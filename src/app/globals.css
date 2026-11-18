@@ -1203,3 +1203,7 @@ body{font-size:15px}
 .cfg-audit article{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-top:1px solid var(--border,#edf0f4);font-size:10px}
 .cfg-audit article small{display:block;margin-top:4px;color:var(--muted-foreground,#667085)}.cfg-audit article>div:last-child{display:grid;gap:5px;text-align:end;color:var(--muted-foreground,#667085)}.cfg-audit article strong{color:#067647}
 @media(max-width:650px){.cfg-topline,.cfg-toolbar,.cfg-weight-head{align-items:stretch;flex-direction:column}.cfg-metrics{grid-template-columns:1fr}.cfg-search{width:100%}.cfg-toolbar .cfg-primary{width:100%}.cfg-weight-grid{grid-template-columns:1fr}.cfg-version{margin-inline-start:0;align-self:flex-start}.cfg-total{flex-wrap:wrap}.cfg-total span{flex-basis:100%}.cfg-audit article{flex-direction:column}.cfg-audit article>div:last-child{text-align:start}}
+
+
+/* UC-027 notification template validation */
+.template-validation-error{margin:0;color:#b42318;font-size:13px;line-height:1.5}
