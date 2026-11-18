@@ -16,7 +16,7 @@ const members=[
 export default function ManagerTeamPage(){
  const ar=useLocale()==="ar";const [query,setQuery]=useState("");const [filter,setFilter]=useState("all");
  const t=(en:string,a:string)=>ar?a:en;
- const filtered=useMemo(()=>members.filter(m=>(m.name+" "+m.role+" "+m.department+" "+m.id).toLowerCase().includes(query.toLowerCase())&&(filter==="all"||(filter==="risk"?m.progress<65:m.progress>=65)),[query,filter]);
+ const filtered=useMemo(()=>members.filter(m=>(m.name+" "+m.role+" "+m.department+" "+m.id).toLowerCase().includes(query.toLowerCase())&&(filter==="all"||(filter==="risk"?m.progress<65:m.progress>=65))),[query,filter]);
  return <AppShell role="manager" title={t("My team","فريقي")} subtitle={t("A clear view of your direct reports and their current performance progress.","نظرة واضحة على الموظفين التابعين لك ومستوى تقدم أدائهم.")}>
   <div className="team-summary-grid"><div className="team-summary-card"><Users size={18}/><strong>12</strong><span>{t("Direct reports","الموظفون المباشرون")}</span></div><div className="team-summary-card"><span className="summary-dot green"/><strong>10</strong><span>{t("On track","على المسار")}</span></div><div className="team-summary-card"><span className="summary-dot amber"/><strong>2</strong><span>{t("Need attention","تحتاج متابعة")}</span></div></div>
   <section className="panel team-directory"><div className="panel-heading"><div><h3>{t("Team directory","دليل الفريق")}</h3><p>{t("Search and review employee objective progress.","ابحث وراجع تقدم أهداف الموظفين.")}</p></div><span className="readonly-pill">{t("2026 cycle","دورة 2026")}</span></div>
