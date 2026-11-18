@@ -7,10 +7,10 @@ import Link from "next/link";
 import { AlertTriangle, Calculator, CheckCircle2, LockKeyhole, Save, ShieldAlert, Users } from "lucide-react";
 
 type Direction = "higher" | "lower";
-type KPI = { id: string; name: string; target: number; actual: number; direction: Direction; weight: number; unit: string; comment: string };
+type KPI = { id: string; name: string; target: number; actual: number; direction: Direction; weight: number; unit: string; comment: string; evidence: string };
 const initialKpis: KPI[] = [
-  { id: "KPI-01", name: "Sprint delivery", target: 90, actual: 88, direction: "higher", weight: 40, unit: "%", comment: "" },
-  { id: "KPI-02", name: "Production defects", target: 8, actual: 6, direction: "lower", weight: 35, unit: " defects", comment: "" },
+  { id: "KPI-01", name: "Sprint delivery", target: 90, actual: 88, direction: "higher", weight: 40, unit: "%", comment: "", evidence: "" },
+  { id: "KPI-02", name: "Production defects", target: 8, actual: 6, direction: "lower", weight: 35, unit: " defects", comment: "", evidence: "" },
   { id: "KPI-03", name: "Documentation completion", target: 95, actual: 92, direction: "higher", weight: 25, unit: "%", comment: "" }
 ];
 const competencyNames = ["Communication", "Problem solving", "Collaboration", "Ownership"];
@@ -20,7 +20,7 @@ const periodNames = ["Q1", "Q2", "Q3", "Q4"];
 function achievement(kpi: KPI): number | null {
   if (kpi.target <= 0) return null;
   if (kpi.direction === "lower" && kpi.actual === 0) return 100;
-  return kpi.direction === "higher" ? (kpi.actual / kpi.target) * 100 : (kpi.target / kpi.actual) * 100;
+  return Math.min(100, kpi.direction === "higher" ? (kpi.actual / kpi.target) * 100 : (kpi.target / kpi.actual) * 100);
 }
 
 export default function ManagerEvaluationPage() {
@@ -29,7 +29,7 @@ export default function ManagerEvaluationPage() {
   const [period, setPeriod] = useState("Q4");
   const [kpis, setKpis] = useState(initialKpis);
   const [ratings, setRatings] = useState<Record<string, number>>({ Communication: 3, "Problem solving": 4, Collaboration: 4, Ownership: 3 });
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState(false);\n  const [workflowNotice, setWorkflowNotice] = useState("");
 
   const results = useMemo(() => kpis.map((kpi) => {
     const score = achievement(kpi);
@@ -198,7 +198,7 @@ export default function ManagerEvaluationPage() {
             <span className="evaluation-demo-warning"><AlertTriangle size={15} />{t("Demo only · no backend persistence or submission", "نسخة تجريبية فقط · لا يوجد حفظ أو إرسال إلى Backend")}</span>
           )}
         </div>
-        <button type="button" onClick={() => setSaved(true)}><Save size={16} />{t("Save demo draft", "حفظ مسودة تجريبية")}</button>
+        <div className="evaluation-action-buttons"><button type="button" onClick={() => { setSaved(true); setWorkflowNotice(t("Demo draft saved locally. You can continue later while the evaluation stage is open.", "تم حفظ المسودة التجريبية محلياً ويمكنك المتابعة لاحقاً أثناء فتح مرحلة التقييم.")); }}><Save size={16} />{t("Save demo draft", "حفظ مسودة تجريبية")}</button>{period === "Q4" ? <button type="button" onClick={() => { const missing = results.some(x => x.actual < 0 || !Number.isFinite(x.actual)) || results.some(x => !x.name.trim()); setWorkflowNotice(missing ? t("Complete all KPI Actual values before saving the annual draft.", "أكمل القيم الفعلية لجميع المؤشرات قبل حفظ المسودة السنوية.") : t("Final-period evaluation is saved as an annual draft. It is not submitted individually; the complete Manager–Year Group is submitted after all eligible employees are complete.", "يتم حفظ تقييم الفترة النهائية كمسودة سنوية ولا يتم إرساله بشكل فردي؛ تُرسل مجموعة المدير والسنة بالكامل بعد اكتمال جميع الموظفين المؤهلين.")); setSaved(!missing); }}><Save size={16}/>{t("Save annual evaluation draft","حفظ مسودة التقييم السنوي")}</button> : <button type="button" onClick={() => { const valid = results.every(x => x.actual >= 0 && Number.isFinite(x.actual)) && Math.abs(results.reduce((s,x)=>s+x.weight,0)-100)<0.0001; setWorkflowNotice(valid ? t("Demo Non-Final Period evaluation is ready for individual Admin review.", "تقييم الفترة غير النهائية التجريبي جاهز للمراجعة الفردية من الإدارة.") : t("Submission blocked: enter valid Actual values and ensure KPI weights total 100%.", "تم منع الإرسال: أدخل قيماً فعلية صحيحة وتأكد أن إجمالي أوزان المؤشرات 100%.") ); setSaved(valid); }}><Send size={16}/>{t("Submit period to Admin","إرسال الفترة للإدارة")}</button>}</div>
       </div>
     </AppShell>
   );
