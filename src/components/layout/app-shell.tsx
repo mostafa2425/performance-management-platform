@@ -23,7 +23,8 @@ const managerNavItems = [
   { key: "team", label: "My team", labelAr: "فريقي", href: "/manager/team", icon: Users },
   { key: "reviews", label: "Review queue", labelAr: "قائمة المراجعات", href: "/manager/reviews", icon: ClipboardCheck },
   { key: "objectives", label: "Team objectives", labelAr: "أهداف الفريق", href: "/manager/objectives", icon: Target },
-  { key: "performance", label: "Team performance", labelAr: "أداء الفريق", href: "/manager/performance", icon: Activity }
+  { key: "performance", label: "Team performance", labelAr: "أداء الفريق", href: "/manager/performance", icon: Activity },
+  { key: "evaluation", label: "Manager evaluation", labelAr: "تقييم المدير", href: "/manager/evaluation", icon: ClipboardCheck }
 ];
 
 const departmentNavItems = [
