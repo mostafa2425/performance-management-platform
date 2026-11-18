@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import {
-  Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck, FileCheck2,
+  Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck, FileCheck2, History,
   LayoutDashboard, LogOut, Menu, Settings2, Target, UserRound, Users, X
 } from "lucide-react";
 import { useState } from "react";
@@ -15,12 +15,14 @@ const employeeNavItems = [
   { key: "dashboard", label: "Overview", labelAr: "نظرة عامة", href: "/dashboard", icon: LayoutDashboard },
   { key: "objectives", label: "My objectives", labelAr: "أهدافي", href: "/employee/objectives", icon: Target },
   { key: "performance", label: "My performance", labelAr: "أدائي", href: "/employee/performance", icon: Activity },
+  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/employee/history", icon: History },
   { key: "development", label: "Development", labelAr: "التطوير", href: "/employee/development", icon: BookOpen }
  ];
 
 const managerNavItems = [
   { key: "dashboard", label: "Team overview", labelAr: "نظرة عامة على الفريق", href: "/manager", icon: LayoutDashboard },
   { key: "team", label: "My team", labelAr: "فريقي", href: "/manager/team", icon: Users },
+  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/manager/history", icon: History },
   { key: "reviews", label: "Review queue", labelAr: "قائمة المراجعات", href: "/manager/reviews", icon: ClipboardCheck },
   { key: "objectives", label: "Team objectives", labelAr: "أهداف الفريق", href: "/manager/objectives", icon: Target },
   { key: "performance", label: "Team performance", labelAr: "أداء الفريق", href: "/manager/performance", icon: Activity },
@@ -32,7 +34,8 @@ const departmentNavItems = [
   { key: "dashboard", label: "Department overview", labelAr: "نظرة عامة على الإدارة", href: "/department", icon: LayoutDashboard },
   { key: "teams", label: "Teams", labelAr: "الفرق", href: "/department/teams", icon: Users },
   { key: "progress", label: "Performance progress", labelAr: "تقدم الأداء", href: "/department/progress", icon: Activity },
-  { key: "reports", label: "Department reports", labelAr: "تقارير الإدارة", href: "/department/reports", icon: BookOpen }
+  { key: "reports", label: "Department reports", labelAr: "تقارير الإدارة", href: "/department/reports", icon: BookOpen },
+  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/department/history", icon: History }
 ];
 
 const hcdNavItems = [
@@ -40,7 +43,8 @@ const hcdNavItems = [
   { key: "cycles", label: "Cycle governance", labelAr: "حوكمة الدورات", href: "/hcd/cycles", icon: Activity },
   { key: "templates", label: "Competency templates", labelAr: "قوالب الكفاءات", href: "/hcd/templates", icon: ClipboardCheck },
   { key: "calibration", label: "Calibration", labelAr: "المعايرة", href: "/hcd/calibration", icon: Target },
-  { key: "reports", label: "Organization insights", labelAr: "مؤشرات المؤسسة", href: "/hcd/reports", icon: BookOpen }
+  { key: "reports", label: "Organization insights", labelAr: "مؤشرات المؤسسة", href: "/hcd/reports", icon: BookOpen },
+  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/hcd/history", icon: History }
 ];
 
 const adminNavItems = [
@@ -49,6 +53,7 @@ const adminNavItems = [
   { key: "employees", label: "Employees", labelAr: "الموظفون", href: "/admin/employees", icon: Users },
   { key: "approvals", label: "Approvals", labelAr: "الاعتمادات", href: "/admin/approvals", icon: ClipboardCheck },
   { key: "publication", label: "Results publication", labelAr: "نشر النتائج", href: "/admin/publication", icon: FileCheck2 },
+  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/admin/history", icon: History },
   { key: "reports", label: "Reports & analytics", labelAr: "التقارير والتحليلات", href: "/admin/reports", icon: BookOpen }
 ];
 
