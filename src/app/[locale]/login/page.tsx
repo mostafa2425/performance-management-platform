@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Form, Input, Typography } from "antd";\nimport Link from "next/link";
+import { Button, Form, Input, Typography } from "antd";
+import Link from "next/link";
 import { ArrowRight, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
