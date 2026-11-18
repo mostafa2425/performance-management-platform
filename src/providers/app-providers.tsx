@@ -5,6 +5,7 @@ import enUS from "antd/locale/en_US";
 import arEG from "antd/locale/ar_EG";
 import { useLocale } from "next-intl";
 import { QueryProvider } from "./query-provider";
+import { RegisterServiceWorker } from "@/components/pwa/register-service-worker";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   const isArabic = useLocale() === "ar";
@@ -14,7 +15,12 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       locale={isArabic ? arEG : enUS}
       theme={{ token: { colorPrimary: "#153b63", colorSuccess: "#167d75", borderRadius: 8, fontSize: 14 } }}
     >
-      <AntdApp><QueryProvider>{children}</QueryProvider></AntdApp>
+      <AntdApp>
+        <QueryProvider>
+          <RegisterServiceWorker />
+          {children}
+        </QueryProvider>
+      </AntdApp>
     </ConfigProvider>
   );
 }
