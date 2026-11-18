@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-type Props = { children: React.ReactNode; title: string; subtitle?: string; role?: "employee" | "admin" };
+type Props = { children: React.ReactNode; title: string; subtitle?: string; role?: "employee" | "manager" | "department" | "hcd" | "admin" };
 
 const employeeNavItems = [
   { key: "dashboard", label: "Overview", labelAr: "نظرة عامة", href: "/dashboard", icon: LayoutDashboard },
@@ -17,6 +17,29 @@ const employeeNavItems = [
   { key: "performance", label: "My performance", labelAr: "أدائي", href: "/employee/performance", icon: Activity },
   { key: "development", label: "Development", labelAr: "التطوير", href: "/employee/development", icon: BookOpen }
  ];
+
+const managerNavItems = [
+  { key: "dashboard", label: "Team overview", labelAr: "نظرة عامة على الفريق", href: "/manager", icon: LayoutDashboard },
+  { key: "team", label: "My team", labelAr: "فريقي", href: "/manager/team", icon: Users },
+  { key: "reviews", label: "Review queue", labelAr: "قائمة المراجعات", href: "/manager/reviews", icon: ClipboardCheck },
+  { key: "objectives", label: "Team objectives", labelAr: "أهداف الفريق", href: "/manager/objectives", icon: Target },
+  { key: "performance", label: "Team performance", labelAr: "أداء الفريق", href: "/manager/performance", icon: Activity }
+];
+
+const departmentNavItems = [
+  { key: "dashboard", label: "Department overview", labelAr: "نظرة عامة على الإدارة", href: "/department", icon: LayoutDashboard },
+  { key: "teams", label: "Teams", labelAr: "الفرق", href: "/department/teams", icon: Users },
+  { key: "progress", label: "Performance progress", labelAr: "تقدم الأداء", href: "/department/progress", icon: Activity },
+  { key: "reports", label: "Department reports", labelAr: "تقارير الإدارة", href: "/department/reports", icon: BookOpen }
+];
+
+const hcdNavItems = [
+  { key: "dashboard", label: "HCD overview", labelAr: "نظرة عامة", href: "/hcd", icon: LayoutDashboard },
+  { key: "cycles", label: "Cycle governance", labelAr: "حوكمة الدورات", href: "/hcd/cycles", icon: Activity },
+  { key: "templates", label: "Competency templates", labelAr: "قوالب الكفاءات", href: "/hcd/templates", icon: ClipboardCheck },
+  { key: "calibration", label: "Calibration", labelAr: "المعايرة", href: "/hcd/calibration", icon: Target },
+  { key: "reports", label: "Organization insights", labelAr: "مؤشرات المؤسسة", href: "/hcd/reports", icon: BookOpen }
+];
 
 const adminNavItems = [
   { key: "dashboard", label: "Overview", labelAr: "نظرة عامة", href: "/admin", icon: LayoutDashboard },
@@ -32,7 +55,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
   const isAr = locale === "ar";
   const [mobileOpen, setMobileOpen] = useState(false);
   const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
-  const navItems = role === "admin" ? adminNavItems : employeeNavItems;
+  const navItems = role === "admin" ? adminNavItems : role === "manager" ? managerNavItems : role === "department" ? departmentNavItems : role === "hcd" ? hcdNavItems : employeeNavItems;
   const active = navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ?? "dashboard";
 
   return (
@@ -61,6 +84,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
           <div className="workspace-label">{isAr ? "المساعدة" : "SUPPORT"}</div>
           <a className="nav-link" href="mailto:people.support@example.com"><CircleHelp size={18} /><span>{isAr ? "مركز المساعدة" : "Help center"}</span></a>
           <a className="nav-link" href="#"><Settings2 size={18} /><span>{isAr ? "الإعدادات" : "Settings"}</span></a>
+          <details className="role-switcher"><summary>{isAr ? "تبديل الدور التجريبي" : "Switch demo role"} <ChevronDown size={13}/></summary><div className="role-switcher-menu">{[["employee","Employee","الموظف","/dashboard"],["manager","Manager","المدير","/manager"],["department","Department Manager","مدير الإدارة","/department"],["hcd","HCD","تطوير رأس المال البشري","/hcd"],["admin","Admin","مسؤول النظام","/admin"]].map(([key,en,ar,path])=><Link key={key} href={`/${locale}${path}`} className={role===key?"current":""}>{isAr?ar:en}</Link>)}</div></details>
           <div className="sidebar-profile">
             <div className="avatar avatar-small">MG</div>
             <div className="profile-copy"><strong>{role === "admin" ? "HCD Administrator" : "Mostafa Gamal"}</strong><small>{role === "admin" ? "Administrator" : "Employee"}</small></div>
@@ -79,7 +103,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
             <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
             <button className="icon-button notification-button" aria-label="Notifications"><Bell size={18} /><i /></button>
             <div className="topbar-divider" />
-            <div className="topbar-user"><div className="avatar avatar-small">{role === "admin" ? "HA" : "MG"}</div><div><strong>{role === "admin" ? "HCD Administrator" : "Mostafa Gamal"}</strong><small>{role === "admin" ? "Human Capital Development" : "Frontend Developer"}</small></div></div>
+            <div className="topbar-user"><div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div><div><strong>{role === "admin" ? "HCD Administrator" : role === "hcd" ? "HCD Specialist" : role === "department" ? "Department Manager" : role === "manager" ? "People Manager" : "Mostafa Gamal"}</strong><small>{role === "employee" ? "Frontend Developer" : role === "manager" ? "People Manager" : role === "department" ? "Department Manager" : "Human Capital Development"}</small></div></div>
             <div className="locale-switch">
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "en")} className={!isAr ? "selected" : ""}>EN</Link>
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "ar")} className={isAr ? "selected" : ""}>ع</Link>
