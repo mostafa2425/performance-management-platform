@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, Form, Input, Typography } from "antd";
-import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
+import { Button, Form, Input, Typography } from "antd";\nimport Link from "next/link";
+import { ArrowRight, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,7 +25,7 @@ export default function LoginPage() {
         <div className="login-brand-footer"><span>© 2026 Perform.</span><span>{text("Built for better work.", "لعمل أفضل.")}</span></div>
       </section>
       <section className="login-form-panel">
-        <div className="login-locale"><a href="/en/login" className={!ar?"selected":""}>EN</a><a href="/ar/login" className={ar?"selected":""}>عربي</a></div>
+        <div className="login-locale"><Link href="/en/login" className={!ar?"selected":""}>EN</Link><Link href="/ar/login" className={ar?"selected":""}>عربي</Link></div>
         <div className="login-form-wrap">
           <div className="login-welcome-icon"><LockKeyhole size={22}/></div>
           <span className="form-overline">{text("WELCOME BACK","مرحباً بعودتك")}</span>
