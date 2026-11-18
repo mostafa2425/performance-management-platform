@@ -1,3 +1,3 @@
-import { AdminSectionPage } from "@/features/admin/admin-section-page";
+import PerformanceCycleWorkspace from "@/features/admin/performance-cycle-workspace";
 
-export default function Page() { return <AdminSectionPage section="cycles" />; }
+export default function Page() { return <PerformanceCycleWorkspace mode="list" />; }
