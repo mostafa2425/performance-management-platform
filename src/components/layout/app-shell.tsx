@@ -24,7 +24,7 @@ const managerNavItems = [
   { key: "team", label: "My team", labelAr: "فريقي", href: "/manager/team", icon: Users },
   { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/manager/history", icon: History },
   { key: "reviews", label: "Review queue", labelAr: "قائمة المراجعات", href: "/manager/reviews", icon: ClipboardCheck },
-  { key: "objectives", label: "Team objectives", labelAr: "أهداف الفريق", href: "/manager/objectives", icon: Target },
+  { key: "objectives", label: "Objective planning", labelAr: "إعداد الأهداف", href: "/manager/objectives", icon: Target },
   { key: "performance", label: "Team performance", labelAr: "أداء الفريق", href: "/manager/performance", icon: Activity },
   { key: "evaluation", label: "Manager evaluation", labelAr: "تقييم المدير", href: "/manager/evaluation", icon: ClipboardCheck },
   { key: "year-group", label: "Manager–Year Group", labelAr: "مجموعة المدير والسنة", href: "/manager/year-group", icon: Users },
