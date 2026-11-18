@@ -11,7 +11,7 @@ type KPI = { id: string; name: string; target: number; actual: number; direction
 const initialKpis: KPI[] = [
   { id: "KPI-01", name: "Sprint delivery", target: 90, actual: 88, direction: "higher", weight: 40, unit: "%", comment: "", evidence: "" },
   { id: "KPI-02", name: "Production defects", target: 8, actual: 6, direction: "lower", weight: 35, unit: " defects", comment: "", evidence: "" },
-  { id: "KPI-03", name: "Documentation completion", target: 95, actual: 92, direction: "higher", weight: 25, unit: "%", comment: "" }
+  { id: "KPI-03", name: "Documentation completion", target: 95, actual: 92, direction: "higher", weight: 25, unit: "%", comment: "", evidence: "" }
 ];
 const competencyNames = ["Communication", "Problem solving", "Collaboration", "Ownership"];
 const ratingMap: Record<number, number> = { 1: 50, 2: 70, 3: 85, 4: 93, 5: 100 };
@@ -37,7 +37,7 @@ export default function ManagerEvaluationPage() {
   }), [kpis]);
   const periodResult = results.some((item) => item.weighted === null) ? null : results.reduce((sum, item) => sum + (item.weighted ?? 0), 0);
   const competencyResult = useMemo(() => competencyNames.reduce((sum, name) => sum + ratingMap[ratings[name] || 1] * 0.25, 0), [ratings]);
-  const fmt = (value: number | null) => value === null ? "—" : value.toFixed(1) + "%";
+  const annualObjectivesPreview = periodResult === null ? null : (82 + 86 + 88 + periodResult) / 4;\n  const overallAnnualPreview = annualObjectivesPreview === null ? null : annualObjectivesPreview * 0.8 + competencyResult * 0.2;\n  const requiresEvidence = period === "Q4" && overallAnnualPreview !== null && overallAnnualPreview >= 90;\n  const fmt = (value: number | null) => value === null ? "—" : value.toFixed(1) + "%";
 
   function updateKpi(id: string, patch: Partial<KPI>) {
     setSaved(false);
@@ -109,7 +109,7 @@ export default function ManagerEvaluationPage() {
               <strong className="evaluation-calculated">{fmt(kpi.weighted)}</strong>
               <label className="evaluation-comment">
                 {t("Manager comment (optional)", "تعليق المدير (اختياري)")}
-                <textarea value={kpi.comment} onChange={(event) => updateKpi(kpi.id, { comment: event.target.value })} placeholder={t("Add context or evidence reference…", "أضف توضيحاً أو مرجعاً للدليل…")} />
+                <textarea value={kpi.comment} onChange={(event) => updateKpi(kpi.id, { comment: event.target.value })} placeholder={t("Add context or evidence reference…", "أضف توضيحاً أو مرجعاً للدليل…")} />\n                <span>{t("Supporting evidence reference", "مرجع الدليل الداعم")}{requiresEvidence ? " · "+t("Required for rating 4–5","مطلوب للتقدير 4–5") : ""}</span>\n                <input value={kpi.evidence} onChange={(event) => updateKpi(kpi.id, { evidence: event.target.value })} placeholder={t("Evidence file / reference (demo)", "ملف الدليل / المرجع (تجريبي)")} />
               </label>
             </article>
           ))}
@@ -198,7 +198,7 @@ export default function ManagerEvaluationPage() {
             <span className="evaluation-demo-warning"><AlertTriangle size={15} />{t("Demo only · no backend persistence or submission", "نسخة تجريبية فقط · لا يوجد حفظ أو إرسال إلى Backend")}</span>
           )}
         </div>
-        <div className="evaluation-action-buttons"><button type="button" onClick={() => { setSaved(true); setWorkflowNotice(t("Demo draft saved locally. You can continue later while the evaluation stage is open.", "تم حفظ المسودة التجريبية محلياً ويمكنك المتابعة لاحقاً أثناء فتح مرحلة التقييم.")); }}><Save size={16} />{t("Save demo draft", "حفظ مسودة تجريبية")}</button>{period === "Q4" ? <button type="button" onClick={() => { const missing = results.some(x => x.actual < 0 || !Number.isFinite(x.actual)) || results.some(x => !x.name.trim()); setWorkflowNotice(missing ? t("Complete all KPI Actual values before saving the annual draft.", "أكمل القيم الفعلية لجميع المؤشرات قبل حفظ المسودة السنوية.") : t("Final-period evaluation is saved as an annual draft. It is not submitted individually; the complete Manager–Year Group is submitted after all eligible employees are complete.", "يتم حفظ تقييم الفترة النهائية كمسودة سنوية ولا يتم إرساله بشكل فردي؛ تُرسل مجموعة المدير والسنة بالكامل بعد اكتمال جميع الموظفين المؤهلين.")); setSaved(!missing); }}><Save size={16}/>{t("Save annual evaluation draft","حفظ مسودة التقييم السنوي")}</button> : <button type="button" onClick={() => { const valid = results.every(x => x.actual >= 0 && Number.isFinite(x.actual)) && Math.abs(results.reduce((s,x)=>s+x.weight,0)-100)<0.0001; setWorkflowNotice(valid ? t("Demo Non-Final Period evaluation is ready for individual Admin review.", "تقييم الفترة غير النهائية التجريبي جاهز للمراجعة الفردية من الإدارة.") : t("Submission blocked: enter valid Actual values and ensure KPI weights total 100%.", "تم منع الإرسال: أدخل قيماً فعلية صحيحة وتأكد أن إجمالي أوزان المؤشرات 100%.") ); setSaved(valid); }}><Send size={16}/>{t("Submit period to Admin","إرسال الفترة للإدارة")}</button>}</div>
+        <div className="evaluation-action-buttons"><button type="button" onClick={() => { setSaved(true); setWorkflowNotice(t("Demo draft saved locally. You can continue later while the evaluation stage is open.", "تم حفظ المسودة التجريبية محلياً ويمكنك المتابعة لاحقاً أثناء فتح مرحلة التقييم.")); }}><Save size={16} />{t("Save demo draft", "حفظ مسودة تجريبية")}</button>{period === "Q4" ? <button type="button" onClick={() => { const missing = results.some(x => x.actual < 0 || !Number.isFinite(x.actual)) || results.some(x => !x.name.trim()) || (requiresEvidence && kpis.some(x => !x.evidence.trim())); setWorkflowNotice(missing ? t("Complete all KPI Actual values before saving the annual draft.", "أكمل القيم الفعلية لجميع المؤشرات قبل حفظ المسودة السنوية.") : t("Final-period evaluation is saved as an annual draft. It is not submitted individually; the complete Manager–Year Group is submitted after all eligible employees are complete.", "يتم حفظ تقييم الفترة النهائية كمسودة سنوية ولا يتم إرساله بشكل فردي؛ تُرسل مجموعة المدير والسنة بالكامل بعد اكتمال جميع الموظفين المؤهلين.")); setSaved(!missing); }}><Save size={16}/>{t("Save annual evaluation draft","حفظ مسودة التقييم السنوي")}</button> : <button type="button" onClick={() => { const valid = results.every(x => x.actual >= 0 && Number.isFinite(x.actual)) && Math.abs(results.reduce((s,x)=>s+x.weight,0)-100)<0.0001 && (!requiresEvidence || kpis.every(x => x.evidence.trim())); setWorkflowNotice(valid ? t("Demo Non-Final Period evaluation is ready for individual Admin review.", "تقييم الفترة غير النهائية التجريبي جاهز للمراجعة الفردية من الإدارة.") : t("Submission blocked: enter valid Actual values and ensure KPI weights total 100%.", "تم منع الإرسال: أدخل قيماً فعلية صحيحة وتأكد أن إجمالي أوزان المؤشرات 100%.") ); setSaved(valid); }}><Send size={16}/>{t("Submit period to Admin","إرسال الفترة للإدارة")}</button>}</div>
       </div>
     </AppShell>
   );
