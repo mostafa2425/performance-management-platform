@@ -505,3 +505,74 @@ button { cursor: pointer; }
 .admin-record-status.pending { background:#fff6e8; color:#b9873f; }.admin-record-status.needs-attention { background:#fff0ef; color:#c56e66; }.admin-record-status.published,.admin-record-status.available { background:#edf3ff; color:#557bb8; }.admin-record-status.on-leave { background:#f3f1fb; color:#8272b8; }
 .admin-record > svg { color:#a4afbd; }
 @media(max-width:720px){.admin-section-toolbar{align-items:stretch;}.admin-section-toolbar .search-field{flex:1;}.admin-record{gap:8px;}.admin-record-status{font-size:7px;padding:4px 6px;}}
+
+
+/* Five-role workspace switcher */
+.role-switcher { position:relative; margin:0 3px 12px; border:1px solid #ffffff16; border-radius:8px; background:#ffffff08; }
+.role-switcher summary { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 11px; color:#c3d0e1; cursor:pointer; list-style:none; font-size:10px; }
+.role-switcher summary::-webkit-details-marker { display:none; }
+.role-switcher[open] summary { color:#fff; }
+.role-switcher-menu { display:grid; gap:3px; padding:0 5px 5px; }
+.role-switcher-menu a { padding:8px 9px; border-radius:6px; color:#aebdd0; font-size:9px; }
+.role-switcher-menu a:hover,.role-switcher-menu a.current { background:#ffffff14; color:#fff; }
+.manager-welcome { display:flex; align-items:center; justify-content:space-between; gap:24px; min-height:178px; padding:24px 29px; overflow:hidden; border-radius:14px; color:white; background:linear-gradient(112deg,#1c365c,#285c78 65%,#25816f); }
+.manager-eyebrow { display:inline-flex; align-items:center; gap:7px; color:#91e0c6; font-size:9px; font-weight:800; letter-spacing:1px; }
+.manager-welcome h2 { margin:12px 0 7px; color:white; font-size:23px; font-weight:760; letter-spacing:-.6px; }
+.manager-welcome p { max-width:570px; margin:0; color:#cad9e5; font-size:10px; line-height:1.7; }
+.manager-banner-meta { display:flex; flex-wrap:wrap; gap:17px; margin-top:16px; color:#d1deea; font-size:9px; }
+.manager-banner-meta span { display:inline-flex; align-items:center; gap:7px; }
+.manager-banner-meta i { width:7px; height:7px; border-radius:50%; background:#61d8b2; box-shadow:0 0 0 4px #61d8b222; }
+.manager-team-total { display:grid; justify-items:center; min-width:130px; padding-inline:16px; border-inline-start:1px solid #ffffff2c; }
+.manager-team-total>strong { color:white; font-size:36px; line-height:1.1; }
+.manager-team-total>span { margin-top:4px; color:#d1e0e9; font-size:9px; }
+.manager-avatars { display:flex; margin-top:13px; padding-inline-start:8px; }
+.manager-avatars i { display:grid; place-items:center; width:25px; height:25px; margin-inline-start:-7px; border:2px solid #315d77; border-radius:50%; background:#e8f0f8; color:#3c6281; font-size:7px; font-style:normal; font-weight:800; }
+.manager-avatars i:last-child { background:#bfe7dc; color:#246b60; }
+.manager-metric-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; margin:14px 0; }
+.manager-grid { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); gap:14px; }
+.manager-team-list { display:grid; margin-top:10px; }
+.manager-person-row { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid #f0f2f6; }
+.manager-person-row:last-child { border-bottom:0; }
+.manager-person-avatar,.manager-review-avatar { display:grid; place-items:center; flex:0 0 auto; width:34px; height:34px; border-radius:50%; background:#eaf1fb; color:#557ba7; font-size:9px; font-weight:800; }
+.manager-person-avatar.avatar-1 { background:#e9f7f2;color:#2d947b; }.manager-person-avatar.avatar-2 { background:#f2effb;color:#8171b8; }.manager-person-avatar.avatar-3 { background:#fff3e6;color:#b98442; }.manager-person-avatar.avatar-4 { background:#edf1f7;color:#63748d; }
+.manager-person-copy { display:grid; flex:1; gap:4px; min-width:100px; }
+.manager-person-copy strong,.manager-review-row strong { color:#4b5c72; font-size:9px; }
+.manager-person-copy small,.manager-review-row small { color:#99a4b2; font-size:8px; }
+.manager-person-progress { width:105px; flex:0 0 auto; }
+.manager-person-progress>div:first-child { display:flex; justify-content:space-between; margin-bottom:5px; color:#9aa5b3; font-size:8px; }
+.manager-person-progress b { color:#61738b; font-size:8px; }
+.manager-status { padding:5px 7px; border-radius:20px; font-size:7px; font-weight:750; white-space:nowrap; }
+.manager-status.good { background:#edf8f3; color:#278c72; }.manager-status.risk { background:#fff4e8; color:#b98643; }
+.manager-review-list { display:grid; margin-top:10px; }
+.manager-review-row { display:flex; align-items:center; gap:9px; padding:12px 0; border-bottom:1px solid #f0f2f6; }
+.manager-review-row>div { display:grid; flex:1; gap:4px; min-width:0; }
+.manager-review-row>div>span { display:flex; align-items:center; gap:5px; color:#b18a4d; font-size:8px; }
+.manager-review-row>svg { color:#9ca8b6; }
+.manager-review-avatar { width:31px; height:31px; }
+.manager-priority { display:flex; align-items:center; gap:9px; padding:12px 0; border-bottom:1px solid #f0f2f6; }
+.manager-priority:last-child { border-bottom:0; }
+.priority-icon { display:grid; place-items:center; flex:0 0 auto; width:31px; height:31px; border-radius:8px; }
+.priority-icon.blue { background:#edf3ff;color:#557db7; }.priority-icon.teal { background:#eaf8f3;color:#26967b; }.priority-icon.amber { background:#fff5e8;color:#bf8b46; }
+.manager-priority>div { display:grid; flex:1; gap:4px; }
+.manager-priority strong { color:#586981; font-size:9px; }
+.manager-priority small { color:#9ba6b4; font-size:8px; line-height:1.5; }
+.manager-priority>b { color:#657890; font-size:9px; }
+.manager-milestone { display:flex; align-items:center; gap:10px; padding:11px 0; border-bottom:1px solid #f0f2f6; }
+.manager-milestone:last-child { border-bottom:0; }
+.milestone-date { display:grid; justify-items:center; width:37px; padding:5px 0; border-radius:7px; background:#f0f4fa; }
+.milestone-date b { color:#456484; font-size:13px; }.milestone-date small { color:#8796a8; font-size:7px; font-weight:800; }
+.manager-milestone>div { display:grid; gap:4px; }
+.manager-milestone strong { color:#56677e; font-size:9px; }.manager-milestone small { color:#9aa5b3; font-size:8px; }
+.role-overview-banner { padding:24px 27px; border-radius:13px; background:linear-gradient(110deg,#1c365c,#286d79); color:white; }
+.role-overview-banner>span { color:#94e0c7; font-size:9px; font-weight:800; letter-spacing:1px; }
+.role-overview-banner h2 { margin:10px 0 6px; color:white; font-size:21px; }
+.role-overview-banner p { margin:0; color:#d0e0e8; font-size:10px; }
+.role-overview-panel { margin-top:14px; }
+.role-overview-row { display:flex; align-items:center; gap:11px; padding:14px 0; border-bottom:1px solid #f0f2f6; }
+.role-overview-row:last-child { border-bottom:0; }
+.role-overview-row>div { display:grid; gap:4px; }
+.role-overview-row strong { color:#53647a; font-size:10px; }
+.role-overview-row small { color:#98a4b3; font-size:9px; }
+@media(max-width:1050px){.manager-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.manager-grid{grid-template-columns:1fr;}}
+@media(max-width:720px){.manager-welcome{padding:18px;gap:8px;}.manager-welcome h2{max-width:270px;font-size:18px;}.manager-welcome p{max-width:280px;font-size:9px;}.manager-team-total{min-width:84px;padding-inline:8px;}.manager-team-total>strong{font-size:29px;}.manager-team-total>span{max-width:75px;text-align:center;font-size:8px;}.manager-person-row{gap:7px;}.manager-person-progress{width:72px;}.manager-status{max-width:70px;white-space:normal;text-align:center;line-height:1.3;}.manager-person-copy{min-width:70px;}.manager-person-copy strong{font-size:8px;}.manager-person-copy small{font-size:7px;}.manager-metric-grid{gap:8px;}.manager-metric-grid .admin-metric{padding:12px;}}
+@media(max-width:420px){.manager-welcome{align-items:flex-start;}.manager-team-total{min-width:65px;}.manager-avatars{display:none;}.manager-person-progress{width:60px;}.manager-person-avatar{width:29px;height:29px;}}
