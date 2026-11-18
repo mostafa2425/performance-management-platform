@@ -53,7 +53,7 @@ const adminNavItems = [
   { key: "employees", label: "Employees", labelAr: "الموظفون", href: "/admin/employees", icon: Users },
   { key: "approvals", label: "Approvals", labelAr: "الاعتمادات", href: "/admin/approvals", icon: ClipboardCheck },
   { key: "publication", label: "Results publication", labelAr: "نشر النتائج", href: "/admin/publication", icon: FileCheck2 },
-  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/admin/history", icon: History },
+  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/admin/history", icon: History },\n  { key: "notifications", label: "Notifications", labelAr: "الإشعارات", href: "/admin/notifications", icon: Bell },\n  { key: "notification-templates", label: "Notification templates", labelAr: "قوالب الإشعارات", href: "/admin/notification-templates", icon: FileCheck2 },
   { key: "reports", label: "Reports & analytics", labelAr: "التقارير والتحليلات", href: "/admin/reports", icon: BookOpen }
 ];
 
@@ -115,7 +115,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
           </div>
           <div className="topbar-actions">
             <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
-            <button className="icon-button notification-button" aria-label="Notifications"><Bell size={18} /><i /></button>
+            <Link className="icon-button notification-button" href={`/${locale}${role === "admin" ? "/admin/notifications" : role === "hcd" ? "/hcd/notifications" : role === "department" ? "/department/notifications" : role === "manager" ? "/manager/notifications" : "/employee/notifications"}`} aria-label={isAr ? "الإشعارات" : "Notifications"}><Bell size={18} /><i /></Link>
             <div className="topbar-divider" />
             <div className="topbar-user"><div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div><div><strong>{role === "admin" ? "HCD Administrator" : role === "hcd" ? "HCD Specialist" : role === "department" ? "Department Manager" : role === "manager" ? "People Manager" : "Mostafa Gamal"}</strong><small>{role === "employee" ? "Frontend Developer" : role === "manager" ? "People Manager" : role === "department" ? "Department Manager" : "Human Capital Development"}</small></div></div>
             <div className="locale-switch">
