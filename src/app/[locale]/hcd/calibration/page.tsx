@@ -1,2 +1,2 @@
-import { WorkspaceSubpage } from "@/features/workspaces/workspace-subpage";
-export default function Page(){return <WorkspaceSubpage role="hcd" page="hcd-calibration"/>;}
+import { BellCurveMonitoringWorkspace } from "@/features/workspaces/performance-workflow-workspaces";
+export default function Page(){return <BellCurveMonitoringWorkspace/>;}
