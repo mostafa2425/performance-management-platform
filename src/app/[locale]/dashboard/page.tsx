@@ -13,6 +13,9 @@ export default function DashboardPage() {
   const locale = useLocale();
   const ar = locale === "ar";
   const completed = objectives.filter((item) => item.status === "completed").length;
+  const atRisk = objectives.filter((item) => item.status === "at-risk").length;
+  const onTrack = objectives.filter((item) => item.status === "on-track").length;
+  const totalWeight = objectives.reduce((sum, item) => sum + item.weight, 0);
   const averageProgress = Math.round(objectives.reduce((sum, item) => sum + item.progress, 0) / objectives.length);
   const text = (en: string, arabic: string) => ar ? arabic : en;
 
@@ -27,16 +30,16 @@ export default function DashboardPage() {
         </div>
         <div className="welcome-visual">
           <div className="welcome-orbit orbit-one" /><div className="welcome-orbit orbit-two" />
-          <div className="welcome-stat"><span>{text("Your progress", "تقدمك")}</span><strong>{averageProgress}%</strong><small><TrendingUp size={13} /> +8.4% {text("this month", "هذا الشهر")}</small></div>
+          <div className="welcome-stat"><span>{text("Your progress", "تقدمك")}</span><strong>{averageProgress}%</strong><small><TrendingUp size={13} /> {text("Demo data", "بيانات تجريبية")}</small></div>
           <div className="welcome-spark spark-one">✦</div><div className="welcome-spark spark-two">✧</div>
         </div>
       </section>
 
       <section className="metric-grid">
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon blue"><Target size={19} /></span><span className="metric-trend positive"><TrendingUp size={13} /> 12%</span></div><div className="metric-value">8<span className="metric-unit">/ 8</span></div><div className="metric-label">{text("Active objectives", "الأهداف النشطة")}</div><div className="metric-foot">{text("Across 2 categories", "ضمن تصنيفين")}</div></article>
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon green"><CheckCircle2 size={19} /></span><span className="metric-trend positive">{completed} {text("done", "مكتمل")}</span></div><div className="metric-value">{averageProgress}%</div><div className="metric-label">{text("Overall progress", "إجمالي التقدم")}</div><div className="metric-progress"><span style={{width:`${averageProgress}%`}} /></div></article>
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon violet"><Trophy size={19} /></span><span className="metric-trend neutral">{text("On track", "على المسار")}</span></div><div className="metric-value">4.2<span className="metric-unit">/ 5</span></div><div className="metric-label">{text("Last cycle rating", "تقييم الدورة السابقة")}</div><div className="metric-foot">{text("Exceeds expectations", "يفوق التوقعات")}</div></article>
-        <article className="metric-card"><div className="metric-top"><span className="metric-icon amber"><Clock3 size={19} /></span><span className="metric-trend warning">2 {text("need attention", "تحتاج متابعة")}</span></div><div className="metric-value">3</div><div className="metric-label">{text("Pending actions", "إجراءات معلقة")}</div><div className="metric-foot">{text("Keep your cycle moving", "حافظ على تقدم دورتك")}</div></article>
+        <article className="metric-card"><div className="metric-top"><span className="metric-icon blue"><Target size={19} /></span><span className="metric-trend neutral">{text("Current cycle", "الدورة الحالية")}</span></div><div className="metric-value">{objectives.length}<span className="metric-unit">/ {objectives.length}</span></div><div className="metric-label">{text("Assigned objectives", "الأهداف المسندة")}</div><div className="metric-foot">{text(`Total weight ${totalWeight}%`, `إجمالي الوزن ${totalWeight}%`)}</div></article>
+        <article className="metric-card"><div className="metric-top"><span className="metric-icon green"><CheckCircle2 size={19} /></span><span className="metric-trend positive">{completed} {text("completed", "مكتمل")}</span></div><div className="metric-value">{averageProgress}%</div><div className="metric-label">{text("Overall progress", "إجمالي التقدم")}</div><div className="metric-progress"><span style={{width:`${averageProgress}%`}} /></div></article>
+        <article className="metric-card"><div className="metric-top"><span className="metric-icon violet"><Target size={19} /></span><span className="metric-trend neutral">{onTrack} {text("on track", "على المسار")}</span></div><div className="metric-value">{onTrack}</div><div className="metric-label">{text("Objectives on track", "أهداف على المسار")}</div><div className="metric-foot">{text(`${atRisk} need attention`, `${atRisk} تحتاج متابعة`)}</div></article>
+        <article className="metric-card"><div className="metric-top"><span className="metric-icon amber"><Clock3 size={19} /></span><span className="metric-trend warning">{atRisk} {text("at risk", "تحتاج متابعة")}</span></div><div className="metric-value">{atRisk}</div><div className="metric-label">{text("Objectives needing attention", "أهداف تحتاج متابعة")}</div><div className="metric-foot">{text("Based on current demo status", "وفق حالات البيانات التجريبية")}</div></article>
       </section>
 
       <div className="dashboard-grid">
@@ -51,13 +54,13 @@ export default function DashboardPage() {
         <section className="panel actions-panel">
           <div className="panel-heading"><div><h3>{text("Your next steps", "خطواتك القادمة")}</h3><p>{text("A few things to keep you moving", "بعض المهام لمساعدتك على التقدم")}</p></div><span className="count-badge">03</span></div>
           <div className="action-list">
-            {actionItems.map((item) => <div className="action-item" key={item.id}><span className={`action-icon ${item.type}`}>{item.type === "review" ? <ClipboardCheck size={17}/> : item.type === "development" ? <BookOpenIcon/> : <Target size={17}/>}</span><div className="action-copy"><strong>{text(item.title, item.id===1?"راجع أهداف أدائك":item.id===2?"أكمل خطة التطوير":"أضف تحديثاً للتقدم")}</strong><small>{text(item.detail, item.id===1?"8 أهداف · بانتظار إرسال المدير":item.id===2?"نشاطان تدريبيان متبقيان":"دقة تقدير المهام")}</small><span><CalendarDays size={12}/> {text("Due", "الموعد")}: {item.due}</span></div><ChevronRight size={16} className="action-arrow"/></div>)}
+            {actionItems.map((item) => <div className="action-item" key={item.id}><span className={`action-icon ${item.type}`}>{item.type === "review" ? <ClipboardCheck size={17}/> : item.type === "development" ? <BookOpenIcon/> : <Target size={17}/>}</span><div className="action-copy"><strong>{text(item.title, item.id===1?"راجع أهداف أدائك":item.id===2?"أكمل خطة التطوير":"راجع تقدم الأهداف")}</strong><small>{text(item.detail, item.id===1?"8 أهداف · في انتظار مراجعة الموظف":item.id===2?"ملف الكفاءات · للعرض فقط":"دقة تقدير المهام")}</small><span><CalendarDays size={12}/> {text("Due", "الموعد")}: {item.due}</span></div><ChevronRight size={16} className="action-arrow"/></div>)}
           </div>
           <Link href={`/${locale}/employee/objectives`} className="panel-bottom-link">{text("Go to my objectives", "الانتقال إلى أهدافي")} <ArrowUpRight size={15}/></Link>
         </section>
 
         <section className="panel cycle-panel">
-          <div className="panel-heading"><div><h3>{text("Your performance cycle", "دورة أدائك")}</h3><p>{text("2026 annual performance journey", "رحلة الأداء السنوية لعام 2026")}</p></div><span className="soft-status"><span className="status-dot"/> {text("In progress", "جارية")}</span></div>
+          <div className="panel-heading"><div><h3>{text("Your performance cycle", "دورة أدائك")}</h3><p>{text("2026 annual performance journey · Illustrative timeline", "رحلة الأداء السنوية لعام 2026 · جدول توضيحي")}</p></div><span className="soft-status"><span className="status-dot"/> {text("In progress", "جارية")}</span></div>
           <div className="cycle-steps">
             <div className="cycle-step completed"><span className="step-marker"><Check size={13}/></span><div><strong>{text("Objective setting", "تحديد الأهداف")}</strong><small>{text("Completed · Jan 15", "مكتمل · 15 يناير")}</small></div></div>
             <div className="cycle-step current"><span className="step-marker">2</span><div><strong>{text("Active performance", "فترة الأداء")}</strong><small>{text("In progress · Jan – Dec", "جارية · يناير – ديسمبر")}</small></div><span className="current-tag">{text("CURRENT", "الحالية")}</span></div>
@@ -67,10 +70,10 @@ export default function DashboardPage() {
         </section>
 
         <section className="panel competency-panel">
-          <div className="panel-heading"><div><h3>{text("Competency framework", "إطار الكفاءات")}</h3><p>{text("The skills that shape your performance", "المهارات التي تشكل أداءك")}</p></div><span className="competency-count">20 {text("competencies", "كفاءة")}</span></div>
-          <div className="competency-highlight"><div className="competency-icon"><Users size={20}/></div><div><strong>{text("People & professional skills", "المهارات الشخصية والمهنية")}</strong><small>{text("Aligned with your role and job family", "متوافقة مع دورك الوظيفي")}</small></div><span>20</span></div>
-          <div className="competency-tags"><span>{text("Collaboration", "التعاون")}</span><span>{text("Ownership", "المسؤولية")}</span><span>{text("Quality", "الجودة")}</span><span>+17</span></div>
-          <div className="competency-note"><CircleAlert size={15}/>{text("Competencies are evaluated annually by your manager.", "يتم تقييم الكفاءات سنوياً بواسطة مديرك.")}</div>
+          <div className="panel-heading"><div><h3>{text("Competency framework", "إطار الكفاءات")}</h3><p>{text("The skills that shape your performance", "المهارات التي تشكل أداءك")}</p></div><span className="competency-count">{12} {text("demo competencies", "كفاءة تجريبية")}</span></div>
+          <div className="competency-highlight"><div className="competency-icon"><Users size={20}/></div><div><strong>{text("People & professional skills", "المهارات الشخصية والمهنية")}</strong><small>{text("Aligned with your role and job family", "متوافقة مع دورك الوظيفي")}</small></div><span>{12}</span></div>
+          <div className="competency-tags"><span>{text("Collaboration", "التعاون")}</span><span>{text("Ownership", "المسؤولية")}</span><span>{text("Quality", "الجودة")}</span><span>{text("Demo", "تجريبي")}</span></div>
+          <div className="competency-note"><CircleAlert size={15}/>{text("Competencies are evaluated annually by your manager. Demo competency names are illustrative.", "يتم تقييم الكفاءات سنوياً بواسطة مديرك. أسماء الكفاءات المعروضة تجريبية.")}</div>
         </section>
       </div>
     </AppShell>
