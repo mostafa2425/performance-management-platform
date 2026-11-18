@@ -1,0 +1,89 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
+import {
+  Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck,
+  LayoutDashboard, LogOut, Menu, Settings2, Target, UserRound, Users, X
+} from "lucide-react";
+import { useState } from "react";
+
+type Props = { children: React.ReactNode; title: string; subtitle?: string };
+
+const navItems = [
+  { key: "dashboard", label: "Overview", labelAr: "نظرة عامة", href: "/dashboard", icon: LayoutDashboard },
+  { key: "objectives", label: "My objectives", labelAr: "أهدافي", href: "/employee/objectives", icon: Target },
+  { key: "performance", label: "My performance", labelAr: "أدائي", href: "/employee/performance", icon: Activity },
+  { key: "development", label: "Development", labelAr: "التطوير", href: "/employee/development", icon: BookOpen }
+];
+
+export function AppShell({ children, title, subtitle }: Props) {
+  const pathname = usePathname();
+  const locale = useLocale();
+  const isAr = locale === "ar";
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
+  const active = navItems.find((item) => pathname.endsWith(item.href))?.key ?? "dashboard";
+
+  return (
+    <div className="app-frame" dir={isAr ? "rtl" : "ltr"}>
+      {mobileOpen && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileOpen(false)} />}
+      <aside className={`app-sidebar ${mobileOpen ? "is-open" : ""}`}>
+        <div className="brand-lockup">
+          <div className="brand-mark">P</div>
+          <div><strong>Perform<span>.</span></strong><small>People & performance</small></div>
+          <button className="icon-button sidebar-close" onClick={() => setMobileOpen(false)} aria-label="Close menu"><X size={18} /></button>
+        </div>
+        <div className="workspace-label">{isAr ? "مساحة العمل" : "WORKSPACE"}</div>
+        <nav className="sidebar-nav">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.key} href={`/${locale}${item.href}`} onClick={() => setMobileOpen(false)} className={`nav-link ${active === item.key ? "active" : ""}`}>
+                <Icon size={18} strokeWidth={1.8} />
+                <span>{isAr ? item.labelAr : item.label}</span>
+                {item.key === "objectives" && <span className="nav-count">8</span>}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="workspace-label">{isAr ? "المساعدة" : "SUPPORT"}</div>
+          <a className="nav-link" href="mailto:people.support@example.com"><CircleHelp size={18} /><span>{isAr ? "مركز المساعدة" : "Help center"}</span></a>
+          <a className="nav-link" href="#"><Settings2 size={18} /><span>{isAr ? "الإعدادات" : "Settings"}</span></a>
+          <div className="sidebar-profile">
+            <div className="avatar avatar-small">MG</div>
+            <div className="profile-copy"><strong>Mostafa Gamal</strong><small>Employee</small></div>
+            <ChevronDown size={15} />
+          </div>
+        </div>
+      </aside>
+
+      <div className="app-main">
+        <header className="topbar">
+          <div className="topbar-left">
+            <button className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu size={20} /></button>
+            <div className="breadcrumb"><span>Workspace</span><span className="breadcrumb-separator">/</span><strong>{title}</strong></div>
+          </div>
+          <div className="topbar-actions">
+            <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
+            <button className="icon-button notification-button" aria-label="Notifications"><Bell size={18} /><i /></button>
+            <div className="topbar-divider" />
+            <div className="topbar-user"><div className="avatar avatar-small">MG</div><div><strong>Mostafa Gamal</strong><small>Frontend Developer</small></div></div>
+            <div className="locale-switch">
+              <Link href={localeHref(pathname.replace(`/${locale}`, ""), "en")} className={!isAr ? "selected" : ""}>EN</Link>
+              <Link href={localeHref(pathname.replace(`/${locale}`, ""), "ar")} className={isAr ? "selected" : ""}>ع</Link>
+            </div>
+            <Link href={`/${locale}/login`} className="icon-button logout-button" aria-label="Sign out"><LogOut size={17} /></Link>
+          </div>
+        </header>
+        <main className="page-content">
+          <div className="page-heading"><div><h1>{title}</h1>{subtitle && <p>{subtitle}</p>}</div><div className="page-heading-extra"><span className="updated-label">Last updated just now</span></div></div>
+          {children}
+          <footer className="app-footer"><span>© 2026 Perform. All rights reserved.</span><span>Performance made meaningful.</span></footer>
+        </main>
+      </div>
+    </div>
+  );
+}
