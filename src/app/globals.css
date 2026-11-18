@@ -803,3 +803,19 @@ body{font-size:15px}
 .employee-results-footnote svg{flex:0 0 auto;color:#7895b5}
 @media(max-width:720px){.employee-results-summary{align-items:flex-start;flex-direction:column;padding:18px}.employee-period-section,.employee-annual-result{padding:15px}.employee-period-tabs{gap:6px}.employee-period-tabs button{padding:9px 8px}.employee-period-tabs button>span{font-size:12px}.employee-period-tabs button>small{font-size:8px}.employee-result-score-row{gap:14px;padding:12px}.employee-result-score{min-width:80px}.employee-result-score strong{font-size:27px}.employee-annual-components{grid-template-columns:repeat(2,minmax(0,1fr))}.employee-annual-pending{align-items:flex-start;flex-wrap:wrap}.employee-pending-status{margin-inline-start:48px}}
 @media(max-width:390px){.employee-period-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.employee-period-result{padding:12px}.employee-result-score-row{align-items:flex-start;flex-direction:column}.employee-result-progress{width:100%}}
+
+/* Employee plan review decision dialog */
+.employee-decision-backdrop{position:fixed;z-index:80;inset:0;display:grid;place-items:center;padding:18px;background:#14243b66;backdrop-filter:blur(3px)}
+.employee-decision-dialog{width:min(100%,500px);padding:22px;border:1px solid #e7edf4;border-radius:15px;background:#fff;box-shadow:0 24px 70px #13233b33}
+.employee-decision-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.employee-decision-dialog-head h3{margin:0;color:#293d58;font-size:17px}
+.employee-decision-dialog-head p{margin:7px 0 0;color:#8292a6;font-size:12px;line-height:1.7}
+.employee-decision-dialog-head>button{display:grid;place-items:center;width:32px;height:32px;border:1px solid #e8edf3;border-radius:8px;background:#fff;color:#73849a}
+.employee-decision-comment{display:grid;gap:8px;margin-top:18px;color:#52677f;font-size:12px;font-weight:650}
+.employee-decision-comment textarea{width:100%;resize:vertical;padding:11px 12px;border:1px solid #dfe6ee;border-radius:9px;color:#40546c;font-size:12px;line-height:1.6}
+.employee-decision-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
+.employee-decision-actions button{min-height:37px;padding:0 13px;border:1px solid #e1e7ef;border-radius:8px;background:#fff;color:#63768d;font-size:11px;font-weight:650}
+.employee-decision-actions button:last-child{border-color:#244b72;background:#244b72;color:#fff}
+.employee-decision-actions button:disabled{opacity:.45;cursor:not-allowed}
+.employee-decision-dialog>small{display:block;margin-top:12px;color:#a0aaba;font-size:10px}
+@media(max-width:600px){.employee-decision-dialog{padding:17px}.employee-decision-dialog-head h3{font-size:15px}.employee-decision-actions{flex-wrap:wrap}.employee-decision-actions button{flex:1}}
