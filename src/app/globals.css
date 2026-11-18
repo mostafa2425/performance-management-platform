@@ -682,3 +682,53 @@ body { font-size: 15px; line-height: 1.55; }
 .cycle-snapshot{display:grid;gap:0}.cycle-snapshot>div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #eff1f5}.cycle-snapshot>div:last-child{border-bottom:0}.cycle-snapshot strong{color:#315e7b;font-size:17px}.cycle-snapshot span{color:#8997a9;font-size:10px;text-align:end}
 @media(max-width:900px){.manager-analytics-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.manager-objective-row{gap:8px;align-items:flex-start}.objective-icon{width:31px;height:31px}.objective-title-line strong{font-size:10px}.objective-side{min-width:52px}.objective-side>strong{font-size:13px}.objective-side .manager-status{max-width:62px}.manager-trend-chart{height:180px}.trend-bar-wrap{height:110px}.cycle-snapshot>div{align-items:flex-start;flex-direction:column;gap:4px}.cycle-snapshot span{text-align:start}}
+
+
+/* Department and HCD workspaces */
+.workspace-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:17px}
+.workspace-stat-card{display:grid;grid-template-columns:38px 1fr;column-gap:11px;align-items:center;min-height:116px;padding:17px;border:1px solid var(--app-border);border-radius:13px;background:#fff}
+.workspace-stat-icon{grid-row:span 2;display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#edf4fb;color:#4776a8}
+.workspace-stat-card>strong{color:#263c59;font-size:25px;line-height:1.1;font-weight:760}
+.workspace-stat-card>span:nth-of-type(2){color:#74869d;font-size:12px}
+.workspace-stat-card>small{grid-column:2;color:#a0aaba;font-size:10px;margin-top:4px}
+.workspace-data-panel{padding:21px 23px}
+.workspace-record-list{display:grid}
+.workspace-record{display:flex;align-items:center;gap:13px;padding:15px 2px;border-bottom:1px solid #eff1f5}
+.workspace-record:last-child{border-bottom:0}
+.workspace-record-icon{display:grid;place-items:center;width:36px;height:36px;flex:0 0 auto;border-radius:10px;background:#f0f4fa;color:#5d7fa5}
+.workspace-record-main{display:grid;gap:5px;flex:1;min-width:0}
+.workspace-record-main strong{color:#405873;font-size:13px;font-weight:650}
+.workspace-record-main small{color:#8796a8;font-size:11px}
+.workspace-record-value{min-width:70px;text-align:end;color:#385b7a;font-size:13px}
+.workspace-note{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:13px 14px;border:1px solid #f1e7d5;border-radius:10px;background:#fffbf4;color:#8e7959;font-size:11px;line-height:1.7}
+.workspace-note svg{flex:0 0 auto;margin-top:1px}
+@media(max-width:900px){.workspace-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.workspace-stat-grid{gap:8px}.workspace-stat-card{min-height:100px;padding:12px;grid-template-columns:32px 1fr;column-gap:8px}.workspace-stat-icon{width:32px;height:32px}.workspace-stat-card>strong{font-size:21px}.workspace-stat-card>span:nth-of-type(2){font-size:10px}.workspace-record{gap:8px;flex-wrap:wrap}.workspace-record-main{flex-basis:calc(100% - 48px)}.workspace-record-value{margin-inline-start:44px;text-align:start}.workspace-data-panel{padding:16px 13px}}
+
+/* Global readability pass: slightly larger typography across navigation, tables and cards */
+body{font-size:15px}
+.nav-link{font-size:13px;min-height:46px}
+.workspace-label{font-size:10px}
+.profile-copy strong{font-size:12px}.profile-copy small{font-size:11px}
+.breadcrumb{font-size:12px}
+.topbar-user strong{font-size:12px}.topbar-user small{font-size:11px}
+.page-heading h1{font-size:26px}.page-heading p{font-size:13px}
+.metric-label{font-size:12px}.metric-card{padding:19px 20px 16px}
+.team-summary-card>span:last-child{font-size:11px}
+.team-table th{font-size:11px}.team-table td{font-size:12px}
+.team-employee-cell strong{font-size:12px}.team-employee-cell small{font-size:11px}
+.search-field input,.team-filter select{font-size:12px}
+.panel-heading h3{font-size:15px}.panel-heading p{font-size:12px}
+.objective-title-line strong{font-size:13px}.objective-main>small{font-size:11px}
+.manager-insight strong{font-size:12px}.manager-insight small{font-size:11px}
+.queue-item-main strong{font-size:12px}.queue-item-main small{font-size:11px}.queue-item-main>span{font-size:10px}
+.queue-item-due b{font-size:11px}.queue-item-due small{font-size:9px}
+.manager-status,.readonly-pill{font-size:10px}
+@media(max-width:720px){
+ .page-content{padding:22px 16px 18px}
+ .page-heading h1{font-size:23px}
+ .page-heading p{font-size:12px;line-height:1.6}
+ .nav-link{font-size:13px}
+ .team-summary-card>span:last-child{font-size:10px}
+ .team-table td{font-size:11px}
+}
