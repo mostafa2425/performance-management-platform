@@ -20,7 +20,8 @@ export default function AdminFinalReviewPage() {
   const t = (en: string, arabic: string) => ar ? arabic : en;
   const [employees] = useState(initialEmployees);
   const [decision, setDecision] = useState<"approve" | "return" | null>(null);
-  const [comment, setComment] = useState("");\n  const [affectedEmployees, setAffectedEmployees] = useState<string[]>([]);
+  const [comment, setComment] = useState("");
+  const [affectedEmployees, setAffectedEmployees] = useState<string[]>([]);
   const [recorded, setRecorded] = useState<"approved" | "returned" | null>(null);
   const [history, setHistory] = useState<{ action: string; note: string; time: string }[]>([
     { action: "Submitted by Manager", note: "Annual group submitted for final review.", time: "Nov 18, 2026 · 10:42 AM" },
