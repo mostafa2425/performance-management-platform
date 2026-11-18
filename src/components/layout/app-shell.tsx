@@ -53,7 +53,9 @@ const adminNavItems = [
   { key: "employees", label: "Employees", labelAr: "الموظفون", href: "/admin/employees", icon: Users },
   { key: "approvals", label: "Approvals", labelAr: "الاعتمادات", href: "/admin/approvals", icon: ClipboardCheck },
   { key: "publication", label: "Results publication", labelAr: "نشر النتائج", href: "/admin/publication", icon: FileCheck2 },
-  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/admin/history", icon: History },\n  { key: "notifications", label: "Notifications", labelAr: "الإشعارات", href: "/admin/notifications", icon: Bell },\n  { key: "notification-templates", label: "Notification templates", labelAr: "قوالب الإشعارات", href: "/admin/notification-templates", icon: FileCheck2 },
+  { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/admin/history", icon: History },
+  { key: "notifications", label: "Notifications", labelAr: "الإشعارات", href: "/admin/notifications", icon: Bell },
+  { key: "notification-templates", label: "Notification templates", labelAr: "قوالب الإشعارات", href: "/admin/notification-templates", icon: FileCheck2 },
   { key: "reports", label: "Reports & analytics", labelAr: "التقارير والتحليلات", href: "/admin/reports", icon: BookOpen }
 ];
 
