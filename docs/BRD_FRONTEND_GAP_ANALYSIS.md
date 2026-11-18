@@ -19,7 +19,7 @@ The frontend should therefore be described as **workflow UI prototype / integrat
 | Role workspaces and navigation | Five role workspaces and role-specific routes exist | Partial |
 | Arabic / English and RTL | next-intl routes, locale provider, root direction | Implemented foundation; translation coverage incomplete |
 | PWA | Manifest, service worker and registration exist | Foundation only; verify offline/cache safety |
-| Admin cycle management | Cycle list is static mock data; no create/edit/activate workflow | Gap |
+| Admin cycle management | List/search/year-frequency-status filters, create/scope/deadline preview, detail roster/exclusions/manual-inclusion demo, and edit-deadline/audit preview; all local illustrative state | Partial / API integration gap |
 | Employee records / Jisr | Static employee list; no sync status, failure detail, eligibility or inclusion workflow | Gap |
 | Objective & KPI planning | Employee plan review and manager objective screens exist, but data is demo; key BRD authoring/validation rules need verification | Partial |
 | Admin plan review | Approval area is a static final-group review demo; objective/KPI-level Admin review is not fully represented | Gap |
@@ -49,10 +49,10 @@ The BRD defines the following principal use cases in section 11. Current status 
 | UC-002 | View Admin Dashboard | Admin dashboard with illustrative data | Partial |
 | UC-003 | View Manager Employees | Manager team directory and employee detail routes | Partial |
 | UC-004 | View Employee Performance Details | Manager detail page and role history/detail views; mock data | Partial |
-| UC-005 | View Performance Cycles | Static Admin cycle listing | Gap |
-| UC-006 | Create Performance Cycle | No full create wizard, scope selection, stages/deadlines validation or activation flow | Gap |
-| UC-007 | View Performance Cycle Details | No complete cycle detail workflow identified | Gap |
-| UC-008 | Edit Performance Cycle | No date-edit workflow with completed-stage locks and audit preview | Gap |
+| UC-005 | View Performance Cycles | Search and filters by name, year, frequency and status; cycle summary/list with job-title and employee counts; seed data only | Partial |
+| UC-006 | Create Performance Cycle | Create form, scope preview, eligibility exceptions, period/deadline preview and client validation; create/activate are local only | Partial |
+| UC-007 | View Performance Cycle Details | Cycle metadata, generated periods, manager-grouped employee sample statuses, exclusions and manual inclusion demo; source data is illustrative | Partial |
+| UC-008 | Edit Performance Cycle | Deadline editor, completed-stage read-only preview, period/cycle/chronology validation and local audit preview; locks currently infer completion from dates and must use backend workflow status | Partial |
 | UC-009 | View Manager Dashboard | Manager dashboard with illustrative metrics | Partial |
 | UC-010 | View Employee Performance Details | Manager employee detail view | Partial |
 | UC-011 | Prepare Employee Objectives & KPIs | Manager objectives workspace exists; verify complete Category → Objective → KPI authoring and all BRD validations | Partial |
@@ -175,7 +175,7 @@ Production requires notification list/unread count/read mutations, recipient sco
 6. Add backend-backed authorization tests and frontend tests for critical role visibility / employee data privacy.
 
 ### P1 — Core BRD completion
-1. Build Admin Performance Cycle create/detail/edit/activate workflows and validations (UC-005–UC-008).
+1. Connect the Admin Performance Cycle UC-005–UC-008 screens to backend list/detail/create/activate/manual-inclusion/deadline-update/audit APIs; make workflow locks and eligibility server-authoritative.
 2. Build employee population, Jisr sync status/failure details, eligibility/exclusion and manual cycle inclusion.
 3. Complete Objective Category administration and full Manager objective/KPI authoring/SMART validation.
 4. Complete Admin plan review with Objective/KPI-level comments, approve/return, and returned-plan resubmission.
@@ -222,3 +222,4 @@ A BRD use case is not complete merely because a route exists. Mark it complete o
 5. Arabic and English UI, responsive behavior and accessibility are checked.
 6. Automated tests cover the important success, failure, role-visibility and privacy paths.
 7. No demo seed data or local-only state is presented as a real business transaction.
+\n\n## 7. Cycle API handoff\n\nThe cycle-specific backend contract requirements are documented in `docs/PERFORMANCE_CYCLE_API_HANDOFF.md`. This document deliberately does not invent endpoint paths or payload formats; the backend team must confirm the wire contract before API wiring.\n
