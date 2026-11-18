@@ -1,5 +1,5 @@
 "use client";
-import {useMemo,useState} from "react";
+import {useState} from "react";
 import {useLocale} from "next-intl";
 import {AppShell} from "@/components/layout/app-shell";
 import {calculateAchievement,calculateAnnualObjectives,calculateCompetencyResult,calculateOverallAnnual,calculatePeriodResult,getRating,sumWeights} from "@/lib/performance-calculations";
