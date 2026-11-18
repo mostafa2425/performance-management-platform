@@ -4,7 +4,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Activity, AlertTriangle, ArrowLeft, ArrowRight, CalendarDays, Check, ChevronRight, Clock3, Eye, Filter, Plus, Search, ShieldCheck, Users, X } from "lucide-react";
+import { AlertTriangle, ArrowLeft, CalendarDays, Check, Eye, Plus, Search, ShieldCheck, Users } from "lucide-react";
 
 type Frequency = "Quarterly" | "Semi-Annual" | "Annual";
 type Status = "Draft" | "Active" | "Closed";
@@ -39,7 +39,6 @@ const periodsFor = (start: string, frequency: Frequency) => {
  const months = frequency==="Quarterly"?3:frequency==="Semi-Annual"?6:12;
  return Array.from({length:count},(_,i)=>{const d=new Date(start+"T12:00:00");d.setMonth(d.getMonth()+i*months);const s=d.toISOString().slice(0,10);const e=new Date(d);e.setMonth(e.getMonth()+months);e.setDate(e.getDate()-1);return {name:frequency==="Quarterly"?"Q"+(i+1):frequency==="Semi-Annual"?"H"+(i+1):"Annual",start:s,end:e.toISOString().slice(0,10)};});
 };
-const stageNames = (ar:boolean) => ar ? ["إعداد الأهداف واعتمادها","مراجعة الموظف","فترة الأداء الفعلي","تقييم المدير","المراجعة النهائية للإدارة"] : ["Objective Setting & Approval","Employee Review","Active Performance","Manager Evaluation","Admin Final Review"];
 
 export default function PerformanceCycleWorkspace({ mode, cycleId }: { mode: "list"|"create"|"detail"; cycleId?: string }) {
  const ar=useLocale()==="ar"; const t=(en:string,arabic:string)=>ar?arabic:en;
