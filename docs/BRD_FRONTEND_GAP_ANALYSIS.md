@@ -23,7 +23,7 @@ The frontend should therefore be described as **workflow UI prototype / integrat
 | Employee records / Jisr | Static employee list; no sync status, failure detail, eligibility or inclusion workflow | Gap |
 | Objective & KPI planning | Employee plan review and manager objective screens exist, but data is demo; key BRD authoring/validation rules need verification | Partial |
 | Admin plan review | Approval area is a static final-group review demo; objective/KPI-level Admin review is not fully represented | Gap |
-| Competency templates | HCD summary rows only; no full template editor, weights, job-title mapping | Gap |
+| Competency templates | Admin Competency Bank with bilingual groups/competencies, descriptions, weight total validation, Job Title mapping, copy/delete controls and active-cycle read-only demo lock; local-only data | Partial / API integration gap |
 | KPI evaluation | Manager evaluation form exists; local calculations and local state, not API-backed | Partial / calculation boundary issue |
 | Annual competency evaluation | Rating UI exists, but competency set and 25% weights are hard-coded demo values | Partial |
 | Period / annual calculation | Summary displays exist; no authoritative API calculation breakdown | Gap |
@@ -60,7 +60,7 @@ The BRD defines the following principal use cases in section 11. Current status 
 | UC-013 | Review Employee Performance Plan | Manager/Admin review surfaces exist; Admin objective/KPI-level comments and all review states need completion | Partial |
 | UC-014 | Review Performance Plan – Employee / modification request | Employee approve/request-modification UI with mandatory comment for request; local state only | Partial |
 | UC-015 | Update Returned Performance Plan – Manager | Manager review queue exists; full return-edit-resubmit lifecycle needs API and verification | Partial |
-| UC-016 | Manage Competency Templates | HCD template overview only; no complete template CRUD/copy, competency weights and job-title mapping | Gap |
+| UC-016 | Manage Competency Templates | Admin editor supports bilingual group and competency details, add/remove groups and competencies, 100% total weight validation, unique Job Title mapping, copy and delete; local state only and active-cycle lock is illustrative | Partial |
 | UC-017 | Evaluate Employee Objectives & KPIs – Manager | Manager evaluation form; actual values, comments and calculations are local demo state | Partial |
 | UC-018 | Calculate Period & Annual Objectives Result | No backend calculation contract or authoritative result rendering | Gap |
 | UC-019 | Evaluate Employee Competencies – Manager | Annual 1–5 rating controls exist with demo competencies/weights | Partial |
@@ -179,7 +179,7 @@ Production requires notification list/unread count/read mutations, recipient sco
 2. Build employee population, Jisr sync status/failure details, eligibility/exclusion and manual cycle inclusion.
 3. Complete Objective Category administration and full Manager objective/KPI authoring/SMART validation.
 4. Complete Admin plan review with Objective/KPI-level comments, approve/return, and returned-plan resubmission.
-5. Complete Competency Template management, copy, competency weights and Job Title mapping.
+5. Connect Competency Template management (UC-016) to backend template CRUD/copy, weight validation, Job Title mapping, employee auto-assignment and active-cycle version locks.
 6. Implement Non-Final Period Evaluation review and the Final Period → Manager-Year Group path.
 7. Implement period/annual calculation display, group-level Bell Curve and final review.
 8. Implement finalization/publication and employee results visibility based only on published state.
@@ -222,4 +222,4 @@ A BRD use case is not complete merely because a route exists. Mark it complete o
 5. Arabic and English UI, responsive behavior and accessibility are checked.
 6. Automated tests cover the important success, failure, role-visibility and privacy paths.
 7. No demo seed data or local-only state is presented as a real business transaction.
-\n\n## 7. Cycle API handoff\n\nThe cycle-specific backend contract requirements are documented in `docs/PERFORMANCE_CYCLE_API_HANDOFF.md`. This document deliberately does not invent endpoint paths or payload formats; the backend team must confirm the wire contract before API wiring.\n
+\n\n## 7. Cycle API handoff\n\nThe cycle-specific backend contract requirements are documented in `docs/PERFORMANCE_CYCLE_API_HANDOFF.md`. This document deliberately does not invent endpoint paths or payload formats; the backend team must confirm the wire contract before API wiring.\n\n\n## 8. Competency Template implementation\n\nThe Admin Competency Bank UI is available at `/admin/competency-templates`. It covers the UC-016 authoring flow for bilingual template/group/competency labels, competency descriptions and weights, live total calculation, 100% activation validation, Job Title mapping conflict prevention, copy and deletion controls. All records and actions remain local demo state until backend contracts are connected.\n
