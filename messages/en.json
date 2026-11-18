@@ -1,0 +1,17 @@
+{
+  "Home": {
+    "title": "Performance Management Platform",
+    "description": "A centralized workspace for performance cycles, objectives, evaluations and results.",
+    "signIn": "Sign in"
+  },
+  "Auth": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to your performance workspace",
+    "email": "Work email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "or": "OR",
+    "microsoft": "Continue with Microsoft",
+    "integrationPending": "Authentication will be connected after the backend session and SSO contract is confirmed."
+  }
+}
