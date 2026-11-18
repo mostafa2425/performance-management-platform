@@ -97,7 +97,13 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
         <header className="topbar">
           <div className="topbar-left">
             <button className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu size={20} /></button>
-            <div className="breadcrumb"><span>Workspace</span><span className="breadcrumb-separator">/</span><strong>{title}</strong></div>
+            <nav className="breadcrumb" aria-label={isAr ? "مسار التنقل" : "Breadcrumb"}>
+              <Link className="breadcrumb-home" href={`/${locale}${role === "admin" ? "/admin" : role === "hcd" ? "/hcd" : role === "department" ? "/department" : role === "manager" ? "/manager" : "/dashboard"}`}>
+                {isAr ? "مساحة العمل" : "Workspace"}
+              </Link>
+              <span className="breadcrumb-separator" aria-hidden="true">/</span>
+              <span className="breadcrumb-current" aria-current="page">{title}</span>
+            </nav>
           </div>
           <div className="topbar-actions">
             <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
