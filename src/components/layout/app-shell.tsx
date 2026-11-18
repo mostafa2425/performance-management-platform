@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 import {
-  Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck,
+  Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck, FileCheck2,
   LayoutDashboard, LogOut, Menu, Settings2, Target, UserRound, Users, X
 } from "lucide-react";
 import { useState } from "react";
@@ -48,6 +48,7 @@ const adminNavItems = [
   { key: "cycles", label: "Performance cycles", labelAr: "دورات الأداء", href: "/admin/performance-cycles", icon: Activity },
   { key: "employees", label: "Employees", labelAr: "الموظفون", href: "/admin/employees", icon: Users },
   { key: "approvals", label: "Approvals", labelAr: "الاعتمادات", href: "/admin/approvals", icon: ClipboardCheck },
+  { key: "publication", label: "Results publication", labelAr: "نشر النتائج", href: "/admin/publication", icon: FileCheck2 },
   { key: "reports", label: "Reports & analytics", labelAr: "التقارير والتحليلات", href: "/admin/reports", icon: BookOpen }
 ];
 
