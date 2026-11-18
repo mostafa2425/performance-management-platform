@@ -1,2 +1,2 @@
 import { BellCurveMonitoringWorkspace } from "@/features/workspaces/performance-workflow-workspaces";
-export default function Page(){return <BellCurveMonitoringWorkspace/>;}
+export default function Page(){return <BellCurveMonitoringWorkspace role="hcd"/>;}
