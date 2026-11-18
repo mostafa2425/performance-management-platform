@@ -1,3 +1,3 @@
-import { AdminSectionPage } from "@/features/admin/admin-section-page";
+import AdminFinalReviewPage from "@/features/admin/admin-final-review-page";
 
-export default function Page() { return <AdminSectionPage section="approvals" />; }
+export default function Page() { return <AdminFinalReviewPage />; }
