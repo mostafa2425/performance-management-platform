@@ -739,3 +739,67 @@ body{font-size:15px}
 .breadcrumb-home:hover{color:var(--app-primary);text-decoration:underline;text-underline-offset:3px}
 .breadcrumb-home:focus-visible{outline:2px solid #42bda4;outline-offset:3px;border-radius:3px}
 .breadcrumb-current{color:#283b57;font-weight:700}
+
+
+/* Employee performance results */
+.employee-results-notice{display:flex;align-items:flex-start;gap:10px;margin-bottom:15px;padding:12px 14px;border:1px solid #dfe9f3;border-radius:10px;background:#f7fafd;color:#72859b;font-size:11px;line-height:1.7}
+.employee-results-notice svg{flex:0 0 auto;margin-top:1px;color:#6285ad}
+.employee-results-summary{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;padding:22px 25px;border-radius:13px;background:linear-gradient(110deg,#1b355e,#275a78 65%,#267a70);color:white}
+.employee-results-eyebrow{display:inline-flex;align-items:center;gap:7px;color:#91e0c6;font-size:9px;font-weight:800;letter-spacing:.9px}
+.employee-results-summary h2{margin:9px 0 5px;color:white;font-size:21px;font-weight:750}
+.employee-results-summary p{margin:0;color:#c5d6e4;font-size:11px}
+.employee-results-cycle-state{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid #ffffff30;border-radius:20px;color:#d6e8ed;font-size:10px;white-space:nowrap}
+.cycle-live-dot{width:7px;height:7px;border-radius:50%;background:#5cdbb4;box-shadow:0 0 0 4px #5cdbb422}
+.employee-period-section,.employee-annual-result{margin-top:15px;padding:20px;border:1px solid var(--app-border);border-radius:13px;background:white}
+.employee-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.employee-section-heading h3{margin:0;color:#293d58;font-size:14px;font-weight:750}
+.employee-section-heading p{margin:5px 0 0;color:#8b9aad;font-size:10px}
+.employee-period-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:17px 0}
+.employee-period-tabs button{display:grid;gap:5px;padding:11px 12px;border:1px solid #e8edf3;border-radius:9px;background:#fff;text-align:start;cursor:pointer}
+.employee-period-tabs button.selected{border-color:#7db8ad;background:#f1faf7;box-shadow:inset 0 0 0 1px #b8e2d7}
+.employee-period-tabs button>span{color:#3d5572;font-size:13px;font-weight:750}
+.employee-period-tabs button>small{color:#8b9aac;font-size:9px}
+.employee-period-tabs button.selected>span{color:#207c6a}
+.employee-period-result{padding:17px;border:1px solid #e8edf3;border-radius:11px;background:#fcfdff}
+.employee-period-result-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.employee-result-label{color:#91a0b1;font-size:9px;font-weight:800;letter-spacing:.8px}
+.employee-period-result-top h4{margin:6px 0 0;color:#405772;font-size:12px;font-weight:700}
+.employee-published-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:20px;background:#eaf8f2;color:#278a71;font-size:9px;font-weight:700;white-space:nowrap}
+.employee-result-score-row{display:flex;align-items:center;gap:24px;margin:17px 0 19px;padding:16px;border-radius:10px;background:white}
+.employee-result-score{display:grid;gap:3px;min-width:100px}
+.employee-result-score strong{color:#244c70;font-size:31px;line-height:1.1;font-weight:800;letter-spacing:-1px}
+.employee-result-score span{color:#8b9aad;font-size:10px}
+.employee-result-progress{display:grid;gap:8px;flex:1}
+.employee-result-progress>div:first-child{display:flex;justify-content:space-between;gap:10px;color:#8292a6;font-size:10px}
+.employee-result-progress b{color:#47627e}
+.employee-result-track{height:8px;overflow:hidden;border-radius:10px;background:#edf1f5}
+.employee-result-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#43b69a,#278d83)}
+.employee-result-progress small{color:#a0aab7;font-size:9px}
+.employee-approved-objectives{padding-top:2px}
+.employee-approved-objectives>.employee-section-heading{margin-bottom:7px}
+.employee-approved-objective{display:flex;align-items:center;gap:10px;padding:12px 2px;border-top:1px solid #eff2f6}
+.employee-objective-icon{display:grid;place-items:center;width:31px;height:31px;flex:0 0 auto;border-radius:8px;background:#edf4fb;color:#547da8}
+.employee-approved-objective>div{display:grid;gap:4px;flex:1;min-width:0}
+.employee-approved-objective strong{color:#50647c;font-size:11px;font-weight:650}
+.employee-approved-objective small{color:#96a3b2;font-size:9px}
+.employee-approved-objective>svg{color:#a5b0bd}
+.employee-period-locked{display:grid;justify-items:center;gap:9px;padding:30px 18px;border:1px dashed #e1e8ef;border-radius:10px;background:#fbfcfe;text-align:center}
+.employee-period-lock-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#f0f4f8;color:#7188a2}
+.employee-period-locked strong{color:#4a607a;font-size:12px}
+.employee-period-locked p{max-width:480px;margin:0;color:#8c9bad;font-size:10px;line-height:1.7}
+.employee-upcoming-date{color:#9aa7b6;font-size:9px}
+.employee-annual-result{margin-bottom:13px}
+.employee-annual-pending{display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px;border:1px solid #f0e7d8;border-radius:10px;background:#fffcf7}
+.employee-annual-icon{display:grid;place-items:center;width:36px;height:36px;flex:0 0 auto;border-radius:9px;background:#fff2df;color:#b98949}
+.employee-annual-pending>div{display:grid;gap:4px;flex:1;min-width:0}
+.employee-annual-pending strong{color:#65583f;font-size:11px}
+.employee-annual-pending p{margin:0;color:#9c8d73;font-size:9px;line-height:1.6}
+.employee-pending-status{padding:5px 8px;border-radius:20px;background:#fff2df;color:#a67b40;font-size:9px;font-weight:700;white-space:nowrap}
+.employee-annual-components{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.employee-annual-components>div{display:grid;gap:7px;padding:11px;border:1px solid #edf0f4;border-radius:8px}
+.employee-annual-components span{color:#8796a8;font-size:9px;line-height:1.4}
+.employee-annual-components strong{color:#8190a2;font-size:17px}
+.employee-results-footnote{display:flex;align-items:center;gap:8px;margin-top:13px;color:#98a5b4;font-size:9px;line-height:1.6}
+.employee-results-footnote svg{flex:0 0 auto;color:#7895b5}
+@media(max-width:720px){.employee-results-summary{align-items:flex-start;flex-direction:column;padding:18px}.employee-period-section,.employee-annual-result{padding:15px}.employee-period-tabs{gap:6px}.employee-period-tabs button{padding:9px 8px}.employee-period-tabs button>span{font-size:12px}.employee-period-tabs button>small{font-size:8px}.employee-result-score-row{gap:14px;padding:12px}.employee-result-score{min-width:80px}.employee-result-score strong{font-size:27px}.employee-annual-components{grid-template-columns:repeat(2,minmax(0,1fr))}.employee-annual-pending{align-items:flex-start;flex-wrap:wrap}.employee-pending-status{margin-inline-start:48px}}
+@media(max-width:390px){.employee-period-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.employee-period-result{padding:12px}.employee-result-score-row{align-items:flex-start;flex-direction:column}.employee-result-progress{width:100%}}
