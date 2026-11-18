@@ -9,22 +9,31 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-type Props = { children: React.ReactNode; title: string; subtitle?: string };
+type Props = { children: React.ReactNode; title: string; subtitle?: string; role?: "employee" | "admin" };
 
-const navItems = [
+const employeeNavItems = [
   { key: "dashboard", label: "Overview", labelAr: "نظرة عامة", href: "/dashboard", icon: LayoutDashboard },
   { key: "objectives", label: "My objectives", labelAr: "أهدافي", href: "/employee/objectives", icon: Target },
   { key: "performance", label: "My performance", labelAr: "أدائي", href: "/employee/performance", icon: Activity },
   { key: "development", label: "Development", labelAr: "التطوير", href: "/employee/development", icon: BookOpen }
+ ];
+
+const adminNavItems = [
+  { key: "dashboard", label: "Overview", labelAr: "نظرة عامة", href: "/admin", icon: LayoutDashboard },
+  { key: "cycles", label: "Performance cycles", labelAr: "دورات الأداء", href: "/admin/performance-cycles", icon: Activity },
+  { key: "employees", label: "Employees", labelAr: "الموظفون", href: "/admin/employees", icon: Users },
+  { key: "approvals", label: "Approvals", labelAr: "الاعتمادات", href: "/admin/approvals", icon: ClipboardCheck },
+  { key: "reports", label: "Reports & analytics", labelAr: "التقارير والتحليلات", href: "/admin/reports", icon: BookOpen }
 ];
 
-export function AppShell({ children, title, subtitle }: Props) {
+export function AppShell({ children, title, subtitle, role = "employee" }: Props) {
   const pathname = usePathname();
   const locale = useLocale();
   const isAr = locale === "ar";
   const [mobileOpen, setMobileOpen] = useState(false);
   const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
-  const active = navItems.find((item) => pathname.endsWith(item.href))?.key ?? "dashboard";
+  const navItems = role === "admin" ? adminNavItems : employeeNavItems;
+  const active = navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ?? "dashboard";
 
   return (
     <div className="app-frame" dir={isAr ? "rtl" : "ltr"}>
@@ -54,7 +63,7 @@ export function AppShell({ children, title, subtitle }: Props) {
           <a className="nav-link" href="#"><Settings2 size={18} /><span>{isAr ? "الإعدادات" : "Settings"}</span></a>
           <div className="sidebar-profile">
             <div className="avatar avatar-small">MG</div>
-            <div className="profile-copy"><strong>Mostafa Gamal</strong><small>Employee</small></div>
+            <div className="profile-copy"><strong>{role === "admin" ? "HCD Administrator" : "Mostafa Gamal"}</strong><small>{role === "admin" ? "Administrator" : "Employee"}</small></div>
             <ChevronDown size={15} />
           </div>
         </div>
@@ -70,7 +79,7 @@ export function AppShell({ children, title, subtitle }: Props) {
             <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
             <button className="icon-button notification-button" aria-label="Notifications"><Bell size={18} /><i /></button>
             <div className="topbar-divider" />
-            <div className="topbar-user"><div className="avatar avatar-small">MG</div><div><strong>Mostafa Gamal</strong><small>Frontend Developer</small></div></div>
+            <div className="topbar-user"><div className="avatar avatar-small">{role === "admin" ? "HA" : "MG"}</div><div><strong>{role === "admin" ? "HCD Administrator" : "Mostafa Gamal"}</strong><small>{role === "admin" ? "Human Capital Development" : "Frontend Developer"}</small></div></div>
             <div className="locale-switch">
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "en")} className={!isAr ? "selected" : ""}>EN</Link>
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "ar")} className={isAr ? "selected" : ""}>ع</Link>
