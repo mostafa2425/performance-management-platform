@@ -52,9 +52,9 @@ export default function DashboardPage() {
         </section>
 
         <section className="panel actions-panel">
-          <div className="panel-heading"><div><h3>{text("Your next steps", "خطواتك القادمة")}</h3><p>{text("A few things to keep you moving", "بعض المهام لمساعدتك على التقدم")}</p></div><span className="count-badge">03</span></div>
+          <div className="panel-heading"><div><h3>{text("Your next steps", "خطواتك القادمة")}</h3><p>{text("A few things to keep you moving", "بعض المهام لمساعدتك على التقدم")}</p></div><span className="count-badge">01</span></div>
           <div className="action-list">
-            {actionItems.map((item) => <div className="action-item" key={item.id}><span className={`action-icon ${item.type}`}>{item.type === "review" ? <ClipboardCheck size={17}/> : item.type === "development" ? <BookOpenIcon/> : <Target size={17}/>}</span><div className="action-copy"><strong>{text(item.title, item.id===1?"راجع أهداف أدائك":item.id===2?"أكمل خطة التطوير":"راجع تقدم الأهداف")}</strong><small>{text(item.detail, item.id===1?"8 أهداف · في انتظار مراجعة الموظف":item.id===2?"ملف الكفاءات · للعرض فقط":"دقة تقدير المهام")}</small><span><CalendarDays size={12}/> {text("Due", "الموعد")}: {item.due}</span></div><ChevronRight size={16} className="action-arrow"/></div>)}
+            {actionItems.map((item) => <Link href={`/${locale}/employee/objectives`} className="action-item" key={item.id}><span className={`action-icon ${item.type}`}><ClipboardCheck size={17}/></span><div className="action-copy"><strong>{text(item.title, "راجع خطة أدائك")}</strong><small>{text(item.detail, "في انتظار مراجعتك · اعتماد أو طلب تعديل")}</small><span><CalendarDays size={12}/> {text("Action required", "يتطلب إجراءً")}</span></div><ChevronRight size={16} className="action-arrow"/></Link>)}
           </div>
           <Link href={`/${locale}/employee/objectives`} className="panel-bottom-link">{text("Go to my objectives", "الانتقال إلى أهدافي")} <ArrowUpRight size={15}/></Link>
         </section>
@@ -62,10 +62,10 @@ export default function DashboardPage() {
         <section className="panel cycle-panel">
           <div className="panel-heading"><div><h3>{text("Your performance cycle", "دورة أدائك")}</h3><p>{text("2026 annual performance journey · Illustrative timeline", "رحلة الأداء السنوية لعام 2026 · جدول توضيحي")}</p></div><span className="soft-status"><span className="status-dot"/> {text("In progress", "جارية")}</span></div>
           <div className="cycle-steps">
-            <div className="cycle-step completed"><span className="step-marker"><Check size={13}/></span><div><strong>{text("Objective setting", "تحديد الأهداف")}</strong><small>{text("Completed · Jan 15", "مكتمل · 15 يناير")}</small></div></div>
-            <div className="cycle-step current"><span className="step-marker">2</span><div><strong>{text("Active performance", "فترة الأداء")}</strong><small>{text("In progress · Jan – Dec", "جارية · يناير – ديسمبر")}</small></div><span className="current-tag">{text("CURRENT", "الحالية")}</span></div>
-            <div className="cycle-step upcoming"><span className="step-marker">3</span><div><strong>{text("Manager evaluation", "تقييم المدير")}</strong><small>{text("Upcoming · Dec 20", "قادمة · 20 ديسمبر")}</small></div></div>
-            <div className="cycle-step upcoming"><span className="step-marker">4</span><div><strong>{text("Final results", "النتائج النهائية")}</strong><small>{text("Upcoming · Jan 2027", "قادمة · يناير 2027")}</small></div></div>
+            <div className="cycle-step completed"><span className="step-marker"><Check size={13}/></span><div><strong>{text("Objective setting", "تحديد الأهداف")}</strong><small>{text("Submitted for review", "تم إرسالها للمراجعة")}</small></div></div>
+            <div className="cycle-step current"><span className="step-marker">2</span><div><strong>{text("Employee review", "مراجعة الموظف")}</strong><small>{text("Pending your decision", "في انتظار قرارك")}</small></div><span className="current-tag">{text("ACTION", "مطلوب")}</span></div>
+            <div className="cycle-step upcoming"><span className="step-marker">3</span><div><strong>{text("Active performance", "فترة الأداء")}</strong><small>{text("After plan approval", "بعد اعتماد الخطة")}</small></div></div>
+            <div className="cycle-step upcoming"><span className="step-marker">4</span><div><strong>{text("Manager evaluation", "تقييم المدير")}</strong><small>{text("After performance period", "بعد انتهاء فترة الأداء")}</small></div></div>
           </div>
         </section>
 
