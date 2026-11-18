@@ -1065,3 +1065,33 @@ body{font-size:15px}
 .cycle-scope-preview b{color:#5a7087;font-size:9px}
 .cycle-scope-preview small,.cycle-scope-preview>small{color:#9aa6b3;font-size:8px}
 .cycle-scope-preview button{padding:5px 8px;border:1px solid #e2e9ef;border-radius:5px;background:#fff;color:#72869a;font-size:8px}
+
+
+/* Performance cycle detail: employee roster and eligibility preview */
+.cycle-roster-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.cycle-roster-summary>span{display:flex;flex-direction:column;gap:5px;padding:14px 16px;border:1px solid var(--border,#e7eaf0);border-radius:12px;color:var(--muted-foreground,#667085);font-size:12px}
+.cycle-roster-summary b{font-size:22px;line-height:1.2;color:var(--foreground,#182230)}
+.cycle-manager-groups{display:grid;gap:12px;margin:14px 0 22px}
+.cycle-manager-group{border:1px solid var(--border,#e7eaf0);border-radius:12px;overflow:hidden;background:var(--card,#fff)}
+.cycle-manager-group>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;cursor:pointer;list-style:none}
+.cycle-manager-group>summary::-webkit-details-marker{display:none}
+.cycle-manager-group>summary span,.cycle-excluded-person>span:first-child{display:flex;flex-direction:column;gap:4px}
+.cycle-manager-group>summary small,.cycle-roster-table td small,.cycle-excluded-person small{display:block;color:var(--muted-foreground,#667085);font-size:11px;margin-top:3px}
+.cycle-manager-group>summary strong{font-size:12px;color:var(--muted-foreground,#667085)}
+.cycle-roster-table-wrap{overflow-x:auto;border-top:1px solid var(--border,#e7eaf0)}
+.cycle-roster-table{width:100%;border-collapse:collapse;min-width:720px;font-size:12px}
+.cycle-roster-table th,.cycle-roster-table td{padding:12px 14px;text-align:start;border-bottom:1px solid var(--border,#edf0f4);vertical-align:middle}
+.cycle-roster-table th{font-weight:600;color:var(--muted-foreground,#667085);background:var(--muted,#f8fafc);white-space:nowrap}
+.cycle-period-state{display:inline-flex;padding:4px 8px;border-radius:20px;background:#f1f5f9;color:#475569;font-size:10px;white-space:nowrap}
+.cycle-period-state.approved,.cycle-period-state.completed{background:#ecfdf3;color:#067647}
+.cycle-period-state.under-review{background:#fffaeb;color:#b54708}
+.cycle-period-state.in-progress{background:#eff8ff;color:#175cd3}
+.cycle-roster-table td>small{white-space:nowrap}
+.cycle-excluded-list{border:1px solid var(--border,#e7eaf0);border-radius:12px;overflow:hidden;margin-top:18px}
+.cycle-excluded-heading{display:flex;flex-direction:column;gap:4px;padding:14px 16px;background:var(--muted,#f8fafc)}
+.cycle-excluded-heading small{font-size:11px;color:var(--muted-foreground,#667085)}
+.cycle-excluded-person{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px;border-top:1px solid var(--border,#edf0f4);font-size:12px}
+.cycle-exclusion-reason{color:var(--muted-foreground,#667085);font-size:11px}
+.cycle-excluded-person button{border:1px solid var(--border,#d0d5dd);background:transparent;border-radius:8px;padding:7px 10px;font-size:11px;white-space:nowrap;cursor:pointer}
+.cycle-manual-added{font-size:10px;color:#067647;background:#ecfdf3;padding:5px 8px;border-radius:20px;white-space:nowrap}
+@media(max-width:700px){.cycle-roster-summary{grid-template-columns:1fr}.cycle-excluded-person{align-items:flex-start;flex-wrap:wrap}.cycle-exclusion-reason{width:100%;order:3}.cycle-manager-group>summary{padding:12px}}
