@@ -55,18 +55,18 @@ The BRD defines the following principal use cases in section 11. Current status 
 | UC-008 | Edit Performance Cycle | Deadline editor, completed-stage read-only preview, period/cycle/chronology validation and local audit preview; locks currently infer completion from dates and must use backend workflow status | Partial |
 | UC-009 | View Manager Dashboard | Manager dashboard with illustrative metrics | Partial |
 | UC-010 | View Employee Performance Details | Manager employee detail view | Partial |
-| UC-011 | Prepare Employee Objectives & KPIs | Manager objectives workspace exists; verify complete Category → Objective → KPI authoring and all BRD validations | Partial |
+| UC-011 | Prepare Employee Objectives & KPIs | Editable Category → Objective → KPI builder; measurement type/unit/direction/target/weight fields, live total KPI weight, SMART checklist threshold gate, add/delete controls and save/validate preview; AI functions explicitly remain non-connected | Frontend demo complete / API pending |
 | UC-012 | Submit Employee Performance Plan | Plan/review surfaces exist; no API submission or workflow transition | Partial |
-| UC-013 | Review Employee Performance Plan | Manager/Admin review surfaces exist; Admin objective/KPI-level comments and all review states need completion | Partial |
+| UC-013 | Review Employee Performance Plan | Admin queue and Objective/KPI-level comments; return requires at least one item comment; approval/return previews; permitted target/weight edit preview. BRD has conflicting Admin edit permissions, flagged in UI | Frontend demo partial / BRD decision pending |
 | UC-014 | Review Performance Plan – Employee / modification request | Employee approve/request-modification UI with mandatory comment for request; local state only | Partial |
-| UC-015 | Update Returned Performance Plan – Manager | Manager review queue exists; full return-edit-resubmit lifecycle needs API and verification | Partial |
+| UC-015 | Update Returned Performance Plan – Manager | Return source/reason/comments displayed; plan correction and validation preview; Admin-returned routes to Admin approval and Employee-returned routes directly to Employee Review per later activity steps. Conflicting earlier BRD resubmission wording flagged | Frontend demo partial / BRD decision pending |
 | UC-016 | Manage Competency Templates | Admin editor supports bilingual group and competency details, add/remove groups and competencies, 100% total weight validation, unique Job Title mapping, copy and delete; local state only and active-cycle lock is illustrative | Partial |
 | UC-017 | Evaluate Employee Objectives & KPIs – Manager | Manager evaluation form; actual values, comments and calculations are local demo state | Partial |
-| UC-018 | Calculate Period & Annual Objectives Result | No backend calculation contract or authoritative result rendering | Gap |
+| UC-018 | Calculate Period & Annual Objectives Result | Shared pure calculation helpers and period/annual calculation explorer with KPI cap, lower-is-better zero rule, weighted KPI results and equal-period annual average; sample inputs only | Frontend demo complete / API pending |
 | UC-019 | Evaluate Employee Competencies – Manager | Annual 1–5 rating controls exist with demo competencies/weights | Partial |
-| UC-020 | Calculate Overall Annual Performance | No authoritative API result / score breakdown integration | Gap |
-| UC-021 | Review Final Performance Result – Admin | Group-level final review UI exists; Non-Final Period Evaluation approve/return workflow and returned-group rules need completion | Partial |
-| UC-022 | Monitor Performance Rating Distribution (Bell Curve) | UI explains that policy is unresolved; no actual distribution/validation/calibration | Blocked / Gap |
+| UC-020 | Calculate Overall Annual Performance | Shared calculation helpers and annual breakdown explorer for Objectives/Competencies configured weights, full rating bands and provisional result | Frontend demo complete / API pending |
+| UC-021 | Review Final Performance Result – Admin | Group-level final review includes employee score drilldowns, group completeness gate, Bell Curve warning, mandatory return reason and affected-employee selection; decisions remain local | Frontend demo partial / policy and API pending |
+| UC-022 | Monitor Performance Rating Distribution (Bell Curve) | Score-based provisional rating distribution and employee list for Manager-Year Group; no invented limits, pass/fail, or calibration because BRD conflicts and approved thresholds are absent | Frontend monitoring demo complete / policy decision pending |
 | UC-023 | Finalize & Publish Performance Results | Publication schedule and read-only preview; no finalization/publication job/API | Partial |
 | UC-024 | View Performance Results – Employee | Employee period/annual result screen; must be driven by published API state and preserve BRD visibility restrictions | Partial |
 | UC-025 | Manage Objective Categories | No dedicated full Admin category management workflow identified | Gap |
@@ -227,3 +227,26 @@ A BRD use case is not complete merely because a route exists. Mark it complete o
 ## 10. UC-027 Notification Template Management
 
 The Admin notification-template workspace at `/admin/notification-templates` covers the UC-027 content-editing boundary: it lists predefined templates, permits editing English/Arabic subjects and message bodies, validates all four content fields before saving, and keeps recipients, triggers and workflow conditions read-only. Cancel restores the selected template's original seed content without discarding edits to other templates in the current page session. The UI explicitly states that changes apply to future notifications only. NOT-017 message-body copy remains blank because the BRD does not supply it; the Admin must provide approved copy before that template can pass required-field validation. All edits remain local demo state and are not persisted, audited or used by notification delivery until backend APIs are connected.
+
+
+## 10. Frontend workflow completion pass (2026-11-18)
+
+The following front-end-only workspaces were added or upgraded. All actions are explicitly demo-local and do not create server-side workflow records:
+
+- Manager Goal Setting (UC-011): structured Category → Objective → KPI builder; KPI measurement type, unit, calculation direction, target and weight; live aggregate KPI weight; minimum SMART score gate; category/objective/KPI presence checks; draft and submission-readiness previews. The SMART checklist and wording helper are local illustrative UI, not an AI integration.
+- Admin Plan Review (UC-013): separate route `/admin/plan-reviews`, pending-plan selector, Objective/KPI-level comments, optional target/weight editing preview, 100% KPI weight / positive target / SMART validation, comment-required Return and Approve preview. The BRD contains conflicting statements about whether Admin can edit submitted Objectives/KPIs; this remains flagged for business confirmation.
+- Returned Plan Update (UC-015): Manager review queue shows return source, reason, comments and Admin Attention flag; edit/resubmit preview branches by source. The later activity steps send Employee-returned plans directly to Employee Review and Admin-returned plans back to Admin approval, but earlier BRD text conflicts; UI calls this out.
+- Manager Evaluation (UC-017): KPI Achievement is capped at 100%; Actuals, comments and evidence references are shown; high provisional annual rating (4–5) triggers an evidence-reference requirement; Non-Final Periods expose individual Admin submission preview, while Final Period evaluation is saved as annual draft for Manager-Year Group. Evidence is a reference field only; no upload occurs.
+- Manager-Year Group / Bell Curve (UC-022): replaced manual completion toggles with read-only employee completion status, provisional rating distribution and blocked submission when records are incomplete or policy thresholds are missing. Admin and HCD also have a Bell Curve monitoring workspace with score-based distribution.
+- Calculation Explorer (UC-018/UC-020): new Manager route `/manager/calculations`, backed by reusable pure helpers in `src/lib/performance-calculations.ts`; tests cover higher/lower direction, cap, zero actual, invalid targets/weights, period results, annual average, competency mapping, overall score, rating bands and Bell Curve floor/ceil.
+- Final Admin Group Review (UC-021): employee-level score-component drilldowns and affected-employee selection on group return. Approval remains blocked while demo evaluations are incomplete and Bell Curve policy is unresolved.
+- Shared UX polish: responsive workflow layouts, keyboard focus indicators, reduced-motion support, mobile table overflow handling, consistent form controls and status feedback.
+
+### Frontend-only limitations retained intentionally
+
+- Demo seed records and React state do not persist across refreshes and are not real employee data.
+- No AI Wording Improvement / SMART Analysis service is connected; local SMART score is guidance only.
+- No real file evidence upload is performed.
+- No policy thresholds were invented for Bell Curve and no automatic calibration is performed.
+- UC-013 Admin edit permission, UC-015 Employee-return routing, UC-021 return scope, UC-022 calibration rule, and decimal rating-band boundaries contain ambiguities/conflicts in the BRD and require business decisions before production behavior is locked.
+- Authentication, authorization, data scoping, notification delivery, workflow persistence, audit persistence and publication remain outside frontend-only completion.
