@@ -86,8 +86,8 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
           <a className="nav-link" href="#"><Settings2 size={18} /><span>{isAr ? "الإعدادات" : "Settings"}</span></a>
           <details className="role-switcher"><summary>{isAr ? "تبديل الدور التجريبي" : "Switch demo role"} <ChevronDown size={13}/></summary><div className="role-switcher-menu">{[["employee","Employee","الموظف","/dashboard"],["manager","Manager","المدير","/manager"],["department","Department Manager","مدير الإدارة","/department"],["hcd","HCD","تطوير رأس المال البشري","/hcd"],["admin","Admin","مسؤول النظام","/admin"]].map(([key,en,ar,path])=><Link key={key} href={`/${locale}${path}`} className={role===key?"current":""}>{isAr?ar:en}</Link>)}</div></details>
           <div className="sidebar-profile">
-            <div className="avatar avatar-small">MG</div>
-            <div className="profile-copy"><strong>{role === "admin" ? "HCD Administrator" : "Mostafa Gamal"}</strong><small>{role === "admin" ? "Administrator" : "Employee"}</small></div>
+            <div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div>
+            <div className="profile-copy"><strong>{role === "admin" ? "HCD Administrator" : role === "hcd" ? "HCD Specialist" : role === "department" ? "Department Manager" : role === "manager" ? "People Manager" : "Mostafa Gamal"}</strong><small>{role === "employee" ? "Employee" : role === "manager" ? "Manager" : role === "department" ? "Department Manager" : role === "hcd" ? "Human Capital Development" : "Administrator"}</small></div>
             <ChevronDown size={15} />
           </div>
         </div>
