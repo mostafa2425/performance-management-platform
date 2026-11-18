@@ -819,3 +819,49 @@ body{font-size:15px}
 .employee-decision-actions button:disabled{opacity:.45;cursor:not-allowed}
 .employee-decision-dialog>small{display:block;margin-top:12px;color:#a0aaba;font-size:10px}
 @media(max-width:600px){.employee-decision-dialog{padding:17px}.employee-decision-dialog-head h3{font-size:15px}.employee-decision-actions{flex-wrap:wrap}.employee-decision-actions button{flex:1}}
+
+
+/* Manager employee performance detail */
+.employee-detail-back{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}
+.employee-detail-back a{display:inline-flex;align-items:center;gap:7px;color:var(--text-secondary);font-size:13px;font-weight:600;text-decoration:none}
+.employee-detail-back a:hover{color:var(--primary)}
+.employee-detail-hero{padding:22px;margin-bottom:18px}
+.employee-detail-identity{display:flex;align-items:center;gap:14px}
+.employee-detail-avatar{width:52px;height:52px;border-radius:16px;background:var(--surface-soft,#eef4f3);display:grid;place-items:center;color:var(--primary);font-weight:750;font-size:16px}
+.employee-detail-identity h2{margin:0 0 4px;font-size:19px}
+.employee-detail-identity p,.employee-detail-identity small{display:block;margin:0;color:var(--text-secondary);font-size:12px}
+.employee-detail-hero>.manager-status{display:inline-flex;margin-top:14px}
+.employee-detail-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.employee-detail-stats>div{display:flex;flex-direction:column;gap:4px}
+.employee-detail-stats strong{font-size:19px;color:var(--text-primary)}
+.employee-detail-stats span{font-size:11px;color:var(--text-secondary)}
+.employee-period-panel,.employee-annual-panel{padding:20px;margin-bottom:18px}
+.period-tabs{display:flex;gap:7px;margin:18px 0}
+.period-tabs button{border:1px solid var(--border);background:transparent;border-radius:9px;padding:8px 16px;color:var(--text-secondary);font:inherit;font-size:12px;font-weight:650;cursor:pointer}
+.period-tabs button.active{background:var(--primary);border-color:var(--primary);color:white}
+.period-result-header{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--surface-soft,#f7f8fa);border-radius:12px;margin-bottom:14px}
+.period-result-header>div:first-child{display:flex;flex-direction:column;gap:4px}
+.period-result-header strong{font-size:14px}
+.period-result-header small,.period-result-header span{font-size:11px;color:var(--text-secondary)}
+.period-result-header>div:last-child{text-align:end;display:flex;flex-direction:column;gap:2px}
+.period-result-header>div:last-child strong{font-size:22px}
+.employee-kpi-table{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.employee-kpi-head,.employee-kpi-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(65px,.7fr) minmax(65px,.7fr);gap:12px;padding:12px 14px;align-items:center}
+.employee-kpi-head{background:var(--surface-soft,#f7f8fa);font-size:11px;color:var(--text-secondary);font-weight:700}
+.employee-kpi-row{border-top:1px solid var(--border);font-size:12px}
+.employee-kpi-row span{color:var(--text-secondary)}
+.period-empty{display:flex;align-items:flex-start;gap:12px;padding:16px;border:1px dashed var(--border);border-radius:11px;color:var(--text-secondary)}
+.period-empty svg{flex:none;margin-top:2px}
+.period-empty strong{display:block;color:var(--text-primary);font-size:13px;margin-bottom:4px}
+.period-empty p{margin:0;font-size:12px;line-height:1.65}
+.employee-period-foot{display:flex;gap:7px;align-items:center;color:var(--text-secondary);font-size:11px;margin-top:14px}
+.annual-evaluation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.annual-evaluation-grid article{border:1px solid var(--border);border-radius:11px;padding:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.annual-evaluation-grid article svg{color:var(--primary)}
+.annual-evaluation-grid article strong{font-size:12px}
+.annual-evaluation-grid article b{font-size:19px}
+.annual-evaluation-grid article small{font-size:10px;color:var(--text-secondary);line-height:1.5}
+.annual-note{margin-top:12px}
+.team-employee-link{display:inline-block;color:var(--text-primary);font-weight:700;text-decoration:none;font-size:13px}
+.team-employee-link:hover{color:var(--primary);text-decoration:underline}
+@media(max-width:700px){.employee-detail-hero,.employee-period-panel,.employee-annual-panel{padding:15px}.employee-detail-stats{gap:8px}.employee-detail-stats strong{font-size:16px}.annual-evaluation-grid{grid-template-columns:1fr}.period-result-header{align-items:flex-start}.employee-kpi-head,.employee-kpi-row{grid-template-columns:minmax(0,1.5fr) minmax(55px,.6fr) minmax(55px,.6fr);gap:7px;padding:10px;font-size:10px}}
