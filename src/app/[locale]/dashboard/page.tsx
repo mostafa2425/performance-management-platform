@@ -4,7 +4,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { actionItems, employee, objectives } from "@/features/dashboard/mock-data";
 import {
   ArrowUpRight, ArrowRight, CalendarDays, Check, CheckCircle2, ChevronRight,
-  CircleAlert, Clock3, MoreHorizontal, Sparkles, Target, TrendingUp, Trophy
+  CircleAlert, Clock3, MoreHorizontal, Sparkles, Target, TrendingUp, Trophy, Users
 } from "lucide-react";
 import Link from "next/link";
 import { useLocale } from "next-intl";
