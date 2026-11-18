@@ -147,7 +147,5 @@ export const competencies = [
 ];
 
 export const actionItems = [
-  { id: 1, title: "Review your performance objectives", detail: "8 objectives · Waiting for manager submission", due: "Today", type: "review" },
-  { id: 2, title: "Complete your development plan", detail: "2 learning activities remaining", due: "Nov 24", type: "development" },
-  { id: 3, title: "Add a progress update", detail: "Task Estimation Accuracy", due: "Nov 28", type: "update" }
+  { id: 1, title: "Review your performance plan", detail: "Pending employee review · Approval or modification request", due: "Action required", type: "review" }
 ];
