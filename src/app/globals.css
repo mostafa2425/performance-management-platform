@@ -1258,3 +1258,10 @@ body{font-size:15px}
 .pw-plan-source small{font-size:10px;color:#8b98a9}
 .pw-suggestion{justify-content:space-between;background:#f2f8fc;border:1px solid #dceaf4;border-radius:9px;padding:10px;margin:8px 0}
 .pw-suggestion>div{flex:1;min-width:180px}.pw-suggestion p{font-size:11px;color:#61718a;margin:5px 0}
+
+.pw-assigned-competencies{padding:14px;margin:12px 0}
+.pw-assigned-competencies header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pw-assigned-competencies>div{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pw-assigned-competencies>div span{background:#f2f6fa;border:1px solid #e4eaf1;border-radius:8px;padding:7px 10px;font-size:11px;color:#53647b}
+.pw-assigned-competencies small{font-size:10px;color:#8b98a9}
+@media(max-width:640px){.pw-assigned-competencies header{align-items:flex-start;flex-direction:column}}
