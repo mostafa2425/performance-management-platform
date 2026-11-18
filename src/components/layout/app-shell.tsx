@@ -50,6 +50,7 @@ const hcdNavItems = [
 const adminNavItems = [
   { key: "dashboard", label: "Overview", labelAr: "نظرة عامة", href: "/admin", icon: LayoutDashboard },
   { key: "cycles", label: "Performance cycles", labelAr: "دورات الأداء", href: "/admin/performance-cycles", icon: Activity },
+  { key: "competencies", label: "Competency templates", labelAr: "قوالب الكفاءات", href: "/admin/competency-templates", icon: ClipboardCheck },
   { key: "employees", label: "Employees", labelAr: "الموظفون", href: "/admin/employees", icon: Users },
   { key: "approvals", label: "Approvals", labelAr: "الاعتمادات", href: "/admin/approvals", icon: ClipboardCheck },
   { key: "publication", label: "Results publication", labelAr: "نشر النتائج", href: "/admin/publication", icon: FileCheck2 },
