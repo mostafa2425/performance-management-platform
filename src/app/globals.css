@@ -576,3 +576,49 @@ button { cursor: pointer; }
 @media(max-width:1050px){.manager-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.manager-grid{grid-template-columns:1fr;}}
 @media(max-width:720px){.manager-welcome{padding:18px;gap:8px;}.manager-welcome h2{max-width:270px;font-size:18px;}.manager-welcome p{max-width:280px;font-size:9px;}.manager-team-total{min-width:84px;padding-inline:8px;}.manager-team-total>strong{font-size:29px;}.manager-team-total>span{max-width:75px;text-align:center;font-size:8px;}.manager-person-row{gap:7px;}.manager-person-progress{width:72px;}.manager-status{max-width:70px;white-space:normal;text-align:center;line-height:1.3;}.manager-person-copy{min-width:70px;}.manager-person-copy strong{font-size:8px;}.manager-person-copy small{font-size:7px;}.manager-metric-grid{gap:8px;}.manager-metric-grid .admin-metric{padding:12px;}}
 @media(max-width:420px){.manager-welcome{align-items:flex-start;}.manager-team-total{min-width:65px;}.manager-avatars{display:none;}.manager-person-progress{width:60px;}.manager-person-avatar{width:29px;height:29px;}}
+
+
+/* Global typography refinement — improve readability without losing the compact enterprise layout */
+body { font-size: 15px; line-height: 1.55; }
+.page-heading h1 { font-size: 25px; line-height: 1.3; }
+.page-heading p { font-size: 13px; line-height: 1.65; }
+.breadcrumb { font-size: 12px; }
+.workspace-label { font-size: 10px; letter-spacing: .7px; }
+.sidebar-nav .nav-link { font-size: 13px; min-height: 42px; }
+.role-switcher summary { font-size: 11px; }
+.role-switcher-menu a { font-size: 11px; }
+.profile-copy strong,.topbar-user strong { font-size: 12px; }
+.profile-copy small,.topbar-user small { font-size: 10px; }
+.panel-heading h3 { font-size: 15px; line-height: 1.4; }
+.panel-heading p { font-size: 11px; line-height: 1.55; }
+.admin-metric > span { font-size: 11px; }
+.admin-metric > small { font-size: 10px; }
+.admin-metric-change,.admin-metric-neutral,.admin-metric-warning { font-size: 9px; }
+.department-progress-title strong,.department-progress-title span { font-size: 10px; }
+.department-progress-row > small { font-size: 9px; }
+.admin-progress-legend span { font-size: 9px; }
+.admin-task strong,.admin-milestone strong,.admin-quick-grid strong { font-size: 10px; }
+.admin-task small,.admin-milestone small,.admin-quick-grid small { font-size: 9px; }
+.admin-task > div > span,.admin-milestone b { font-size: 9px; }
+.admin-panel-link { font-size: 10px; }
+.admin-record strong { font-size: 11px; }
+.admin-record small,.admin-record-status { font-size: 10px; }
+.admin-demo-note { font-size: 10px; }
+.manager-person-copy strong,.manager-review-row strong,.manager-priority strong,.manager-milestone strong { font-size: 10px; }
+.manager-person-copy small,.manager-review-row small,.manager-priority small,.manager-milestone small { font-size: 9px; }
+.manager-person-progress>div:first-child,.manager-person-progress b { font-size: 9px; }
+.manager-status { font-size: 8px; }
+.manager-review-row>div>span { font-size: 9px; }
+.manager-priority>b { font-size: 10px; }
+.role-overview-row strong { font-size: 11px; }
+.role-overview-row small { font-size: 10px; }
+@media(max-width:720px) {
+  body { font-size: 14px; }
+  .page-heading h1 { font-size: 22px; }
+  .page-heading p { font-size: 12px; }
+  .sidebar-nav .nav-link { font-size: 14px; min-height: 44px; }
+  .admin-metric > span { font-size: 10px; }
+  .admin-metric > small { font-size: 9px; }
+  .manager-person-copy strong { font-size: 9px; }
+  .manager-person-copy small { font-size: 8px; }
+}
