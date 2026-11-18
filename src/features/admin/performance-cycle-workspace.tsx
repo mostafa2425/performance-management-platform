@@ -34,6 +34,7 @@ const seedCycles: Cycle[] = [
 ];
 const addYear = (date: string) => { const d = new Date(date+"T12:00:00"); d.setFullYear(d.getFullYear()+1); d.setDate(d.getDate()-1); return d.toISOString().slice(0,10); };
 const addDays = (date: string, days: number) => { const d = new Date(date+"T12:00:00"); d.setDate(d.getDate()+days); return d.toISOString().slice(0,10); };
+const dayDifference = (from: string, to: string) => Math.round((new Date(to+"T12:00:00").getTime()-new Date(from+"T12:00:00").getTime())/86400000);
 const periodsFor = (start: string, frequency: Frequency) => {
  const count = frequency==="Quarterly"?4:frequency==="Semi-Annual"?2:1;
  const months = frequency==="Quarterly"?3:frequency==="Semi-Annual"?6:12;
@@ -75,7 +76,7 @@ export default function PerformanceCycleWorkspace({ mode, cycleId }: { mode: "li
   <div className="cycle-form-grid">
    <section className="panel cycle-form-panel"><div className="cycle-section-head"><span>01</span><div><h3>{t("Cycle information","بيانات الدورة")}</h3><p>{t("Each cycle covers one annual performance year.","كل دورة تغطي سنة أداء سنوية واحدة.")}</p></div></div>
     <div className="cycle-fields two"><label>{t("Cycle name (English) *","اسم الدورة (إنجليزي) *")}<input value={nameEn} onChange={e=>setNameEn(e.target.value)} placeholder="2027 Annual Performance Cycle"/></label><label>{t("Cycle name (Arabic) *","اسم الدورة (عربي) *")}<input value={nameAr} onChange={e=>setNameAr(e.target.value)} placeholder="دورة الأداء السنوية 2027"/></label></div>
-    <div className="cycle-fields three"><label>{t("Performance year","سنة الأداء")}<input readOnly value={start.slice(0,4)}/></label><label>{t("Frequency *","التكرار *")}<select value={frequency} onChange={e=>setFrequency(e.target.value as Frequency)}><option>Quarterly</option><option>Semi-Annual</option><option>Annual</option></select></label><label>{t("Cycle start date *","تاريخ بداية الدورة *")}<input type="date" value={start} onChange={e=>setStart(e.target.value)}/></label></div>
+    <div className="cycle-fields three"><label>{t("Performance year","سنة الأداء")}<input readOnly value={start.slice(0,4)}/></label><label>{t("Frequency *","التكرار *")}<select value={frequency} onChange={e=>setFrequency(e.target.value as Frequency)}><option>Quarterly</option><option>Semi-Annual</option><option>Annual</option></select></label><label>{t("Cycle start date *","تاريخ بداية الدورة *")}<input type="date" value={start} onChange={e=>{const next=e.target.value;const shift=dayDifference(start,next);setStart(next);setStages(v=>v.map(s=>({...s,deadline:addDays(s.deadline,shift)})));}}/></label></div>
     <div className="cycle-readonly-end"><CalendarDays size={17}/><div><small>{t("Cycle end date · system calculated","تاريخ نهاية الدورة · محسوب تلقائياً")}</small><strong>{end}</strong></div><span>{t("Read only","للقراءة فقط")}</span></div>
    </section>
    <section className="panel cycle-form-panel"><div className="cycle-section-head"><span>02</span><div><h3>{t("Employee scope","نطاق الموظفين")}</h3><p>{t("Select departments, job titles and/or individual employees. Duplicates are merged.","اختر الإدارات أو المسميات الوظيفية أو موظفين بعينهم. يتم دمج التكرارات.")}</p></div></div>
@@ -91,7 +92,7 @@ export default function PerformanceCycleWorkspace({ mode, cycleId }: { mode: "li
    </section>
    <section className="panel cycle-form-panel cycle-span-two"><div className="cycle-section-head"><span>04</span><div><h3>{t("First-period stage deadlines","مواعيد مراحل الفترة الأولى")}</h3><p>{t("Configure the five workflow deadlines once. The same relative pattern is previewed for subsequent periods.","أدخل مواعيد المراحل الخمس مرة واحدة. يتم عرض نفس النمط النسبي للفترات التالية.")}</p></div></div>
     <div className="cycle-stage-grid">{stages.map((s,i)=><label key={s.key}><span className="cycle-stage-number">{i+1}</span><b>{t(s.en,s.ar)}</b><input type="date" value={s.deadline} min={periods[0]?.start} max={periods[0]?.end} onChange={e=>setStages(v=>v.map(x=>x.key===s.key?{...x,deadline:e.target.value}:x))}/></label>)}</div>
-    <div className="cycle-period-preview"><h4>{t("Generated performance periods","فترات الأداء الناتجة")}</h4>{periods.map((p,i)=><article key={p.name}><strong>{p.name}</strong><span>{p.start} — {p.end}</span><small>{i===0?t("Configured deadlines","المواعيد المحددة"):t("Relative deadline pattern will be applied","سيتم تطبيق نمط المواعيد النسبي")}</small></article>)}</div>
+    <div className="cycle-period-preview"><h4>{t("Generated performance periods","فترات الأداء الناتجة")}</h4>{periods.map((p,i)=><article key={p.name}><strong>{p.name}</strong><span>{p.start} — {p.end}</span><small>{i===0?stages.map(s=>s.deadline).join(" · "):stages.map(s=>addDays(s.deadline,dayDifference(periods[0].start,p.start))).join(" · ")}</small></article>)}</div>
    </section>
   </div>
   {error&&<p className="cycle-error"><AlertTriangle size={15}/>{error}</p>}
