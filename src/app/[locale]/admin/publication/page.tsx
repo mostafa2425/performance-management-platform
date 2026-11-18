@@ -1,0 +1,31 @@
+"use client";
+
+import { AppShell } from "@/components/layout/app-shell";
+import { useLocale } from "next-intl";
+import Link from "next/link";
+import { useState } from "react";
+import { CalendarClock, CheckCircle2, Clock3, FileCheck2, LockKeyhole, ShieldCheck, Users } from "lucide-react";
+
+type Publication = { id:string; title:string; scope:string; kind:"period"|"annual"; approved:boolean; deadline:string; status:"waiting-approval"|"finalized"|"scheduled"|"published"; count:number };
+const initial:Publication[]=[
+ {id:"PUB-2026-Q1",title:"Q1 Performance Results",scope:"2026 Annual Cycle · All eligible employees",kind:"period",approved:true,deadline:"Admin Period Review deadline · awaiting configured date",status:"scheduled",count:452},
+ {id:"PUB-2026-Q2",title:"Q2 Performance Results",scope:"2026 Annual Cycle · All eligible employees",kind:"period",approved:true,deadline:"Admin Period Review deadline · awaiting configured date",status:"finalized",count:448},
+ {id:"PUB-2026-Q3",title:"Q3 Performance Results",scope:"2026 Annual Cycle · All eligible employees",kind:"period",approved:false,deadline:"Admin Period Review deadline · awaiting configured date",status:"waiting-approval",count:0},
+ {id:"PUB-2026-ANNUAL",title:"2026 Final Annual Results",scope:"Manager–Year Group · Technology & Shared Services",kind:"annual",approved:false,deadline:"Admin Final Review deadline · awaiting configured date",status:"waiting-approval",count:6}
+];
+export default function AdminPublicationPage(){
+ const ar=useLocale()==="ar";const t=(en:string,a:string)=>ar?a:en;
+ const [items]=useState(initial);
+ const statusLabel=(s:Publication["status"])=>s==="published"?t("Published","تم النشر"):s==="scheduled"?t("Scheduled","مجدول"):s==="finalized"?t("Finalized · waiting schedule","تم الاعتماد · بانتظار الموعد"):t("Awaiting approval","بانتظار الاعتماد");
+ return <AppShell role="admin" title={t("Results publication","نشر النتائج")} subtitle={t("Monitor finalized results and their scheduled release to employees.", "تابع النتائج المعتمدة ومواعيد إتاحتها للموظفين.")}>
+  <div className="publication-intro"><div><span><CalendarClock size={14}/> {t("PUBLICATION GOVERNANCE","حوكمة النشر")}</span><h2>{t("Controlled results release","إتاحة النتائج وفق ضوابط النشر")}</h2><p>{t("Publication is system-scheduled after the applicable review-stage deadline. This workspace is a read-only prototype; it does not trigger early publication.", "يتم النشر آلياً وفق الجدول بعد الموعد النهائي لمرحلة المراجعة المعنية. هذه الشاشة نموذج للمتابعة فقط ولا تنفذ نشراً مبكراً.")}</p></div><LockKeyhole size={24}/></div>
+  <div className="publication-stats"><article className="panel"><span>{t("Publication records","سجلات النشر")}</span><strong>{items.length}</strong></article><article className="panel"><span>{t("Finalized","معتمدة")}</span><strong>{items.filter(x=>x.status==="finalized"||x.status==="scheduled"||x.status==="published").length}</strong></article><article className="panel"><span>{t("Awaiting approval","بانتظار الاعتماد")}</span><strong>{items.filter(x=>!x.approved).length}</strong></article><article className="panel"><span>{t("Published","منشورة")}</span><strong>{items.filter(x=>x.status==="published").length}</strong></article></div>
+  <section className="panel publication-list-panel"><div className="panel-heading"><div><h3>{t("Publication schedule","جدول النشر")}</h3><p>{t("Period and annual results follow separate approval rules.", "تخضع نتائج الفترات والنتائج السنوية لقواعد اعتماد منفصلة.")}</p></div><span className="readonly-pill">{t("Read only","للعرض فقط")}</span></div>
+   <div className="publication-list">{items.map(item=><article className="publication-row" key={item.id}><span className={`publication-icon ${item.kind}`}>{item.kind==="annual"?<Users size={18}/>:<FileCheck2 size={18}/>}</span><div className="publication-main"><strong>{item.title}</strong><small>{item.scope}</small><div className="publication-meta"><span>{item.id}</span><span>{item.count} {t("eligible records (demo)","سجل مؤهل (تجريبي)")}</span></div></div><div className="publication-state"><span className={`publication-status ${item.status}`}>{item.status==="published"?<CheckCircle2 size={13}/>:<Clock3 size={13}/>} {statusLabel(item.status)}</span><small>{item.deadline}</small></div></article>)}</div>
+  </section>
+  <section className="publication-rules"><article className="panel"><h3>{t("Non-final period results","نتائج الفترات غير النهائية")}</h3><p>{t("Admin approves each employee's period evaluation individually. The system finalizes and locks the result, then publishes it one calendar day after the applicable Admin Period Review stage deadline.", "تعتمد الإدارة تقييم كل موظف للفترة بشكل منفصل. ثم يقفل النظام النتيجة وينشرها بعد يوم تقويمي واحد من الموعد النهائي لمرحلة مراجعة الفترة.")}</p></article><article className="panel"><h3>{t("Final annual results","النتائج السنوية النهائية")}</h3><p>{t("The complete Manager–Year Group must pass the required checks and receive Admin Final Approval. All included results are finalized together and published one calendar day after the Admin Final Review stage deadline.", "يجب أن تجتاز مجموعة المدير والسنة بالكامل الفحوصات المطلوبة وتحصل على الاعتماد النهائي. تُقفل جميع النتائج معاً وتنشر بعد يوم تقويمي واحد من الموعد النهائي للمراجعة النهائية.")}</p></article></section>
+  <div className="publication-warning"><ShieldCheck size={15}/>{t("Draft, returned or pending annual groups are not eligible for publication. Published results are read-only. No manual publish action is provided here.", "المجموعات السنوية المسودة أو المعادة أو التي تنتظر الاعتماد غير مؤهلة للنشر. النتائج المنشورة للقراءة فقط. لا يوجد إجراء نشر يدوي هنا.")}</div>
+  <div className="admin-demo-note"><FileCheck2 size={15}/><span>{t("All records and counts are illustrative. Actual deadlines, approval states, publication jobs and audit events must come from backend services.", "جميع السجلات والأعداد توضيحية. يجب أن تأتي المواعيد وحالات الاعتماد ومهام النشر وسجلات التدقيق من خدمات Backend.")}</span></div>
+  <Link className="admin-panel-link publication-back-link" href={`/${ar?"ar":"en"}/admin/approvals`}>{t("Back to Admin final review","العودة للمراجعة النهائية للإدارة")}</Link>
+ </AppShell>;
+}
