@@ -622,3 +622,49 @@ body { font-size: 15px; line-height: 1.55; }
   .manager-person-copy strong { font-size: 9px; }
   .manager-person-copy small { font-size: 8px; }
 }
+
+
+/* Manager team directory and review queue */
+.team-summary-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:14px; }
+.team-summary-card { display:flex; align-items:center; gap:11px; min-height:76px; padding:13px 15px; border:1px solid var(--app-border); border-radius:11px; background:#fff; color:#66809e; }
+.team-summary-card>strong { color:#263d5c; font-size:21px; font-weight:780; }
+.team-summary-card>span:last-child { color:#75849a; font-size:11px; }
+.summary-dot { width:9px; height:9px; border-radius:50%; flex:0 0 auto; }.summary-dot.green{background:#35aa88;}.summary-dot.amber{background:#d8a14f;}
+.team-directory { min-width:0; }
+.team-directory-toolbar { display:flex; align-items:center; gap:10px; margin:17px 0 12px; }
+.team-directory-toolbar .search-field { flex:1; }
+.search-field { display:flex; align-items:center; gap:8px; min-width:0; padding:9px 11px; border:1px solid #e7ebf1; border-radius:8px; background:#fff; color:#8d9bad; }
+.search-field input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:#344861; font:inherit; font-size:12px; }
+.search-field input::placeholder { color:#a3adba; }
+.team-filter { display:flex; align-items:center; gap:7px; padding:8px 10px; border:1px solid #e7ebf1; border-radius:8px; color:#8190a3; }
+.team-filter select { max-width:160px; border:0; outline:0; background:transparent; color:#61738b; font:inherit; font-size:11px; }
+.team-table-wrap { width:100%; overflow-x:auto; }
+.team-table { width:100%; border-collapse:collapse; text-align:start; white-space:nowrap; }
+.team-table th { padding:11px 12px; border-bottom:1px solid #e9edf3; background:#f8fafd; color:#8795a7; font-size:10px; font-weight:700; text-align:start; }
+.team-table td { padding:12px; border-bottom:1px solid #f0f2f6; color:#65758b; font-size:11px; }
+.team-table tbody tr:last-child td { border-bottom:0; }
+.team-employee-cell { display:flex; align-items:center; gap:9px; min-width:190px; }
+.team-avatar { display:grid; place-items:center; width:33px; height:33px; flex:0 0 auto; border-radius:50%; background:#eaf1fb; color:#547ba7; font-size:9px; font-weight:800; }
+.team-avatar-1{background:#eaf7f2;color:#288e75;}.team-avatar-2{background:#f2effb;color:#806fba;}.team-avatar-3{background:#fff3e6;color:#b98442;}
+.team-employee-cell>div { display:grid; gap:3px; }
+.team-employee-cell strong { color:#465a73; font-size:11px; }
+.team-employee-cell small { color:#98a4b2; font-size:9px; }
+.team-progress-cell { width:100px; }
+.team-progress-cell>div:first-child { margin-bottom:5px; text-align:end; }
+.team-progress-cell b { color:#536b85; font-size:10px; }
+.team-progress-cell .department-progress-track { width:100%; }
+.team-table-footer { display:flex; justify-content:space-between; gap:10px; padding-top:12px; border-top:1px solid #eff1f5; color:#99a5b4; font-size:9px; }
+.team-empty { padding:35px 12px; color:#95a2b2; font-size:12px; text-align:center; }
+.manager-queue-list { display:grid; }
+.manager-queue-item { display:flex; align-items:center; gap:12px; padding:15px 4px; border-bottom:1px solid #eff1f5; }
+.manager-queue-item:last-child { border-bottom:0; }
+.queue-priority { width:8px; height:8px; flex:0 0 auto; border-radius:50%; background:#d3a052; }
+.queue-priority.normal { background:#6d98c5; }.queue-priority.low { background:#36a486; }
+.queue-item-main { display:grid; flex:1; gap:4px; min-width:0; }
+.queue-item-main strong { color:#4b5e75; font-size:11px; }
+.queue-item-main small { color:#778ba4; font-size:10px; }
+.queue-item-main>span { color:#9aa6b5; font-size:9px; }
+.queue-item-due { display:grid; gap:3px; text-align:end; }
+.queue-item-due b { color:#65778d; font-size:10px; }
+.queue-item-due small { color:#9ca7b5; font-size:8px; }
+@media(max-width:720px){.team-summary-grid{gap:7px;}.team-summary-card{gap:7px;min-height:67px;padding:10px 8px;flex-wrap:wrap;}.team-summary-card>strong{font-size:18px;}.team-summary-card>span:last-child{font-size:9px;}.team-directory-toolbar{align-items:stretch;flex-direction:column;}.team-filter select{max-width:none;flex:1;}.team-filter{justify-content:space-between;}.team-table{min-width:680px;}.manager-queue-item{gap:8px;}.queue-item-due{min-width:55px;}.manager-queue-item .manager-status{max-width:65px;}}
