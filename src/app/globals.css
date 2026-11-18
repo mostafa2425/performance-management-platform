@@ -1250,3 +1250,11 @@ body{font-size:15px}
 :where(input,select,textarea):disabled{background:#f4f6f8;color:#8b96a5;cursor:not-allowed}
 @media(max-width:640px){.admin-final-employee-detail summary{align-items:flex-start;flex-direction:column}.admin-final-affected label{align-items:flex-start}.evaluation-action-buttons{width:100%}.evaluation-action-buttons button{flex:1;justify-content:center}.admin-final-table-wrap,.year-group-table-wrap,.employee-kpi-table{overflow-x:auto;max-width:100%}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+.pw-plan-source{padding:14px;margin:14px 0;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.pw-plan-source>div,.pw-kpi-actions,.pw-suggestion{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pw-plan-source button{border:1px solid #e1e7ef;background:#f8fafc;color:#52647b;border-radius:8px;padding:8px 11px;font-size:11px;font-weight:700}
+.pw-plan-source button.active{border-color:#8fb5d1;background:#edf6fb;color:#245b88}
+.pw-plan-source small{font-size:10px;color:#8b98a9}
+.pw-suggestion{justify-content:space-between;background:#f2f8fc;border:1px solid #dceaf4;border-radius:9px;padding:10px;margin:8px 0}
+.pw-suggestion>div{flex:1;min-width:180px}.pw-suggestion p{font-size:11px;color:#61718a;margin:5px 0}
