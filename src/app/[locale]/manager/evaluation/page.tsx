@@ -51,7 +51,7 @@ export default function ManagerEvaluationPage() {
           <span className="readonly-pill">2026 · {t("Performance cycle", "دورة الأداء")}</span>
           <span className="readonly-pill">{t("Illustrative data", "بيانات توضيحية")}</span>
         </div>
-        <Link href={`/${ar ? "ar" : "en"}/manager/team`}>{t("Back to team", "العودة للفريق")}</Link>
+        <div className="evaluation-topline-links"><Link href={`/${ar ? "ar" : "en"}/manager/year-group`}>{t("Open Manager–Year Group", "فتح مجموعة المدير والسنة")}</Link><Link href={`/${ar ? "ar" : "en"}/manager/team`}>{t("Back to team", "العودة للفريق")}</Link></div>
       </div>
 
       <section className="panel evaluation-context">
