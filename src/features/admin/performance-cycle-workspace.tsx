@@ -47,8 +47,9 @@ export default function PerformanceCycleWorkspace({ mode, cycleId }: { mode: "li
  const [search,setSearch]=useState(""); const [status,setStatus]=useState("All"); const [frequencyFilter,setFrequencyFilter]=useState("All");
  const [nameEn,setNameEn]=useState(""); const [nameAr,setNameAr]=useState(""); const [frequency,setFrequency]=useState<Frequency>("Quarterly"); const [start,setStart]=useState("2026-01-01");
  const [departments,setDepartments]=useState<string[]>([]); const [titles,setTitles]=useState<string[]>([]); const [individuals,setIndividuals]=useState<string[]>([]); const [excluded,setExcluded]=useState<string[]>([]); const [exceptions,setExceptions]=useState<string[]>([]);
- const [stages,setStages]=useState<Stage[]>(initialStages()); const [saved,setSaved]=useState(false); const [error,setError]="";
- const [manualIncluded,setManualIncluded]=useState<string[]>([]);\n const [editDates,setEditDates]=useState<string[]>([]); const [editSaved,setEditSaved]=useState(false); const [editError,setEditError]=useState(""); const [audit,setAudit]=useState<{stage:string;oldValue:string;newValue:string;user:string;at:string}[]>([]);
+ const [stages,setStages]=useState<Stage[]>(initialStages()); const [saved,setSaved]=useState(false); const [error,setError]=useState("");
+ const [manualIncluded,setManualIncluded]=useState<string[]>([]);
+ const [editDates,setEditDates]=useState<string[]>([]); const [editSaved,setEditSaved]=useState(false); const [editError,setEditError]=useState(""); const [audit,setAudit]=useState<{stage:string;oldValue:string;newValue:string;user:string;at:string}[]>([]);
  const end=useMemo(()=>start?addYear(start):"",[start]); const periods=useMemo(()=>start?periodsFor(start,frequency):[],[start,frequency]);
  const included=useMemo(()=>{const ids=new Set<string>();people.forEach(p=>{if(departments.includes(p.department)||titles.includes(p.title)||individuals.includes(p.id))ids.add(p.id);});excluded.forEach(id=>ids.delete(id));exceptions.forEach(id=>ids.add(id));return people.filter(p=>ids.has(p.id)&&(!p.activeCycle)&&(p.serviceMonths>=6||exceptions.includes(p.id)));},[departments,titles,individuals,excluded,exceptions]);
  const managerCount=new Set(included.map(p=>p.manager)).size;
