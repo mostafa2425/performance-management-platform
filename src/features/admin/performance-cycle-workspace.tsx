@@ -18,7 +18,7 @@ const people: Person[] = [
  {id:"EMP-10602",name:"Youssef Hassan",title:"Software Engineer",department:"Technology",manager:"Mostafa Gamal",serviceMonths:16},
  {id:"EMP-10618",name:"Nada Hany",title:"QA Engineer",department:"Technology",manager:"Mostafa Gamal",serviceMonths:7},
  {id:"EMP-10623",name:"Karim Adel",title:"Financial Analyst",department:"Finance & Operations",manager:"Hany Adel",serviceMonths:44},
- {id:"EMP-10635",name:"Laila Samir",title:"HR Specialist",department:"Human Resources",manager:"Hany Adel",serviceMonths:11}
+ {id:"EMP-10635",name:"Laila Samir",title:"HR Specialist",department:"Human Resources",manager:"Hany Adel",serviceMonths:11,activeCycle:"2026 Annual Performance Cycle"}
 ];
 const initialStages = (): Stage[] => [
  {key:"goal",en:"Objective Setting & Approval",ar:"إعداد الأهداف واعتمادها",deadline:"2026-02-15"},
@@ -49,7 +49,7 @@ export default function PerformanceCycleWorkspace({ mode, cycleId }: { mode: "li
  const [departments,setDepartments]=useState<string[]>([]); const [titles,setTitles]=useState<string[]>([]); const [individuals,setIndividuals]=useState<string[]>([]); const [excluded,setExcluded]=useState<string[]>([]); const [exceptions,setExceptions]=useState<string[]>([]);
  const [stages,setStages]=useState<Stage[]>(initialStages()); const [saved,setSaved]=useState(false); const [error,setError]=useState("");
  const end=useMemo(()=>start?addYear(start):"",[start]); const periods=useMemo(()=>start?periodsFor(start,frequency):[],[start,frequency]);
- const included=useMemo(()=>{const ids=new Set<string>();people.forEach(p=>{if(departments.includes(p.department)||titles.includes(p.title)||individuals.includes(p.id))ids.add(p.id);});excluded.forEach(id=>ids.delete(id));exceptions.forEach(id=>ids.add(id));return people.filter(p=>ids.has(p.id));},[departments,titles,individuals,excluded,exceptions]);
+ const included=useMemo(()=>{const ids=new Set<string>();people.forEach(p=>{if(departments.includes(p.department)||titles.includes(p.title)||individuals.includes(p.id))ids.add(p.id);});excluded.forEach(id=>ids.delete(id));exceptions.forEach(id=>ids.add(id));return people.filter(p=>ids.has(p.id)&&(!p.activeCycle)&&(p.serviceMonths>=6||exceptions.includes(p.id)));},[departments,titles,individuals,excluded,exceptions]);
  const managerCount=new Set(included.map(p=>p.manager)).size;
  const list=cycles.filter(c=>(c.nameEn+" "+c.nameAr).toLowerCase().includes(search.toLowerCase())&&(status==="All"||c.status===status)&&(frequencyFilter==="All"||c.frequency===frequencyFilter));
  const detail=cycles.find(c=>c.id===cycleId)??cycles[0];
