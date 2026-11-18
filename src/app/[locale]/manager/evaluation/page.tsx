@@ -29,7 +29,8 @@ export default function ManagerEvaluationPage() {
   const [period, setPeriod] = useState("Q4");
   const [kpis, setKpis] = useState(initialKpis);
   const [ratings, setRatings] = useState<Record<string, number>>({ Communication: 3, "Problem solving": 4, Collaboration: 4, Ownership: 3 });
-  const [saved, setSaved] = useState(false);\n  const [workflowNotice, setWorkflowNotice] = useState("");
+  const [saved, setSaved] = useState(false);
+  const [workflowNotice, setWorkflowNotice] = useState("");
 
   const results = useMemo(() => kpis.map((kpi) => {
     const score = achievement(kpi);
@@ -37,7 +38,10 @@ export default function ManagerEvaluationPage() {
   }), [kpis]);
   const periodResult = results.some((item) => item.weighted === null) ? null : results.reduce((sum, item) => sum + (item.weighted ?? 0), 0);
   const competencyResult = useMemo(() => competencyNames.reduce((sum, name) => sum + ratingMap[ratings[name] || 1] * 0.25, 0), [ratings]);
-  const annualObjectivesPreview = periodResult === null ? null : (82 + 86 + 88 + periodResult) / 4;\n  const overallAnnualPreview = annualObjectivesPreview === null ? null : annualObjectivesPreview * 0.8 + competencyResult * 0.2;\n  const requiresEvidence = period === "Q4" && overallAnnualPreview !== null && overallAnnualPreview >= 90;\n  const fmt = (value: number | null) => value === null ? "—" : value.toFixed(1) + "%";
+  const annualObjectivesPreview = periodResult === null ? null : (82 + 86 + 88 + periodResult) / 4;
+  const overallAnnualPreview = annualObjectivesPreview === null ? null : annualObjectivesPreview * 0.8 + competencyResult * 0.2;
+  const requiresEvidence = period === "Q4" && overallAnnualPreview !== null && overallAnnualPreview >= 90;
+  const fmt = (value: number | null) => value === null ? "—" : value.toFixed(1) + "%";
 
   function updateKpi(id: string, patch: Partial<KPI>) {
     setSaved(false);
@@ -109,7 +113,9 @@ export default function ManagerEvaluationPage() {
               <strong className="evaluation-calculated">{fmt(kpi.weighted)}</strong>
               <label className="evaluation-comment">
                 {t("Manager comment (optional)", "تعليق المدير (اختياري)")}
-                <textarea value={kpi.comment} onChange={(event) => updateKpi(kpi.id, { comment: event.target.value })} placeholder={t("Add context or evidence reference…", "أضف توضيحاً أو مرجعاً للدليل…")} />\n                <span>{t("Supporting evidence reference", "مرجع الدليل الداعم")}{requiresEvidence ? " · "+t("Required for rating 4–5","مطلوب للتقدير 4–5") : ""}</span>\n                <input value={kpi.evidence} onChange={(event) => updateKpi(kpi.id, { evidence: event.target.value })} placeholder={t("Evidence file / reference (demo)", "ملف الدليل / المرجع (تجريبي)")} />
+                <textarea value={kpi.comment} onChange={(event) => updateKpi(kpi.id, { comment: event.target.value })} placeholder={t("Add context or evidence reference…", "أضف توضيحاً أو مرجعاً للدليل…")} />
+                <span>{t("Supporting evidence reference", "مرجع الدليل الداعم")}{requiresEvidence ? " · "+t("Required for rating 4–5","مطلوب للتقدير 4–5") : ""}</span>
+                <input value={kpi.evidence} onChange={(event) => updateKpi(kpi.id, { evidence: event.target.value })} placeholder={t("Evidence file / reference (demo)", "ملف الدليل / المرجع (تجريبي)")} />
               </label>
             </article>
           ))}
@@ -200,6 +206,8 @@ export default function ManagerEvaluationPage() {
         </div>
         <div className="evaluation-action-buttons"><button type="button" onClick={() => { setSaved(true); setWorkflowNotice(t("Demo draft saved locally. You can continue later while the evaluation stage is open.", "تم حفظ المسودة التجريبية محلياً ويمكنك المتابعة لاحقاً أثناء فتح مرحلة التقييم.")); }}><Save size={16} />{t("Save demo draft", "حفظ مسودة تجريبية")}</button>{period === "Q4" ? <button type="button" onClick={() => { const missing = results.some(x => x.actual < 0 || !Number.isFinite(x.actual)) || results.some(x => !x.name.trim()) || (requiresEvidence && kpis.some(x => !x.evidence.trim())); setWorkflowNotice(missing ? t("Complete all KPI Actual values before saving the annual draft.", "أكمل القيم الفعلية لجميع المؤشرات قبل حفظ المسودة السنوية.") : t("Final-period evaluation is saved as an annual draft. It is not submitted individually; the complete Manager–Year Group is submitted after all eligible employees are complete.", "يتم حفظ تقييم الفترة النهائية كمسودة سنوية ولا يتم إرساله بشكل فردي؛ تُرسل مجموعة المدير والسنة بالكامل بعد اكتمال جميع الموظفين المؤهلين.")); setSaved(!missing); }}><Save size={16}/>{t("Save annual evaluation draft","حفظ مسودة التقييم السنوي")}</button> : <button type="button" onClick={() => { const valid = results.every(x => x.actual >= 0 && Number.isFinite(x.actual)) && Math.abs(results.reduce((s,x)=>s+x.weight,0)-100)<0.0001 && (!requiresEvidence || kpis.every(x => x.evidence.trim())); setWorkflowNotice(valid ? t("Demo Non-Final Period evaluation is ready for individual Admin review.", "تقييم الفترة غير النهائية التجريبي جاهز للمراجعة الفردية من الإدارة.") : t("Submission blocked: enter valid Actual values and ensure KPI weights total 100%.", "تم منع الإرسال: أدخل قيماً فعلية صحيحة وتأكد أن إجمالي أوزان المؤشرات 100%.") ); setSaved(valid); }}><Send size={16}/>{t("Submit period to Admin","إرسال الفترة للإدارة")}</button>}</div>
       </div>
-      {workflowNotice && <p className="pw-demo-confirm" role="status">{workflowNotice}</p>}\n      <div className="admin-demo-note"><AlertTriangle size={15}/><span>{t("Non-Final Period evaluations are submitted individually for Admin review. Final Period evaluations remain drafts until Manager–Year Group submission. Evidence references are illustrative only; no files are uploaded.", "تُرسل تقييمات الفترات غير النهائية بشكل فردي لمراجعة الإدارة. تظل تقييمات الفترة النهائية مسودات حتى إرسال مجموعة المدير والسنة. مراجع الأدلة توضيحية ولا يتم رفع ملفات.")}</span></div>\n    </AppShell>
+      {workflowNotice && <p className="pw-demo-confirm" role="status">{workflowNotice}</p>}
+      <div className="admin-demo-note"><AlertTriangle size={15}/><span>{t("Non-Final Period evaluations are submitted individually for Admin review. Final Period evaluations remain drafts until Manager–Year Group submission. Evidence references are illustrative only; no files are uploaded.", "تُرسل تقييمات الفترات غير النهائية بشكل فردي لمراجعة الإدارة. تظل تقييمات الفترة النهائية مسودات حتى إرسال مجموعة المدير والسنة. مراجع الأدلة توضيحية ولا يتم رفع ملفات.")}</span></div>
+    </AppShell>
   );
 }
