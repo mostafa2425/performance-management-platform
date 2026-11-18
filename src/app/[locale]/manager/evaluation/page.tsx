@@ -4,7 +4,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { useLocale } from "next-intl";
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Calculator, CheckCircle2, LockKeyhole, Save, ShieldAlert, Users } from "lucide-react";
+import { AlertTriangle, Calculator, CheckCircle2, LockKeyhole, Save, Send, ShieldAlert, Users } from "lucide-react";
 
 type Direction = "higher" | "lower";
 type KPI = { id: string; name: string; target: number; actual: number; direction: Direction; weight: number; unit: string; comment: string; evidence: string };
