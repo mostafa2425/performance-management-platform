@@ -732,3 +732,10 @@ body{font-size:15px}
  .team-summary-card>span:last-child{font-size:10px}
  .team-table td{font-size:11px}
 }
+
+
+/* Breadcrumb navigation */
+.breadcrumb-home{color:#7d8da2;font-weight:600;transition:color .16s ease;text-decoration:none}
+.breadcrumb-home:hover{color:var(--app-primary);text-decoration:underline;text-underline-offset:3px}
+.breadcrumb-home:focus-visible{outline:2px solid #42bda4;outline-offset:3px;border-radius:3px}
+.breadcrumb-current{color:#283b57;font-weight:700}
