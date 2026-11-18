@@ -13,7 +13,7 @@ const items=[
 ];
 export default function ManagerReviewsPage(){
  const ar=useLocale()==="ar";const [query,setQuery]=useState("");const [status,setStatus]=useState("pending");const t=(en:string,a:string)=>ar?a:en;
- const visible=useMemo(()=>items.filter(x=>(x.name+" "+x.type+" "+x.detail).toLowerCase().includes(query.toLowerCase())&&(status==="all"||status==="pending"))),[query,status]);
+ const visible=useMemo(() => items.filter((x) => (x.name + " " + x.type + " " + x.detail).toLowerCase().includes(query.toLowerCase()) && (status === "all" || status === "pending")), [query, status]);
  return <AppShell role="manager" title={t("Review queue","قائمة المراجعات")} subtitle={t("Keep decisions moving with a prioritized view of reviews awaiting your input.","تابع القرارات من خلال قائمة مرتبة للمراجعات التي تنتظر إجراءك.")}>
   <div className="team-summary-grid"><div className="team-summary-card"><Clock3 size={18}/><strong>4</strong><span>{t("Pending reviews","مراجعات معلقة")}</span></div><div className="team-summary-card"><span className="summary-dot amber"/><strong>1</strong><span>{t("Due today","مستحقة اليوم")}</span></div><div className="team-summary-card"><CheckCircle2 size={18}/><strong>8</strong><span>{t("Completed this month","مكتملة هذا الشهر")}</span></div></div>
   <section className="panel team-directory"><div className="panel-heading"><div><h3>{t("Items awaiting your review","عناصر بانتظار مراجعتك")}</h3><p>{t("Prioritized tasks for the active performance cycle.","المهام ذات الأولوية خلال دورة الأداء الحالية.")}</p></div><span className="readonly-pill">{t("Demo queue","قائمة تجريبية")}</span></div>
