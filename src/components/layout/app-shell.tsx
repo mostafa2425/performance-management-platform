@@ -27,7 +27,8 @@ const managerNavItems = [
   { key: "objectives", label: "Team objectives", labelAr: "أهداف الفريق", href: "/manager/objectives", icon: Target },
   { key: "performance", label: "Team performance", labelAr: "أداء الفريق", href: "/manager/performance", icon: Activity },
   { key: "evaluation", label: "Manager evaluation", labelAr: "تقييم المدير", href: "/manager/evaluation", icon: ClipboardCheck },
-  { key: "year-group", label: "Manager–Year Group", labelAr: "مجموعة المدير والسنة", href: "/manager/year-group", icon: Users }
+  { key: "year-group", label: "Manager–Year Group", labelAr: "مجموعة المدير والسنة", href: "/manager/year-group", icon: Users },
+  { key: "calculations", label: "Calculation explorer", labelAr: "تفاصيل الحسابات", href: "/manager/calculations", icon: Activity }
 ];
 
 const departmentNavItems = [
@@ -54,7 +55,9 @@ const adminNavItems = [
   { key: "categories", label: "Objective categories", labelAr: "تصنيفات الأهداف", href: "/admin/objective-categories", icon: Tags },
   { key: "configuration", label: "Performance configuration", labelAr: "إعدادات الأداء", href: "/admin/performance-configuration", icon: SlidersHorizontal },
   { key: "employees", label: "Employees", labelAr: "الموظفون", href: "/admin/employees", icon: Users },
-  { key: "approvals", label: "Approvals", labelAr: "الاعتمادات", href: "/admin/approvals", icon: ClipboardCheck },
+  { key: "approvals", label: "Final group review", labelAr: "المراجعة النهائية للمجموعة", href: "/admin/approvals", icon: ClipboardCheck },
+  { key: "plan-reviews", label: "Plan reviews", labelAr: "مراجعة الخطط", href: "/admin/plan-reviews", icon: FileCheck2 },
+  { key: "bell-curve", label: "Bell Curve", labelAr: "التوزيع الطبيعي", href: "/admin/bell-curve", icon: Activity },
   { key: "publication", label: "Results publication", labelAr: "نشر النتائج", href: "/admin/publication", icon: FileCheck2 },
   { key: "history", label: "Performance history", labelAr: "سجل الأداء", href: "/admin/history", icon: History },
   { key: "notifications", label: "Notifications", labelAr: "الإشعارات", href: "/admin/notifications", icon: Bell },
