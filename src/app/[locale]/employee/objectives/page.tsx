@@ -1,86 +1,229 @@
 "use client";
 
+import { App, Alert, Avatar, Button, Card, Col, Collapse, Descriptions, Divider, Empty, Form, Input, Modal, Progress, Row, Select, Space, Statistic, Tag, Typography } from "antd";
+import { useMemo, useState } from "react";
+import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { competencies, employee, objectives } from "@/features/dashboard/mock-data";
-import { useLocale } from "next-intl";
-import { useMemo, useState } from "react";
-import {
-  AlertCircle, ArrowDownUp, CheckCircle2, ChevronDown, ChevronRight,
-  CircleHelp, Clock3, Filter, MessageSquare, Search, Sparkles, Target, Check, Send, X
-} from "lucide-react";
+import { CheckCircle2, Clock3, MessageSquare, Search, Sparkles, Target, UserRound, ChevronDown, ChevronRight } from "lucide-react";
+
+const { Title, Text, Paragraph } = Typography;
+type Decision = "approve" | "request";
 
 export default function EmployeeObjectivesPage() {
-  const locale = useLocale();
-  const ar = locale === "ar";
+  const ar = useLocale() === "ar";
+  const { message } = App.useApp();
   const [expanded, setExpanded] = useState<string[]>(["OBJ-01"]);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
-  const [decision, setDecision] = useState<"approve" | "request" | null>(null);
+  const [decision, setDecision] = useState<Decision | null>(null);
   const [comment, setComment] = useState("");
   const [submittedDecision, setSubmittedDecision] = useState<"approved" | "requested" | null>(null);
-  const text = (en: string, arabic: string) => ar ? arabic : en;
+  const t = (en: string, arabic: string) => ar ? arabic : en;
+
   const filtered = useMemo(() => objectives.filter((item) => {
-    const matchesQuery = item.title.toLowerCase().includes(query.toLowerCase()) || item.titleAr.includes(query);
+    const q = query.trim().toLocaleLowerCase();
+    const matchesQuery = !q || item.title.toLocaleLowerCase().includes(q) || item.titleAr.includes(query.trim());
     return matchesQuery && (filter === "all" || item.status === filter);
   }), [query, filter]);
-  const toggle = (id: string) => setExpanded((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current,id]);
+
+  const statusLabel = (status: string) => status === "completed"
+    ? t("Completed", "مكتمل")
+    : status === "at-risk" ? t("Needs attention", "يحتاج متابعة") : t("On track", "على المسار");
+  const statusColor = (status: string) => status === "completed" ? "success" : status === "at-risk" ? "warning" : "processing";
+  const objectiveWeight = objectives.reduce((sum, item) => sum + item.weight, 0);
+
+  const submitDecision = () => {
+    if (decision === "request" && !comment.trim()) return;
+    setSubmittedDecision(decision === "approve" ? "approved" : "requested");
+    message.success(decision === "approve"
+      ? t("Demo approval recorded", "تم تسجيل الاعتماد التجريبي")
+      : t("Demo modification request recorded", "تم تسجيل طلب التعديل التجريبي"));
+    setDecision(null);
+    setComment("");
+  };
+
+  const collapseItems = filtered.map((item, index) => {
+    const title = ar ? item.titleAr : item.title;
+    return {
+      key: item.id,
+      label: (
+        <div className="eo-collapse-title">
+          <Avatar shape="square" size={34}>{String(index + 1).padStart(2, "0")}</Avatar>
+          <div className="eo-title-copy">
+            <Text strong>{title}</Text>
+            <Space size={6} wrap>
+              <Tag color={statusColor(item.status)}>{statusLabel(item.status)}</Tag>
+              <Text type="secondary">{t("Weight", "الوزن")}: {item.weight}%</Text>
+              <Text type="secondary">SMART {item.smartScore}%</Text>
+            </Space>
+          </div>
+          <div className="eo-title-progress">
+            <Progress type="circle" percent={item.progress} size={42} strokeWidth={9} />
+          </div>
+        </div>
+      ),
+      children: (
+        <div className="eo-objective-details">
+          <Row gutter={[20, 16]}>
+            <Col xs={24} lg={15}>
+              <Text type="secondary">{t("Objective description", "وصف الهدف")}</Text>
+              <Paragraph className="eo-description">{ar ? item.descriptionAr : item.description}</Paragraph>
+              <Descriptions size="small" column={{ xs: 1, sm: 2 }} items={[
+                { key: "weight", label: t("Objective weight", "وزن الهدف"), children: <Text strong>{item.weight}%</Text> },
+                { key: "due", label: t("Due date", "تاريخ الاستحقاق"), children: item.dueDate },
+                { key: "status", label: t("Status", "الحالة"), children: <Tag color={statusColor(item.status)}>{statusLabel(item.status)}</Tag> },
+                { key: "smart", label: "SMART", children: <Text strong>{item.smartScore}%</Text> }
+              ]} />
+            </Col>
+            <Col xs={24} lg={9}>
+              <Card size="small" className="eo-progress-card">
+                <Space align="center" className="eo-progress-heading">
+                  <Target size={17} />
+                  <Text strong>{t("Progress", "نسبة الإنجاز")}</Text>
+                </Space>
+                <Title level={2} className="eo-progress-value">{item.progress}%</Title>
+                <Progress percent={item.progress} status={item.status === "at-risk" ? "exception" : "normal"} />
+                <Text type="secondary">{t("SMART quality score", "تقييم جودة الهدف")}</Text>
+                <Progress percent={item.smartScore} size="small" />
+              </Card>
+            </Col>
+          </Row>
+          <Alert type="info" showIcon message={t("Read-only objective", "هدف للعرض فقط")} description={t("You can review the proposed objective and its progress. Editing objectives and KPIs is not available in the employee review stage.", "يمكنك مراجعة الهدف المقترح ونسبة إنجازه. تعديل الأهداف ومؤشرات الأداء غير متاح في مرحلة مراجعة الموظف.")} />
+        </div>
+      )
+    };
+  });
 
   return (
-    <AppShell title={text("My objectives", "أهدافي")} subtitle={text("Understand what success looks like and track your progress throughout the cycle.", "تعرف على معايير نجاحك وتابع تقدمك طوال دورة الأداء.")}>
-      <div className="employee-profile-card">
-        <div className="employee-identity"><div className="employee-avatar">MG</div><div><div className="identity-name">{employee.name}<span className="draft-badge">{text("Draft", "مسودة")}</span></div><div className="identity-meta"><span>#{employee.employeeId}</span><span>{employee.email}</span></div></div></div>
-        <div className="employee-details"><div><small>{text("BUSINESS UNIT", "وحدة الأعمال")}</small><strong>{employee.businessUnit}</strong></div><div><small>{text("DEPARTMENT", "الإدارة")}</small><strong>{employee.department}</strong></div><div><small>{text("LOCATION", "الموقع")}</small><strong>{employee.location}</strong></div><div><small>{text("JOB TITLE", "المسمى الوظيفي")}</small><strong>{employee.title}</strong></div><div><small>{text("LINE MANAGER", "المدير المباشر")}</small><strong>{employee.manager}</strong></div></div>
-      </div>
+    <AppShell role="employee" title={t("My objectives", "أهدافي")} subtitle={t("Review your performance plan, understand expectations and follow your progress throughout the cycle.", "راجع خطة أدائك وافهم التوقعات وتابع تقدمك طوال دورة الأداء.")}>
+      <Space direction="vertical" size={20} className="eo-page">
+        <Card className="eo-profile-card" bordered={false}>
+          <Row gutter={[20, 18]} align="middle">
+            <Col xs={24} lg={8}>
+              <Space size={14} align="center">
+                <Avatar size={54} icon={<UserRound />} className="eo-profile-avatar">MG</Avatar>
+                <div>
+                  <Title level={4} className="eo-profile-name">{employee.name}</Title>
+                  <Space wrap size={6}>
+                    <Text type="secondary">#{employee.employeeId}</Text>
+                    <Tag color="default">{t("Employee", "موظف")}</Tag>
+                  </Space>
+                  <Text type="secondary">{employee.email}</Text>
+                </div>
+              </Space>
+            </Col>
+            <Col xs={24} lg={16}>
+              <Descriptions size="small" column={{ xs: 1, sm: 2, xl: 3 }} items={[
+                { key: "unit", label: t("Business unit", "وحدة الأعمال"), children: employee.businessUnit },
+                { key: "department", label: t("Department", "الإدارة"), children: employee.department },
+                { key: "title", label: t("Job title", "المسمى الوظيفي"), children: employee.title },
+                { key: "location", label: t("Location", "الموقع"), children: employee.location },
+                { key: "manager", label: t("Line manager", "المدير المباشر"), children: employee.manager },
+                { key: "cycle", label: t("Performance cycle", "دورة الأداء"), children: employee.cycle }
+              ]} />
+            </Col>
+          </Row>
+        </Card>
 
-      <div className="submission-notice"><span className="notice-icon"><Clock3 size={19}/></span><div><strong>{text("Performance plan awaiting your review", "خطة الأداء في انتظار مراجعتك")}</strong><p>{text("Review the proposed objectives and KPIs. You can approve the plan or request modifications with a comment.", "راجع الأهداف ومؤشرات الأداء المقترحة. يمكنك اعتماد الخطة أو طلب تعديل مع كتابة تعليق.")}</p></div><span className="notice-status">{text("Pending", "معلق")}</span></div>
+        <Alert
+          showIcon
+          type={submittedDecision ? "success" : "warning"}
+          icon={submittedDecision ? <CheckCircle2 size={18} /> : <Clock3 size={18} />}
+          message={submittedDecision
+            ? submittedDecision === "approved" ? t("Demo approval recorded", "تم تسجيل الاعتماد التجريبي") : t("Demo modification request recorded", "تم تسجيل طلب التعديل التجريبي")
+            : t("Performance plan awaiting your review", "خطة الأداء في انتظار مراجعتك")}
+          description={submittedDecision
+            ? t("This is a local demo state only. No backend workflow or permanent record has been created.", "هذه حالة تجريبية محلية فقط. لم يتم إنشاء إجراء فعلي أو حفظ دائم في النظام.")
+            : t("Review the objectives and competencies below. You can approve the plan or request modifications with a comment.", "راجع الأهداف والكفاءات أدناه. يمكنك اعتماد الخطة أو طلب تعديلها مع كتابة تعليق.")}
+          action={!submittedDecision ? (
+            <Space wrap>
+              <Button icon={<MessageSquare size={15} />} onClick={() => setDecision("request")}>{t("Request changes", "طلب تعديل")}</Button>
+              <Button type="primary" icon={<CheckCircle2 size={15} />} onClick={() => setDecision("approve")}>{t("Approve plan", "اعتماد الخطة")}</Button>
+            </Space>
+          ) : <Tag color="success">{submittedDecision === "approved" ? t("Approved (demo)", "تم الاعتماد (تجريبي)") : t("Changes requested (demo)", "طُلب التعديل (تجريبي)")}</Tag>}
+        />
 
-      {submittedDecision ? <div className="submission-notice"><span className="notice-icon"><CheckCircle2 size={19}/></span><div><strong>{submittedDecision === "approved" ? text("Demo approval recorded", "تم تسجيل الاعتماد التجريبي") : text("Demo modification request recorded", "تم تسجيل طلب التعديل التجريبي")}</strong><p>{text("This is a local demo state only. The backend workflow has not been connected.", "هذه حالة تجريبية محلية فقط، ولم يتم ربط سير العمل بالـBackend.")}</p></div><span className="notice-status">{submittedDecision === "approved" ? text("Approved", "تم الاعتماد") : text("Requested", "تم الطلب")}</span></div> : <div className="feedback-card"><div><h3>{text("Review decision", "قرار المراجعة")}</h3><p>{text("Approve the plan or request a modification. A comment is mandatory for a modification request.", "اعتمد الخطة أو اطلب تعديلها. التعليق إلزامي عند طلب التعديل.")}</p></div><div className="toolbar-actions"><button type="button" onClick={()=>setDecision("request")}><MessageSquare size={15}/>{text("Request modification", "طلب تعديل")}</button><button type="button" onClick={()=>setDecision("approve")}><Check size={15}/>{text("Approve plan", "اعتماد الخطة")}</button></div></div>}
-      {decision && <div className="employee-decision-backdrop" role="presentation" onClick={()=>setDecision(null)}><section className="employee-decision-dialog" role="dialog" aria-modal="true" aria-labelledby="employee-decision-title" onClick={(e)=>e.stopPropagation()}>
-        <div className="employee-decision-dialog-head"><div><h3 id="employee-decision-title">{decision === "approve" ? text("Approve performance plan", "اعتماد خطة الأداء") : text("Request plan modification", "طلب تعديل الخطة")}</h3><p>{decision === "approve" ? text("Approving locks the objectives, KPIs, targets and weights.", "الاعتماد يؤدي إلى قفل الأهداف ومؤشرات الأداء والمستهدفات والأوزان.") : text("Your comment will be sent to the manager with the modification request.", "سيتم إرسال تعليقك إلى المدير مع طلب التعديل.")}</p></div><button type="button" aria-label={text("Close","إغلاق")} onClick={()=>setDecision(null)}><X size={17}/></button></div>
-        {decision === "request" && <label className="employee-decision-comment">{text("Comment (required)", "التعليق (إلزامي)")}<textarea value={comment} onChange={(e)=>setComment(e.target.value)} rows={4} placeholder={text("Explain what needs to be changed...", "وضح ما الذي يحتاج إلى تعديل...")}/></label>}
-        <div className="employee-decision-actions"><button type="button" onClick={()=>setDecision(null)}>{text("Cancel", "إلغاء")}</button><button type="button" disabled={decision === "request" && !comment.trim()} onClick={()=>{setSubmittedDecision(decision === "approve" ? "approved" : "requested");setDecision(null);}}>{decision === "approve" ? text("Confirm approval", "تأكيد الاعتماد") : text("Submit request", "إرسال الطلب")}</button></div>
-        <small>{text("Demo only — no backend action will be performed.", "تجريبي فقط — لن يتم تنفيذ إجراء فعلي على الـBackend.")}</small>
-      </section></div>}
-      <div className="objective-summary-grid">
-        <div className="summary-tile"><span className="summary-icon blue"><Target size={18}/></span><strong>1</strong><small>{text("Categories", "تصنيفات")}</small></div>
-        <div className="summary-tile"><span className="summary-icon violet"><Sparkles size={18}/></span><strong>8</strong><small>{text("Objectives", "أهداف")}</small></div>
-        <div className="summary-tile"><span className="summary-icon green"><CheckCircle2 size={18}/></span><strong>{competencies.length}</strong><small>{text("Competencies", "كفاءة")}</small></div>
-        <div className="summary-tile total"><span className="summary-icon green"><Target size={18}/></span><strong>{objectives.reduce((sum,item)=>sum+item.weight,0)}%</strong><small>{text("Total objective weight", "إجمالي أوزان الأهداف")}</small></div>
-      </div>
+        <Row gutter={[12, 12]}>
+          <Col xs={12} md={6}><Card className="eo-stat-card"><Statistic title={t("Categories", "التصنيفات")} value={new Set(objectives.map(x => x.category)).size} prefix={<Target size={17} />} /></Card></Col>
+          <Col xs={12} md={6}><Card className="eo-stat-card"><Statistic title={t("Objectives", "الأهداف")} value={objectives.length} prefix={<Sparkles size={17} />} /></Card></Col>
+          <Col xs={12} md={6}><Card className="eo-stat-card"><Statistic title={t("Competencies", "الكفاءات")} value={competencies.length} prefix={<CheckCircle2 size={17} />} /></Card></Col>
+          <Col xs={12} md={6}><Card className="eo-stat-card"><Statistic title={t("Objective weight", "أوزان الأهداف")} value={objectiveWeight} suffix="%" /></Card></Col>
+        </Row>
 
-      <div className="objectives-toolbar"><div className="toolbar-left"><div className="search-field"><Search size={16}/><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder={text("Search objectives...", "ابحث في الأهداف...")}/></div><select className="filter-select" value={filter} onChange={(e)=>setFilter(e.target.value)}><option value="all">{text("All statuses", "كل الحالات")}</option><option value="on-track">{text("On track", "على المسار")}</option><option value="at-risk">{text("At risk", "تحتاج متابعة")}</option><option value="completed">{text("Completed", "مكتمل")}</option></select></div><div className="toolbar-actions"><button onClick={()=>setExpanded(filtered.map((item)=>item.id))}><ChevronDown size={15}/>{text("Expand all", "توسيع الكل")}</button><button onClick={()=>setExpanded([])}><ChevronRight size={15}/>{text("Collapse all", "طي الكل")}</button></div></div>
+        <Card
+          title={<Space><Target size={18} /><span>{t("Objectives", "الأهداف")}</span><Tag color="blue">{filtered.length} / {objectives.length}</Tag></Space>}
+          extra={<Space wrap>
+            <Button size="small" onClick={() => setExpanded(filtered.map(x => x.id))}>{t("Expand all", "توسيع الكل")}</Button>
+            <Button size="small" onClick={() => setExpanded([])}>{t("Collapse all", "طي الكل")}</Button>
+          </Space>}
+          className="eo-section-card"
+        >
+          <Row gutter={[12, 12]} className="eo-filter-row">
+            <Col xs={24} md={15}>
+              <Input allowClear prefix={<Search size={16} />} value={query} onChange={e => setQuery(e.target.value)} placeholder={t("Search by objective title...", "ابحث باسم الهدف...")} />
+            </Col>
+            <Col xs={24} md={9}>
+              <Select
+                value={filter}
+                onChange={setFilter}
+                className="eo-full-width"
+                options={[
+                  { value: "all", label: t("All statuses", "كل الحالات") },
+                  { value: "on-track", label: t("On track", "على المسار") },
+                  { value: "at-risk", label: t("Needs attention", "يحتاج متابعة") },
+                  { value: "completed", label: t("Completed", "مكتمل") }
+                ]}
+              />
+            </Col>
+          </Row>
+          <Divider />
+          {filtered.length ? <Collapse items={collapseItems} activeKey={expanded} onChange={keys => setExpanded(Array.isArray(keys) ? keys : [keys])} expandIconPosition={ar ? "end" : "start"} /> : <Empty description={t("No objectives match your filters", "لا توجد أهداف تطابق عوامل التصفية")} />}
+        </Card>
 
-      <div className="objectives-layout"><div className="objectives-main">
-        <div id="business" className="category-header"><div><span className="category-symbol">✦</span><div><strong>{text("Business & Delivery", "الأعمال والتسليم")}</strong><small>8 {text("objectives", "أهداف")}</small></div></div><div className="category-weight"><strong>80%</strong><small>{text("Category weight", "وزن التصنيف")}</small></div></div>
-        <div className="objective-cards">
-          {filtered.map((item,index)=> {
-            const open=expanded.includes(item.id);
-            return <article className={`objective-card ${open?"is-expanded":""}`} key={item.id}>
-              <button className="objective-card-trigger" onClick={()=>toggle(item.id)} aria-expanded={open}>
-                <span className="expand-indicator">{open?<ChevronDown size={16}/>:<ChevronRight size={16}/>}</span>
-                <span className="objective-number">{String(index+1).padStart(2,"0")}</span>
-                <span className="objective-trigger-title">{ar?item.titleAr:item.title}</span>
-                <span className="objective-type">OBJECTIVE</span><span className="weight-chip">{item.weight}%</span>
-                <span className={`smart-chip ${item.smartScore>=85?"good":"mid"}`}>SMART {item.smartScore}%</span>
-              </button>
-              {open && <div className="objective-detail">
-                <div className="objective-detail-head"><div><span className="detail-overline">{text("OBJECTIVE DETAILS", "تفاصيل الهدف")}</span><h3>{ar?item.titleAr:item.title}</h3></div><div className="weight-display"><small>{text("WEIGHT", "الوزن")}</small><strong>{item.weight}%</strong></div></div>
-                <div className="objective-description-grid"><div><small>{text("ENGLISH DESCRIPTION", "الوصف بالإنجليزية")}</small><p>{item.description}</p></div><div><small>{text("ARABIC DESCRIPTION", "الوصف بالعربية")}</small><p dir="rtl">{item.descriptionAr}</p></div></div>
-                <div className="smart-score-card"><div className="smart-score-heading"><div><Sparkles size={16}/><strong>{text("SMART assessment", "تقييم SMART")}</strong></div><strong>{item.smartScore}%</strong></div><div className="smart-dimensions">{["Specific","Measurable","Achievable","Relevant","Time-bound"].map((label,i)=><div key={label}><span>{text(label,["محدد","قابل للقياس","قابل للتحقيق","مرتبط","محدد بزمن"][i])}</span><strong>{[90,85,90,80,95][i]}%</strong></div>)}</div><div className="smart-bar"><span style={{width:`${item.smartScore}%`}}/></div></div>
-                <div className="objective-progress-detail"><div><span>{text("Progress", "التقدم")}</span><strong>{item.progress}%</strong></div><div className="detail-progress-track"><span className={item.status} style={{width:`${item.progress}%`}}/></div><div className="detail-footer"><span className={`status-label ${item.status}`}>{item.status==="completed"?text("Completed", "مكتمل"):item.status==="at-risk"?text("Needs attention", "يحتاج متابعة"):text("On track", "على المسار")}</span><span>{text("Due", "تاريخ الاستحقاق")}: {item.dueDate}</span></div></div>
-                <div className="objective-info-note"><CircleHelp size={15}/>{text("You can review the proposed plan but cannot edit objectives or KPIs.", "يمكنك مراجعة الخطة المقترحة ولكن لا يمكنك تعديل الأهداف أو مؤشرات الأداء.")}</div>
-              </div>}
-            </article>
-          })}
-          {filtered.length===0 && <div className="empty-state"><Search size={24}/><strong>{text("No objectives found", "لم يتم العثور على أهداف")}</strong><span>{text("Try another search or status filter.", "جرّب البحث بكلمات أو حالة مختلفة.")}</span></div>}
-        </div>
+        <Card
+          className="eo-section-card"
+          title={<Space><CheckCircle2 size={18} /><span>{t("Core competencies", "الكفاءات الأساسية")}</span><Tag>{competencies.length}</Tag></Space>}
+          extra={<Tag color="default">{t("Read only", "للعرض فقط")}</Tag>}
+        >
+          <Paragraph type="secondary">{t("Competencies assigned to your job title. These are reviewed annually and cannot be edited here.", "الكفاءات المرتبطة بمسمّاك الوظيفي. تتم مراجعتها سنويًا ولا يمكن تعديلها من هنا.")}</Paragraph>
+          <Row gutter={[10, 10]}>
+            {competencies.map((item, index) => (
+              <Col xs={24} sm={12} lg={8} key={item}>
+                <Card size="small" className="eo-competency-item">
+                  <Space align="center">
+                    <Avatar size="small" shape="square">{String(index + 1).padStart(2, "0")}</Avatar>
+                    <Text strong>{ar ? ["تحقيق الأهداف","دعم الفريق","جودة العمل","المسؤولية واتخاذ القرار","التعلم المستمر","تحسين العمليات","تطبيق المعرفة","الالتزام بالسياسات","الالتزام بالمواعيد","التمثيل المهني","الانضباط والمساءلة","الإنتاجية والمخرجات"][index] : item}</Text>
+                  </Space>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Card>
 
-        <div id="competencies" className="category-header competency-category"><div><span className="category-symbol purple">✧</span><div><strong>{text("HR Competencies", "الكفاءات")}</strong><small>20 {text("competencies", "كفاءة")}</small></div></div><div className="category-weight"><strong>20%</strong><small>{text("Category weight", "وزن التصنيف")}</small></div></div>
-        <div className="competency-list-card"><div className="competency-list-heading"><div><h3>{text("Core competencies", "الكفاءات الأساسية")}</h3><p>{text("Competencies assigned to your role", "الكفاءات المحددة لدورك الوظيفي")}</p></div><span className="readonly-pill">{text("Read only", "للعرض فقط")}</span></div><div className="competency-grid">{competencies.map((item,i)=><div key={item} className="competency-item"><span>{String(i+1).padStart(2,"0")}</span><strong>{ar?["تحقيق الأهداف","دعم الفريق","جودة العمل","المسؤولية واتخاذ القرار","التعلم المستمر","تحسين العمليات","تطبيق المعرفة","الالتزام بالسياسات","الالتزام بالمواعيد","التمثيل المهني","الانضباط والمساءلة","الإنتاجية والمخرجات"][i]:item}</strong><CheckCircle2 size={15}/></div>)}</div></div>
-        <div className="feedback-card"><div><h3>{text("General feedback & decision", "الملاحظات العامة والقرار")}</h3><p>{text("You can review the submitted plan now. Approve it or request modifications with a comment.", "يمكنك مراجعة الخطة المرسلة الآن. اعتمدها أو اطلب تعديلها مع كتابة تعليق.")}</p></div><span className="feedback-lock"><Clock3 size={16}/>{text("Your review is pending", "في انتظار مراجعتك")}</span></div>
-      </div>
-      <aside className="objectives-aside"><div className="aside-card"><div className="aside-heading"><strong>{text("On this page", "في هذه الصفحة")}</strong><span>02</span></div><a href="#business" className="aside-section-link active"><span>01</span>{text("Business & Delivery", "الأعمال والتسليم")}<b>8</b></a><div className="aside-subitems">{objectives.slice(0,5).map((item)=> <a key={item.id} href="#" onClick={(e)=>{e.preventDefault();toggle(item.id)}}>{ar?item.titleAr:item.title}</a>)}</div><a href="#competencies" className="aside-section-link"><span>02</span>{text("HR Competencies", "الكفاءات")}<b>20</b></a><div className="aside-tip"><Sparkles size={16}/><div><strong>{text("A quick tip", "نصيحة سريعة")}</strong><p>{text("Clear, measurable objectives make performance conversations more meaningful.", "الأهداف الواضحة والقابلة للقياس تجعل مناقشات الأداء أكثر فاعلية.")}</p></div></div></div></aside>
-      </div>
+        <Alert type="info" showIcon message={t("Demo environment", "بيئة تجريبية")} description={t("Review decisions are held in local page state only. Backend integration is required to submit an auditable approval or modification request.", "قرارات المراجعة محفوظة في حالة الصفحة المحلية فقط. يلزم ربط Backend لإرسال اعتماد أو طلب تعديل قابل للتدقيق.")} />
+      </Space>
+
+      <Modal
+        open={decision !== null}
+        title={decision === "approve" ? t("Confirm performance plan approval", "تأكيد اعتماد خطة الأداء") : t("Request plan modifications", "طلب تعديل الخطة")}
+        onCancel={() => { setDecision(null); setComment(""); }}
+        onOk={submitDecision}
+        okText={decision === "approve" ? t("Confirm approval", "تأكيد الاعتماد") : t("Submit request", "إرسال الطلب")}
+        cancelText={t("Cancel", "إلغاء")}
+        okButtonProps={{ disabled: decision === "request" && !comment.trim(), danger: false }}
+        destroyOnHidden
+      >
+        {decision === "approve" ? (
+          <Alert type="warning" showIcon message={t("Approval locks the proposed plan", "الاعتماد يؤدي إلى قفل الخطة المقترحة")} description={t("Please make sure you reviewed the objectives, targets, weights and competencies before confirming.", "تأكد من مراجعة الأهداف والمستهدفات والأوزان والكفاءات قبل التأكيد.")} />
+        ) : (
+          <Form layout="vertical">
+            <Form.Item label={t("Comment (required)", "التعليق (إلزامي)")} required>
+              <Input.TextArea rows={4} showCount maxLength={1000} value={comment} onChange={e => setComment(e.target.value)} placeholder={t("Explain what needs to be changed...", "وضح ما الذي يحتاج إلى تعديل...")} />
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
     </AppShell>
   );
 }

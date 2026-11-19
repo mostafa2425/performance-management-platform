@@ -1,5 +1,7 @@
 "use client";
 
+import { AppButton } from "@/components/ui-antd-primitives";
+
 import { AppShell } from "@/components/layout/app-shell";
 import { useLocale } from "next-intl";
 import { useState } from "react";
@@ -59,9 +61,9 @@ export default function EmployeePerformancePage() {
         </div>
         <div className="employee-period-tabs" role="tablist" aria-label={t("Performance periods", "فترات الأداء")}>
           {periods.map((item) => (
-            <button key={item.id} type="button" role="tab" aria-selected={selected === item.id} className={selected === item.id ? "selected" : ""} onClick={() => setSelected(item.id)}>
+            <AppButton key={item.id} type="button" role="tab" aria-selected={selected === item.id} className={selected === item.id ? "selected" : ""} onClick={() => setSelected(item.id)}>
               <span>{item.label}</span><small>{item.status === "published" ? t("Published", "منشورة") : item.status === "in-progress" ? t("In progress", "جارية") : t("Upcoming", "قادمة")}</small>
-            </button>
+            </AppButton>
           ))}
         </div>
 

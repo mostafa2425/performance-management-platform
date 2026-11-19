@@ -1,5 +1,7 @@
 "use client";
 
+import { AppButton, AppDetails } from "@/components/ui-antd-primitives";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
@@ -94,12 +96,12 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
 
   return (
     <div className="app-frame" dir={isAr ? "rtl" : "ltr"}>
-      {mobileOpen && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileOpen(false)} />}
+      {mobileOpen && <AppButton className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileOpen(false)} />}
       <aside className={`app-sidebar ${mobileOpen ? "is-open" : ""}`}>
         <div className="brand-lockup">
           <div className="brand-mark">P</div>
           <div><strong>Perform<span>.</span></strong><small>People & performance</small></div>
-          <button className="icon-button sidebar-close" onClick={() => setMobileOpen(false)} aria-label="Close menu"><X size={18} /></button>
+          <AppButton className="icon-button sidebar-close" onClick={() => setMobileOpen(false)} aria-label="Close menu"><X size={18} /></AppButton>
         </div>
         <div className="workspace-label">{isAr ? "مساحة العمل" : "WORKSPACE"}</div>
         <nav className="sidebar-nav">
@@ -118,7 +120,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
           <div className="workspace-label">{isAr ? "المساعدة" : "SUPPORT"}</div>
           <a className="nav-link" href="mailto:people.support@example.com"><CircleHelp size={18} /><span>{isAr ? "مركز المساعدة" : "Help center"}</span></a>
           <a className="nav-link" href="#"><Settings2 size={18} /><span>{isAr ? "الإعدادات" : "Settings"}</span></a>
-          <details className="role-switcher"><summary>{isAr ? "تبديل الدور التجريبي" : "Switch demo role"} <ChevronDown size={13}/></summary><div className="role-switcher-menu">{[["employee","Employee","الموظف","/dashboard"],["manager","Manager","المدير","/manager"],["department","Department Manager","مدير الإدارة","/department"],["hcd","HCD","تطوير رأس المال البشري","/hcd"],["admin","Admin","مسؤول النظام","/admin"]].map(([key,en,ar,path])=><Link key={key} href={`/${locale}${path}`} className={role===key?"current":""}>{isAr?ar:en}</Link>)}</div></details>
+          <AppDetails className="role-switcher"><summary>{isAr ? "تبديل الدور التجريبي" : "Switch demo role"} <ChevronDown size={13}/></summary><div className="role-switcher-menu">{[["employee","Employee","الموظف","/dashboard"],["manager","Manager","المدير","/manager"],["department","Department Manager","مدير الإدارة","/department"],["hcd","HCD","تطوير رأس المال البشري","/hcd"],["admin","Admin","مسؤول النظام","/admin"]].map(([key,en,ar,path])=><Link key={key} href={`/${locale}${path}`} className={role===key?"current":""}>{isAr?ar:en}</Link>)}</div></AppDetails>
           <div className="sidebar-profile">
             <div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div>
             <div className="profile-copy"><strong>{role === "admin" ? "HCD Administrator" : role === "hcd" ? "HCD Specialist" : role === "department" ? "Department Manager" : role === "manager" ? "People Manager" : "Mostafa Gamal"}</strong><small>{role === "employee" ? "Employee" : role === "manager" ? "Manager" : role === "department" ? "Department Manager" : role === "hcd" ? "Human Capital Development" : "Administrator"}</small></div>
@@ -130,7 +132,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
       <div className="app-main">
         <header className="topbar">
           <div className="topbar-left">
-            <button className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu size={20} /></button>
+            <AppButton className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu size={20} /></AppButton>
             <nav className="breadcrumb" aria-label={isAr ? "مسار التنقل" : "Breadcrumb"}>
               <Link className="breadcrumb-home" href={`/${locale}${role === "admin" ? "/admin" : role === "hcd" ? "/hcd" : role === "department" ? "/department" : role === "manager" ? "/manager" : "/dashboard"}`}>
                 {isAr ? "مساحة العمل" : "Workspace"}

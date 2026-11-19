@@ -1,5 +1,7 @@
 "use client";
 
+import { AppCheckbox } from "@/components/ui-antd-primitives";
+
 import { Button, Form, Input, Typography } from "antd";
 import Link from "next/link";
 import { ArrowRight, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
@@ -40,7 +42,7 @@ export default function LoginPage() {
             <Form.Item label={text("Password","كلمة المرور")} name="password" rules={[{required:true,message:text("Please enter your password","أدخل كلمة المرور")}]}>
               <Input.Password size="large" prefix={<LockKeyhole size={17} className="input-prefix-icon"/>} placeholder="••••••••••" />
             </Form.Item>
-            <div className="login-options"><label><input type="checkbox" defaultChecked/> {text("Remember me","تذكرني")}</label><a href="mailto:it.support@example.com">{text("Forgot password?","نسيت كلمة المرور؟")}</a></div>
+            <div className="login-options"><label><AppCheckbox type="checkbox" defaultChecked/> {text("Remember me","تذكرني")}</label><a href="mailto:it.support@example.com">{text("Forgot password?","نسيت كلمة المرور؟")}</a></div>
             <Button type="primary" htmlType="submit" size="large" block loading={loading} className="login-submit">{text("Sign in","تسجيل الدخول")} <ArrowRight size={17}/></Button>
           </Form>
           <div className="login-divider"><span>{text("OR CONTINUE WITH","أو المتابعة باستخدام")}</span></div>
