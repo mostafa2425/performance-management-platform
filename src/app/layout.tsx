@@ -22,13 +22,13 @@ export const metadata: Metadata = {
     siteName: "Perform.",
     title: "Perform. | Performance Management Platform",
     description: "A unified workspace for performance cycles, objectives, reviews and employee development",
-    images: [{ url: "/icons/icon.svg", width: 512, height: 512, alt: "Perform. app icon" }]
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Perform. Performance Management Platform" }]
   },
   twitter: {
     card: "summary",
     title: "Perform. | Performance Management Platform",
     description: "A unified workspace for performance cycles, objectives, reviews and employee development",
-    images: ["/icons/icon.svg"]
+    images: ["/opengraph-image"]
   },
   robots: { index: false, follow: false }
 };
