@@ -6,7 +6,7 @@ import type { ButtonProps, InputProps, TableColumnsType } from "antd";
 
 type NativeButtonProps = Omit<ButtonProps, "type" | "htmlType"> & { type?: "button" | "submit" | "reset" };
 export function AppButton({ type = "button", children, className, ...props }: NativeButtonProps) {
-  const primary = /(^|\\s)(primary|pw-primary|cfg-primary|login-submit)(\\s|$)/.test(className ?? "");
+  const primary = (className ?? "").split(" ").some((name) => ["primary", "pw-primary", "cfg-primary", "login-submit", "mo-primary"].includes(name));
   return <Button {...props} className={className} type={primary ? "primary" : "default"} htmlType={type}>{children}</Button>;
 }
 
