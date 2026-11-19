@@ -7,7 +7,7 @@ import {
   Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck, FileCheck2, History,
   LayoutDashboard, LogOut, Menu, Settings2, Target, UserRound, Users, X, Tags, SlidersHorizontal
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = { children: React.ReactNode; title: string; subtitle?: string; role?: "employee" | "manager" | "department" | "hcd" | "admin" };
 
@@ -70,6 +70,24 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
   const locale = useLocale();
   const isAr = locale === "ar";
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const pageTitle = `${title} | Perform.`;
+    document.title = pageTitle;
+    const upsertMeta = (selector: string, attribute: string, value: string) => {
+      let element = document.head.querySelector<HTMLMetaElement>(selector);
+      if (!element) {
+        element = document.createElement("meta");
+        element.setAttribute(attribute, selector.includes("property=") ? selector.match(/property="([^"]+)"/)?.[1] ?? "" : selector.match(/name="([^"]+)"/)?.[1] ?? "");
+        document.head.appendChild(element);
+      }
+      element.content = value;
+    };
+    upsertMeta('meta[property="og:title"]', "property", pageTitle);
+    upsertMeta('meta[name="twitter:title"]', "name", pageTitle);
+    upsertMeta('meta[name="description"]', "name", subtitle ?? "Performance management workspace");
+    upsertMeta('meta[property="og:description"]', "property", subtitle ?? "Performance management workspace");
+  }, [title, subtitle]);
   const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
   const navItems = role === "admin" ? adminNavItems : role === "manager" ? managerNavItems : role === "department" ? departmentNavItems : role === "hcd" ? hcdNavItems : employeeNavItems;
   const active = navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ?? "dashboard";
