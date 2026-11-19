@@ -1265,3 +1265,55 @@ body{font-size: 19px}
 .pw-assigned-competencies>div span{background:#f2f6fa;border:1px solid #e4eaf1;border-radius:8px;padding:7px 10px;font-size: 15px;color:#53647b}
 .pw-assigned-competencies small{font-size: 14px;color:#8b98a9}
 @media(max-width:640px){.pw-assigned-competencies header{align-items:flex-start;flex-direction:column}}
+
+
+/* Ant Design control consistency */
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-select-selector,
+.ant-picker,
+.ant-input-number,
+.ant-btn { border-radius: 9px !important; }
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-select-selector,
+.ant-input-number { min-height: 40px; }
+.ant-input-affix-wrapper .ant-input { min-height: auto; }
+.ant-btn { font-weight: 600; }
+.ant-table-wrapper { max-width: 100%; }
+.ant-table-wrapper .ant-table { border-radius: 10px; }
+.ant-form-item-label > label { font-weight: 600; }
+.ant-modal .ant-input,
+.ant-modal .ant-input-affix-wrapper { min-height: 42px; }
+
+/* Employee objectives workspace */
+.eo-page { display: flex; width: 100%; }
+.eo-page > .ant-space-item { width: 100%; }
+.eo-profile-card { border: 1px solid var(--app-border); border-radius: 15px; box-shadow: 0 5px 18px #1b35530a; }
+.eo-profile-avatar { background: #e9f1ff; color: #163366; }
+.eo-profile-name { margin: 0 0 2px !important; }
+.eo-stat-card { height: 100%; border: 1px solid var(--app-border); border-radius: 13px; }
+.eo-stat-card .ant-statistic-title { color: var(--app-muted); font-weight: 600; }
+.eo-stat-card .ant-statistic-content { font-weight: 750; }
+.eo-section-card { border: 1px solid var(--app-border); border-radius: 15px; }
+.eo-full-width { width: 100%; }
+.eo-collapse-title { display: flex; align-items: center; gap: 12px; width: 100%; min-width: 0; }
+.eo-title-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 4px; }
+.eo-title-copy > .ant-typography { overflow: hidden; text-overflow: ellipsis; }
+.eo-title-progress { margin-inline-start: auto; flex: 0 0 auto; }
+.eo-objective-details { display: grid; gap: 16px; }
+.eo-description { margin: 8px 0 16px !important; line-height: 1.8; }
+.eo-progress-card { height: 100%; border-radius: 12px; background: #f8faff; }
+.eo-progress-heading { color: var(--app-primary); }
+.eo-progress-value { margin: 12px 0 6px !important; }
+.eo-competency-item { height: 100%; border-radius: 10px; }
+.eo-competency-item .ant-card-body { padding: 12px; }
+.eo-competency-item .ant-typography { line-height: 1.55; }
+.eo-filter-row { align-items: center; }
+@media (max-width: 640px) {
+  .eo-collapse-title { gap: 8px; }
+  .eo-title-progress { display: none; }
+  .eo-profile-card .ant-descriptions-item-label,
+  .eo-profile-card .ant-descriptions-item-content { padding-bottom: 7px; }
+  .eo-page { gap: 14px !important; }
+}
