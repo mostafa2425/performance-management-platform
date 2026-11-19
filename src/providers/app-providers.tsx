@@ -13,7 +13,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     <ConfigProvider
       direction={isArabic ? "rtl" : "ltr"}
       locale={isArabic ? arEG : enUS}
-      theme={{ token: { colorPrimary: "#153b63", colorSuccess: "#167d75", borderRadius: 8, fontSize: 14 } }}
+      theme={{ token: { colorPrimary: "#163366", colorSuccess: "#167d75", borderRadius: 8, fontSize: 16 } }}
     >
       <AntdApp>
         <QueryProvider>
