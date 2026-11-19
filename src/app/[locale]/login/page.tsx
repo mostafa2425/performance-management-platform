@@ -5,13 +5,14 @@ import Link from "next/link";
 import { ArrowRight, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
   const locale = useLocale();
   const router = useRouter();
   const ar = locale === "ar";
   const [loading,setLoading] = useState(false);
+  useEffect(() => { document.title = ar ? "تسجيل الدخول | Perform." : "Sign in | Perform."; }, [ar]);
   const text = (en:string,arabic:string)=>ar?arabic:en;
   const onFinish = async () => {
     setLoading(true);
