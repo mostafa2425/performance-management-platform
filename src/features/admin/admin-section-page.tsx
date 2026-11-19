@@ -1,5 +1,7 @@
 "use client";
 
+import { AppInput } from "@/components/ui-antd-primitives";
+
 import { AppShell } from "@/components/layout/app-shell";
 import { useLocale } from "next-intl";
 import { CalendarDays, ChevronRight, CircleCheck, Clock3, Search, Users } from "lucide-react";
@@ -19,7 +21,7 @@ export function AdminSectionPage({section}:{section:SectionKey}) {
   const rows=c.rows.filter(r=>r.join(" ").toLowerCase().includes(search.toLowerCase()));
   const title=ar?c.ar:c.en;
   return <AppShell role="admin" title={title} subtitle={ar?c.subAr:c.subEn}>
-    <div className="admin-section-toolbar"><div className="search-field"><Search size={15}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={ar?"بحث...":"Search records..."}/></div><span className="readonly-pill">{ar?"بيانات تجريبية":"Mock data"}</span></div>
+    <div className="admin-section-toolbar"><div className="search-field"><Search size={15}/><AppInput value={search} onChange={e=>setSearch(e.target.value)} placeholder={ar?"بحث...":"Search records..."}/></div><span className="readonly-pill">{ar?"بيانات تجريبية":"Mock data"}</span></div>
     <section className="panel admin-record-panel"><div className="panel-heading"><div><h3>{title}</h3><p>{ar?`عدد السجلات: ${rows.length}`:`${rows.length} records`}</p></div><span className="admin-cycle-tag">2026</span></div>
       <div className="admin-record-list">{rows.map((row,i)=><div className="admin-record" key={row[0]}><span className="admin-record-icon">{section==="employees"?<Users size={17}/>:section==="cycles"?<CalendarDays size={17}/>:section==="approvals"?<Clock3 size={17}/>:<CircleCheck size={17}/>}</span><div><strong>{row[0]}</strong><small>{row[1]}</small></div><span className={`admin-record-status ${row[2].toLowerCase().replace(/ /g,"-")}`}>{row[2]}</span><ChevronRight size={15}/></div>)}</div>
     </section>
