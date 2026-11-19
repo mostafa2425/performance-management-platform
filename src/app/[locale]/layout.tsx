@@ -4,7 +4,6 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { AppProviders } from "@/providers/app-providers";
-import { PwaRegister } from "@/components/pwa-register";
 
 type Props = { children: React.ReactNode; params: Promise<{ locale: string }> };
 
@@ -23,7 +22,6 @@ export default async function LocaleLayout({ children, params }: Props) {
       <AntdRegistry>
         <NextIntlClientProvider messages={messages}>
           <AppProviders>{children}</AppProviders>
-          <PwaRegister />
         </NextIntlClientProvider>
       </AntdRegistry>
     </div>
