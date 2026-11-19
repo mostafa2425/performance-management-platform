@@ -1,5 +1,7 @@
 "use client";
 
+import { AppButton, AppInput, AppTextArea, AppSelect } from "@/components/ui-antd-primitives";
+
 import { AppShell } from "@/components/layout/app-shell";
 import { useLocale } from "next-intl";
 import { useMemo, useState } from "react";
@@ -65,16 +67,16 @@ export default function ManagerEvaluationPage() {
         </div>
         <div className="evaluation-context-fields">
           <label>{t("Employee", "الموظف")}
-            <select defaultValue="EMP-10574">
+            <AppSelect defaultValue="EMP-10574">
               <option value="EMP-10574">Omar Khaled · EMP-10574</option>
               <option value="EMP-10561">Sara Ahmed · EMP-10561</option>
               <option value="EMP-10589">Mona Ali · EMP-10589</option>
-            </select>
+            </AppSelect>
           </label>
           <label>{t("Performance period", "فترة الأداء")}
-            <select value={period} onChange={(event) => { setPeriod(event.target.value); setSaved(false); }}>
+            <AppSelect value={period} onChange={(event) => { setPeriod(event.target.value); setSaved(false); }}>
               {periodNames.map((name) => <option key={name} value={name}>{name} · 2026</option>)}
-            </select>
+            </AppSelect>
           </label>
         </div>
       </section>
@@ -105,7 +107,7 @@ export default function ManagerEvaluationPage() {
               </div>
               <span className="evaluation-readonly">{kpi.target}{kpi.unit}</span>
               <label className="evaluation-actual">
-                <input aria-label={t("Actual value", "القيمة الفعلية")} type="number" min="0" step="any" value={kpi.actual} onChange={(event) => updateKpi(kpi.id, { actual: Math.max(0, Number(event.target.value)) })} />
+                <AppInput aria-label={t("Actual value", "القيمة الفعلية")} type="number" min="0" step="any" value={kpi.actual} onChange={(event) => updateKpi(kpi.id, { actual: Math.max(0, Number(event.target.value)) })} />
                 <small>{kpi.unit.trim() || "value"}</small>
               </label>
               <span className="evaluation-readonly">{kpi.weight}%</span>
@@ -113,9 +115,9 @@ export default function ManagerEvaluationPage() {
               <strong className="evaluation-calculated">{fmt(kpi.weighted)}</strong>
               <label className="evaluation-comment">
                 {t("Manager comment (optional)", "تعليق المدير (اختياري)")}
-                <textarea value={kpi.comment} onChange={(event) => updateKpi(kpi.id, { comment: event.target.value })} placeholder={t("Add context or evidence reference…", "أضف توضيحاً أو مرجعاً للدليل…")} />
+                <AppTextArea value={kpi.comment} onChange={(event) => updateKpi(kpi.id, { comment: event.target.value })} placeholder={t("Add context or evidence reference…", "أضف توضيحاً أو مرجعاً للدليل…")} />
                 <span>{t("Supporting evidence reference", "مرجع الدليل الداعم")}{requiresEvidence ? " · "+t("Required for rating 4–5","مطلوب للتقدير 4–5") : ""}</span>
-                <input value={kpi.evidence} onChange={(event) => updateKpi(kpi.id, { evidence: event.target.value })} placeholder={t("Evidence file / reference (demo)", "ملف الدليل / المرجع (تجريبي)")} />
+                <AppInput value={kpi.evidence} onChange={(event) => updateKpi(kpi.id, { evidence: event.target.value })} placeholder={t("Evidence file / reference (demo)", "ملف الدليل / المرجع (تجريبي)")} />
               </label>
             </article>
           ))}
@@ -139,9 +141,9 @@ export default function ManagerEvaluationPage() {
             {competencyNames.map((name) => (
               <label key={name}>
                 <span><strong>{name}</strong><small>{t("Weight 25%", "الوزن 25%")}</small></span>
-                <select value={ratings[name]} onChange={(event) => setRatings((current) => ({ ...current, [name]: Number(event.target.value) }))}>
+                <AppSelect value={ratings[name]} onChange={(event) => setRatings((current) => ({ ...current, [name]: Number(event.target.value) }))}>
                   {[1, 2, 3, 4, 5].map((rating) => <option key={rating} value={rating}>{rating} · {ratingMap[rating]}%</option>)}
-                </select>
+                </AppSelect>
               </label>
             ))}
           </div>
@@ -204,7 +206,7 @@ export default function ManagerEvaluationPage() {
             <span className="evaluation-demo-warning"><AlertTriangle size={15} />{t("Demo only · no backend persistence or submission", "نسخة تجريبية فقط · لا يوجد حفظ أو إرسال إلى Backend")}</span>
           )}
         </div>
-        <div className="evaluation-action-buttons"><button type="button" onClick={() => { setSaved(true); setWorkflowNotice(t("Demo draft saved locally. You can continue later while the evaluation stage is open.", "تم حفظ المسودة التجريبية محلياً ويمكنك المتابعة لاحقاً أثناء فتح مرحلة التقييم.")); }}><Save size={16} />{t("Save demo draft", "حفظ مسودة تجريبية")}</button>{period === "Q4" ? <button type="button" onClick={() => { const missing = results.some(x => x.actual < 0 || !Number.isFinite(x.actual)) || results.some(x => !x.name.trim()) || (requiresEvidence && kpis.some(x => !x.evidence.trim())); setWorkflowNotice(missing ? t("Complete all KPI Actual values before saving the annual draft.", "أكمل القيم الفعلية لجميع المؤشرات قبل حفظ المسودة السنوية.") : t("Final-period evaluation is saved as an annual draft. It is not submitted individually; the complete Manager–Year Group is submitted after all eligible employees are complete.", "يتم حفظ تقييم الفترة النهائية كمسودة سنوية ولا يتم إرساله بشكل فردي؛ تُرسل مجموعة المدير والسنة بالكامل بعد اكتمال جميع الموظفين المؤهلين.")); setSaved(!missing); }}><Save size={16}/>{t("Save annual evaluation draft","حفظ مسودة التقييم السنوي")}</button> : <button type="button" onClick={() => { const valid = results.every(x => x.actual >= 0 && Number.isFinite(x.actual)) && Math.abs(results.reduce((s,x)=>s+x.weight,0)-100)<0.0001 && (!requiresEvidence || kpis.every(x => x.evidence.trim())); setWorkflowNotice(valid ? t("Demo Non-Final Period evaluation is ready for individual Admin review.", "تقييم الفترة غير النهائية التجريبي جاهز للمراجعة الفردية من الإدارة.") : t("Submission blocked: enter valid Actual values and ensure KPI weights total 100%.", "تم منع الإرسال: أدخل قيماً فعلية صحيحة وتأكد أن إجمالي أوزان المؤشرات 100%.") ); setSaved(valid); }}><Send size={16}/>{t("Submit period to Admin","إرسال الفترة للإدارة")}</button>}</div>
+        <div className="evaluation-action-buttons"><AppButton type="button" onClick={() => { setSaved(true); setWorkflowNotice(t("Demo draft saved locally. You can continue later while the evaluation stage is open.", "تم حفظ المسودة التجريبية محلياً ويمكنك المتابعة لاحقاً أثناء فتح مرحلة التقييم.")); }}><Save size={16} />{t("Save demo draft", "حفظ مسودة تجريبية")}</AppButton>{period === "Q4" ? <AppButton type="button" onClick={() => { const missing = results.some(x => x.actual < 0 || !Number.isFinite(x.actual)) || results.some(x => !x.name.trim()) || (requiresEvidence && kpis.some(x => !x.evidence.trim())); setWorkflowNotice(missing ? t("Complete all KPI Actual values before saving the annual draft.", "أكمل القيم الفعلية لجميع المؤشرات قبل حفظ المسودة السنوية.") : t("Final-period evaluation is saved as an annual draft. It is not submitted individually; the complete Manager–Year Group is submitted after all eligible employees are complete.", "يتم حفظ تقييم الفترة النهائية كمسودة سنوية ولا يتم إرساله بشكل فردي؛ تُرسل مجموعة المدير والسنة بالكامل بعد اكتمال جميع الموظفين المؤهلين.")); setSaved(!missing); }}><Save size={16}/>{t("Save annual evaluation draft","حفظ مسودة التقييم السنوي")}</AppButton> : <AppButton type="button" onClick={() => { const valid = results.every(x => x.actual >= 0 && Number.isFinite(x.actual)) && Math.abs(results.reduce((s,x)=>s+x.weight,0)-100)<0.0001 && (!requiresEvidence || kpis.every(x => x.evidence.trim())); setWorkflowNotice(valid ? t("Demo Non-Final Period evaluation is ready for individual Admin review.", "تقييم الفترة غير النهائية التجريبي جاهز للمراجعة الفردية من الإدارة.") : t("Submission blocked: enter valid Actual values and ensure KPI weights total 100%.", "تم منع الإرسال: أدخل قيماً فعلية صحيحة وتأكد أن إجمالي أوزان المؤشرات 100%.") ); setSaved(valid); }}><Send size={16}/>{t("Submit period to Admin","إرسال الفترة للإدارة")}</AppButton>}</div>
       </div>
       {workflowNotice && <p className="pw-demo-confirm" role="status">{workflowNotice}</p>}
       <div className="admin-demo-note"><AlertTriangle size={15}/><span>{t("Non-Final Period evaluations are submitted individually for Admin review. Final Period evaluations remain drafts until Manager–Year Group submission. Evidence references are illustrative only; no files are uploaded.", "تُرسل تقييمات الفترات غير النهائية بشكل فردي لمراجعة الإدارة. تظل تقييمات الفترة النهائية مسودات حتى إرسال مجموعة المدير والسنة. مراجع الأدلة توضيحية ولا يتم رفع ملفات.")}</span></div>
