@@ -1,5 +1,7 @@
 "use client";
 
+import { AppButton } from "@/components/ui-antd-primitives";
+
 import { AppShell } from "@/components/layout/app-shell";
 import { useLocale } from "next-intl";
 import Link from "next/link";
@@ -46,7 +48,7 @@ export default function AdminDashboardPage() {
 
       <div className="admin-content-grid">
         <section className="panel admin-cycle-panel">
-          <div className="panel-heading"><div><h3>{t("Cycle progress", "تقدم الدورة")}</h3><p>{t("Submission and review status by department", "حالة الإرسال والمراجعة حسب الإدارة")}</p></div><button className="admin-ghost-button"><Filter size={14}/>{t("This cycle", "هذه الدورة")}</button></div>
+          <div className="panel-heading"><div><h3>{t("Cycle progress", "تقدم الدورة")}</h3><p>{t("Submission and review status by department", "حالة الإرسال والمراجعة حسب الإدارة")}</p></div><AppButton className="admin-ghost-button"><Filter size={14}/>{t("This cycle", "هذه الدورة")}</AppButton></div>
           <div className="admin-progress-legend"><span><i className="admin-legend submitted"/> {t("Submitted", "تم الإرسال")}</span><span><i className="admin-legend remaining"/> {t("Remaining", "متبقي")}</span></div>
           <div className="department-progress-list">{departments.map((d)=><div className="department-progress-row" key={d.name}><div className="department-progress-title"><strong>{t(d.name, d.name==="Technology"?"التقنية":d.name==="Program Management"?"إدارة البرامج":d.name==="Human Resources"?"الموارد البشرية":"المالية والعمليات")}</strong><span>{d.submitted}/{d.employees}</span></div><div className="department-progress-track"><span className={d.color} style={{width:`${Math.round(d.submitted/d.employees*100)}%`}}/></div><small>{Math.round(d.submitted/d.employees*100)}% {t("submitted", "تم الإرسال")}</small></div>)}</div>
           <Link className="admin-panel-link" href={`/${ar?"ar":"en"}/admin/employees`}>{t("View employee progress", "عرض تقدم الموظفين")} <ArrowUpRight size={14}/></Link>
