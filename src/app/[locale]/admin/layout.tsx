@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    openGraph: { title: `${title} | Perform.`, description, type: "website", siteName: "Perform." },
-    twitter: { card: "summary", title: `${title} | Perform.`, description }
+    openGraph: { title: `${title} | Perform.`, description, type: "website", siteName: "Perform.", images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Perform. Performance Management Platform" }] },
+    twitter: { card: "summary_large_image", images: ["/opengraph-image"], title: `${title} | Perform.`, description }
   };
 }
 
