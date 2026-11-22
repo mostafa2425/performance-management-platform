@@ -3,7 +3,7 @@
 import { AppButton, AppInput, AppTextArea, AppSelect, AppCheckbox, AppTable } from "@/components/ui-antd-primitives";
 
 import { AppShell } from "@/components/layout/app-shell";
-import {useTranslations} from "next-intl";
+import {useLocale, useTranslations} from "next-intl";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowLeft, Check, Copy, LockKeyhole, Plus, Search, ShieldCheck, Trash2 } from "lucide-react";
@@ -27,7 +27,7 @@ const seed:Template[]=[
 ];
 const uid=()=>Math.random().toString(36).slice(2,9);
 export default function CompetencyTemplateWorkspace(){
- const ar=useLocale()==="ar";const t=(en:string,arabic:string)=>ar?arabic:en;
+ const ar=useLocale()==="ar";const t=useTranslations("CompetencyTemplates");
  const [templates,setTemplates]=useState(seed);const [selected,setSelected]=useState<string|null>(null);const [query,setQuery]=useState("");const [filter,setFilter]=useState("All");const [notice,setNotice]=useState("");const [error,setError]=useState("");
  const current=templates.find(x=>x.id===selected)??null;const [draft,setDraft]=useState<Template|null>(null);
  const start=(template?:Template,copy=false)=>{const base=template??{id:"TPL-"+String(templates.length+1).padStart(3,"0"),nameEn:"",nameAr:"",status:"Draft" as const,jobTitles:[],groups:[{id:uid(),nameEn:"",nameAr:"",competencies:[makeCompetency(uid(),"","","","",100)]}],usedInActiveCycle:false,updatedAt:"—"};setDraft({...base,id:copy?"TPL-"+String(templates.length+1).padStart(3,"0"):base.id,status:"Draft",nameEn:copy?base.nameEn+" (Copy)":base.nameEn,jobTitles:copy?[]:[...base.jobTitles],groups:base.groups.map(g=>({...g,id:copy?uid():g.id,competencies:g.competencies.map(c=>({...c,id:copy?uid():c.id}))})),usedInActiveCycle:false});setSelected(base.id);setError("");setNotice("");};
