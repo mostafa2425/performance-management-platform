@@ -3,7 +3,7 @@
 import { AppButton, AppInput, AppTextArea, AppCheckbox, AppTable, AppDetails } from "@/components/ui-antd-primitives";
 
 import { AppShell } from "@/components/layout/app-shell";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, Clock3, FileCheck2, MessageSquare, ShieldCheck, Users, XCircle } from "lucide-react";
 
@@ -19,6 +19,7 @@ const initialEmployees: Employee[] = [
 
 export default function AdminFinalReviewPage() {
   const ar = useLocale() === "ar";
+  const translate = useTranslations("AdminFinalReview");
   const t = (en: string, arabic: string) => ar ? arabic : en;
   const [employees] = useState(initialEmployees);
   const [decision, setDecision] = useState<"approve" | "return" | null>(null);
@@ -44,50 +45,50 @@ export default function AdminFinalReviewPage() {
   }
 
   return (
-    <AppShell role="admin" title={t("Admin final review", "المراجعة النهائية للإدارة")} subtitle={t("Review the Manager–Year Group, verify completeness and record a group-level decision.", "راجع مجموعة المدير والسنة وتحقق من اكتمالها وسجّل قراراً على مستوى المجموعة.")}>
-      <div className="admin-final-topline"><span className="readonly-pill">2026 · {t("Annual performance cycle", "دورة الأداء السنوية")}</span><span className="readonly-pill">{t("Illustrative group data", "بيانات مجموعة توضيحية")}</span></div>
+    <AppShell role="admin" title={translate("text001")} subtitle={translate("text002")}>
+      <div className="admin-final-topline"><span className="readonly-pill">2026 · {translate("text003")}</span><span className="readonly-pill">{translate("text004")}</span></div>
 
       <section className="panel admin-final-hero">
-        <div><span className="admin-final-eyebrow"><Users size={13}/>{t("MANAGER–YEAR GROUP · TECHNOLOGY & SHARED SERVICES", "مجموعة المدير والسنة · التقنية والخدمات المشتركة")}</span><h2>{t("Annual performance group", "مجموعة الأداء السنوي")}</h2><p>{t("Submitted by: People Manager · Cycle: 2026 · Frequency: Quarterly", "مقدم من: مدير الفريق · الدورة: 2026 · التكرار: ربع سنوي")}</p></div>
-        <div className="admin-final-summary-score"><strong>{average.toFixed(1)}%</strong><span>{t("Average of complete demo records", "متوسط السجلات التجريبية المكتملة")}</span></div>
+        <div><span className="admin-final-eyebrow"><Users size={13}/>{translate("text005")}</span><h2>{translate("text006")}</h2><p>{translate("text007")}</p></div>
+        <div className="admin-final-summary-score"><strong>{average.toFixed(1)}%</strong><span>{translate("text008")}</span></div>
       </section>
 
       <section className="admin-final-metrics">
-        <article className="panel"><span>{t("Group population", "عدد المجموعة")}</span><strong>{employees.length}</strong><small>{t("Employees in this group", "موظف في المجموعة")}</small></article>
-        <article className="panel"><span>{t("Complete evaluations", "تقييمات مكتملة")}</span><strong>{complete.length}</strong><small>{t("Period + annual competencies", "الفترات + الكفاءات السنوية")}</small></article>
-        <article className="panel"><span>{t("Incomplete evaluations", "تقييمات غير مكتملة")}</span><strong>{incomplete}</strong><small>{t("Must be resolved before approval", "يجب استكمالها قبل الاعتماد")}</small></article>
-        <article className="panel"><span>{t("Bell Curve", "التوزيع الطبيعي")}</span><strong>{t("Unverified", "غير متحقق")}</strong><small>{t("Policy thresholds unavailable", "حدود السياسة غير متاحة")}</small></article>
+        <article className="panel"><span>{translate("text009")}</span><strong>{employees.length}</strong><small>{translate("text010")}</small></article>
+        <article className="panel"><span>{translate("text011")}</span><strong>{complete.length}</strong><small>{translate("text012")}</small></article>
+        <article className="panel"><span>{translate("text013")}</span><strong>{incomplete}</strong><small>{translate("text014")}</small></article>
+        <article className="panel"><span>{translate("text015")}</span><strong>{translate("text016")}</strong><small>{translate("text017")}</small></article>
       </section>
 
       <section className="panel admin-final-table-panel">
-        <div className="panel-heading"><div><h3>{t("Employee annual results", "النتائج السنوية للموظفين")}</h3><p>{t("Review objectives, competencies, overall score and rating for each member.", "راجع الأهداف والكفاءات والنتيجة الإجمالية والتقدير لكل عضو.")}</p></div><span className="readonly-pill">{employees.length} {t("records", "سجلات")}</span></div>
-        <div className="admin-final-table-wrap"><AppTable className="admin-final-table"><thead><tr><th>{t("Employee", "الموظف")}</th><th>{t("Objectives", "الأهداف")}</th><th>{t("Competencies", "الكفاءات")}</th><th>{t("Overall score", "النتيجة الإجمالية")}</th><th>{t("Rating", "التقدير")}</th><th>{t("Status", "الحالة")}</th></tr></thead><tbody>{employees.map((employee)=><tr key={employee.id}><td><div className="admin-final-person"><strong>{employee.name}</strong><small>{employee.department} · {employee.id}</small></div></td><td>{employee.objectives ? employee.objectives.toFixed(1)+"%" : "—"}</td><td>{employee.competencies ? employee.competencies.toFixed(1)+"%" : "—"}</td><td><strong className="admin-final-score">{employee.score ? employee.score.toFixed(1)+"%" : "—"}</strong></td><td>{employee.rating}</td><td><span className={`admin-final-status ${employee.status.toLowerCase()}`}>{employee.status==="Complete"?<CheckCircle2 size={13}/>:<AlertTriangle size={13}/>} {employee.status==="Complete"?t("Complete","مكتمل"):t("Incomplete","غير مكتمل")}</span></td></tr>)}</tbody></AppTable></div>
-        <div className="admin-final-note"><AlertTriangle size={14}/>{t("This demo contains incomplete employee records. The BRD requires group completeness before final approval; do not infer missing scores.", "تحتوي هذه النسخة التجريبية على سجلات غير مكتملة. يشترط BRD اكتمال المجموعة قبل الاعتماد النهائي؛ لا يتم افتراض الدرجات المفقودة.")}</div>
+        <div className="panel-heading"><div><h3>{translate("text018")}</h3><p>{translate("text019")}</p></div><span className="readonly-pill">{employees.length} {translate("text020")}</span></div>
+        <div className="admin-final-table-wrap"><AppTable className="admin-final-table"><thead><tr><th>{translate("text021")}</th><th>{translate("text022")}</th><th>{translate("text023")}</th><th>{translate("text024")}</th><th>{translate("text025")}</th><th>{translate("text026")}</th></tr></thead><tbody>{employees.map((employee)=><tr key={employee.id}><td><div className="admin-final-person"><strong>{employee.name}</strong><small>{employee.department} · {employee.id}</small></div></td><td>{employee.objectives ? employee.objectives.toFixed(1)+"%" : "—"}</td><td>{employee.competencies ? employee.competencies.toFixed(1)+"%" : "—"}</td><td><strong className="admin-final-score">{employee.score ? employee.score.toFixed(1)+"%" : "—"}</strong></td><td>{employee.rating}</td><td><span className={`admin-final-status ${employee.status.toLowerCase()}`}>{employee.status==="Complete"?<CheckCircle2 size={13}/>:<AlertTriangle size={13}/>} {employee.status==="Complete"?translate("text027"):translate("text028")}</span></td></tr>)}</tbody></AppTable></div>
+        <div className="admin-final-note"><AlertTriangle size={14}/>{translate("text029")}</div>
       </section>
 
 
-      <section className="panel pw-calc-panel"><h3>{t("Employee evaluation details", "تفاصيل تقييم الموظف")}</h3><p className="pw-muted">{t("Review visible score components. Detailed KPI actuals, comments, evidence and workflow history are illustrative only.", "راجع مكونات الدرجات الظاهرة. تفاصيل القيم الفعلية والتعليقات والأدلة وسجل سير العمل توضيحية فقط.")}</p>{employees.map(employee=><AppDetails className="admin-final-employee-detail" key={employee.id}><summary><strong>{employee.name}</strong><span>{employee.id} · {employee.status}</span><b>{employee.score ? employee.score.toFixed(1)+"%" : "—"}</b></summary><div className="pw-plan-summary"><div><span>{t("Annual Objectives Result", "نتيجة الأهداف السنوية")}</span><strong>{employee.objectives ? employee.objectives.toFixed(1)+"%" : "Pending"}</strong></div><div><span>{t("Annual Competency Result", "نتيجة الكفاءات السنوية")}</span><strong>{employee.competencies ? employee.competencies.toFixed(1)+"%" : "Pending"}</strong></div><div><span>{t("Overall Annual Performance", "إجمالي الأداء السنوي")}</span><strong>{employee.score ? employee.score.toFixed(1)+"%" : "Pending"}</strong></div><div><span>{t("Calculated rating", "التقدير المحسوب")}</span><strong>{employee.rating}</strong></div></div><small className="pw-muted">Objectives, KPI Actuals, competency ratings, evidence and workflow history are sample-only and require complete record payloads for production.</small></AppDetails>)}</section>
+      <section className="panel pw-calc-panel"><h3>{translate("text030")}</h3><p className="pw-muted">{translate("text031")}</p>{employees.map(employee=><AppDetails className="admin-final-employee-detail" key={employee.id}><summary><strong>{employee.name}</strong><span>{employee.id} · {employee.status}</span><b>{employee.score ? employee.score.toFixed(1)+"%" : "—"}</b></summary><div className="pw-plan-summary"><div><span>{translate("text032")}</span><strong>{employee.objectives ? employee.objectives.toFixed(1)+"%" : "Pending"}</strong></div><div><span>{translate("text033")}</span><strong>{employee.competencies ? employee.competencies.toFixed(1)+"%" : "Pending"}</strong></div><div><span>{translate("text034")}</span><strong>{employee.score ? employee.score.toFixed(1)+"%" : "Pending"}</strong></div><div><span>{translate("text035")}</span><strong>{employee.rating}</strong></div></div><small className="pw-muted">Objectives, KPI Actuals, competency ratings, evidence and workflow history are sample-only and require complete record payloads for production.</small></AppDetails>)}</section>
       <section className="admin-final-lower-grid">
         <div className="panel admin-final-decision">
-          <div className="panel-heading"><div><h3>{t("Group-level decision", "القرار على مستوى المجموعة")}</h3><p>{t("Approve the group or return it to the manager with a mandatory reason.", "اعتمد المجموعة أو أعدها إلى المدير مع توضيح سبب الإرجاع.")}</p></div><ShieldCheck size={18}/></div>
-          <div className="admin-final-policy-warning"><AlertTriangle size={15}/><span>{t("Approval is blocked: incomplete employee evaluations and unverified Bell Curve policy.", "الاعتماد متوقف: توجد تقييمات غير مكتملة وسياسة Bell Curve غير متحقق منها.")}</span></div>
+          <div className="panel-heading"><div><h3>{translate("text036")}</h3><p>{translate("text037")}</p></div><ShieldCheck size={18}/></div>
+          <div className="admin-final-policy-warning"><AlertTriangle size={15}/><span>{translate("text038")}</span></div>
           <div className="admin-final-choice">
-            <label className={decision==="approve"?"selected":""}><AppInput type="radio" name="admin-decision" checked={decision==="approve"} onChange={()=>{setDecision("approve");setAffectedEmployees([]);setRecorded(null);}}/><span><CheckCircle2 size={16}/><strong>{t("Approve group", "اعتماد المجموعة")}</strong><small>{t("Proceed to final publication workflow", "الانتقال إلى مسار النشر النهائي")}</small></span></label>
-            <label className={decision==="return"?"selected":""}><AppInput type="radio" name="admin-decision" checked={decision==="return"} onChange={()=>{setDecision("return");setRecorded(null);}}/><span><XCircle size={16}/><strong>{t("Return to manager", "إرجاع إلى المدير")}</strong><small>{t("Send the entire group back for updates", "إعادة المجموعة بالكامل للتعديل")}</small></span></label>
+            <label className={decision==="approve"?"selected":""}><AppInput type="radio" name="admin-decision" checked={decision==="approve"} onChange={()=>{setDecision("approve");setAffectedEmployees([]);setRecorded(null);}}/><span><CheckCircle2 size={16}/><strong>{translate("text039")}</strong><small>{translate("text040")}</small></span></label>
+            <label className={decision==="return"?"selected":""}><AppInput type="radio" name="admin-decision" checked={decision==="return"} onChange={()=>{setDecision("return");setRecorded(null);}}/><span><XCircle size={16}/><strong>{translate("text041")}</strong><small>{translate("text042")}</small></span></label>
           </div>
           
-          {decision === "return" && <div className="admin-final-affected"><strong>{t("Affected employees (required)", "الموظفون المتأثرون (مطلوب)")}</strong><p>{t("Select the employees whose permitted final-period evaluation inputs need revision.", "حدد الموظفين الذين تحتاج مدخلات تقييم الفترة النهائية المسموح بها لديهم إلى تعديل.")}</p>{employees.map(employee=><label key={employee.id}><AppCheckbox type="checkbox" checked={affectedEmployees.includes(employee.id)} onChange={event=>setAffectedEmployees(current=>event.target.checked?[...current,employee.id]:current.filter(id=>id!==employee.id))}/><span>{employee.name} · {employee.id}</span></label>)}</div>}
-          <label className="admin-final-comment-label">{t("Admin comments", "تعليقات الإدارة")} {commentRequired && <em>{t("Required for return", "مطلوبة عند الإرجاع")}</em>}<AppTextArea value={comment} onChange={(event)=>{setComment(event.target.value);setRecorded(null);}} placeholder={t("Enter decision notes or required corrections…", "اكتب ملاحظات القرار أو التعديلات المطلوبة…")}/></label>
-          <AppButton className="admin-final-action" type="button" disabled={!canRecord} onClick={recordDecision}>{decision==="approve"?<CheckCircle2 size={15}/>:<MessageSquare size={15}/>} {decision==="approve"?t("Record approval preview","تسجيل معاينة الاعتماد"):t("Record return preview","تسجيل معاينة الإرجاع")}</AppButton>
-          {recorded && <div className="admin-final-recorded"><CheckCircle2 size={14}/>{recorded==="approved"?t("Demo approval decision recorded.","تم تسجيل قرار الاعتماد التجريبي."):t("Demo group return recorded.","تم تسجيل إرجاع المجموعة التجريبي.")}</div>}
+          {decision === "return" && <div className="admin-final-affected"><strong>{translate("text043")}</strong><p>{translate("text044")}</p>{employees.map(employee=><label key={employee.id}><AppCheckbox type="checkbox" checked={affectedEmployees.includes(employee.id)} onChange={event=>setAffectedEmployees(current=>event.target.checked?[...current,employee.id]:current.filter(id=>id!==employee.id))}/><span>{employee.name} · {employee.id}</span></label>)}</div>}
+          <label className="admin-final-comment-label">{translate("text045")} {commentRequired && <em>{translate("text046")}</em>}<AppTextArea value={comment} onChange={(event)=>{setComment(event.target.value);setRecorded(null);}} placeholder={translate("text047")}/></label>
+          <AppButton className="admin-final-action" type="button" disabled={!canRecord} onClick={recordDecision}>{decision==="approve"?<CheckCircle2 size={15}/>:<MessageSquare size={15}/>} {decision==="approve"?translate("text048"):translate("text049")}</AppButton>
+          {recorded && <div className="admin-final-recorded"><CheckCircle2 size={14}/>{recorded==="approved"?translate("text050"):translate("text051")}</div>}
         </div>
 
         <div className="panel admin-final-history">
-          <div className="panel-heading"><div><h3>{t("Workflow history", "سجل سير العمل")}</h3><p>{t("Group-level audit trail", "سجل تدقيق المجموعة")}</p></div><Clock3 size={18}/></div>
+          <div className="panel-heading"><div><h3>{translate("text052")}</h3><p>{translate("text053")}</p></div><Clock3 size={18}/></div>
           <div className="admin-final-timeline">{history.map((item,index)=><div className="admin-final-timeline-item" key={index}><i/><div><strong>{item.action}</strong><p>{item.note}</p><small>{item.time}</small></div></div>)}</div>
         </div>
       </section>
-      <div className="admin-demo-note"><FileCheck2 size={15}/><span>{t("Frontend prototype only. Decisions update this local screen state; no backend workflow, notification, publication or audit record is created.", "نموذج Frontend فقط. القرارات تحدث حالة الشاشة محلياً ولا تنشئ سير عمل أو إشعاراً أو نشراً أو سجل تدقيق في Backend.")}</span></div>
+      <div className="admin-demo-note"><FileCheck2 size={15}/><span>{translate("text054")}</span></div>
     </AppShell>
   );
 }
