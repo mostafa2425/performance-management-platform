@@ -13,5 +13,146 @@
     "or": "OR",
     "microsoft": "Continue with Microsoft",
     "integrationPending": "Authentication will be connected after the backend session and SSO contract is confirmed."
+  },
+  "Shell": {
+    "workspace": "WORKSPACE",
+    "support": "SUPPORT",
+    "closeNavigation": "Close navigation",
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu",
+    "signOut": "Sign out",
+    "helpCenter": "Help center",
+    "settings": "Settings",
+    "switchDemoRole": "Switch demo role",
+    "breadcrumb": "Breadcrumb",
+    "notifications": "Notifications",
+    "lastUpdated": "Last updated just now",
+    "copyright": "© 2026 Perform. All rights reserved.",
+    "tagline": "Performance made meaningful.",
+    "metaDescription": "Performance management workspace",
+    "roles": {
+      "employee": "Employee",
+      "manager": "Manager",
+      "department": "Department Manager",
+      "hcd": "HCD",
+      "admin": "Admin"
+    },
+    "profile": {
+      "employee": {
+        "name": "Mostafa Gamal",
+        "role": "Employee",
+        "subtitle": "Frontend Developer"
+      },
+      "manager": {
+        "name": "People Manager",
+        "role": "Manager",
+        "subtitle": "People Manager"
+      },
+      "department": {
+        "name": "Department Manager",
+        "role": "Department Manager",
+        "subtitle": "Department Manager"
+      },
+      "hcd": {
+        "name": "HCD Specialist",
+        "role": "Human Capital Development",
+        "subtitle": "Human Capital Development"
+      },
+      "admin": {
+        "name": "HCD Administrator",
+        "role": "Administrator",
+        "subtitle": "Human Capital Development"
+      }
+    },
+    "nav": {
+      "employee.dashboard": "Overview",
+      "employee.objectives": "My objectives",
+      "employee.performance": "My performance",
+      "employee.history": "Performance history",
+      "employee.development": "Development",
+      "manager.dashboard": "Team overview",
+      "manager.team": "My team",
+      "manager.history": "Performance history",
+      "manager.reviews": "Review queue",
+      "manager.objectives": "Objective planning",
+      "manager.performance": "Team performance",
+      "manager.evaluation": "Manager evaluation",
+      "manager.year-group": "Manager–Year Group",
+      "manager.calculations": "Calculation explorer",
+      "department.dashboard": "Department overview",
+      "department.teams": "Teams",
+      "department.progress": "Performance progress",
+      "department.reports": "Department reports",
+      "department.history": "Performance history",
+      "hcd.dashboard": "HCD overview",
+      "hcd.cycles": "Cycle governance",
+      "hcd.templates": "Competency templates",
+      "hcd.calibration": "Calibration",
+      "hcd.reports": "Organization insights",
+      "hcd.history": "Performance history",
+      "admin.dashboard": "Overview",
+      "admin.cycles": "Performance cycles",
+      "admin.competencies": "Competency templates",
+      "admin.categories": "Objective categories",
+      "admin.configuration": "Performance configuration",
+      "admin.employees": "Employees",
+      "admin.approvals": "Final group review",
+      "admin.plan-reviews": "Plan reviews",
+      "admin.bell-curve": "Bell Curve",
+      "admin.publication": "Results publication",
+      "admin.history": "Performance history",
+      "admin.notifications": "Notifications",
+      "admin.notification-templates": "Notification templates",
+      "admin.reports": "Reports & analytics",
+      "employee": {
+        "dashboard": "Overview",
+        "objectives": "My objectives",
+        "performance": "My performance",
+        "history": "Performance history",
+        "development": "Development"
+      },
+      "manager": {
+        "dashboard": "Team overview",
+        "team": "My team",
+        "history": "Performance history",
+        "reviews": "Review queue",
+        "objectives": "Objective planning",
+        "performance": "Team performance",
+        "evaluation": "Manager evaluation",
+        "year-group": "Manager–Year Group",
+        "calculations": "Calculation explorer"
+      },
+      "department": {
+        "dashboard": "Department overview",
+        "teams": "Teams",
+        "progress": "Performance progress",
+        "reports": "Department reports",
+        "history": "Performance history"
+      },
+      "hcd": {
+        "dashboard": "HCD overview",
+        "cycles": "Cycle governance",
+        "templates": "Competency templates",
+        "calibration": "Calibration",
+        "reports": "Organization insights",
+        "history": "Performance history"
+      },
+      "admin": {
+        "dashboard": "Overview",
+        "cycles": "Performance cycles",
+        "competencies": "Competency templates",
+        "categories": "Objective categories",
+        "configuration": "Performance configuration",
+        "employees": "Employees",
+        "approvals": "Final group review",
+        "plan-reviews": "Plan reviews",
+        "bell-curve": "Bell Curve",
+        "publication": "Results publication",
+        "history": "Performance history",
+        "notifications": "Notifications",
+        "notification-templates": "Notification templates",
+        "reports": "Reports & analytics"
+      }
+    }
   }
 }

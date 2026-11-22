@@ -13,5 +13,146 @@
     "or": "أو",
     "microsoft": "المتابعة باستخدام Microsoft",
     "integrationPending": "سيتم ربط تسجيل الدخول بعد تأكيد آلية الجلسات وتكامل Microsoft مع فريق Backend."
+  },
+  "Shell": {
+    "workspace": "مساحة العمل",
+    "support": "المساعدة",
+    "closeNavigation": "إغلاق التنقل",
+    "closeMenu": "إغلاق القائمة",
+    "openMenu": "فتح القائمة",
+    "signOut": "تسجيل الخروج",
+    "helpCenter": "مركز المساعدة",
+    "settings": "الإعدادات",
+    "switchDemoRole": "تبديل الدور التجريبي",
+    "breadcrumb": "مسار التنقل",
+    "notifications": "الإشعارات",
+    "lastUpdated": "آخر تحديث الآن",
+    "copyright": "© 2026 Perform. جميع الحقوق محفوظة.",
+    "tagline": "نجعل الأداء ذا معنى.",
+    "metaDescription": "منصة إدارة الأداء",
+    "roles": {
+      "employee": "الموظف",
+      "manager": "المدير",
+      "department": "مدير الإدارة",
+      "hcd": "تطوير رأس المال البشري",
+      "admin": "مسؤول النظام"
+    },
+    "profile": {
+      "employee": {
+        "name": "مصطفى جمال",
+        "role": "الموظف",
+        "subtitle": "مطور واجهات أمامية"
+      },
+      "manager": {
+        "name": "مدير الأفراد",
+        "role": "المدير",
+        "subtitle": "مدير الأفراد"
+      },
+      "department": {
+        "name": "مدير الإدارة",
+        "role": "مدير الإدارة",
+        "subtitle": "مدير الإدارة"
+      },
+      "hcd": {
+        "name": "أخصائي تطوير رأس المال البشري",
+        "role": "تطوير رأس المال البشري",
+        "subtitle": "تطوير رأس المال البشري"
+      },
+      "admin": {
+        "name": "مسؤول تطوير رأس المال البشري",
+        "role": "مسؤول النظام",
+        "subtitle": "تطوير رأس المال البشري"
+      }
+    },
+    "nav": {
+      "employee.dashboard": "نظرة عامة",
+      "employee.objectives": "أهدافي",
+      "employee.performance": "أدائي",
+      "employee.history": "سجل الأداء",
+      "employee.development": "التطوير",
+      "manager.dashboard": "نظرة عامة على الفريق",
+      "manager.team": "فريقي",
+      "manager.history": "سجل الأداء",
+      "manager.reviews": "قائمة المراجعات",
+      "manager.objectives": "إعداد الأهداف",
+      "manager.performance": "أداء الفريق",
+      "manager.evaluation": "تقييم المدير",
+      "manager.year-group": "مجموعة المدير والسنة",
+      "manager.calculations": "تفاصيل الحسابات",
+      "department.dashboard": "نظرة عامة على الإدارة",
+      "department.teams": "الفرق",
+      "department.progress": "تقدم الأداء",
+      "department.reports": "تقارير الإدارة",
+      "department.history": "سجل الأداء",
+      "hcd.dashboard": "نظرة عامة",
+      "hcd.cycles": "حوكمة الدورات",
+      "hcd.templates": "قوالب الكفاءات",
+      "hcd.calibration": "المعايرة",
+      "hcd.reports": "مؤشرات المؤسسة",
+      "hcd.history": "سجل الأداء",
+      "admin.dashboard": "نظرة عامة",
+      "admin.cycles": "دورات الأداء",
+      "admin.competencies": "قوالب الكفاءات",
+      "admin.categories": "تصنيفات الأهداف",
+      "admin.configuration": "إعدادات الأداء",
+      "admin.employees": "الموظفون",
+      "admin.approvals": "المراجعة النهائية للمجموعة",
+      "admin.plan-reviews": "مراجعة الخطط",
+      "admin.bell-curve": "التوزيع الطبيعي",
+      "admin.publication": "نشر النتائج",
+      "admin.history": "سجل الأداء",
+      "admin.notifications": "الإشعارات",
+      "admin.notification-templates": "قوالب الإشعارات",
+      "admin.reports": "التقارير والتحليلات",
+      "employee": {
+        "dashboard": "نظرة عامة",
+        "objectives": "أهدافي",
+        "performance": "أدائي",
+        "history": "سجل الأداء",
+        "development": "التطوير"
+      },
+      "manager": {
+        "dashboard": "نظرة عامة على الفريق",
+        "team": "فريقي",
+        "history": "سجل الأداء",
+        "reviews": "قائمة المراجعات",
+        "objectives": "إعداد الأهداف",
+        "performance": "أداء الفريق",
+        "evaluation": "تقييم المدير",
+        "year-group": "مجموعة المدير والسنة",
+        "calculations": "تفاصيل الحسابات"
+      },
+      "department": {
+        "dashboard": "نظرة عامة على الإدارة",
+        "teams": "الفرق",
+        "progress": "تقدم الأداء",
+        "reports": "تقارير الإدارة",
+        "history": "سجل الأداء"
+      },
+      "hcd": {
+        "dashboard": "نظرة عامة",
+        "cycles": "حوكمة الدورات",
+        "templates": "قوالب الكفاءات",
+        "calibration": "المعايرة",
+        "reports": "مؤشرات المؤسسة",
+        "history": "سجل الأداء"
+      },
+      "admin": {
+        "dashboard": "نظرة عامة",
+        "cycles": "دورات الأداء",
+        "competencies": "قوالب الكفاءات",
+        "categories": "تصنيفات الأهداف",
+        "configuration": "إعدادات الأداء",
+        "employees": "الموظفون",
+        "approvals": "المراجعة النهائية للمجموعة",
+        "plan-reviews": "مراجعة الخطط",
+        "bell-curve": "التوزيع الطبيعي",
+        "publication": "نشر النتائج",
+        "history": "سجل الأداء",
+        "notifications": "الإشعارات",
+        "notification-templates": "قوالب الإشعارات",
+        "reports": "التقارير والتحليلات"
+      }
+    }
   }
 }
