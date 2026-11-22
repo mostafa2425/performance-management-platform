@@ -72,7 +72,7 @@ const templates:Template[]=[
 ];
 const orderedTemplates=[...templates].sort((a,b)=>Number(a.code.slice(4))-Number(b.code.slice(4)));
 export function NotificationTemplatesWorkspace(){
- const ar=useLocale()==="ar";const t=(en:string,a:string)=>ar?a:en;
+ const ar=useLocale()==="ar";const translate=useTranslations("Notifications");const t=(en:string,a:string)=>ar?a:en;
  const [selected,setSelected]=useState(orderedTemplates[0].code);const [drafts,setDrafts]=useState(orderedTemplates);const [editing,setEditing]=useState(false);const [saved,setSaved]=useState(false);const [validationError,setValidationError]=useState("");
  const current=drafts.find(x=>x.code===selected)!;
  const update=(key:"subjectEn"|"subjectAr"|"bodyEn"|"bodyAr",value:string)=>{setDrafts(prev=>prev.map(x=>x.code===selected?{...x,[key]:value}:x));setSaved(false);setValidationError("")};

@@ -20,7 +20,6 @@ const initialEmployees: Employee[] = [
 export default function AdminFinalReviewPage() {
   const ar = useLocale() === "ar";
   const translate = useTranslations("AdminFinalReview");
-  const t = (en: string, arabic: string) => ar ? arabic : en;
   const [employees] = useState(initialEmployees);
   const [decision, setDecision] = useState<"approve" | "return" | null>(null);
   const [comment, setComment] = useState("");
