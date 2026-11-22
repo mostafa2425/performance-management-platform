@@ -600,5 +600,67 @@
     "text052": "Workflow history",
     "text053": "Group-level audit trail",
     "text054": "Frontend prototype only. Decisions update this local screen state; no backend workflow, notification, publication or audit record is created."
+  },
+  "PerformanceHistory": {
+    "text001": "PERFORMANCE ARCHIVE",
+    "text002": "A complete view of performance over time",
+    "text003": "Historical records are read-only. Only finalized and published results are included in this archive.",
+    "text004": "Available records",
+    "text005": "Published only",
+    "text006": "Performance years",
+    "text007": "With available results",
+    "text008": "Latest result",
+    "text009": "Access mode",
+    "text010": "Read only",
+    "text011": "Role-scoped",
+    "text012": "Historical performance records",
+    "text013": "Select a record to view its available details",
+    "text014": "Search employee or record",
+    "text015": "All years",
+    "text016": "All periods",
+    "text017": "No published records found",
+    "text018": "Try changing the filters or search term.",
+    "text019": "Record details",
+    "text020": "Finalized performance information",
+    "text021": "Published",
+    "text022": "My performance record",
+    "text023": "FINALIZED RESULT",
+    "text024": "Objectives result",
+    "text025": "Competency result",
+    "text026": "KPI evaluation details",
+    "text027": "Actual",
+    "text028": "Achievement",
+    "text029": "Weighted result",
+    "text030": "Manager comments",
+    "text031": "No comment recorded",
+    "text032": "Manager assignment history",
+    "text033": "Workflow history",
+    "text034": "Available to authorized roles; demo record only.",
+    "text035": "Individual KPI Actuals, Achievement %, Weighted KPI Results, Manager Comments, supporting Evidence and Workflow/Audit History are not visible to Employees.",
+    "text036": "This published record is read-only and cannot be modified.",
+    "text037": "Select an available record",
+    "text038": "Illustrative demo records only. Production history, files, workflow audit events and role-scoped filtering must be supplied and enforced by backend APIs.",
+    "page": {
+      "employee": {
+        "title": "My performance history",
+        "sub": "Your published performance results across completed periods and years."
+      },
+      "manager": {
+        "title": "Team performance history",
+        "sub": "Review historical performance for your authorized direct reports, including records under previous managers."
+      },
+      "department": {
+        "title": "Department performance history",
+        "sub": "Review finalized performance results within your authorized department scope."
+      },
+      "hcd": {
+        "title": "Organization performance history",
+        "sub": "Review finalized performance results across the organization within HCD permissions."
+      },
+      "admin": {
+        "title": "Performance records & audit",
+        "sub": "Review employee performance records and administrative workflow history."
+      }
+    }
   }
 }
