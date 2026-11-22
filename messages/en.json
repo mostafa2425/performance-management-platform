@@ -739,6 +739,12 @@
     "text047": "Ownership",
     "text048": "Quality",
     "text049": "Demo",
-    "text050": "Competencies are evaluated annually by your manager. Demo competency names are illustrative."
+    "text050": "Competencies are evaluated annually by your manager. Demo competency names are illustrative.",
+    "totalWeight": "Total weight {weight}%",
+    "needAttention": "{count} need attention",
+    "actionItems": {
+      "reviewTitle": "Review your performance plan",
+      "reviewDetail": "Pending employee review · Approval or modification request"
+    }
   }
 }
