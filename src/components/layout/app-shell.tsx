@@ -146,7 +146,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
             <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
             <Link className="icon-button notification-button" href={`/${locale}${role === "admin" ? "/admin/notifications" : role === "hcd" ? "/hcd/notifications" : role === "department" ? "/department/notifications" : role === "manager" ? "/manager/notifications" : "/employee/notifications"}`} aria-label={t("notifications")}><Bell size={18} /><i /></Link>
             <div className="topbar-divider" />
-            <div className="topbar-user"><div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div><div><strong>{role === "admin" ? "HCD Administrator" : role === "hcd" ? "HCD Specialist" : role === "department" ? "Department Manager" : role === "manager" ? "People Manager" : "Mostafa Gamal"}</strong><small>{t(`profile.${role}.subtitle`)}</small></div></div>
+            <div className="topbar-user"><div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div><div><strong>{t(`profile.${role}.name`)}</strong><small>{t(`profile.${role}.subtitle`)}</small></div></div>
             <div className="locale-switch">
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "en")} className={!isAr ? "selected" : ""}>EN</Link>
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "ar")} className={isAr ? "selected" : ""}>ع</Link>
