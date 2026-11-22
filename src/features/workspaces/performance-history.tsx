@@ -3,7 +3,7 @@
 import { AppButton, AppInput, AppSelect } from "@/components/ui-antd-primitives";
 
 import { AppShell } from "@/components/layout/app-shell";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { Activity, CalendarDays, CheckCircle2, Clock3, Download, FileClock, Filter, LockKeyhole, Search, ShieldCheck, UserRound, Users } from "lucide-react";
 
@@ -17,11 +17,11 @@ const records:RecordItem[]=[
 ];
 
 export function PerformanceHistory({role}:{role:Role}){
- const ar=useLocale()==="ar";const translate=useTranslations("PerformanceHistory");const t=(en:string,a:string)=>ar?a:en;const [query,setQuery]=useState("");const [year,setYear]=useState("All");const [period,setPeriod]=useState("All");const [selected,setSelected]=useState("H-2026-014");
+ const translate=useTranslations("PerformanceHistory");const [query,setQuery]=useState("");const [year,setYear]=useState("All");const [period,setPeriod]=useState("All");const [selected,setSelected]=useState("H-2026-014");
  const isEmployee=role==="employee";const canSeeDetails=!isEmployee;const source=useMemo(()=>records.filter(r=>(!isEmployee||r.employeeId==="EMP-10482")&&(role!=="department"||r.department==="Technology")&&(role!=="hcd"||true)&&(role!=="admin"||true)&&r.status==="Published"&&(year==="All"||r.year===year)&&(period==="All"||r.period===period)&&(!query||[r.name,r.employeeId,r.department,r.manager,r.id].some(x=>x.toLowerCase().includes(query.toLowerCase())))),[role,isEmployee,year,period,query]);
  const current=source.find(x=>x.id===selected)||source[0];const title={title:translate(`page.${role}.title`),sub:translate(`page.${role}.sub`)};
  const roleTitle=role==="employee"?"Employee":role==="manager"?"Manager":role==="department"?"Department Manager":role==="hcd"?"HCD":"Admin";
- return <AppShell role={role} title={t(title.title,title.ar)} subtitle={t(title.sub,title.subAr)}>
+ return <AppShell role={role} title={title.title} subtitle={title.sub}>
   <div className="history-banner"><div><span><FileClock size={14}/> {translate("text001")}</span><h2>{translate("text002")}</h2><p>{translate("text003")}</p></div><span className="history-role-pill"><ShieldCheck size={13}/>{roleTitle}</span></div>
   <div className="history-metrics"><article className="panel"><span>{translate("text004")}</span><strong>{source.length}</strong><small>{translate("text005")}</small></article><article className="panel"><span>{translate("text006")}</span><strong>{new Set(source.map(r=>r.year)).size}</strong><small>{translate("text007")}</small></article><article className="panel"><span>{translate("text008")}</span><strong>{source[0]?.result||"—"}</strong><small>{source[0]?.period+" · "+(source[0]?.year||"")}</small></article><article className="panel"><span>{translate("text009")}</span><strong>{translate("text010")}</strong><small>{translate("text011")}</small></article></div>
   <div className="history-layout"><section className="panel history-records"><div className="panel-heading"><div><h3>{translate("text012")}</h3><p>{translate("text013")}</p></div><span className="readonly-pill"><LockKeyhole size={12}/>{translate("text010")}</span></div>
