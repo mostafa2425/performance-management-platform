@@ -3,13 +3,14 @@
 import { AppButton, AppDetails } from "@/components/ui-antd-primitives";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck, FileCheck2, History,
   LayoutDashboard, LogOut, Menu, Settings2, Target, UserRound, Users, X, Tags, SlidersHorizontal
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuthSession } from "@/lib/auth/session";
 
 type Props = { children: React.ReactNode; title: string; subtitle?: string; role?: "employee" | "manager" | "department" | "hcd" | "admin" };
 
@@ -67,12 +68,22 @@ const adminNavItems = [
   { key: "reports", labelKey: "admin.reports", href: "/admin/reports", icon: BookOpen }
 ];
 
-export function AppShell({ children, title, subtitle, role = "employee" }: Props) {
+export function AppShell({ children, title, subtitle, role }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout, user, isReady, isAuthenticated } = useAuthSession();
   const locale = useLocale();
   const t = useTranslations("Shell");
   const isAr = locale === "ar";
   const [mobileOpen, setMobileOpen] = useState(false);
+  const activeRole = role ?? (user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee");
+
+  useEffect(() => {
+    if (!isReady) return;
+    if (!isAuthenticated) { router.replace(`/${locale}/login`); return; }
+    const allowed = role === undefined || (role === "admin" && user?.roles.admin) || (role === "manager" && user?.roles.manager) || (role === "employee" && user?.roles.employee);
+    if (!allowed) router.replace(`/${locale}/dashboard`);
+  }, [isReady, isAuthenticated, locale, role, router, user]);
 
   useEffect(() => {
     const pageTitle = `${title} | Perform.`;
@@ -92,7 +103,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
     upsertMeta('meta[property="og:description"]', "property", subtitle ?? "Performance management workspace");
   }, [title, subtitle]);
   const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
-  const navItems = role === "admin" ? adminNavItems : role === "manager" ? managerNavItems : role === "department" ? departmentNavItems : role === "hcd" ? hcdNavItems : employeeNavItems;
+  const navItems = activeRole === "admin" ? adminNavItems : activeRole === "manager" ? managerNavItems : activeRole === "department" ? departmentNavItems : activeRole === "hcd" ? hcdNavItems : employeeNavItems;
   const active = navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ?? "dashboard";
 
   return (
@@ -111,8 +122,8 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
             return (
               <Link key={item.key} href={`/${locale}${item.href}`} onClick={() => setMobileOpen(false)} className={`nav-link ${active === item.key ? "active" : ""}`}>
                 <Icon size={18} strokeWidth={1.8} />
-                <span>{t(`nav.${role}.${item.key}`)}</span>
-                {item.key === "objectives" && <span className="nav-count">8</span>}
+                <span>{t(`nav.${activeRole}.${item.key}`)}</span>
+                
               </Link>
             );
           })}
@@ -121,10 +132,10 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
           <div className="workspace-label">{t("support")}</div>
           <a className="nav-link" href="mailto:people.support@example.com"><CircleHelp size={18} /><span>{t("helpCenter")}</span></a>
           <a className="nav-link" href="#"><Settings2 size={18} /><span>{t("settings")}</span></a>
-          <AppDetails className="role-switcher"><summary>{t("switchDemoRole")} <ChevronDown size={13}/></summary><div className="role-switcher-menu">{[["employee","/dashboard"],["manager","/manager"],["department","/department"],["hcd","/hcd"],["admin","/admin"]].map(([key,path])=><Link key={key} href={`/${locale}${path}`} className={role===key?"current":""}>{t(`roles.${key}`)}</Link>)}</div></AppDetails>
+          
           <div className="sidebar-profile">
-            <div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div>
-            <div className="profile-copy"><strong>{t(`profile.${role}.name`)}</strong><small>{t(`profile.${role}.role`)}</small></div>
+            <div className="avatar avatar-small">{activeRole==="admin"?"HA":activeRole==="hcd"?"HC":activeRole==="department"?"DM":activeRole==="manager"?"MG":"EM"}</div>
+            <div className="profile-copy"><strong>{user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`)}</strong><small>{user?.email || t(`profile.${activeRole}.role`)}</small></div>
             <ChevronDown size={15} />
           </div>
         </div>
@@ -135,7 +146,7 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
           <div className="topbar-left">
             <AppButton className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label={t("openMenu")}><Menu size={20} /></AppButton>
             <nav className="breadcrumb" aria-label={t("breadcrumb")}>
-              <Link className="breadcrumb-home" href={`/${locale}${role === "admin" ? "/admin" : role === "hcd" ? "/hcd" : role === "department" ? "/department" : role === "manager" ? "/manager" : "/dashboard"}`}>
+              <Link className="breadcrumb-home" href={`/${locale}${activeRole === "admin" ? "/admin" : activeRole === "hcd" ? "/hcd" : activeRole === "department" ? "/department" : activeRole === "manager" ? "/manager" : "/dashboard"}`}>
                 {t("workspace")}
               </Link>
               <span className="breadcrumb-separator" aria-hidden="true">/</span>
@@ -144,14 +155,14 @@ export function AppShell({ children, title, subtitle, role = "employee" }: Props
           </div>
           <div className="topbar-actions">
             <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
-            <Link className="icon-button notification-button" href={`/${locale}${role === "admin" ? "/admin/notifications" : role === "hcd" ? "/hcd/notifications" : role === "department" ? "/department/notifications" : role === "manager" ? "/manager/notifications" : "/employee/notifications"}`} aria-label={t("notifications")}><Bell size={18} /><i /></Link>
+            <Link className="icon-button notification-button" href={`/${locale}${activeRole === "admin" ? "/admin/notifications" : activeRole === "hcd" ? "/hcd/notifications" : activeRole === "department" ? "/department/notifications" : activeRole === "manager" ? "/manager/notifications" : "/employee/notifications"}`} aria-label={t("notifications")}><Bell size={18} /><i /></Link>
             <div className="topbar-divider" />
-            <div className="topbar-user"><div className="avatar avatar-small">{role==="admin"?"HA":role==="hcd"?"HC":role==="department"?"DM":"MG"}</div><div><strong>{t(`profile.${role}.name`)}</strong><small>{t(`profile.${role}.subtitle`)}</small></div></div>
+            <div className="topbar-user"><div className="avatar avatar-small">{activeRole==="admin"?"HA":activeRole==="hcd"?"HC":activeRole==="department"?"DM":activeRole==="manager"?"MG":"EM"}</div><div><strong>{user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`)}</strong><small>{user?.email || t(`profile.${activeRole}.subtitle`)}</small></div></div>
             <div className="locale-switch">
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "en")} className={!isAr ? "selected" : ""}>EN</Link>
               <Link href={localeHref(pathname.replace(`/${locale}`, ""), "ar")} className={isAr ? "selected" : ""}>ع</Link>
             </div>
-            <Link href={`/${locale}/login`} className="icon-button logout-button" aria-label={t("signOut")}><LogOut size={17} /></Link>
+            <AppButton className="icon-button logout-button" aria-label={t("signOut")} onClick={() => void logout()}><LogOut size={17} /></AppButton>
           </div>
         </header>
         <main className="page-content">

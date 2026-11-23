@@ -1,2 +1,2 @@
-import { ManagerYearGroupWorkspace } from "@/features/workspaces/performance-workflow-workspaces";
-export default function Page(){return <ManagerYearGroupWorkspace/>;}
+import { ApiManagerGroupWorkspace } from "@/features/api/manager-workspaces";
+export default function Page(){return <ApiManagerGroupWorkspace/>;}

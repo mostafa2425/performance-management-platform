@@ -1,2 +1,2 @@
-import { AdminPlanReviewWorkspace } from "@/features/workspaces/performance-workflow-workspaces";
-export default function Page(){return <AdminPlanReviewWorkspace/>;}
+import { ApiPlanWorkspace } from "@/features/api/plan-workspace";
+export default function Page(){return <ApiPlanWorkspace mode="admin"/>;}

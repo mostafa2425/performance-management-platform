@@ -1,5 +1,2 @@
-import { AnnualPerformanceConfiguration } from "@/features/admin/objective-configuration-workspaces";
-
-export default function Page() {
-  return <AnnualPerformanceConfiguration />;
-}
+import { ApiPerformancePolicyWorkspace } from "@/features/api/admin-configuration-workspaces";
+export default function Page(){return <ApiPerformancePolicyWorkspace/>;}

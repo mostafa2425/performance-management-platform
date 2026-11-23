@@ -1,39 +1,15 @@
-export type ApiError = {
-  status: number;
-  code?: string;
-  message: string;
-  details?: unknown;
-};
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-export async function apiRequest<T>(
-  path: string,
-  init: RequestInit = {}
-): Promise<T> {
-  if (!API_BASE_URL) throw new Error("NEXT_PUBLIC_API_BASE_URL is not configured");
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...init,
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      ...(init.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
-      ...init.headers
-    }
-  });
-
-  if (!response.ok) {
-    const payload = await response.json().catch(() => undefined);
-    const error: ApiError = {
-      status: response.status,
-      code: payload?.code,
-      message: payload?.message ?? response.statusText,
-      details: payload?.details
-    };
-    throw error;
-  }
-
-  if (response.status === 204) return undefined as T;
-  return response.json() as Promise<T>;
-}
+import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import { API_BASE_URL, API_TIMEOUT_MS, AUTH_STORAGE_KEY, AUTH_UNAUTHORIZED_EVENT } from "./config";
+export type ApiErrorPayload={error?:{code?:string;message?:string;fields?:Record<string,string[]>;details?:unknown};request_id?:string};
+export class ApiRequestError extends Error { status:number; code?:string; fields?:Record<string,string[]>; details?:unknown; requestId?:string; constructor(status:number,payload?:ApiErrorPayload,fallback="Request failed"){super(payload?.error?.message||fallback);this.name="ApiRequestError";this.status=status;this.code=payload?.error?.code;this.fields=payload?.error?.fields;this.details=payload?.error?.details;this.requestId=payload?.request_id;} }
+export type ApiEnvelope<T>={data:T;meta?:Record<string,unknown>;links?:Record<string,unknown>};
+export type Paginated<T>=ApiEnvelope<T[]> & {meta:{current_page:number;per_page:number;total:number;last_page:number;[key:string]:unknown}};
+export function readStoredToken():string|null{if(typeof window==="undefined")return null;try{const v=window.sessionStorage.getItem(AUTH_STORAGE_KEY);return v?(JSON.parse(v) as {token?:string}).token??null:null;}catch{return null;}}
+function currentLocale():"ar"|"en"{if(typeof window==="undefined")return "en";return window.location.pathname.split("/")[1]==="ar"?"ar":"en";}
+export const apiClient=axios.create({baseURL:API_BASE_URL,timeout:API_TIMEOUT_MS,headers:{Accept:"application/json"}});
+apiClient.interceptors.request.use((config:InternalAxiosRequestConfig)=>{config.headers.set("Accept","application/json");config.headers.set("Accept-Language",currentLocale());const token=readStoredToken();if(token)config.headers.set("Authorization",`Bearer ${token}`);if(typeof FormData!=="undefined"&&config.data instanceof FormData)config.headers.delete("Content-Type");else if(config.data!==undefined)config.headers.set("Content-Type","application/json");return config;});
+apiClient.interceptors.response.use(r=>r,(error:AxiosError<ApiErrorPayload>)=>{const status=error.response?.status??0;if(status===401&&typeof window!=="undefined")window.dispatchEvent(new Event(AUTH_UNAUTHORIZED_EVENT));if(error.response)return Promise.reject(new ApiRequestError(status,error.response.data,error.message));return Promise.reject(new ApiRequestError(status,undefined,error.message||"Network error"));});
+export async function apiGetRaw<T>(path:string,params?:Record<string,unknown>):Promise<T>{const response=await apiClient.get<T>(path,{params});return response.data;}
+export async function apiGet<T>(path:string,params?:Record<string,unknown>):Promise<T>{const body=await apiGetRaw<ApiEnvelope<T>|T>(path,params);return body&&typeof body==="object"&&"data" in body?(body as ApiEnvelope<T>).data:body as T;}
+export async function apiSendRaw<T>(method:"post"|"put"|"patch"|"delete",path:string,body?:unknown,params?:Record<string,unknown>):Promise<T>{const response=await apiClient.request<T>({method,url:path,data:body,params});return response.data;}
+export async function apiSend<T>(method:"post"|"put"|"patch"|"delete",path:string,body?:unknown,params?:Record<string,unknown>):Promise<T>{const response=await apiSendRaw<ApiEnvelope<T>|T>(method,path,body,params);if(response==null)return undefined as T;return response&&typeof response==="object"&&"data" in response?(response as ApiEnvelope<T>).data:response as T;}

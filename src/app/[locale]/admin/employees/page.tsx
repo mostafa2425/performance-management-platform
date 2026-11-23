@@ -1,3 +1,2 @@
-import { AdminSectionPage } from "@/features/admin/admin-section-page";
-
-export default function Page() { return <AdminSectionPage section="employees" />; }
+import ApiEmployeesWorkspace from "@/features/api/employees-workspace";
+export default function Page(){return <ApiEmployeesWorkspace/>;}

@@ -1,5 +1,2 @@
-import { ObjectiveCategoryWorkspace } from "@/features/admin/objective-configuration-workspaces";
-
-export default function Page() {
-  return <ObjectiveCategoryWorkspace />;
-}
+import { ApiObjectiveCategoriesWorkspace } from "@/features/api/admin-configuration-workspaces";
+export default function Page(){return <ApiObjectiveCategoriesWorkspace/>;}

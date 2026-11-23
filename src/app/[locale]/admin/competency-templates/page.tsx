@@ -1,5 +1,2 @@
-import CompetencyTemplateWorkspace from "@/features/admin/competency-template-workspace";
-
-export default function Page() {
-  return <CompetencyTemplateWorkspace />;
-}
+import { ApiCompetencyTemplateWorkspace } from "@/features/api/admin-configuration-workspaces";
+export default function Page(){return <ApiCompetencyTemplateWorkspace/>;}

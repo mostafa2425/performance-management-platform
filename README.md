@@ -1,51 +1,24 @@
 # Performance Management Platform
 
-Frontend prototype for an enterprise employee performance management platform.
+Next.js App Router frontend for the PMP API, with Arabic/English localization, RTL/LTR, Ant Design and TanStack Query.
 
-## Stack
-- Next.js App Router + TypeScript
-- Ant Design v6
-- Tailwind CSS v4
-- TanStack Query v5
-- Lucide icons
-- Arabic / English (RTL / LTR)
-- PWA foundation
+## API integration
+- Set `NEXT_PUBLIC_API_BASE_URL` to the API origin or versioned URL. The default is `http://89.117.49.160:8008`; `/api/v1` is appended automatically.
+- Requests send `Accept: application/json`, locale-aware `Accept-Language`, and `Authorization: Bearer <token>` after sign-in.
+- Email/password sign-in calls `POST /api/v1/auth/login`; the bearer token is held in `sessionStorage` and expires according to the API `expires_at` value. The session is restored through `GET /me` and revoked with `POST /auth/logout`.
+- API errors preserve the backend error code, translated message, field validation errors, details and request id. HTTP 401 clears the session and redirects to login.
+- TanStack Query hooks and feature API services live in `src/lib/api`; API-backed cycle, plan, evaluation, notification-template, final-review and results workspaces live in `src/features/api`.
+- Evidence uploads use multipart form data; downloads use an authenticated blob request.
 
-## Getting started
-
+## Local development
 ```bash
-npm install
 cp .env.example .env.local
+npm install
 npm run dev
 ```
 
-Open http://localhost:3000. The root route redirects to `/en`.
-
-## Demo experience
-
-- Sign in: `/en/login` or `/ar/login`
-- Dashboard: `/en/dashboard`
-- My objectives: `/en/employee/objectives`
-- My performance: `/en/employee/performance`
-- Development: `/en/employee/development`
-
-The login is currently a frontend-only demo. Use any valid email and a non-empty password, or choose Continue with Microsoft, to open the mock dashboard. No real authentication is performed.
-
-## Mock data
-
-Employee, objectives, competencies, action items and progress values are in:
-`src/features/dashboard/mock-data.ts`.
-
-Replace the mock data access with feature API hooks when the backend OpenAPI contract is available. Keep authorization, workflow transitions, calculations, Bell Curve rules and publication decisions on the backend.
-
-## Documentation
-- [Frontend Technical Specification](docs/FRONTEND_TECHNICAL_SPECIFICATION.md)
-
-## Project principles
-- Backend is the source of truth for authorization, workflow transitions, calculations, Bell Curve rules, and publication.
-- No sensitive employee performance data is cached for offline use.
-- User-facing strings must support both locales.
-- Keep feature code inside `src/features`; shared UI belongs in `src/components`.
-
-## Status
-Frontend prototype and mock employee experience are in progress. API contracts and business-rule clarifications are tracked in the technical specification.
+## Important
+- The API guide is authoritative for endpoint contracts, response envelopes, workflow actions, role scope, version conflicts, and server-side deadlines.
+- The backend is the source of truth for permissions, workflow transitions, eligibility, scores, Bell Curve rules and publication.
+- No sensitive performance data is cached offline. Microsoft SSO is not part of the currently supplied API contract and remains disabled until the backend supplies its flow.
+- Do not commit `.env.local`, credentials, tokens or real employee data.

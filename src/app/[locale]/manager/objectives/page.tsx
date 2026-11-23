@@ -1,2 +1,2 @@
-import { ObjectivePlanWorkspace } from "@/features/workspaces/performance-workflow-workspaces";
-export default function Page(){return <ObjectivePlanWorkspace/>;}
+import { ApiPlanWorkspace } from "@/features/api/plan-workspace";
+export default function Page(){return <ApiPlanWorkspace mode="manager"/>;}

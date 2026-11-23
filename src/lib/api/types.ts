@@ -1,0 +1,12 @@
+export type Bilingual={ar:string;en:string};
+export type ApiRoleFlags={admin:boolean;manager:boolean;employee:boolean};
+export type ApiEmployee={id:number;jisr_id?:string|null;code?:string|null;full_name:string;email?:string|null;status?:string;is_active?:boolean;joining_date?:string|null;terminate_date?:string|null;line_manager_id?:number|null;department?:{id:number;name:string}|null;job_title?:{id:number;name:string}|null;[key:string]:unknown};
+export type ApiUser={id:number;email:string;name:string;employee:ApiEmployee|null;roles:ApiRoleFlags};
+export type LoginResponse={token:string;token_type:"Bearer";expires_at:string;user:ApiUser};
+export type PerformanceCycle={id:number;name:Bilingual;performance_year:number;start_date:string;end_date:string;status:"draft"|"active"|"closed";current_stage?:string|null;my_roles?:{member:boolean;manager:boolean};stages?:Array<{stage:string;position:number;deadline_date:string;cutoff_at:string;processed_at:string|null}>;[key:string]:unknown};
+export type Plan={id:number;cycle_id:number;cycle_member_id:number;employee:{id:number;code?:string;name:string};status:string;display_status:string;version:number;objectives:any[]|null;allowed_actions:string[];content_visible?:boolean;requires_admin_attention?:boolean;[key:string]:unknown};
+export type Evaluation={plan_id:number;version:number;evaluable:boolean;editable:boolean;is_complete:boolean;overall_bp:number|null;kpis:any[];competencies:any[];[key:string]:unknown};
+export type GroupSummary={cycle_id:number;manager_id:number;group_id:number|null;status:string;version:number|null;n:number;can_submit:boolean;blockers:any[];[key:string]:unknown};
+export type ApiResult={id:number;cycle:PerformanceCycle;employee:{id:number;code?:string;name:string};objectives:any[];objectives_bp:number;competency_bp:number;overall_bp:number;rating_level:number;rating_label:Bilingual;published:boolean;published_at:string|null;[key:string]:unknown};
+export type ObjectiveCategory={id:number;name:Bilingual;created_at?:string;updated_at?:string};
+export type KpiUnitsMeta={measurement_types:Array<{value:string;label:Bilingual;units:Array<{value:string;label:Bilingual}>}>;directions:string[];max_percentage_target:number};
