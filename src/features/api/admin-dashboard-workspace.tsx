@@ -71,6 +71,24 @@ type StatusKey =
   | "pending_final_approval"
   | "finalized";
 
+type CycleApiRecord = AnyRecord & {
+  id: number;
+  name: unknown;
+  performance_year: number;
+  start_date: string;
+  end_date: string;
+  status: string;
+  current_stage?: string | null;
+  activated_at?: string | null;
+};
+
+type ExclusionRecord = {
+  employee: ApiEmployee;
+  cycle: DashboardCycle;
+  joiningDate: string;
+  eligibleFrom: string;
+};
+
 type DashboardCycle = {
   id: number;
   name: unknown;
@@ -99,7 +117,7 @@ type DashboardData = {
   employees: ApiEmployee[];
   cycles: DashboardCycle[];
   results: AnyRecord[];
-  exclusions: AnyRecord[];
+  exclusions: ExclusionRecord[];
   evaluationIncomplete: boolean;
   eligibilityIncomplete: boolean;
 };
@@ -132,7 +150,10 @@ async function fetchAllPages<T>(
 ): Promise<T[]> {
   const first = await request(1);
   const all = rowsFrom<T>(first);
-  const lastPage = Math.max(1, Number(first?.meta?.last_page || 1));
+  const meta = first && typeof first === "object" && "meta" in first
+    ? (first as { meta?: { last_page?: unknown } }).meta
+    : undefined;
+  const lastPage = Math.max(1, Number(meta?.last_page || 1));
   if (lastPage <= 1) return all;
   const remaining = await Promise.all(
     Array.from({ length: lastPage - 1 }, (_, index) => request(index + 2)),
@@ -319,7 +340,7 @@ async function loadAdminDashboard(): Promise<DashboardData> {
     fetchAllPages<ApiEmployee>((page) =>
       employeesApi.list({ page, per_page: 100, sort: "id" }),
     ),
-    fetchAllPages<AnyRecord>((page) =>
+    fetchAllPages<CycleApiRecord>((page) =>
       cyclesApi.adminList({ page, per_page: 100, "filter[status]": "active" }),
     ),
     resultsApi.list(),
@@ -427,7 +448,7 @@ async function loadAdminDashboard(): Promise<DashboardData> {
 
   let eligibilityIncomplete = false;
   const exclusions = (
-    await mapConcurrent(exclusionCandidates, 6, async ({ cycle, employee }) => {
+    await mapConcurrent(exclusionCandidates, 6, async ({ cycle, employee }): Promise<ExclusionRecord | null> => {
       try {
         const referenceDate = String(cycle.activated_at).slice(0, 10);
         const eligibility = await adminApi.employeeEligibility(Number(employee.id), referenceDate);
@@ -451,7 +472,7 @@ async function loadAdminDashboard(): Promise<DashboardData> {
         return null;
       }
     })
-  ).filter(Boolean) as AnyRecord[];
+  ).filter((row): row is ExclusionRecord => row !== null);
 
   return {
     employees,
