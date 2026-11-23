@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Button, Card, Col, Form, Input, InputNumber, Row, Select, Space, Typography } from "antd";
+import { Alert, Button, Card, Col, Form, Input, InputNumber, Popconfirm, Row, Select, Space, Typography } from "antd";
 import type { FormInstance } from "antd";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
 import { commentsForTarget, type OpenComments } from "./plans/plan-shared";
@@ -151,9 +151,18 @@ function KpiFields({
         </Col>
       </Row>
       {canRemove && (
-        <Button danger type="link" onClick={onRemove}>
-          {t("Remove KPI", "حذف المؤشر")}
-        </Button>
+        <Popconfirm
+          title={t("Remove this KPI?", "هل تريد حذف مؤشر الأداء؟")}
+          description={t("This KPI will be removed from the objective.", "سيتم حذف هذا المؤشر من الهدف.")}
+          okText={t("Remove", "حذف")}
+          cancelText={t("Cancel", "إلغاء")}
+          okButtonProps={{ danger: true }}
+          onConfirm={onRemove}
+        >
+          <Button danger type="link">
+            {t("Remove KPI", "حذف المؤشر")}
+          </Button>
+        </Popconfirm>
       )}
     </Card>
   );
@@ -243,9 +252,18 @@ export function PlanContentEditor({
                 style={{ marginBottom: 12 }}
                 title={`${t("Objective", "الهدف")} ${field.name + 1}`}
                 extra={
-                  <Button danger type="link" onClick={() => remove(field.name)}>
-                    {t("Remove", "حذف")}
-                  </Button>
+                  <Popconfirm
+                    title={t("Remove this objective?", "هل تريد حذف هذا الهدف؟")}
+                    description={t("All KPIs under this objective will also be deleted.", "سيتم حذف جميع مؤشرات الأداء التابعة لهذا الهدف أيضاً.")}
+                    okText={t("Remove", "حذف")}
+                    cancelText={t("Cancel", "إلغاء")}
+                    okButtonProps={{ danger: true }}
+                    onConfirm={() => remove(field.name)}
+                  >
+                    <Button danger type="link">
+                      {t("Remove", "حذف")}
+                    </Button>
+                  </Popconfirm>
                 }
               >
                 <InlineComments
