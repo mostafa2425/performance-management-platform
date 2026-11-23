@@ -21,7 +21,6 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cyclesApi, plansApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
-import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { ApiRequestError } from "@/lib/api/client";
 import type { Plan } from "@/lib/api/types";
