@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
+  App,
   Button,
   Card,
   Col,
@@ -17,6 +18,7 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
+import { DownloadOutlined } from "@ant-design/icons";
 import { useLocale } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/layout/app-shell";
@@ -28,6 +30,7 @@ import {
 } from "@/lib/api/endpoints";
 import { bilingual, planStatusTag, weightPct } from "./plans/plan-shared";
 import { PlanHistoryPanel } from "./plans/plan-history-panel";
+import { PlanSnapshotsPanel } from "./plans/plan-snapshots-panel";
 import { PlanReadonlyTree } from "./plans/plan-readonly-tree";
 
 type Props = {
@@ -38,6 +41,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
   const locale = useLocale();
   const ar = locale === "ar";
   const t = (en: string, arabic: string) => (ar ? arabic : en);
+  const { message } = App.useApp();
   const [cycleId, setCycleId] = useState<number>();
 
   const employee = useQuery({
@@ -368,6 +372,15 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                     ),
                   },
                   {
+                    key: "versions",
+                    label: t("Plan versions", "إصدارات الخطة"),
+                    children: planId ? (
+                      <PlanSnapshotsPanel planId={planId} ar={ar} />
+                    ) : (
+                      <Empty description={t("No plan versions yet.", "لا توجد إصدارات للخطة بعد.")} />
+                    ),
+                  },
+                  {
                     key: "previous",
                     label: t("Previous performance", "الأداء السابق"),
                     children: results.isLoading ? (
@@ -386,13 +399,19 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                             size="small"
                             key={row.id}
                             title={`${bilingual(row.cycle?.name, ar)} · ${row.cycle?.performance_year || "—"}`}
+                            extra={<Tag>{t("Read only", "للعرض فقط")}</Tag>}
                           >
-                            <Typography.Paragraph style={{ marginBottom: 0 }}>
-                              {t("Overall", "الإجمالي")}:{" "}
-                              {weightPct(row.overall_bp).toFixed(2)}% ·{" "}
-                              {t("Rating", "التقييم")}:{" "}
-                              {bilingual(row.rating_label, ar)}
-                            </Typography.Paragraph>
+                            <Descriptions
+                              size="small"
+                              column={{ xs: 1, sm: 3 }}
+                              items={[
+                                { key: "overall", label: t("Overall", "الإجمالي"), children: `${weightPct(row.overall_bp).toFixed(2)}%` },
+                                { key: "objectives", label: t("Objectives", "الأهداف"), children: `${weightPct(row.objectives_bp).toFixed(2)}%` },
+                                { key: "competencies", label: t("Competencies", "الكفاءات"), children: `${weightPct(row.competency_bp).toFixed(2)}%` },
+                                { key: "rating", label: t("Final rating", "التقدير النهائي"), children: bilingual(row.rating_label, ar) },
+                              ]}
+                            />
+                            <PlanReadonlyTree ar={ar} objectives={row.objectives || []} />
                           </Card>
                         ))}
                       </Space>
