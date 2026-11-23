@@ -28,6 +28,7 @@ import { PlanContentEditor } from "./plan-content-editor";
 import type { KpiUnitsMeta, Plan } from "@/lib/api/types";
 import { PlanActionModal } from "./plans/plan-action-modal";
 import { PlanHistoryPanel } from "./plans/plan-history-panel";
+import { PlanSnapshotsPanel } from "./plans/plan-snapshots-panel";
 import { PlanReadonlyTree } from "./plans/plan-readonly-tree";
 import {
   formatInstant,
@@ -124,6 +125,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const [pendingAction, setPendingAction] = useState("");
   const [dialog, setDialog] = useState(false);
   const [form] = Form.useForm();
+  const [adminEditMode, setAdminEditMode] = useState(false);
 
   const cycles = useQuery({
     queryKey: queryKeys.cycles,
@@ -236,6 +238,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     onSuccess: async (plan: any) => {
       message.success(ar ? "تم حفظ محتوى الخطة" : "Plan content saved");
       setSelectedPlan(plan);
+      if (mode === "admin") setAdminEditMode(false);
       await invalidatePlanQueries(plan.id);
     },
     onError: (error: Error) => {
@@ -256,7 +259,12 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const members = (status.data as any)?.data || [];
   const planDetails = detail.data || selectedPlan;
   const canEdit = planDetails?.allowed_actions?.includes("edit_content");
+  const canEditContent = canEdit && (mode !== "admin" || adminEditMode);
   const showHistory = mode !== "employee";
+
+  useEffect(() => {
+    setAdminEditMode(false);
+  }, [selectedPlan?.id]);
 
   const openAction = (plan: any, action: string) => {
     setSelectedPlan(plan);
@@ -539,7 +547,20 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                           />
                         ) : null}
 
-                        {canEdit ? (
+                        {mode === "admin" && canEdit && !adminEditMode ? (
+                          <Button type="primary" onClick={() => setAdminEditMode(true)}>
+                            {t("Edit submitted plan", "تعديل الخطة المرسلة")}
+                          </Button>
+                        ) : null}
+                        {mode === "admin" && adminEditMode ? (
+                          <Button onClick={() => {
+                            form.setFieldsValue({ objectives: toDraftObjectives(detail.data?.objectives || []) });
+                            setAdminEditMode(false);
+                          }}>
+                            {t("Cancel editing", "إلغاء التعديل")}
+                          </Button>
+                        ) : null}
+                        {canEditContent ? (
                           <PlanContentEditor
                             form={form}
                             categories={(categories.data || []) as any}
@@ -585,6 +606,13 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                               planId={planDetails.id}
                               ar={ar}
                             />
+                          ),
+                        },
+                        {
+                          key: "versions",
+                          label: t("Plan versions", "إصدارات الخطة"),
+                          children: (
+                            <PlanSnapshotsPanel planId={planDetails.id} ar={ar} />
                           ),
                         },
                       ]
