@@ -1089,6 +1089,7 @@
     "filterDepartment": "Department",
     "filterStatus": "Employee status",
     "managerName": "Manager name",
+    "managerEmail": "Email",
     "managerEmployeeId": "Manager employee ID",
     "jobTitle": "Job title",
     "businessUnit": "Business unit",
