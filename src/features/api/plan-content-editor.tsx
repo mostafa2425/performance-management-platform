@@ -1,6 +1,7 @@
 "use client";
 
-import { Alert, Button, Card, Collapse, Col, Form, Input, InputNumber, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Form, Input, InputNumber, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { FormInstance } from "antd";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
 import { commentsForTarget, type OpenComments } from "./plans/plan-shared";
@@ -94,18 +95,30 @@ function KpiFields({
   const kpiWeight = Form.useWatch(["objectives", objectiveIndex, "kpis", kpiField.name, "weight_pct"], form);
 
   return (
-    <Collapse
-      defaultActiveKey={[]}
-      items={[{
-        key: String(kpiField.key),
-        label: (
-          <Space wrap size={8}>
-            <Typography.Text strong>{kpiName || t("New KPI", "مؤشر جديد")}</Typography.Text>
-            <Tag color="blue">{t("Weight", "الوزن")}: {Number(kpiWeight || 0).toFixed(2)}%</Tag>
-          </Space>
-        ),
-        children: (
-    <Card size="small" type="inner">
+    <Card
+      size="small"
+      type="inner"
+      title={
+        <Space wrap size={8}>
+          <Typography.Text strong>{kpiName || t("New KPI", "مؤشر جديد")}</Typography.Text>
+          <Tag color="blue">{t("Weight", "الوزن")}: {Number(kpiWeight || 0).toFixed(2)}%</Tag>
+        </Space>
+      }
+      extra={canRemove ? (
+        <Popconfirm
+          title={t("Delete KPI?", "حذف مؤشر الأداء؟")}
+          description={t("This KPI will be removed from this objective.", "سيتم حذف مؤشر الأداء من هذا الهدف.")}
+          okText={t("Delete", "حذف")}
+          cancelText={t("Keep", "إلغاء")}
+          okButtonProps={{ danger: true }}
+          onConfirm={onRemove}
+        >
+          <Button danger type="text" size="small" icon={<DeleteOutlined />}>
+            {t("Delete", "حذف")}
+          </Button>
+        </Popconfirm>
+      ) : null}
+    >
       <InlineComments openComments={openComments} target="kpi" id={kpiId} ar={ar} />
       <Form.Item name={[kpiField.name, "id"]} hidden>
         <Input />
@@ -179,9 +192,6 @@ function KpiFields({
         </Popconfirm>
       )}
     </Card>
-        ),
-      }]}
-    />
   );
 }
 
@@ -225,6 +235,9 @@ export function PlanContentEditor({
         />
         <Space>
           <Button
+            type="primary"
+            ghost
+            icon={<PlusOutlined />}
             onClick={() => {
               const current = form.getFieldValue("objectives") || [];
               form.setFieldsValue({
@@ -266,34 +279,28 @@ export function PlanContentEditor({
               const objectiveCategoryId = form.getFieldValue(["objectives", field.name, "category_id"]);
               const categoryLabel = bilingual(categories.find((item) => item.id === objectiveCategoryId)?.name, ar);
               return (
-              <Collapse
-                key={field.key}
-                defaultActiveKey={[]}
-                style={{ marginBottom: 12 }}
-                items={[{
-                  key: String(field.key),
-                  label: (
-                    <Space wrap size={8}>
-                      <Typography.Text strong>{`${t("Objective", "الهدف")} ${field.name + 1}`}</Typography.Text>
-                      <Typography.Text type="secondary">{objectiveText || t("No description yet", "لم تتم إضافة وصف بعد")}</Typography.Text>
-                      {categoryLabel ? <Tag>{categoryLabel}</Tag> : null}
-                      <Tag color="cyan">{(form.getFieldValue(["objectives", field.name, "kpis"]) || []).length} {t("KPIs", "مؤشرات")}</Tag>
-                    </Space>
-                  ),
-                  children: (
               <Card
+                key={field.key}
                 size="small"
+                style={{ marginBottom: 16, borderRadius: 12 }}
+                title={
+                  <Space wrap size={8}>
+                    <Typography.Text strong>{`${t("Objective", "الهدف")} ${field.name + 1}`}</Typography.Text>
+                    {categoryLabel ? <Tag>{categoryLabel}</Tag> : null}
+                    <Tag color="cyan">{(form.getFieldValue(["objectives", field.name, "kpis"]) || []).length} {t("KPIs", "مؤشرات")}</Tag>
+                  </Space>
+                }
                 extra={
                   <Popconfirm
-                    title={t("Remove this objective?", "هل تريد حذف هذا الهدف؟")}
+                    title={t("Delete objective?", "حذف الهدف؟")}
                     description={t("All KPIs under this objective will also be deleted.", "سيتم حذف جميع مؤشرات الأداء التابعة لهذا الهدف أيضاً.")}
-                    okText={t("Remove", "حذف")}
-                    cancelText={t("Cancel", "إلغاء")}
+                    okText={t("Delete", "حذف")}
+                    cancelText={t("Keep", "إلغاء")}
                     okButtonProps={{ danger: true }}
                     onConfirm={() => remove(field.name)}
                   >
-                    <Button danger type="link">
-                      {t("Remove", "حذف")}
+                    <Button danger type="text" icon={<DeleteOutlined />}>
+                      {t("Delete objective", "حذف الهدف")}
                     </Button>
                   </Popconfirm>
                 }
@@ -346,6 +353,7 @@ export function PlanContentEditor({
                       ))}
                       <Button
                         type="dashed"
+                        icon={<PlusOutlined />}
                         onClick={() =>
                           kpiOps.add({
                             name: "",
@@ -364,9 +372,6 @@ export function PlanContentEditor({
                   )}
                 </Form.List>
               </Card>
-                  ),
-                }]}
-              />
             )})}
           </>
         )}
