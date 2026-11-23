@@ -1126,6 +1126,7 @@
       "evaluation_in_progress": "Evaluation in progress",
       "pending_final_approval": "Pending final approval",
       "finalized": "Finalized"
-    }
+    },
+    "notStartedDefinition": "Employees who are not currently included in any active performance cycle."
   }
 }

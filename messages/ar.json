@@ -1126,6 +1126,7 @@
       "evaluation_in_progress": "التقييم قيد التنفيذ",
       "pending_final_approval": "بانتظار الاعتماد النهائي",
       "finalized": "تم الاعتماد النهائي"
-    }
+    },
+    "notStartedDefinition": "الموظفون غير المدرجين حالياً ضمن أي دورة أداء نشطة."
   }
 }
