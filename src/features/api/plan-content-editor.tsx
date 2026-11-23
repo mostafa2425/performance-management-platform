@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Button, Card, Col, Form, Input, InputNumber, Popconfirm, Row, Select, Space, Typography } from "antd";
+import { Alert, Button, Card, Collapse, Col, Form, Input, InputNumber, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
 import type { FormInstance } from "antd";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
 import { commentsForTarget, type OpenComments } from "./plans/plan-shared";
@@ -90,8 +90,22 @@ function KpiFields({
   const unitOptions =
     measurementTypes.find((item) => item.value === measurementType)?.units || measurementTypes[0]?.units || [];
 
+  const kpiName = Form.useWatch(["objectives", objectiveIndex, "kpis", kpiField.name, "name"], form);
+  const kpiWeight = Form.useWatch(["objectives", objectiveIndex, "kpis", kpiField.name, "weight_pct"], form);
+
   return (
-    <Card size="small" type="inner" title={t("KPI", "مؤشر أداء")}>
+    <Collapse
+      defaultActiveKey={[]}
+      items={[{
+        key: String(kpiField.key),
+        label: (
+          <Space wrap size={8}>
+            <Typography.Text strong>{kpiName || t("New KPI", "مؤشر جديد")}</Typography.Text>
+            <Tag color="blue">{t("Weight", "الوزن")}: {Number(kpiWeight || 0).toFixed(2)}%</Tag>
+          </Space>
+        ),
+        children: (
+    <Card size="small" type="inner">
       <InlineComments openComments={openComments} target="kpi" id={kpiId} ar={ar} />
       <Form.Item name={[kpiField.name, "id"]} hidden>
         <Input />
@@ -165,6 +179,9 @@ function KpiFields({
         </Popconfirm>
       )}
     </Card>
+        ),
+      }]}
+    />
   );
 }
 
@@ -245,12 +262,27 @@ export function PlanContentEditor({
           <>
             {fields.map((field) => {
               const objectiveId = form.getFieldValue(["objectives", field.name, "id"]);
+              const objectiveText = form.getFieldValue(["objectives", field.name, "text"]);
+              const objectiveCategoryId = form.getFieldValue(["objectives", field.name, "category_id"]);
+              const categoryLabel = bilingual(categories.find((item) => item.id === objectiveCategoryId)?.name, ar);
               return (
-              <Card
+              <Collapse
                 key={field.key}
-                size="small"
+                defaultActiveKey={[]}
                 style={{ marginBottom: 12 }}
-                title={`${t("Objective", "الهدف")} ${field.name + 1}`}
+                items={[{
+                  key: String(field.key),
+                  label: (
+                    <Space wrap size={8}>
+                      <Typography.Text strong>{`${t("Objective", "الهدف")} ${field.name + 1}`}</Typography.Text>
+                      <Typography.Text type="secondary">{objectiveText || t("No description yet", "لم تتم إضافة وصف بعد")}</Typography.Text>
+                      {categoryLabel ? <Tag>{categoryLabel}</Tag> : null}
+                      <Tag color="cyan">{(form.getFieldValue(["objectives", field.name, "kpis"]) || []).length} {t("KPIs", "مؤشرات")}</Tag>
+                    </Space>
+                  ),
+                  children: (
+              <Card
+                size="small"
                 extra={
                   <Popconfirm
                     title={t("Remove this objective?", "هل تريد حذف هذا الهدف؟")}
@@ -332,6 +364,9 @@ export function PlanContentEditor({
                   )}
                 </Form.List>
               </Card>
+                  ),
+                }]}
+              />
             )})}
           </>
         )}
