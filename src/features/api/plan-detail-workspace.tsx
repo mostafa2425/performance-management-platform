@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { App, Alert, Button, Card, Descriptions, Form, Space, Spin, Tag, Typography } from "antd";
+import { App, Alert, Button, Card, Col, Descriptions, Form, Row, Space, Spin, Tag, Typography } from "antd";
 import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
@@ -183,6 +183,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
       title={pageTitle}
       subtitle={t("Review employee information, objectives, KPIs and workflow.", "راجع بيانات الموظف والأهداف ومؤشرات الأداء وسير العمل.")}
     >
+      <div style={{ width: "100%", maxWidth: mode === "employee" ? 1040 : "100%", marginInline: "auto" }}>
       <Space direction="vertical" size={16} style={{ width: "100%" }}>
         <Button icon={<ArrowLeftOutlined />} onClick={() => router.push(listPath)} type="text">
           {t("Back to objectives", "العودة إلى الأهداف")}
@@ -199,29 +200,50 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           }
           extra={<Typography.Text type="secondary">{t("Plan", "الخطة")} #{plan.id}</Typography.Text>}
         >
-          <Descriptions
-            size="small"
-            column={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-            items={[
-              { key: "employee", label: t("Employee", "الموظف"), children: employeeProfile?.full_name || employeeName },
-              { key: "code", label: t("Employee code", "كود الموظف"), children: employeeProfile?.code || plan.employee?.code || "—" },
-              { key: "email", label: t("Email", "البريد الإلكتروني"), children: employeeProfile?.email || "—" },
-              { key: "businessUnit", label: t("Business unit", "قطاع الأعمال"), children: employeeProfile?.business_unit?.name || "—" },
-              { key: "department", label: t("Department", "الإدارة"), children: employeeProfile?.department?.name || "—" },
-              { key: "location", label: t("Location", "الموقع"), children: employeeProfile?.location?.name || "—" },
-              { key: "jobTitle", label: t("Job title", "المسمى الوظيفي"), children: employeeProfile?.job_title?.name || "—" },
-              { key: "manager", label: t("Line manager ID", "رقم المدير المباشر"), children: employeeProfile?.line_manager_id ?? "—" },
-              { key: "cycle", label: t("Performance cycle", "دورة الأداء"), children: cycle ? `${typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name} · ${cycle.performance_year}` : `#${plan.cycle_id}` },
-              { key: "stage", label: t("Current stage", "المرحلة الحالية"), children: cycle?.current_stage || "—" },
-              { key: "version", label: t("Plan version", "إصدار الخطة"), children: plan.version ?? "—" },
-              { key: "author", label: t("Created by role", "دور منشئ الخطة"), children: plan.author_role || "—" },
-              { key: "created", label: t("Created at", "تاريخ الإنشاء"), children: formatInstant(plan.created_at, ar) },
-              { key: "updated", label: t("Last updated", "آخر تحديث"), children: formatInstant(plan.updated_at, ar) },
-            ]}
-          />
+          {mode === "employee" ? (
+            <Row gutter={[10, 10]}>
+              {[
+                [t("Department", "الإدارة"), employeeProfile?.department?.name],
+                [t("Job title", "المسمى الوظيفي"), employeeProfile?.job_title?.name],
+                [t("Business unit", "قطاع الأعمال"), employeeProfile?.business_unit?.name],
+                [t("Location", "الموقع"), employeeProfile?.location?.name],
+                [t("Performance cycle", "دورة الأداء"), cycle ? String(typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name) + " · " + cycle.performance_year : "#" + plan.cycle_id],
+                [t("Current stage", "المرحلة الحالية"), cycle?.current_stage],
+              ].map(([label, value]) => (
+                <Col xs={12} sm={8} md={8} key={String(label)}>
+                  <Card size="small" style={{ height: "100%" }}>
+                    <Typography.Text type="secondary" style={{ fontSize: 12 }}>{label}</Typography.Text>
+                    <div style={{ fontWeight: 600, marginTop: 4 }}>{value || "—"}</div>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Descriptions
+              size="small"
+              column={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+              items={[
+                { key: "employee", label: t("Employee", "الموظف"), children: employeeProfile?.full_name || employeeName },
+                { key: "code", label: t("Employee code", "كود الموظف"), children: employeeProfile?.code || plan.employee?.code || "—" },
+                { key: "email", label: t("Email", "البريد الإلكتروني"), children: employeeProfile?.email || "—" },
+                { key: "businessUnit", label: t("Business unit", "قطاع الأعمال"), children: employeeProfile?.business_unit?.name || "—" },
+                { key: "department", label: t("Department", "الإدارة"), children: employeeProfile?.department?.name || "—" },
+                { key: "location", label: t("Location", "الموقع"), children: employeeProfile?.location?.name || "—" },
+                { key: "jobTitle", label: t("Job title", "المسمى الوظيفي"), children: employeeProfile?.job_title?.name || "—" },
+                { key: "manager", label: t("Line manager ID", "رقم المدير المباشر"), children: employeeProfile?.line_manager_id ?? "—" },
+                { key: "cycle", label: t("Performance cycle", "دورة الأداء"), children: cycle ? String(typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name) + " · " + cycle.performance_year : "#" + plan.cycle_id },
+                { key: "stage", label: t("Current stage", "المرحلة الحالية"), children: cycle?.current_stage || "—" },
+                { key: "version", label: t("Plan version", "إصدار الخطة"), children: plan.version ?? "—" },
+                { key: "author", label: t("Created by role", "دور منشئ الخطة"), children: plan.author_role || "—" },
+                { key: "created", label: t("Created at", "تاريخ الإنشاء"), children: formatInstant(plan.created_at, ar) },
+                { key: "updated", label: t("Last updated", "آخر تحديث"), children: formatInstant(plan.updated_at, ar) },
+              ]}
+            />
+          )}
         </Card>
 
         {plan.return_source ? (
+          <div style={{ maxWidth: mode === "employee" ? 720 : 960, width: "100%" }}>
           <Alert
             type="warning"
             showIcon
@@ -235,12 +257,15 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
               </Space>
             }
           />
+          </div>
         ) : null}
 
         {mode === "employee" && plan.content_visible === false ? (
+          <div style={{ maxWidth: 720, width: "100%" }}>
           <Alert type="info" showIcon message={t("Waiting for Manager Submission", "في انتظار إرسال المدير للخطة")}
             description={t("Your manager has not submitted your objectives for review yet. You cannot comment or approve until the plan is submitted.", "لم يرسل مديرك الأهداف للمراجعة بعد. لن تتمكن من التعليق أو الاعتماد قبل إرسال الخطة.")}
           />
+          </div>
         ) : null}
 
         <Card
@@ -330,6 +355,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           }}
         />
       </Space>
+      </div>
     </AppShell>
   );
 }
