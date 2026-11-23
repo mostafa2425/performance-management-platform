@@ -303,32 +303,63 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                             {
                               key: "obj",
                               label: t("Objectives result", "نتيجة الأهداف"),
-                              children: `${weightPct(evalData.objectives_bp).toFixed(2)}%`,
+                              children: evalData.objectives_bp == null ? "—" : (weightPct(evalData.objectives_bp).toFixed(2) + "%"),
                             },
                             {
                               key: "comp",
                               label: t("Competency result", "نتيجة الكفاءات"),
-                              children: `${weightPct(evalData.competency_bp).toFixed(2)}%`,
+                              children: evalData.competency_bp == null ? "—" : (weightPct(evalData.competency_bp).toFixed(2) + "%"),
                             },
                             {
                               key: "overall",
                               label: t("Overall", "الإجمالي"),
-                              children: `${weightPct(evalData.overall_bp).toFixed(2)}%`,
+                              children: evalData.overall_bp == null ? "—" : (weightPct(evalData.overall_bp).toFixed(2) + "%"),
+                            },
+                            {
+                              key: "template",
+                              label: t("Competency template version", "إصدار قالب الكفاءات"),
+                              children: evalData.provenance?.template_version_id ? ("#" + evalData.provenance.template_version_id) : "—",
                             },
                           ]}
                         />
                         {(evalData.kpis || []).map((kpi: any) => (
                           <Card size="small" key={kpi.plan_kpi_id} title={kpi.name}>
-                            <Typography.Paragraph style={{ marginBottom: 4 }}>
-                              {t("Target", "المستهدف")}: {kpi.target ?? "—"} ·{" "}
-                              {t("Actual", "الفعلي")}: {kpi.actual ?? "—"} ·{" "}
-                              {t("Achievement", "الإنجاز")}:{" "}
-                              {kpi.achievement_bp == null
-                                ? "—"
-                                : `${weightPct(kpi.achievement_bp).toFixed(2)}%`}
-                            </Typography.Paragraph>
+                            <Descriptions
+                              size="small"
+                              column={{ xs: 1, sm: 2, xl: 3 }}
+                              items={[
+                                { key: "target", label: t("Target", "المستهدف"), children: kpi.target ?? "—" },
+                                { key: "weight", label: t("Weight", "الوزن"), children: (weightPct(kpi.weight_bp).toFixed(2) + "%") },
+                                { key: "actual", label: t("Actual", "الفعلي"), children: kpi.actual ?? "—" },
+                                { key: "achievement", label: t("Achievement", "نسبة الإنجاز"), children: kpi.achievement_bp == null ? "—" : (weightPct(kpi.achievement_bp).toFixed(2) + "%") },
+                                { key: "weighted", label: t("Weighted KPI result", "نتيجة المؤشر الموزونة"), children: kpi.weighted_bp == null ? "—" : (weightPct(kpi.weighted_bp).toFixed(2) + "%") },
+                                { key: "direction", label: t("Calculation direction", "اتجاه الاحتساب"), children: kpi.direction === "lower" ? t("Lower is better", "الأقل أفضل") : t("Higher is better", "الأعلى أفضل") },
+                              ]}
+                            />
                             {kpi.comment ? (
-                              <Typography.Text type="secondary">{kpi.comment}</Typography.Text>
+                              <Typography.Paragraph type="secondary" style={{ margin: "8px 0 0" }}>
+                                {t("Manager comment", "تعليق المدير")}: {kpi.comment}
+                              </Typography.Paragraph>
+                            ) : null}
+                            {(kpi.evidence || []).length > 0 ? (
+                              <Space wrap style={{ marginTop: 8 }}>
+                                {(kpi.evidence || []).map((file: any) => (
+                                  <Button
+                                    key={file.id}
+                                    size="small"
+                                    icon={<DownloadOutlined />}
+                                    onClick={async () => {
+                                      try {
+                                        await plansApi.downloadEvidence(planId!, file.id, file.original_name || file.name || ("evidence-" + file.id));
+                                      } catch (error) {
+                                        message.error((error as Error).message || t("Could not download evidence", "تعذر تنزيل المرفق"));
+                                      }
+                                    }}
+                                  >
+                                    {file.original_name || file.name || t("Download evidence", "تنزيل الدليل")}
+                                  </Button>
+                                ))}
+                              </Space>
                             ) : null}
                           </Card>
                         ))}
