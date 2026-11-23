@@ -369,6 +369,16 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
               title={t("Start a plan (UC-011)", "بدء خطة (UC-011)")}
               style={{ marginBottom: 16 }}
             >
+              <Alert
+                type="info"
+                showIcon
+                style={{ marginBottom: 12 }}
+                title={t("Some goal-setting tools need backend support", "بعض أدوات إعداد الأهداف تحتاج إلى دعم من الخادم")}
+                description={t(
+                  "The current API supports plan creation, editing, validation and workflow actions. It does not expose objective templates, copy-previous-cycle, SMART analysis (70% score), or AI wording suggestions yet.",
+                  "تدعم الواجهة الحالية إنشاء الخطة وتعديلها والتحقق منها وإجراءات سير العمل، لكنها لا توفر بعد قوالب الأهداف أو نسخ أهداف الدورة السابقة أو تحليل SMART (70%) أو تحسين الصياغة بالذكاء الاصطناعي."
+                )}
+              />
               <Select
                 showSearch
                 optionFilterProp="label"
