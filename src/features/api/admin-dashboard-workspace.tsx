@@ -17,7 +17,6 @@ import {
   Statistic,
   Table,
   Tag,
-  Tooltip,
   Typography,
 } from "antd";
 import {
@@ -35,7 +34,29 @@ import { AppShell } from "@/components/layout/app-shell";
 import { adminApi, cyclesApi, employeesApi, resultsApi } from "@/lib/api/endpoints";
 import type { ApiEmployee } from "@/lib/api/types";
 
-type AnyRecord = Record<string, any>;
+type AnyRecord = {
+  [key: string]: unknown;
+  id?: number | string;
+  employee_id?: number | string;
+  manager_id?: number | string;
+  current_manager_id?: number | string | null;
+  plan_id?: number | string | null;
+  display_status?: string;
+  status?: string;
+  finalized_at?: string | null;
+  cycle_id?: number | string;
+  employee?: {
+    id?: number | string;
+    code?: string;
+    name?: string;
+    full_name?: string;
+    department_id?: number | string;
+    line_manager_id?: number | string | null;
+  };
+  manager?: { id?: number | string };
+  cycle?: { id?: number | string; status?: string };
+  reason?: unknown;
+};
 type StatusKey =
   | "not_started"
   | "no_plan_yet"
@@ -51,7 +72,7 @@ type StatusKey =
 
 type DashboardCycle = {
   id: number;
-  name: any;
+  name: unknown;
   performance_year: number;
   start_date: string;
   end_date: string;
@@ -61,6 +82,7 @@ type DashboardCycle = {
   groups: AnyRecord[];
   evaluations: Map<number, string>;
   evaluationRestricted: boolean;
+  evaluationFailed?: boolean;
 };
 
 type ManagerRow = {
@@ -95,26 +117,17 @@ const STATUS_KEYS: StatusKey[] = [
   "finalized",
 ];
 
-const SUMMARY_KEYS: StatusKey[] = [
-  "not_started",
-  "draft",
-  "pending_admin_approval",
-  "pending_employee_review",
-  "returned_to_manager",
-  "active_performance",
-  "evaluation_in_progress",
-  "pending_final_approval",
-  "finalized",
-];
-
-function rowsFrom<T = AnyRecord>(payload: any): T[] {
+function rowsFrom<T = AnyRecord>(payload: unknown): T[] {
   if (Array.isArray(payload)) return payload as T[];
-  if (Array.isArray(payload?.data)) return payload.data as T[];
+  if (payload && typeof payload === "object" && "data" in payload) {
+    const data = (payload as { data?: unknown }).data;
+    if (Array.isArray(data)) return data as T[];
+  }
   return [];
 }
 
 async function fetchAllPages<T>(
-  request: (page: number) => Promise<any>,
+  request: (page: number) => Promise<unknown>,
 ): Promise<T[]> {
   const first = await request(1);
   const all = rowsFrom<T>(first);
@@ -148,10 +161,11 @@ function asId(value: unknown): number | null {
   return Number.isFinite(id) && id > 0 ? id : null;
 }
 
-function bilingual(value: any, locale: string): string {
+function bilingual(value: unknown, locale: string): string {
   if (value == null) return "—";
   if (typeof value === "object") {
-    return String(value[locale] || value.en || value.ar || "—");
+    const record = value as Record<string, unknown>;
+    return String(record[locale] || record.en || record.ar || "—");
   }
   return String(value);
 }
@@ -347,8 +361,9 @@ async function loadAdminDashboard(): Promise<DashboardData> {
             const employeeId = getMemberEmployeeId(row);
             if (employeeId != null && row.status) evaluations.set(employeeId, String(row.status));
           }
-        } catch (error: any) {
-          if (error?.status === 403 || error?.response?.status === 403) {
+        } catch (error: unknown) {
+          const apiError = error as { status?: number; response?: { status?: number } };
+          if (apiError?.status === 403 || apiError?.response?.status === 403) {
             evaluationRestricted = true;
           } else {
             evaluationFailed = true;
@@ -416,14 +431,19 @@ async function loadAdminDashboard(): Promise<DashboardData> {
         const referenceDate = String(cycle.activated_at).slice(0, 10);
         const eligibility = await adminApi.employeeEligibility(Number(employee.id), referenceDate);
         if (eligibility?.status !== "under_6_months") return null;
-        const reason = Array.isArray(eligibility.reason)
-          ? eligibility.reason[0] || {}
-          : eligibility.reason || {};
+        const reasonValue = eligibility.reason;
+        const reason = (Array.isArray(reasonValue)
+          ? reasonValue[0]
+          : reasonValue) as Record<string, unknown> | null | undefined;
         return {
           employee,
           cycle,
-          joiningDate: reason.joining_date || employee.joining_date,
-          eligibleFrom: reason.eligible_from || addMonths(employee.joining_date || referenceDate, 6),
+          joiningDate:
+            typeof reason?.joining_date === "string" ? reason.joining_date : employee.joining_date,
+          eligibleFrom:
+            typeof reason?.eligible_from === "string"
+              ? reason.eligible_from
+              : addMonths(employee.joining_date || referenceDate, 6),
         };
       } catch {
         eligibilityIncomplete = true;
@@ -437,7 +457,7 @@ async function loadAdminDashboard(): Promise<DashboardData> {
     cycles: cycleDetails,
     results: rowsFrom<AnyRecord>(results),
     exclusions,
-    evaluationIncomplete: cycleDetails.some((cycle: any) => cycle.evaluationRestricted || cycle.evaluationFailed),
+    evaluationIncomplete: cycleDetails.some((cycle) => cycle.evaluationRestricted || cycle.evaluationFailed),
     eligibilityIncomplete,
   };
 }
@@ -460,7 +480,6 @@ function downloadCsv(filename: string, rows: Array<Array<unknown>>) {
 
 export default function AdminDashboardWorkspace() {
   const locale = useLocale();
-  const ar = locale === "ar";
   const t = useTranslations("AdminDashboard");
   const { user, isReady, isAuthenticated } = useAuthSession();
   const router = useRouter();
@@ -479,22 +498,20 @@ export default function AdminDashboardWorkspace() {
   });
 
   const data = dashboard.data;
-  const employees = data?.employees || [];
-  const cycles = data?.cycles || [];
-  const activeCycleIds = new Set(cycles.map((cycle) => Number(cycle.id)));
-  const finalizedEmployeeIds = new Set<number>();
-  for (const result of data?.results || []) {
-    const resultCycleId = asId(result?.cycle?.id ?? result?.cycle_id);
-    const employeeId = asId(result?.employee?.id ?? result?.employee_id);
-    if (
-      employeeId != null &&
-      resultCycleId != null &&
-      activeCycleIds.has(resultCycleId) &&
-      result.finalized_at
-    ) {
-      finalizedEmployeeIds.add(employeeId);
+  const employees = useMemo(() => data?.employees || [], [data?.employees]);
+  const cycles = useMemo(() => data?.cycles || [], [data?.cycles]);
+  const finalizedEmployeeIds = useMemo(() => {
+    const cycleIds = new Set(cycles.map((cycle) => Number(cycle.id)));
+    const ids = new Set<number>();
+    for (const result of data?.results || []) {
+      const resultCycleId = asId(result?.cycle?.id ?? result?.cycle_id);
+      const employeeId = asId(result?.employee?.id ?? result?.employee_id);
+      if (employeeId != null && resultCycleId != null && cycleIds.has(resultCycleId) && result.finalized_at) {
+        ids.add(employeeId);
+      }
     }
-  }
+    return ids;
+  }, [cycles, data?.results]);
 
   const membershipByEmployee = useMemo(() => {
     const map = new Map<number, { cycle: DashboardCycle; member: AnyRecord }>();
@@ -520,7 +537,7 @@ export default function AdminDashboardWorkspace() {
       );
     }
     return map;
-  }, [employees, membershipByEmployee, data?.results]);
+  }, [employees, membershipByEmployee, finalizedEmployeeIds]);
 
   const summary = useMemo(() => {
     const counts = emptyCounts();
