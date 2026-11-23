@@ -1,0 +1,16 @@
+---
+description: Prefer Ant Design Form controls for all PMP UI forms
+globs: src/**/*.{tsx,ts}
+alwaysApply: false
+---
+
+# Ant Design forms
+
+When building or editing forms in this project:
+
+- Use Ant Design `Form`, `Form.Item`, `Input`, `Input.TextArea`, `InputNumber`, `Select`, `Checkbox`, `Radio`, `Switch`, `Upload`, and related controls — not native HTML inputs for the same job.
+- Never use `<Input type="date" />` or `<input type="date" />`. Use `FormDatePicker` / `FormDateRangePicker` from `@/components/form/form-date-picker` (Ant Design `DatePicker` / `RangePicker` storing `YYYY-MM-DD`).
+- Prefer `Form.Item` field binding (`name`, `rules`, `getValueFromEvent` when needed) over uncontrolled local state for submitted values.
+- On screens wide enough for it, place related fields in a 2-column responsive grid with Ant Design `Row` / `Col` (`xs={24}` `md={12}`), not a single full-width stack of every field.
+- Keep labels via `Form.Item` `label` and validation via `rules`; surface API `fields` errors onto matching form fields when available.
+- Do not introduce custom form primitive wrappers (`AppInput`, `AppSelect`, etc.) for new API screens — use antd components directly.

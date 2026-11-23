@@ -1,74 +1,78 @@
 "use client";
 
-import { AppButton, AppDetails } from "@/components/ui-antd-primitives";
-
+import { Button } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import {
-  Activity, Bell, BookOpen, ChevronDown, CircleHelp, ClipboardCheck, FileCheck2, History,
-  LayoutDashboard, LogOut, Menu, Settings2, Target, UserRound, Users, X, Tags, SlidersHorizontal
+  Activity,
+  ArrowLeft,
+  ClipboardCheck,
+  FileCheck2,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
+  SlidersHorizontal,
+  Tags,
+  Target,
+  Users,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthSession } from "@/lib/auth/session";
+import { homePathForUser } from "@/lib/auth/home-path";
 
-type Props = { children: React.ReactNode; title: string; subtitle?: string; role?: "employee" | "manager" | "department" | "hcd" | "admin" };
+type Props = {
+  children: React.ReactNode;
+  title: string;
+  subtitle?: string;
+  /** When set, shows a back arrow in the page heading. */
+  backHref?: string;
+  /** Only admin/manager/employee are API roles; other values redirect home. */
+  role?: "employee" | "manager" | "admin" | "department" | "hcd";
+};
 
 const employeeNavItems = [
-  { key: "dashboard", labelKey: "employee.dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { key: "objectives", labelKey: "employee.objectives", href: "/employee/objectives", icon: Target },
-  { key: "performance", labelKey: "employee.performance", href: "/employee/performance", icon: Activity },
-  { key: "history", labelKey: "employee.history", href: "/employee/history", icon: History },
-  { key: "development", labelKey: "employee.development", href: "/employee/development", icon: BookOpen }
- ];
+  { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { key: "objectives", href: "/employee/objectives", icon: Target },
+  { key: "performance", href: "/employee/performance", icon: Activity },
+];
 
 const managerNavItems = [
-  { key: "dashboard", labelKey: "manager.dashboard", href: "/manager", icon: LayoutDashboard },
-  { key: "team", labelKey: "manager.team", href: "/manager/team", icon: Users },
-  { key: "history", labelKey: "manager.history", href: "/manager/history", icon: History },
-  { key: "reviews", labelKey: "manager.reviews", href: "/manager/reviews", icon: ClipboardCheck },
-  { key: "objectives", labelKey: "manager.objectives", href: "/manager/objectives", icon: Target },
-  { key: "performance", labelKey: "manager.performance", href: "/manager/performance", icon: Activity },
-  { key: "evaluation", labelKey: "manager.evaluation", href: "/manager/evaluation", icon: ClipboardCheck },
-  { key: "year-group", labelKey: "manager.year-group", href: "/manager/year-group", icon: Users },
-  { key: "calculations", labelKey: "manager.calculations", href: "/manager/calculations", icon: Activity }
-];
-
-const departmentNavItems = [
-  { key: "dashboard", labelKey: "department.dashboard", href: "/department", icon: LayoutDashboard },
-  { key: "teams", labelKey: "department.teams", href: "/department/teams", icon: Users },
-  { key: "progress", labelKey: "department.progress", href: "/department/progress", icon: Activity },
-  { key: "reports", labelKey: "department.reports", href: "/department/reports", icon: BookOpen },
-  { key: "history", labelKey: "department.history", href: "/department/history", icon: History }
-];
-
-const hcdNavItems = [
-  { key: "dashboard", labelKey: "hcd.dashboard", href: "/hcd", icon: LayoutDashboard },
-  { key: "cycles", labelKey: "hcd.cycles", href: "/hcd/cycles", icon: Activity },
-  { key: "templates", labelKey: "hcd.templates", href: "/hcd/templates", icon: ClipboardCheck },
-  { key: "calibration", labelKey: "hcd.calibration", href: "/hcd/calibration", icon: Target },
-  { key: "reports", labelKey: "hcd.reports", href: "/hcd/reports", icon: BookOpen },
-  { key: "history", labelKey: "hcd.history", href: "/hcd/history", icon: History }
+  { key: "dashboard", href: "/manager", icon: LayoutDashboard },
+  { key: "team", href: "/manager/team", icon: Users },
+  { key: "objectives", href: "/manager/objectives", icon: Target },
+  { key: "evaluation", href: "/manager/evaluation", icon: ClipboardCheck },
+  { key: "year-group", href: "/manager/year-group", icon: Users },
 ];
 
 const adminNavItems = [
-  { key: "dashboard", labelKey: "admin.dashboard", href: "/admin", icon: LayoutDashboard },
-  { key: "cycles", labelKey: "admin.cycles", href: "/admin/performance-cycles", icon: Activity },
-  { key: "competencies", labelKey: "admin.competencies", href: "/admin/competency-templates", icon: ClipboardCheck },
-  { key: "categories", labelKey: "admin.categories", href: "/admin/objective-categories", icon: Tags },
-  { key: "configuration", labelKey: "admin.configuration", href: "/admin/performance-configuration", icon: SlidersHorizontal },
-  { key: "employees", labelKey: "admin.employees", href: "/admin/employees", icon: Users },
-  { key: "approvals", labelKey: "admin.approvals", href: "/admin/approvals", icon: ClipboardCheck },
-  { key: "plan-reviews", labelKey: "admin.plan-reviews", href: "/admin/plan-reviews", icon: FileCheck2 },
-  { key: "bell-curve", labelKey: "admin.bell-curve", href: "/admin/bell-curve", icon: Activity },
-  { key: "publication", labelKey: "admin.publication", href: "/admin/publication", icon: FileCheck2 },
-  { key: "history", labelKey: "admin.history", href: "/admin/history", icon: History },
-  { key: "notifications", labelKey: "admin.notifications", href: "/admin/notifications", icon: Bell },
-  { key: "notification-templates", labelKey: "admin.notification-templates", href: "/admin/notification-templates", icon: FileCheck2 },
-  { key: "reports", labelKey: "admin.reports", href: "/admin/reports", icon: BookOpen }
+  { key: "dashboard", href: "/admin", icon: LayoutDashboard },
+  { key: "cycles", href: "/admin/performance-cycles", icon: Activity },
+  { key: "plan-reviews", href: "/admin/plan-reviews", icon: FileCheck2 },
+  { key: "approvals", href: "/admin/approvals", icon: ClipboardCheck },
+  { key: "employees", href: "/admin/employees", icon: Users },
+  { key: "categories", href: "/admin/objective-categories", icon: Tags },
+  { key: "competencies", href: "/admin/competency-templates", icon: ClipboardCheck },
+  { key: "configuration", href: "/admin/performance-configuration", icon: SlidersHorizontal },
+  { key: "notification-templates", href: "/admin/notification-templates", icon: FileCheck2 },
 ];
 
-export function AppShell({ children, title, subtitle, role }: Props) {
+const SIDEBAR_COLLAPSED_KEY = "pmp.sidebar.collapsed";
+
+function initials(name?: string | null, fallback = "EM") {
+  if (!name) return fallback;
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return fallback;
+  return parts
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || "")
+    .join("");
+}
+
+export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { logout, user, isReady, isAuthenticated } = useAuthSession();
@@ -76,67 +80,126 @@ export function AppShell({ children, title, subtitle, role }: Props) {
   const t = useTranslations("Shell");
   const isAr = locale === "ar";
   const [mobileOpen, setMobileOpen] = useState(false);
-  const activeRole = role ?? (user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee");
+  const [collapsed, setCollapsed] = useState(false);
+  const resolvedRole = user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee";
+  const activeRole = resolvedRole;
+  const displayName = user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`);
+  const displayEmail = user?.email || t(`profile.${activeRole}.role`);
+
+  useEffect(() => {
+    try {
+      setCollapsed(window.sessionStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "1");
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   useEffect(() => {
     if (!isReady) return;
-    if (!isAuthenticated) { router.replace(`/${locale}/login`); return; }
-    const allowed = role === undefined || (role === "admin" && user?.roles.admin) || (role === "manager" && user?.roles.manager) || (role === "employee" && user?.roles.employee);
-    if (!allowed) router.replace(`/${locale}/dashboard`);
+    if (!isAuthenticated) {
+      router.replace(`/${locale}/login`);
+      return;
+    }
+    const apiRole =
+      role === "admin" || role === "manager" || role === "employee" || role === undefined;
+    const allowed =
+      role === undefined ||
+      (role === "admin" && user?.roles.admin) ||
+      (role === "manager" && user?.roles.manager) ||
+      (role === "employee" && user?.roles.employee);
+    if (!apiRole || !allowed) router.replace(homePathForUser(user, locale));
   }, [isReady, isAuthenticated, locale, role, router, user]);
 
   useEffect(() => {
-    const pageTitle = `${title} | Perform.`;
-    document.title = pageTitle;
-    const upsertMeta = (selector: string, attribute: string, value: string) => {
-      let element = document.head.querySelector<HTMLMetaElement>(selector);
-      if (!element) {
-        element = document.createElement("meta");
-        element.setAttribute(attribute, selector.includes("property=") ? selector.match(/property="([^"]+)"/)?.[1] ?? "" : selector.match(/name="([^"]+)"/)?.[1] ?? "");
-        document.head.appendChild(element);
+    document.title = `${title} | Perform.`;
+  }, [title]);
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        window.sessionStorage.setItem(SIDEBAR_COLLAPSED_KEY, next ? "1" : "0");
+      } catch {
+        /* ignore */
       }
-      element.content = value;
-    };
-    upsertMeta('meta[property="og:title"]', "property", pageTitle);
-    upsertMeta('meta[name="twitter:title"]', "name", pageTitle);
-    upsertMeta('meta[name="description"]', "name", subtitle ?? t("metaDescription"));
-    upsertMeta('meta[property="og:description"]', "property", subtitle ?? "Performance management workspace");
-  }, [title, subtitle]);
+      return next;
+    });
+  };
+
   const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
-  const navItems = activeRole === "admin" ? adminNavItems : activeRole === "manager" ? managerNavItems : activeRole === "department" ? departmentNavItems : activeRole === "hcd" ? hcdNavItems : employeeNavItems;
-  const active = navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ?? "dashboard";
+  const navItems =
+    activeRole === "admin" ? adminNavItems : activeRole === "manager" ? managerNavItems : employeeNavItems;
+  const active =
+    navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ??
+    "dashboard";
+  const homeHref = homePathForUser(user, locale);
+
+  if (!isReady || !isAuthenticated) {
+    return <div className="app-frame" style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>…</div>;
+  }
 
   return (
-    <div className="app-frame" dir={isAr ? "rtl" : "ltr"}>
-      {mobileOpen && <AppButton className="mobile-scrim" aria-label={t("closeNavigation")} onClick={() => setMobileOpen(false)} />}
+    <div className={`app-frame ${collapsed ? "sidebar-collapsed" : ""}`} dir={isAr ? "rtl" : "ltr"}>
+      {mobileOpen && (
+        <button
+          type="button"
+          className="mobile-scrim"
+          aria-label={t("closeNavigation")}
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
       <aside className={`app-sidebar ${mobileOpen ? "is-open" : ""}`}>
         <div className="brand-lockup">
           <div className="brand-mark">P</div>
-          <div><strong>Perform<span>.</span></strong><small>People & performance</small></div>
-          <AppButton className="icon-button sidebar-close" onClick={() => setMobileOpen(false)} aria-label={t("closeMenu")}><X size={18} /></AppButton>
+          <div className="brand-copy">
+            <strong>
+              Perform<span>.</span>
+            </strong>
+            <small>People & performance</small>
+          </div>
+          {/* <Button
+            type="text"
+            className="shell-icon-btn sidebar-collapse-btn"
+            aria-label={collapsed ? t("openMenu") : t("closeMenu")}
+            title={collapsed ? t("openMenu") : t("closeMenu")}
+            icon={collapsed ? <PanelLeftOpen size={18} strokeWidth={2.2} /> : <PanelLeftClose size={18} strokeWidth={2.2} />}
+            onClick={toggleCollapsed}
+          /> */}
+          <Button
+            type="text"
+            className="shell-icon-btn sidebar-close"
+            aria-label={t("closeMenu")}
+            icon={<X size={18} strokeWidth={2.2} />}
+            onClick={() => setMobileOpen(false)}
+          />
         </div>
         <div className="workspace-label">{t("workspace")}</div>
         <nav className="sidebar-nav">
           {navItems.map((item) => {
             const Icon = item.icon;
+            const label = t(`nav.${activeRole}.${item.key}`);
             return (
-              <Link key={item.key} href={`/${locale}${item.href}`} onClick={() => setMobileOpen(false)} className={`nav-link ${active === item.key ? "active" : ""}`}>
-                <Icon size={18} strokeWidth={1.8} />
-                <span>{t(`nav.${activeRole}.${item.key}`)}</span>
-                
+              <Link
+                key={item.key}
+                href={`/${locale}${item.href}`}
+                onClick={() => setMobileOpen(false)}
+                className={`nav-link ${active === item.key ? "active" : ""}`}
+                title={label}
+              >
+                <Icon size={16} strokeWidth={2} className="nav-link-icon" aria-hidden />
+                <span className="nav-link-label">{label}</span>
               </Link>
             );
           })}
         </nav>
         <div className="sidebar-bottom">
-          <div className="workspace-label">{t("support")}</div>
-          <a className="nav-link" href="mailto:people.support@example.com"><CircleHelp size={18} /><span>{t("helpCenter")}</span></a>
-          <a className="nav-link" href="#"><Settings2 size={18} /><span>{t("settings")}</span></a>
-          
           <div className="sidebar-profile">
-            <div className="avatar avatar-small">{activeRole==="admin"?"HA":activeRole==="hcd"?"HC":activeRole==="department"?"DM":activeRole==="manager"?"MG":"EM"}</div>
-            <div className="profile-copy"><strong>{user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`)}</strong><small>{user?.email || t(`profile.${activeRole}.role`)}</small></div>
-            <ChevronDown size={15} />
+            <div className="avatar avatar-small">
+              {initials(displayName, activeRole === "admin" ? "AD" : activeRole === "manager" ? "MG" : "EM")}
+            </div>
+            <div className="profile-copy">
+              <strong>{displayName}</strong>
+            </div>
           </div>
         </div>
       </aside>
@@ -144,31 +207,82 @@ export function AppShell({ children, title, subtitle, role }: Props) {
       <div className="app-main">
         <header className="topbar">
           <div className="topbar-left">
-            <AppButton className="icon-button mobile-menu" onClick={() => setMobileOpen(true)} aria-label={t("openMenu")}><Menu size={20} /></AppButton>
-            <nav className="breadcrumb" aria-label={t("breadcrumb")}>
-              <Link className="breadcrumb-home" href={`/${locale}${activeRole === "admin" ? "/admin" : activeRole === "hcd" ? "/hcd" : activeRole === "department" ? "/department" : activeRole === "manager" ? "/manager" : "/dashboard"}`}>
+            <Button
+              type="text"
+              className="shell-icon-btn mobile-menu"
+              aria-label={t("openMenu")}
+              icon={<Menu size={20} strokeWidth={2.2} />}
+              onClick={() => setMobileOpen(true)}
+            />
+            <Button
+              type="text"
+              className="shell-icon-btn desktop-sidebar-toggle"
+              aria-label={collapsed ? t("openMenu") : t("closeMenu")}
+              title={collapsed ? t("openMenu") : t("closeMenu")}
+              icon={collapsed ? <PanelLeftOpen size={18} strokeWidth={2.2} /> : <PanelLeftClose size={18} strokeWidth={2.2} />}
+              onClick={toggleCollapsed}
+            />
+            {/* <nav className="breadcrumb" aria-label={t("breadcrumb")}>
+              <Link className="breadcrumb-home" href={homeHref}>
                 {t("workspace")}
               </Link>
-              <span className="breadcrumb-separator" aria-hidden="true">/</span>
-              <span className="breadcrumb-current" aria-current="page">{title}</span>
-            </nav>
+              <span className="breadcrumb-separator" aria-hidden="true">
+                /
+              </span>
+              <span className="breadcrumb-current" aria-current="page">
+                {title}
+              </span>
+            </nav> */}
           </div>
           <div className="topbar-actions">
-            <span className="cycle-pill"><span className="status-dot" /> 2026 Cycle</span>
-            <Link className="icon-button notification-button" href={`/${locale}${activeRole === "admin" ? "/admin/notifications" : activeRole === "hcd" ? "/hcd/notifications" : activeRole === "department" ? "/department/notifications" : activeRole === "manager" ? "/manager/notifications" : "/employee/notifications"}`} aria-label={t("notifications")}><Bell size={18} /><i /></Link>
-            <div className="topbar-divider" />
-            <div className="topbar-user"><div className="avatar avatar-small">{activeRole==="admin"?"HA":activeRole==="hcd"?"HC":activeRole==="department"?"DM":activeRole==="manager"?"MG":"EM"}</div><div><strong>{user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`)}</strong><small>{user?.email || t(`profile.${activeRole}.subtitle`)}</small></div></div>
-            <div className="locale-switch">
-              <Link href={localeHref(pathname.replace(`/${locale}`, ""), "en")} className={!isAr ? "selected" : ""}>EN</Link>
-              <Link href={localeHref(pathname.replace(`/${locale}`, ""), "ar")} className={isAr ? "selected" : ""}>ع</Link>
+            <div className="topbar-user">
+              <div className="avatar avatar-small">{initials(displayName)}</div>
+              <div>
+                <strong>{displayName}</strong>
+              </div>
             </div>
-            <AppButton className="icon-button logout-button" aria-label={t("signOut")} onClick={() => void logout()}><LogOut size={17} /></AppButton>
+            <div className="locale-switch">
+              <Link href={localeHref(pathname.replace(`/${locale}`, "") || "/", "en")} className={!isAr ? "selected" : ""}>
+                EN
+              </Link>
+              <Link href={localeHref(pathname.replace(`/${locale}`, "") || "/", "ar")} className={isAr ? "selected" : ""}>
+                ع
+              </Link>
+            </div>
+            <Button
+              type="text"
+              className="shell-icon-btn logout-button"
+              aria-label={t("signOut")}
+              title={t("signOut")}
+              icon={<LogOut size={18} strokeWidth={2.2} />}
+              onClick={() => void logout()}
+            />
           </div>
         </header>
         <main className="page-content">
-          <div className="page-heading"><div><h1>{title}</h1>{subtitle && <p>{subtitle}</p>}</div><div className="page-heading-extra"><span className="updated-label">{t("lastUpdated")}</span></div></div>
+          <div className="page-heading">
+            <div className="page-heading-main">
+              {backHref ? (
+                <Link
+                  href={backHref.startsWith("/") ? `/${locale}${backHref}` : backHref}
+                  className="page-heading-back"
+                  aria-label={t("back")}
+                  title={t("back")}
+                >
+                  <ArrowLeft size={20} strokeWidth={2.2} aria-hidden />
+                </Link>
+              ) : null}
+              <div>
+                <h1>{title}</h1>
+                {subtitle && <p>{subtitle}</p>}
+              </div>
+            </div>
+          </div>
           {children}
-          <footer className="app-footer"><span>{t("copyright")}</span><span>{t("tagline")}</span></footer>
+          <footer className="app-footer">
+            <span>{t("copyright")}</span>
+            <span>{t("tagline")}</span>
+          </footer>
         </main>
       </div>
     </div>

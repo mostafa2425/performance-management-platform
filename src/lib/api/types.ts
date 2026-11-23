@@ -1,6 +1,7 @@
 export type Bilingual={ar:string;en:string};
 export type ApiRoleFlags={admin:boolean;manager:boolean;employee:boolean};
-export type ApiEmployee={id:number;jisr_id?:string|null;code?:string|null;full_name:string;email?:string|null;status?:string;is_active?:boolean;joining_date?:string|null;terminate_date?:string|null;line_manager_id?:number|null;department?:{id:number;name:string}|null;job_title?:{id:number;name:string}|null;[key:string]:unknown};
+export type ApiOrgUnit={id:number;type?:string;jisr_id?:string|null;code?:string|null;name?:string|null};
+export type ApiEmployee={id:number;jisr_id?:string|null;code?:string|null;full_name:string;email?:string|null;status?:string;is_active?:boolean;joining_date?:string|null;terminate_date?:string|null;line_manager_id?:number|null;department?:ApiOrgUnit|null;business_unit?:ApiOrgUnit|null;location?:ApiOrgUnit|null;job_title?:ApiOrgUnit|null;employment_type?:ApiOrgUnit|null;[key:string]:unknown};
 export type ApiUser={id:number;email:string;name:string;employee:ApiEmployee|null;roles:ApiRoleFlags};
 export type LoginResponse={token:string;token_type:"Bearer";expires_at:string;user:ApiUser};
 export type PerformanceCycle={id:number;name:Bilingual;performance_year:number;start_date:string;end_date:string;status:"draft"|"active"|"closed";current_stage?:string|null;my_roles?:{member:boolean;manager:boolean};stages?:Array<{stage:string;position:number;deadline_date:string;cutoff_at:string;processed_at:string|null}>;[key:string]:unknown};

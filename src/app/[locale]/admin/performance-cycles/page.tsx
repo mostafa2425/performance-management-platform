@@ -1,3 +1,12 @@
+import { getTranslations } from "next-intl/server";
 import { AppShell } from "@/components/layout/app-shell";
 import ApiPerformanceCycleWorkspace from "@/features/api/performance-cycle-workspace";
-export default function Page(){return <AppShell role="admin" title="Performance cycles" subtitle="Configure and manage annual performance cycles."><ApiPerformanceCycleWorkspace mode="list"/></AppShell>;}
+
+export default async function Page() {
+  const t = await getTranslations("PerformanceCycles");
+  return (
+    <AppShell role="admin" title={t("pages.listTitle")} subtitle={t("pages.listSubtitle")}>
+      <ApiPerformanceCycleWorkspace mode="list" />
+    </AppShell>
+  );
+}

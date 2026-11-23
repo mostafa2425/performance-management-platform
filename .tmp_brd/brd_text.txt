@@ -1,0 +1,4285 @@
+
+Performance Management Platform
+
+Business Requirements Document
+
+Version 1.01.2
+
+Document Description
+Human Resources – Talent Development Department
+Submitted to
+V1.10
+Version Number
+14-09-2026
+Date
+Sadeem Alharbi
+Prepared By
+
+Copies of the Document
+Reason for change
+Date
+Version Number
+Prepared By
+Initial Draft
+14-09-2026
+1.0
+Sadeem Alharbi
+Addressed Business Review Comments
+25-10-2026
+1.1
+Sadeem Alharbi
+Updated annual performance cycle, employee eligibility and exceptions, manager reassignment, and Bell Curve submission rules based on business feedback.
+15-11-2026
+1.2
+Sadeem Alharbi
+
+Audit Schedule
+Status
+Date
+Version Number
+Name
+
+List of approvals
+Notes
+Signature
+Date
+Role
+E-mail Address
+Name
+
+Table of Content
+TOC \o "1-3" \h \z \u HYPERLINK \l "_Toc245719904" 1. Table of Content PAGEREF _Toc245719904 \h 3
+HYPERLINK \l "_Toc245719905" 2. Introduction PAGEREF _Toc245719905 \h 5
+HYPERLINK \l "_Toc245719906" 3. Objective of the project PAGEREF _Toc245719906 \h 5
+HYPERLINK \l "_Toc245719907" 4. Purpose of the document PAGEREF _Toc245719907 \h 6
+HYPERLINK \l "_Toc245719908" 5. Business Requirements Document Structure PAGEREF _Toc245719908 \h 6
+HYPERLINK \l "_Toc245719909" 5.1. Users and Roles: PAGEREF _Toc245719909 \h 6
+HYPERLINK \l "_Toc245719910" 5.2. Data: PAGEREF _Toc245719910 \h 6
+HYPERLINK \l "_Toc245719911" 5.3. Business Functions: PAGEREF _Toc245719911 \h 6
+HYPERLINK \l "_Toc245719912" 5.4. Process: PAGEREF _Toc245719912 \h 6
+HYPERLINK \l "_Toc245719913" 5.5. Notifications: PAGEREF _Toc245719913 \h 7
+HYPERLINK \l "_Toc245719914" 5.6. Artificial Intelligence: PAGEREF _Toc245719914 \h 7
+HYPERLINK \l "_Toc245719915" 6. Definitions, terms and abbreviations PAGEREF _Toc245719915 \h 7
+HYPERLINK \l "_Toc245719916" 7. Business Procedures and Coding Form PAGEREF _Toc245719916 \h 8
+HYPERLINK \l "_Toc245719917" 8. Users PAGEREF _Toc245719917 \h 8
+HYPERLINK \l "_Toc245719918" 8.1. User Journey PAGEREF _Toc245719918 \h 8
+HYPERLINK \l "_Toc245719919" 8.2. Roles and Permissions PAGEREF _Toc245719919 \h 8
+HYPERLINK \l "_Toc245719920" 8.3. General Permission Rules PAGEREF _Toc245719920 \h 11
+HYPERLINK \l "_Toc245719921" 9. Data PAGEREF _Toc245719921 \h 13
+HYPERLINK \l "_Toc245719922" 9.1. Connectivity and integration PAGEREF _Toc245719922 \h 13
+HYPERLINK \l "_Toc245719923" 9.2. Jisr Integration Business Rules PAGEREF _Toc245719923 \h 13
+HYPERLINK \l "_Toc245719924" 9.3. Succession Integration Business Rules PAGEREF _Toc245719924 \h 14
+HYPERLINK \l "_Toc245719925" 10. Business Functions PAGEREF _Toc245719925 \h 14
+HYPERLINK \l "_Toc245719926" 11. Process PAGEREF _Toc245719926 \h 15
+HYPERLINK \l "_Toc245719927" 11.1. Login to Performance Management Platform PAGEREF _Toc245719927 \h 15
+HYPERLINK \l "_Toc245719928" 11.2. View Admin Dashboard PAGEREF _Toc245719928 \h 16
+HYPERLINK \l "_Toc245719929" 11.3. View Manager Employees PAGEREF _Toc245719929 \h 20
+HYPERLINK \l "_Toc245719930" 11.4. View Employee Performance Details PAGEREF _Toc245719930 \h 23
+HYPERLINK \l "_Toc245719931" 11.5. View Performance Cycles PAGEREF _Toc245719931 \h 27
+HYPERLINK \l "_Toc245719932" 11.6. Create Performance Cycle PAGEREF _Toc245719932 \h 28
+HYPERLINK \l "_Toc245719933"  Clarification for Stages Execution Rules PAGEREF _Toc245719933 \h 33
+HYPERLINK \l "_Toc245719934" 11.7. View Performance Cycle Details PAGEREF _Toc245719934 \h 34
+HYPERLINK \l "_Toc245719935" 11.8. Edit Performance Cycle PAGEREF _Toc245719935 \h 39
+HYPERLINK \l "_Toc245719936" 11.9. View Manager Dashboard PAGEREF _Toc245719936 \h 40
+HYPERLINK \l "_Toc245719937" 11.10. View Employee Performance Details PAGEREF _Toc245719937 \h 45
+HYPERLINK \l "_Toc245719938" 11.11. Prepare Employee Objectives & KPIs PAGEREF _Toc245719938 \h 50
+HYPERLINK \l "_Toc245719939"  KPI Measurement Rules PAGEREF _Toc245719939 \h 55
+HYPERLINK \l "_Toc245719940" 11.12. Submit Employee Performance Plan PAGEREF _Toc245719940 \h 55
+HYPERLINK \l "_Toc245719941" 11.13. Review Employee Performance Plan PAGEREF _Toc245719941 \h 56
+HYPERLINK \l "_Toc245719942" 11.14. Review Performance Plan – Employee PAGEREF _Toc245719942 \h 58
+HYPERLINK \l "_Toc245719943" 11.15. Update Returned Performance Plan – Manager PAGEREF _Toc245719943 \h 59
+HYPERLINK \l "_Toc245719944" 11.16. Manage Competency Templates PAGEREF _Toc245719944 \h 61
+HYPERLINK \l "_Toc245719945" 11.17. Evaluate Employee Objectives & KPIs – Manager PAGEREF _Toc245719945 \h 63
+HYPERLINK \l "_Toc245719946" 11.18. Calculate Period & Annual Objectives Result PAGEREF _Toc245719946 \h 66
+HYPERLINK \l "_Toc245719947" 11.19. Evaluate Employee Competencies – Manager PAGEREF _Toc245719947 \h 68
+HYPERLINK \l "_Toc245719948" 11.20. Calculate Overall Annual Performance PAGEREF _Toc245719948 \h 70
+HYPERLINK \l "_Toc245719949" 11.21. Review Final Performance Result – Admin PAGEREF _Toc245719949 \h 72
+HYPERLINK \l "_Toc245719950" 11.22. Monitor Performance Rating Distribution (BellCurve) PAGEREF _Toc245719950 \h 74
+HYPERLINK \l "_Toc245719951" 11.23. Finalize & Publish Performance Results PAGEREF _Toc245719951 \h 77
+HYPERLINK \l "_Toc245719952" 11.24. View Performance Results – Employee PAGEREF _Toc245719952 \h 79
+HYPERLINK \l "_Toc245719953" 11.25. Manage Objective Categories PAGEREF _Toc245719953 \h 80
+HYPERLINK \l "_Toc245719954" 11.26. Configure Annual Performance Component Weights PAGEREF _Toc245719954 \h 82
+HYPERLINK \l "_Toc245719955" 11.27. Manage Notification Templates PAGEREF _Toc245719955 \h 84
+HYPERLINK \l "_Toc245719956" 12. Workflow PAGEREF _Toc245719956 \h 85
+HYPERLINK \l "_Toc245719957" 13. Notifications & Messages PAGEREF _Toc245719957 \h 85
+HYPERLINK \l "_Toc245719958" 14. Request Status PAGEREF _Toc245719958 \h 92
+HYPERLINK \l "_Toc245719959" 15. Artificial Intelligence PAGEREF _Toc245719959 \h 93
+HYPERLINK \l "_Toc245719960" 16. Attachments PAGEREF _Toc245719960 \h 93
+1. Table of Content 3
+2. Introduction 5
+3. Objective of the project 5
+4. Purpose of the document 6
+5. Business Requirements Document Structure 6
+5.1. Users and Roles: 6
+5.2. Data: 6
+5.3. Business Functions: 6
+5.4. Process: 6
+5.5. Notifications: 7
+5.6. Artificial Intelligence: 7
+6. Definitions, terms and abbreviations 7
+7. Business Procedures and Coding Form 7
+8. Users 8
+8.1. User Journey 8
+8.2. Roles and Permissions 8
+8.3. General Permission Rules 10
+9. Data 11
+9.1. Connectivity and integration 11
+9.2. Jisr Integration Business Rules 11
+9.3. Succession Integration Business Rules 12
+10. Business Functions 12
+11. Process 13
+11.1. Login to Performance Management Platform 13
+11.2. View Admin Dashboard 14
+11.3. View Manager Employees 18
+11.4. View Employee Performance Details 21
+11.5. View Performance Cycles 24
+11.6. Create Performance Cycle 26
+ Clarification for Stages Execution Rules 30
+11.7. View Performance Cycle Details 30
+11.8. Edit Performance Cycle 35
+11.9. View Manager Dashboard 36
+11.10. View Employee Performance Details 40
+11.11. Prepare Employee Objectives & KPIs 45
+ KPI Measurement Rules 49
+11.12. Submit Employee Performance Plan 50
+11.13. Review Employee Performance Plan 51
+11.14. Review Performance Plan – Employee 52
+11.15. Update Returned Performance Plan – Manager 53
+11.16. Manage Competency Templates 55
+11.17. Evaluate Employee Objectives & KPIs – Manager 57
+11.18. Calculate Period & Annual Objectives Result 60
+11.19. Evaluate Employee Competencies – Manager 62
+11.20. Calculate Overall Annual Performance 64
+11.21. Review Final Performance Result – Admin 66
+11.22. Monitor Performance Rating Distribution (BellCurve) 68
+11.23. Finalize & Publish Performance Results 71
+11.24. View Performance Results – Employee 73
+11.25. Manage Objective Categories 74
+11.26. Manage Objective Categories 76
+12. Workflow 78
+13. Notifications & Messages 78
+14. Request Status 87
+15. Artificial Intelligence 87
+16. Attachments 88
+
+Introduction
+The Performance Management Platform aims to provide a centralized solution for managing the employee performance lifecycle across the organization.
+The platform will support the process from performance cycle setup and objective setting through Admin (Talent Development) review, employee review, performance evaluation, final approval, and publication of performance results.
+It will enable Admin to manage and monitor the performance process, Managers to define and evaluate employee objectives, Employees to review their assigned objectives and performance results, and authorized management stakeholders to access performance information according to their organizational scope.
+The platform will also support performance competencies, objective templates, performance rating rules, workflow history, notifications, and dashboards.
+
+Objective of the project
+The main objectives of the project are to:
+Establish a centralized and standardized Performance Management Platform.
+Enable Admin to configure, manage, and monitor performance cycles across the organization.
+Enable Managers to create, assign, manage, and evaluate employee objectives.
+Enable Admin to review and approve employee objectives before they are presented to Employees.
+Enable Employees to review, approve, or request modifications to their assigned objectives.
+Support structured performance evaluation based on Objectives and Competencies.
+Provide visibility of performance progress and pending actions throughout the performance lifecycle.
+Maintain a complete history and audit trail of approvals, returns, comments, and evaluation activities.
+Improve transparency and consistency of the employee performance management process.
+Ensure consistent and controlled performance rating distribution through Bell Curve monitoring and validation.
+
+Purpose of the document
+The purpose of this Business Requirements Document (BRD) is to document the business requirements for the Performance Management Platform and establish a common understanding of the required solution among business and project stakeholders.
+The document defines the business users and roles, data requirements, business functions, end-to-end processes, business rules, workflow statuses, notifications, and related system dependencies.
+
+Business Requirements Document Structure
+The business requirements in this document are structured into key analysis areas to provide a clear and consistent view of the proposed Employee Performance Management Platform.
+Each area addresses a specific aspect of the business requirements, from identifying the users and required data to defining the business functions, processes, rules, and notifications.
+The following analysis areas will be used throughout this document:
+Users and Roles:
+This section identifies the users who interact with Performance Management Platform and defines their responsibilities, access requirements, and level of involvement in the performance management process.
+Data:
+This section identifies the business data required to support the Employee Performance Management process and the expected source of each data element.
+Business Functions:
+This section defines the main business capabilities that the platform is required to provide.
+Process:
+In this step, will include use case description for each process, and workflows.
+"The name of the service or procedure is mentioned"
+Procedure name
+"A unique serial number used to mark and reference the action in the document"
+Procedure Code
+"Users and beneficiaries of the system are mentioned"
+User
+"The procedure is described"
+Description
+"Prerequisites for entry into this procedure are stated"
+Pre-Condition
+"The terms of the business are mentioned and detailed for some cases, for example when the complaint is duplicated"
+Business Constraints
+"The scenario is mentioned for the action"
+Activity Steps
+"Notifications or alerts sent from the system to users are mentioned in this procedure"
+Notifications
+Notifications:
+This section identifies the notifications and reminders required by the system, including their triggering events, recipients, and purpose.
+Artificial Intelligence:
+This section identifies the Artificial Intelligence capabilities required within the platform and describes how they support the business processes and users.
+
+Definitions, terms and abbreviations
+Term / Abbreviation
+Definition
+Performance Management Platform
+A centralized platform for managing employee performance planning, evaluation, approval, and results publication.
+Performance Cycle
+An annual performance management cycle defining the applicable employees, five workflow stages, and their scheduled timelines, with one performance evaluation conducted per year.A configured performance management cycle defining the applicable employees, evaluation periods, and timelines.
+Performance Year
+The year for which employee performance is evaluated and annual results are calculated.
+Performance Period
+An evaluation period within a Performance Cycle based on the configured cycle frequency.
+KPI
+Key Performance Indicator used to measure employee performance against an assigned target.
+SMART
+Specific, Measurable, Achievable, Relevant, and Time-bound criteria used to assess objectives.
+Performance Plan
+A set of Objectives, KPIs, Targets, and Weights assigned to an Employee.
+HCD
+Human Capital Development manager.
+
+Business Procedures and Coding Form
+Actions are documented and described using flowchart drawing modeling codes, which consist of the following symbols:
+#
+Classification
+Named
+Shape
+
+1
+Flow object
+Start event
+10795067740Start Beginning
+Start Beginning
+
+This form means the beginning of the event or action.
+2
+Flow object
+Process
+123149834320
+This shape symbolizes the processes contained in the drawing.
+3
+Flow object
+Decision
+-698551435Condition
+00Condition
+
+This shape symbolizes the process of comparing the decision, and more than one direction comes out of it to different operations.
+4
+Flow object
+End event
+12218692935The end
+The end
+
+This form means the end of the event or action.
+5
+Flow object
+Arrow
+18118018388400
+This shape symbolizes the flow of the procedure from beginning to end and is one-way.
+
+Users
+User Journey
+Roles and Permissions
+User Name
+Procedure
+Modification Permissions
+Read Permissions
+Admin
+Performance Cycle Management
+Create and manage Annual Performance Cycles; configure scope and stage timelines; activate Cycles; edit current incomplete and future stage dates; view Employees excluded from a Cycle; and manually include Employees as authorized exceptions, including after standard stage closure.Create cycles; configure scope; activate cycles; edit current incomplete and future stage dates
+View all Annual Performance Cycles, Employees, Managers, eligibility and exclusion information, workflow stages, and performance progress.
+View all Cycles, Periods, Employees, Managers and progress
+Admin
+Objective Configuration
+Create/edit applicable Objective Categories and Admin Templates
+View all configured Categories/Templates
+Admin
+Competency Template Management
+Create/edit/copy Competency Templates; configure Competency weights; map Templates to Job Titles
+View all Templates and Job Title coverage
+Admin
+Performance Plan Review
+Create a Performance Plan for an Employee who does not have an existing Plan for the applicable Cycle and Period; edit submitted Performance Plans during Admin Review; approve or return Plans; and add Objective/KPI-level comments.
+Approve or Return Plan; add Objective/KPI-level comments
+View submitted Objectives, KPIs, SMART results, weights and assigned Competencies
+Admin
+Performance Monitoring
+No direct modification to Manager's approved Objectives/KPIs
+Full visibility of Employee performance status, current Return Details and Workflow/Audit History
+Admin
+Performance Configuration
+Configure Annual Objectives/Competencies weights and Rating Scale
+View active and historical configuration
+Admin
+Final Performance Review
+Admin shall review, approve, or return complete Annual Evaluation Groups submitted by Managers after successful Bell Curve compliance validation.Admin shall approve or return individual Non-Final Period Evaluations, and approve or return complete Manager–Year Groups for Final Annual Review.
+View Annual Objectives Results, Annual Competency Results, Overall Annual Performance Scores, calculated Ratings, Bell Curve compliance, and complete Manager–Year Group submissions.
+View Period Results, Annual Objectives, Competencies, Overall Result, Final Rating
+Admin
+Employee Cycle Inclusion
+Manually include selected Employees in an active Annual Performance Cycle as an exception, including after the standard Objective Setting stage has closed.
+View Employees not included in the Annual Performance Cycle, including their exclusion reasons, eligibility flags, and employment details.
+Manager
+Employee Performance Plan
+Create/edit Objectives, KPIs, Targets and KPI Weights before final Employee approval; update Returned Plans
+View assigned Employee Plan, Competencies, Return Details and authorized History
+Manager
+KPI Evaluation
+Enter and update KPI Actuals, Comments, and Evidence during the Annual Evaluation stage. The system shall recalculate KPI Achievement, Overall Annual Performance Score, and the corresponding Rating based on the evaluation inputs.Enter Actual, Comment and optional Evidence during applicable Evaluation stage
+View Targets, KPI Weights, Actuals, Achievement Percentages, Weighted KPI Results, Manager Comments, Evidence, and Annual Objectives Results for authorized Employees.
+View Target, Weight, Actual, Achievement %, Weighted KPI Result, Manager Comments, Evidence, and Period Results for authorized Employees.
+Manager
+Competency Evaluation
+Enter annual Competency Scores (1–1005).
+View assigned Competency Template and weights; cannot modify Template
+Manager
+Performance History
+None
+View authorized Direct Reports' previous Period and Annual Performance Results, including historical records created under previous Managers.
+Manager
+Bell Curve Compliance
+Adjust KPI Actuals and Competency Ratings during the Annual Evaluation stage to achieve Bell Curve compliance; submit the complete Manager–Year Group only when all Rating counts meet the calculated Minimum and Maximum limits.
+View the allowed Minimum and Maximum Employee counts for each Rating, the calculated Ratings, and the live Bell Curve distribution from the start of the Annual Evaluation stage.
+Employee
+Performance Plan Review
+Approve Plan or Request Modification with Comment
+View own Objectives, KPIs, Targets and assigned Competencies
+Employee
+Active Performance
+None after approval
+View own approved Objectives/KPIs and Competencies
+Employee
+Performance Results
+None
+View own finalized Period Results and published Overall Annual Performance Result, excluding individual KPI evaluation details.
+Department Manager
+Performance Results
+
+None
+View finalized Performance Results, including individual KPI evaluation details, within the authorized organizational scope.
+HCD
+Performance Results
+
+None unless separately authorized
+View finalized Performance Results, including individual KPI evaluation details, for Employees within the authorized organizational scope.
+
+General Permission Rules
+Rule
+Description
+Approved Objectives Lock
+Once the Employee approves the Performance Plan, Objectives, KPIs, Targets, and Weights shall be locked from modification through the standard workflow.
+As an exception, the Admin may return the approved Plan to the Manager for modification before the applicable Annual Evaluation stage begins. The Manager shall not be permitted to edit the approved Plan unless it has been explicitly reopened by the Admin.
+Employees manually included in an Active Annual Performance Cycle after the standard Objective Setting stage has closed shall follow the standard Performance Plan creation and approval workflow without reopening the completed stage for other Employees.
+Once the Employee approves the Performance Plan, Objectives, KPIs, Targets and Weights shall be locked from modification.
+Completed Stage Lock
+Admin cannot modify dates of completed stages. Only the current incomplete stage and future stage dates may be updated.
+Admin History Access
+Admin has full visibility of Workflow and Audit History.
+Manager History Access
+Manager may view Workflow History and Performance History for authorized Direct Reports.
+Following a change in Direct Manager, the newly assigned Manager shall become responsible for the Employee's Annual Evaluation and shall have access to the Employee's authorized Performance Plan and relevant historical Performance information.
+Employee History Access
+Employee shall not have access to Workflow/Audit History “between manager and admin”.
+Multiple Active Cycles
+Admin may create multiple Active Performance Cycles. An Employee shall not be included in more than one Active Performance Cycle at the same time. A Manager may manage Employees across multiple Active Performance Cycles.
+Configuration Permissions
+Annual Performance Component Weights are configurable by Admin. Configuration changes shall not retroactively moodify finalized results.
+Annual Final Review Return
+
+When an Annual Evaluation Group is returned by Admin, the Manager may revise the applicable Annual Evaluation inputs for Employees within the returned Group. The system shall recalculate the affected Performance Scores, Ratings, and Bell Curve distribution. Resubmission shall be permitted only after the Group satisfies all required Bell Curve limits.When the Annual Performance Result is returned by Admin, the Manager may modify the evaluation of the final Period only. Objectives, KPIs, Targets, KPI Weights, and previously completed Period evaluations shall remain locked.
+Annual Performance Result AccessFinalized Period Result Access
+
+Annual Performance Results shall remain unpublished to Employees until the applicable Manager–Year Group has been approved by Admin and the results have been officially published.
+Published Annual Performance Results shall be read-only and accessible according to the authorized role-based scope:
+Employee: Own published Annual Performance Results only.
+Manager: Published Annual Performance Results for authorized Direct Reports.
+Department Manager: Published Annual Performance Results for Employees within the authorized Department scope.
+Admin: Published Annual Performance Results for all Employees.
+HCD: Published Annual Performance Results for Employees within the authorized organizational scope.
+Upon completion and approval of each Performance Period, the Final Period Result shall be visible according to the applicable role-based scope: Employee for their own result, Manager for Direct Reports, Department Manager for Employees within the authorized Department scope, Admin and HCD for all Employees across the organization. Finalized Period Results shall be read-only.
+Bell Curve Access
+
+The Bell Curve distribution shall be visible to Managers from the start of the Annual Evaluation stage and updated whenever evaluation inputs change.
+The system shall calculate the Minimum allowed Employee count by rounding down and the Maximum allowed Employee count by rounding up, based on the eligible Employee population assigned to the current Manager.
+The Manager shall not submit the Annual Evaluation Group unless every Rating count satisfies both its Minimum and Maximum allowed limits.
+The system shall not automatically calibrate Ratings or allow Managers to manually override calculated Ratings. Managers shall adjust the underlying KPI Actuals and/or Competency Ratings to achieve compliance.
+These rules shall apply to all Managers regardless of team size, without exceptions.
+Bell Curve calibration shall be applied to the applicable Manager's employee population using the defined Rating distribution limits.
+Where a Rating exceeds its permitted allocation, the system shall compare Employees calculated Overall Annual Performance Scores, including decimal values, and move the lowest-scoring Employee(s) to the immediately lower Rating.
+The process shall continue across lower Ratings as required to achieve the permitted distribution.
+Bell Curve calibration shall not change the underlying calculated Overall Annual Performance Score. Bell Curve details shall not be visible to Employees.
+Rating Scale Access
+
+The Performance Rating Scale shall be visible to Managers as read-only reference information during applicable Performance Management activities.
+Admin Performance Plan Editing
+The Admin may create a Performance Plan for an Employee who has no existing Plan for the applicable Annual Performance Cycle, and may edit submitted Performance Plans during Admin Review. This permission shall be limited to Performance Plan data and shall not extend to KPI Actuals, Competency Ratings, calculated Performance Results, or other Evaluation Data.
+
+Data
+Connectivity and integration
+Integration
+Integration Inputs
+Integration Outputs
+Jisr – Employee & Organizational Data
+Employee ID, Employee Name, Email, Job Title, Department, Business Unit, Location, Direct Manager, Employment Status, employment start date
+Updated Employee profiles and organizational structure used for Cycle scope, Manager hierarchy, Employee assignment, Job Title mapping and reporting
+Succession System – Job Description
+Job Description
+Job Description information
+Jisr Integration Business Rules
+#
+Business Rule
+1
+Jisr shall be the source of truth for Employee and organizational master data used by the Performance Management Platform.
+2
+Employee and organizational data shall be synchronized and kept updated in the Performance Management Platform.
+3
+Changes in Direct Manager, Job Title, Department, Business Unit, Location or Employment Status shall be reflected following successful synchronization.
+4
+Newly synchronized Employees shall become available in the platform's Employee records. Employees not included in an existing Annual Performance Cycle shall be identifiable and available for Admin review and manual Cycle inclusion, subject to the applicable exception rules.Newly added Employees shall become available for applicable Performance Cycle scope selection.
+5
+Inactive/terminated Employees shall not be deleted from historical Performance records.
+Employees whose employment has ended shall be displayed with an Employment Status of "Terminated", based on the latest synchronized data from Jisr.
+6
+Historical Performance data shall remain preserved when Employee organizational information changes.
+7
+A newly synchronized Job Title with no Competency Template shall be identified and flagged to Admin. The applicable process shall not proceed until a Competency Template is assigned.
+8
+The system shall retain the latest synchronization status and identify failed synchronization records/reasons where applicable.
+9
+When selecting Employees for a Performance Cycle, the system shall use the latest successfully synchronized Employee information from Jisr.
+10
+Employee Eligibility and Exclusion
+The system support identifying Employees who are not subject to Performance Evaluation based on available employee attributes synchronized from Jisr.
+Exclusion categories include terminated Employees, Tamheer, GDP, and trainees, project-based staff, and Employees assigned to overseas offices.
+Subject to the availability of reliable classification data from Jisr, Employees identified as excluded from Performance Evaluation should be excluded from the platform's active evaluation population and related employee counts and evaluation statistics.
+The system retrieve the Employee's Employment Start Date from Jisr to calculate their length of service. If the Employee has completed less than six months of service, shall be flagged and excluded by default.
+11
+When an Employee's Direct Manager changes during an active Annual Performance Cycle, the Employee shall be reassigned to the new Manager for Annual Evaluation and Bell Curve purposes. The Employee's approved Performance Plan and historical records shall be preserved.
+Succession Integration Business Rules
+#
+Business Rule
+1
+The Performance Management Platform shall retrieve the applicable Job Description based on the Employee's Job Title / Job Identifier.
+2
+Job Description shall be displayed as reference information and shall not be manually modified by the Manager within Performance Management.
+3
+If the Employee's Job Title changes through Jisr, the system shall retrieve the Job Description applicable to the updated Job Title.
+4
+Missing Job Description data shall not automatically block the Performance Cycle.
+Business Functions
+Business Functions include:
+Performance Cycle Management
+Objective & KPI Management
+Objective & KPI Review and Approval
+Competency Template Management
+Performance Evaluation
+Annual Evaluation Result ManagementPeriod Result Management
+
+Annual Performance Calculation
+Annual Final Review & Publication
+Performance Configuration
+Bell Curve Monitoring & Compliance ValidationBell Curve Guidelines & Calibration
+
+Monitoring & Dashboards
+Performance History & Audit
+Process
+Login to Performance Management Platform
+Field
+Details
+Procedure Name
+Login to Performance Management Platform
+Procedure Code
+UC-001
+User
+Authorized User
+Description
+This procedure enables authorized users to securely access the Performance Management Platform using their organizational account.
+Pre-Condition
+The user must have an active organizational account and be authorized to access the Performance Management Platform.
+Business Constraints
+Only authorized users can access the platform.
+If the user accesses the platform through a notification link while not authenticated, authentication is required before accessing the requested page.
+Activity Steps
+
+The user accesses the Performance Management Platform.
+The system displays the Login page.
+The user selects one of the available login methods:
+Enters organizational email and password and selects Login,
+Selects Sign in with Microsoft.
+The system authenticates the user using the selected authentication method.
+Upon successful authentication, the system verifies that the user is authorized to access the platform.
+The system identifies the user's assigned role(s) and permissions.
+The user is granted access to the platform.
+The system redirects the user to the appropriate page.
+
+Notifications
+No business notification is required. The system displays an appropriate message if authentication fails or the user is not authorized to access the platform.
+
+View Admin Dashboard
+Field
+Details
+Procedure Name
+View Admin Dashboard
+Procedure Code
+UC-002
+User
+Admin
+Description
+
+This procedure enables the admin to monitor the overall performance management process through the Dashboard, including employee performance status, active Performance Cycles, cycle progress, and Manager progress.
+
+Pre-Condition
+
+Admin has successfully logged in to the Performance Management Platform.
+Employee and organizational data required for the Dashboard is available in the platform.
+
+Business Constraints
+
+The Dashboard shall provide an overall view across all applicable Performance Cycles.
+Total Employees shall represent all employees.
+Each employee shall be counted once under the applicable current performance status in the Employee Status Summary.
+Employees who have not started the performance process shall be included under Not Started.
+The admin shall be able to filter by status.
+The admin shall be able to search.
+Manager Progress shall reflect the employee records within the selected Dashboard filters.
+Exported data shall reflect the applied search and filter criteria.
+The Not Started Count shall identify Employees who are not currently included in any Active Performance Cycle.
+The Admin shall be able to identify Employees excluded from the Annual Performance Cycle due to having less than six months of service, based on the Employment Start Date synchronized from Jisr.
+Employees excluded from the Cycle shall not be included in the Cycle's active evaluation population or related evaluation progress counts unless manually included by the Admin.
+
+Activity Steps
+Admin accesses the Dashboard.
+The system displays the Employee Status Summary.
+The system displays the active Performance Cycles and their current progress.
+The system displays the Manager Progress section.
+Admin may filter by Status to filter the Manager Progress records.
+Admin may search and filter the Manager Progress records.
+The system refreshes the displayed records based on the applied criteria.
+Admin may export the displayed Manager Progress data.
+Admin may select a Performance Cycle to view its details.
+Admin may select View Details for a Manager to view the Manager's employee records. Ref. UC-003
+
+Notifications
+No business notification is generated as part of this procedure.
+
+Fields
+Field Name
+Optional / Mandatory
+Field Permissions
+Type
+Reviews / Notes
+Employee Status Summary
+
+Total Employees
+—
+Read
+Number / Card
+Total employees available “sync with Jisr”
+Not Started Count
+—-
+Read
+Number / Card
+Employees who are not currently included in any Active Performance Cycle.
+Draft Count
+—
+Read
+Number / Card
+Employee Performance Plans currently being prepared by the Manager
+Pending Admin Approval Count
+—
+Read
+Number / Card
+Performance Plans submitted by manager and awaiting Admin review
+Pending Employee Review Count
+—
+Read
+Number / Card
+Admin-approved Performance Plans awaiting Employee review
+Returned for ModificationReturned to Manager
+Count
+—
+Read
+Number / Card
+Performance Plans returned to the Manager by either the Admin or the Employee and requiring Manager action.
+Active Performance Count
+—
+Read
+Number / Card
+Employees with approved Performance Plans who are currently in the Active Performance stage of an Annual Performance Cycle.
+Employees with approved objectives currently within the active performance period
+Evaluation In Progress Count
+—
+Read
+Number / Card
+Employees currently within the Manager Evaluation stage
+Pending Final Approval Count
+—
+Read
+Number / Card
+Completed evaluations awaiting applicable admin final review
+Finalized Count
+—
+Read
+Number / Card
+Employees with finalized performance results
+Active Performance Cycles
+Cycle Name
+—
+Read
+Text
+Performance Cycle name
+Performance Year
+—
+Read
+Year
+Performance Year associated with the cycle
+Frequency
+—
+Read
+Text
+Quarterly / Semi-Annual / Annual
+Cycle Perioddate range
+—
+Read
+Date Range
+Cycle Start Date and Cycle End Date
+Current Period
+—
+Read
+Text
+
+The current evaluation period within the Performance Cycle (e.g., Q2 , H1), based on the configured cycle frequency and period dates.
+
+Current Stage
+—
+Read
+Status
+Current applicable stage within the periodcycle
+Employees in Scope
+—
+Read
+Number
+Employees included in the Annual Performance Cycle after applying eligibility rules and authorized exceptions
+Employees included based on configured Job Titles
+Managers in Scope
+—
+Read
+Number
+Managers responsible for employees within the cycle
+View Cycle
+—
+Action
+Button
+Navigates to the selected Performance Cycle details
+Manager Progress - Search & Filters
+Manager Search
+Optional
+Edit
+Search / Text
+Search by Manager Name, Employee ID, or Email
+Performance Cycle Filter
+Optional
+Edit
+Dropdown
+Displays available Performance Cycles
+Business Unit Filter
+Optional
+Edit
+Dropdown
+Displays available Business Units
+Department Filter
+Optional
+Edit
+Dropdown
+Displays available Departments
+Status Filter
+Optional
+Edit
+Dropdown
+Filters based on employee workflow status
+Export Manager Progress
+—
+Action
+Button
+Exports records according to applied search and filter criteria
+Manager Progress
+Manager Name
+—
+Read
+Text
+Manager full name
+Manager Employee ID
+—
+Read
+Text
+Manager Employee ID
+Job Title
+—
+Read
+Text
+Manager Job title
+Business Unit
+—
+Read
+Text
+Manager's Business Unit
+Department
+—
+Read
+Text
+Manager's Department
+Total Employees
+—
+Read
+Number
+Number of Employees assigned to the Manager within the displayed scope, based on the latest synchronized Direct Manager assignment from Jisr and the applied Dashboard filters.
+Number of Direct Reports within the displayed scope
+Not Started Count
+—
+Read
+Number
+Employees who are not currently included in any Active Performance Cycle.
+Draft Count
+—
+Read
+Number
+Performance Plans currently in Draft
+Pending Admin Approval Count
+—
+Read
+Number
+Plans awaiting Admin review
+Pending Employee Review Count
+—
+Read
+Number
+Plans awaiting Employee review
+Returned for ModificationReturned to Manager Count
+—
+Read
+Number
+Records requiring Manager action
+Active Performance Count
+—
+Read
+Number
+Employees within Active Performance
+Evaluation In Progress Count
+—
+Read
+Number
+Employees currently being evaluated
+Pending Final Approval Count
+—
+Read
+Number
+Evaluations awaiting final review
+Finalized Count
+—
+Read
+Number
+Employees with finalized results
+View Details
+—
+Action
+Button
+Navigates to UC-003 – View Manager Employees
+
+View Manager Employees
+
+Field
+Details
+Procedure Name
+View Manager Employees
+Procedure Code
+UC-003
+User
+Admin
+Description
+
+This procedure enables the Admin to view a selected Manager's information and monitor the performance progress of the Manager's Direct Reports. The Admin can review employee status distribution, search and filter employee records, and access the performance details of a selected employee.
+
+Pre-Condition
+The Admin has selected View Details for a Manager from the Manager Progress section. Reference: UC-002 – View Admin Dashboard.
+Business Constraints
+
+The system shall display the selected Manager's Direct Reports within the applicable performance scope.
+Manager information shall be displayed in read-only mode.
+Each employee shall be displayed with the applicable current performance status.
+The Admin shall be able to search and filter.
+The system shall determine the selected Manager's Direct Reports based on the latest successfully synchronized Direct Manager information from Jisr.
+If an Employee's Direct Manager changes during an Active Annual Performance Cycle, the Employee shall be displayed under the newly assigned Manager for current performance monitoring. Historical performance records associated with the previous Manager shall remain preserved.
+
+Activity Steps
+The Admin selects View Details for a Manager from the Manager Progress section.
+The system opens the Manager Employees page.
+The system displays the selected Manager's information.
+The system displays the employee status summary for the Manager's Direct Reports.
+The system displays the employee records and their current performance statuses.
+The admin may search for an employee by Employee Name, Employee ID, or Email.
+The admin may filter employee records using the available filters.
+The system updates the employee list based on the applied criteria.
+The admin may select View for an employee.
+The system opens the selected employee's Performance Details. Reference: UC-004 – View Employee Performance Details.
+
+Notifications
+No business notification is generated as part of this procedure.
+
+Fields
+Field Name
+Optional / Mandatory
+Field Permissions
+Type
+Reviews / Notes
+Manager Information
+Manager Name
+—
+Read
+Text
+Selected Manager's full name
+Manager Employee ID
+—
+Read
+Text
+Manager Employee ID
+Manager Job Title
+—
+Read
+Text
+Manager's current Job Title
+Business Unit
+—
+Read
+Text
+Manager's Business Unit
+Department
+—
+Read
+Text
+Manager's Department
+Manager Email
+—
+Read
+Email
+Manager's organizational email
+Employee Status Summary
+Total Employees
+—
+Read
+Number
+Number of Direct Reports assigned to the selected Manager based on the latest synchronized organizational data from Jisr and the applied performance scope.
+Direct Reports within the displayed performance scope
+Not Started Count
+—
+Read
+Number
+Direct Reports who are not currently included in any Active Performance Cycle
+Employees who have not started the applicable performance process
+Draft Count
+—
+Read
+Number
+Direct Reports whose Performance Plans are currently in Draft status and being prepared by the Manager.
+Employees who are not currently included in any Active Performance Cycle.
+Pending Admin Approval Count
+—
+Read
+Number
+Performance Plans awaiting Admin review
+Pending Employee Review Count
+—
+Read
+Number
+Performance Plans awaiting Employee review
+Returned for ModificationReturned to Manager
+Count
+—
+Read
+Number
+Records returned and requiring Manager action
+Active Performance Count
+—
+Read
+Number
+Employees currently within the Active Performance stage
+Evaluation In Progress Count
+—
+Read
+Number
+Employees currently within Manager Evaluation
+Pending Final Approval Count
+—
+Read
+Number
+Evaluations awaiting final approval
+Finalized Count
+—
+Read
+Number
+Employees with finalized performance results
+Search & Filters
+Employee Search
+Optional
+Edit
+Search / Text
+Search by Employee Name, Employee ID, or Email
+Status Filter
+Optional
+Edit
+Dropdown
+Filters by current performance status
+Business Unit Filter
+Optional
+Edit
+Dropdown
+Filters by Business Unit
+Department Filter
+Optional
+Edit
+Dropdown
+Filters by Department
+Job Title Filter
+Optional
+Edit
+Dropdown
+Filters by Job Title
+Performance Cycle Filter
+Optional
+Edit
+Dropdown
+Filters employees by applicable Performance Cycle
+Employee List
+Employee ID
+—
+Read
+Text
+Employee unique identifier
+Employee Name
+—
+Read
+Text
+Employee full name
+Job Title
+—
+Read
+Text
+Employee Job Title
+Business Unit
+—
+Read
+Text
+Employee Business Unit
+Department
+—
+Read
+Text
+Employee Department
+Performance Cycle
+—
+Read
+Text
+Applicable Performance Cycle
+Current Period
+—
+Read
+Text
+Applicable current evaluation period
+Current Status
+—
+Read
+Status
+Employee's current performance status
+Last Updated
+—
+Read
+Date & Time
+Latest update to the performance record
+View
+—
+Action
+Button
+Opens UC-004
+
+View Employee Performance Details
+Field
+Details
+Procedure Name
+View Employee Performance Details
+Procedure Code
+UC-004
+User
+Admin
+Description
+
+This procedure enables the Admin to view the performance details of a selected Employee, including Employee information, the applicable Annual Performance Cycle, current performance status, Objectives and KPIs, assigned Competencies, available Annual Evaluation information, current return details, and Workflow & Audit History.
+This procedure enables the Admin to view the performance details of a selected employee, including employee information, applicable Performance Cycle and Period, current performance status, Objectives and KPIs, assigned Competencies, available evaluation information, current return details, and workflow history.
+Pre-Condition
+The Admin has selected an employee from the Manager Employees page.
+Reference: UC-003 – View Manager Employees.
+
+Business Constraints
+
+Employee and organizational information shall be displayed in read-only mode.
+The system shall display performance information related to the employee's applicable Performance Cycle and Period.
+The assigned Competency Template shall be displayed based on the employee's applicable Job Title.
+Evaluation information shall be displayed when available.
+When the employee's record is Returned for ModificationReturned to Manager, the current return details and associated comments shall be visible.
+This procedure shall not allow the Admin to directly edit the Manager's Objectives, KPIs, or evaluation data.
+Admin shall be able to view individual KPI evaluation details, including Actual, Achievement %, Weighted KPI Result, Manager Comments, and supporting Evidence, for authorized Employees.
+The Employee's current Direct Manager shall be displayed based on the latest successfully synchronized organizational data from Jisr. Any historical Manager assignments and related performance records shall remain preserved in the Workflow & Audit History, where applicable.
+
+Activity Steps
+
+The Admin selects View for an employee from the Manager Employees page.
+The system opens the Employee Performance Details page.
+The system displays the employee's personal and organizational information and current performance status.
+The system displays the applicable Performance Cycle and current Period.
+The system displays the Performance Summary.
+The system displays the employee's Objectives and associated KPIs, Targets, and Weights.
+The system displays the assigned Competency Template and Competencies.
+If the record is currently Returned for ModificationReturned to Manager, the system displays the applicable Return Details and current feedback.
+If the return was initiated by the Admin, the system displays the Admin comments against the applicable Objective/KPI.
+If the return was initiated by the Employee, the system displays the Employee Modification Request comment.
+If evaluation information is available, the system displays the applicable evaluation results.
+The system displays the Workflow & Audit History.
+The Admin reviews the employee's performance information.
+If an Admin business action is available for the current status, the Admin may proceed to the applicable Use Case.
+
+Notifications
+No business notification is generated as part of this procedure.
+Fields
+Field Name
+Optional / Mandatory
+Field Permissions
+Type
+Reviews / Notes
+Employee Information
+Employee Name
+—
+Read
+Text
+Employee full name
+Employee ID
+—
+Read
+Text
+Employee unique identifier
+Employee Email
+—
+Read
+Email
+Organizational email
+Job Title
+—
+Read
+Text
+Current Job Title
+Business Unit
+—
+Read
+Text
+Employee Business Unit
+Department
+—
+Read
+Text
+Employee Department
+Location
+—
+Read
+Text
+Employee work location
+Line Manager
+—
+Read
+Text
+Assigned Direct Manager
+Current Performance Status
+—
+Read
+Status
+Current status of the Employee's Performance Plan within the selected Performance Cycle and Period.
+Last Updated
+—
+Read
+Date & Time
+Latest performance record update
+Performance Cycle & Summary
+Performance Cycle
+—
+Read
+Text
+Applicable Performance Cycle
+Performance Year
+—
+Read
+Year
+Applicable Performance Year
+Frequency
+—
+Read
+Text
+Cycle frequency
+Current Period
+—
+Read
+Text
+Applicable evaluation period
+Objectives Weight
+—
+Read
+Percentage
+Objectives component weight
+Competencies Weight
+—
+Read
+Percentage
+Competencies component weight
+Categories count
+—
+Read
+Number
+Number of categories selected by manager
+Objectives Count
+—
+Read
+Number
+Number of Objectives
+KPIs Count
+—
+Read
+Number
+Number of KPIs
+Competencies Count
+—
+Read
+Number
+Number of assigned Competencies
+Objectives & KPIs
+Category
+—
+Read
+Text
+Objective Category
+Objective Name
+—
+Read
+Text
+Employee Objective
+Objective Description
+—
+Read
+Text
+Objective details
+KPI Name
+—
+Read
+Text
+KPI associated with the Objective
+Target
+—
+Read
+Value
+KPI Target
+KPI Weight
+—
+Read
+Percentage
+Weight assigned to KPI
+SMART Analysis Score
+—
+Read
+Percentage
+Latest available SMART Analysis result
+Admin Comment
+—
+Read
+Text
+Current Admin feedback associated with the Objective/KPI, when applicable
+Competencies
+Competency Template
+—
+Read
+Text
+Template assigned based on applicable Job Title
+Competency Name
+—
+Read
+Text
+Assigned Competency
+Competency Description
+—
+Read
+Text
+Competency description
+Competency Weight
+—
+Read
+Percentage
+Weight within the assigned Competency Template
+Return Details
+Returned By
+—
+Read
+Text
+Admin or Employee
+Return Reason
+—
+Read
+Text
+Reason associated with the current return
+Return Date
+—
+Read
+Date & Time
+Date/time of the current return
+Employee Comment
+—
+Read
+Text
+Employee Modification Request comment, when applicable
+Evaluation Information
+Target
+—
+Read
+Value
+KPI Target
+Actual
+—
+Read
+Value
+Actual value entered during evaluation
+Achievement %
+—
+Read
+Percentage
+System-calculated KPI achievement
+Weighted Result
+—
+Read
+Percentage
+Calculated weighted KPI result
+Annual Objectives ResultPeriod Result
+—
+Read
+Percentage
+System-calculated Annual Objectives Result based on the Employee's KPI evaluation results and applicable KPI Weights.
+Available result for the applicable period
+Manager Comment
+—
+Read
+Text
+Manager evaluation comment, when available
+Evidence / Attachment
+—
+Read
+Attachment
+Supporting evidence attached by the Manager during KPI evaluation, when available.
+Workflow & Audit History
+Action
+—
+Read
+Text
+Workflow action performed
+Performed By
+—
+Read
+Text
+User who performed the action
+Role
+—
+Read
+Text
+Admin / Manager / Employee
+Action Date & Time
+—
+Read
+Date & Time
+When the action occurred
+Comments
+—
+Read
+Text
+Historical comment associated with the action, where available
+
+View Performance Cycles
+Field
+Details
+Procedure Name
+View Performance Cycles
+Procedure Code
+UC-005
+User
+Admin
+Description
+This procedure enables the Admin to view and monitor all Performance Cycles, search and filter cycle records, access cycle details, and initiate the creation of a new Performance Cycle.
+Pre-Condition
+The Admin has access to Performance Cycle Management.
+Business Constraints
+
+The system shall display all Performance Cycles available to the Admin.
+Each Performance Cycle shall have one of the following statuses: Draft, Active, or Closed.
+The admin shall able to search and filter.
+Selecting Create Performance Cycle shall navigate to UC-006.
+Selecting View Details shall navigate to UC-007 for the selected cycle.
+The Admin shall be able to access the Employee inclusion and exclusion details of a selected Performance Cycle through UC-007.
+Employee inclusion exceptions shall be managed within the selected Performance Cycle.
+Activity Steps
+Admin accesses Performance Cycles.
+The system displays the Performance Cycles summary and cycle list.
+Admin may search by Cycle Name.
+Admin may filter cycles by Performance Year, Frequency, and Status.
+The system updates the list based on the applied criteria.
+Admin may select Create Performance Cycle.
+Reference: UC-006.
+Admin may select View Details for a cycle.
+Reference: UC-007.
+
+Notifications
+No business notification is generated as part of this procedure.
+
+Fields
+Field Name
+Optional / Mandatory
+Field Permissions
+Type
+Reviews / Notes
+Cycle Search
+Optional
+Edit
+Search / Text
+Search by Cycle Name
+Performance Year Filter
+Optional
+Edit
+Dropdown
+Filters by Performance Year
+Frequency Filter
+Optional
+Edit
+Dropdown
+Monthly / Quarterly / Semi-Annual / Annual
+Status Filter
+Optional
+Edit
+Dropdown
+Draft / Active / Closed
+Cycle Name
+—
+Read
+Text
+Performance Cycle name
+Performance Year
+—
+Read
+Year
+Associated Performance Year
+Frequency
+—
+Read
+Text
+Monthly / Quarterly / Semi-Annual / Annual
+Job Titles
+—
+Read
+Number
+Number of Job Titles included in the cycle
+Employees in Scope
+—
+Read
+Number
+Final number of employees included in the cycle
+Start Date
+—
+Read
+Date
+Cycle Start Date
+End Date
+—
+Read
+Date
+Cycle End Date
+Cycle Status
+—
+Read
+Status
+Draft / Active / Closed
+View Details
+—
+Action
+Button
+Reference: UC-007
+Create Performance Cycle
+—
+Action
+Button
+Reference: UC-006
+
+Create Performance Cycle
+Field
+Details
+Procedure Name
+Create Performance Cycle
+Procedure Code
+UC-006
+User
+Admin
+Description
+This procedure enables the Admin to create an Annual Performance Cycle, define the applicable Employee scope, apply Employee eligibility and exclusion rules, configure the five workflow stage deadlines, and save the Cycle as Draft or activate it.
+This procedure enables the Admin to create a Performance Cycle, define its frequency and period, select the employees included in the cycle, configure stage deadlines, review the generated periods, and save the cycle as Draft or activate it.
+Pre-Condition
+The Admin has access to create Performance Cycles.
+
+Business Constraints
+
+The Admin shall define the Cycle Start Date, and the system shall automatically calculate the Cycle End Date to complete one Performance Year.
+The Cycle End Date shall be system-calculated and read-only.
+Each Performance Cycle shall be annual and shall contain one Annual Performance Evaluation.
+Cycle Frequency shall be Quarterly, Semi-Annual, or Annual.
+The Admin shall define the Cycle scope by selecting one or more Departments, Job Titles, and/or specific Employees.
+Selecting a Job Title shall initially include the employees associated with that Job Title.
+The Admin may exclude individual Employees from the selected Job Title(s)/department before activating the cycle.
+The Admin may search for and add specific Employees individually to the cycle scope.
+The final employee scope shall reflect the admin’s confirmed employee selection after additions and exclusions.
+An Employee shall not appear more than once in the same Performance Cycle scope.
+An Employee shall not be included in more than one Active Performance Cycle at the same time.
+Employees who are already included in another Active Performance Cycle shall be clearly identified during scope selection and shall not be eligible for selection.
+Performance Stages may overlap. The workflow shall proceed to the next applicable action once the previous action is completed, without waiting for the Stage Deadline. However, Manager Evaluation shall only start after Active Performance ends. All actions shall be closed once their applicable Stage Deadline is reached.
+The Admin shall configure the five workflow stages once for the Annual Performance Cycle.The admin shall configure the Stage Deadlines for the first Performance Period only. The system shall automatically apply the same relative Stage Deadline pattern to all subsequent generated Performance Periods.
+
+The system shall maintain one Annual Evaluation within each Annual Performance Cycle.Based on the selected Frequency, the system shall automatically generate the applicable Performance Periods within the Performance Cycle: four Periods for Quarterly, two Periods for Semi-Annual, or one Period for Annual.
+
+The system shall automatically calculate the Start Date and End Date of each generated Performance Period within the Cycle.
+The cycle cannot be activated unless all mandatory information and the final employee scope are valid.
+Save as Draft shall save the cycle without activating it.
+Upon successful activation, the Cycle Status shall change to Active.
+During Cycle scope selection, the system shall retrieve the latest successfully synchronized Employee information from Jisr and apply the eligibility and exclusion rules defined in Section 9.2.
+The system shall calculate each Employee's completed length of service as of the Cycle creation date.
+Employees with less than six months of service shall be flagged and excluded from the proposed Cycle scope by default.
+The Admin may manually include an Employee with less than six months of service in the proposed Annual Performance Cycle as an authorized exception before activation.
+Employees excluded under other applicable exclusion categories shall remain excluded unless explicitly permitted by the approved eligibility rules.
+The system shall distinguish Employees excluded due to insufficient length of service from Employees excluded under other applicable exclusion categories.
+The Admin shall be able to review the proposed Employee scope and excluded Employees before activating the Cycle.
+The final Employees and Managers in Scope shall be calculated based on the confirmed included Employees only.
+Activity Steps
+Admin selects Create Performance Cycle.
+The system displays the Create Performance Cycle form.
+Admin enters the Cycle Name and selects the Performance Year.
+Admin selects the Frequency: Quarterly, Semi-Annual, or Annual.
+Admin enters the Cycle Start Date, and the system automatically calculates the Cycle End Date to complete one Performance Year.
+Admin defines the Cycle scope using one or more of the following options: Department, Job Title, and/or Specific Employees.
+Department Scenario: Admin selects one or more Departments, and the system retrieves the Employees associated with the selected Department(s).
+Job Title Scenario: Admin selects one or more Job Titles, and the system retrieves the Employees associated with the selected Job Title(s).
+Specific Employee Scenario: Admin searches for and adds one or more Employees individually to the Cycle scope.
+The system combines the selected scope and displays the number of Employees and Managers in Scope, without duplicating Employees included through more than one selection method.
+The system identifies Employees who are already included in another Active Performance Cycle and displays the applicable Active Cycle Name. Such Employees shall not be eligible for selection in the new Performance Cycle.
+Admin may select Preview Employees to review the Employees included in and excluded from the proposed Cycle scope, including their eligibility status and exclusion reasons.
+Admin may select Preview Employees to review the Employees included in the Cycle scope.
+Admin may exclude individual Employees from the generated scope or add additional specific Employees.
+The system updates the final Employees and Managers in Scope based on the Admin's selections and exclusions.
+Admin configures the required deadlines for the five workflow stages of the Annual Performance Cycle.
+Admin configures the required Stage Deadlines for the first Performance Period.
+The system validates the configured deadlines.
+Based on the selected Frequency, the system generates and displays the applicable Performance Periods and automatically applies the same relative Stage Deadline pattern configured for the first Performance Period to all subsequent Periods.
+Admin reviews the Annual Performance Cycle information, confirmed Employee scope, eligibility and exclusion details, and configured workflow stage deadlines
+Admin reviews the Cycle information, final Employee scope, and generated Periods.
+Admin selects either Save as Draft or Activate Cycle.
+If Save as Draft is selected, the system saves the Cycle with status Draft.
+If Activate Cycle is selected, the system validates the mandatory Cycle information, Employee scope, dates, and stage deadlines.
+If validation is successful, the system activates the Performance Cycle and sets its status to Active.
+The system displays a confirmation message.
+Notifications
+Upon successful activation, the system notifies the Managers that the Performance Cycle has been activated.
+Upon successful activation, the system shall notify all Managers and Employees included in the Performance Cycle scope that the Performance Cycle has been activated.
+
+Fields
+Field Name
+Optional / Mandatory
+Field Permissions
+Type
+Reviews / Notes
+Performance Cycle Information
+Cycle Name (AR)
+Mandatory
+Edit
+Text
+Arabic Cycle Name
+Cycle Name (EN)
+Mandatory
+Edit
+Text
+English Cycle Name
+Performance Year
+Mandatory
+Edit
+Year
+Performance Year
+Frequency
+Mandatory
+Edit
+Dropdown
+Quarterly / Semi-Annual / Annual
+Cycle Start Date
+Mandatory
+Edit
+Date
+Start Date
+Cycle End Date
+Mandatory
+Read
+Date
+System-calculated to complete one Performance Year from the Cycle Start Date
+Cycle Status
+—
+Read
+Status
+System-controlled
+Cycle Scope
+Departments
+Optional*
+Edit
+Searchable multi-select
+Departments available from Jisr.
+Job Titles
+Optional*
+Edit
+Searchable multi-select
+Job Titles available from Jisr
+Employee Search
+Optional*
+Edit
+Search
+Search specific Employees by Name / Employee ID / email
+Selected Employees
+—
+Read / Edit
+List
+Final Employees included in the Cycle based on the selected scope, including additions and exclusions.
+Exclude Employee
+Optional
+Action
+Action
+Removes an individual Employee from the current cycle scope
+Add Employee
+Optional
+Action
+Action
+Adds a specific Employee individually
+Departments Count
+—
+Read
+Number
+Number of selected Departments.
+Job Titles Count
+—
+Read
+Number
+Number of selected Job Titles
+Employees in Scope
+—
+Read
+Number
+Final number of unique Employees included in the Cycle after applying the selected scope, additions, and exclusions.
+Managers in Scope
+—
+Read
+Number
+Number of Direct Managers responsible for the final Employees in Scope.
+Preview Employees
+—
+Action
+Button
+Opens the detailed list of included and excluded Employees, including eligibility status and exclusion reasons, for review before saving or activation.
+Opens the detailed list of Employees included in the Cycle scope for review before saving or activation.
+Employment Start Date
+-
+Read
+Date
+Employment Start Date retrieved from Jisr
+Length of Service
+-
+Read
+Duration
+Calculated as of the Cycle creation date
+Eligibility Flag
+-
+Read
+Status
+Indicates whether the Employee meets the applicable Cycle eligibility rules
+Exclusion Reason
+-
+Read
+Text
+Reason for default or applicable exclusion
+Excluded Employees Count
+-
+
+Number
+Number of Employees excluded from the proposed Cycle scope
+Stage Deadlines
+
+Goal Setting & Approval Deadline
+Mandatory
+Edit
+Date
+Deadline for plan preparation and approval
+Employee Review Deadline
+Mandatory
+Edit
+Date
+Deadline for Employee review
+Active Performance Deadline
+Mandatory
+Edit
+Date
+Deadline for Active Performance. Manager Evaluation shall only become available after this deadline.
+Manager Evaluation Deadline
+Mandatory
+Edit
+Date
+Manager Evaluation deadline
+Admin Final Review Deadline
+Mandatory*
+Edit
+Date
+
+Actions
+Save as Draft
+-
+Action
+Button
+Saves without activation
+Activate Cycle
+-
+Action
+Button
+Validates and activates cycle
+
+Clarification for Stages Execution Rules
+Stage
+Workflow Progression
+Deadline Rule
+Goal Setting & Approval
+Proceeds once the required action is completed
+Actions close at the Stage Deadline
+Employee Review
+Proceeds once the Employee completes the required action
+Actions close at the Stage Deadline
+Active Performance
+Starts after the required Plan approvals
+Ends at the Stage Deadline
+Manager Evaluation
+Starts only after Active Performance ends
+Actions close at the Stage Deadline
+Admin Final Review
+Proceeds once the Evaluation is submitted
+Actions close at the Stage Deadline
+
+View Performance Cycle Details
+Field
+Details
+Procedure Name
+View Performance Cycle Details
+Procedure Code
+UC-007
+User
+Admin
+Description
+This procedure enables the Admin to view and monitor a selected Annual Performance Cycle, including its configuration, Employee scope, eligibility and exclusion details, workflow stage timeline, Employee performance statuses, Manager evaluation progress, and Performance Plan reviews.Enables the Admin to view and monitor a selected Performance Cycle, including its configuration, scope, generated evaluation periods, current Period and Stage, Employee statuses, Manager evaluation progress, Performance Plan reviews, and completed Period history.
+Pre-Condition
+
+The Admin has selected View Details for a Performance Cycle. Reference: UC-005 – View Performance Cycles.
+
+Business Constraints
+The Cycle shall display its configured Frequency: Quarterly, Semi-Annual, or Annual.
+The system shall display the Performance Periods generated according to the configured Frequency: Q1–Q4 for Quarterly, H1–H2 for Semi-Annual, or Annual for Annual Frequency.
+Each generated Performance Period shall have a system-calculated Start Date and End Date within the Performance Cycle.
+The system shall identify the Current Period based on the Cycle schedule. Workflow stages may overlap, and each Performance record shall reflect its current workflow status.
+The Current Stage Timeline shall be displayed once at Cycle level and shall represent the stages of the Current Period only.
+The Stage Timeline shall not be repeated within individual Period details.
+Periods shall be displayed on the same page and identified as Completed, Current, or Upcoming.
+The Current Period shall be expanded by default, while Completed and Upcoming Periods shall be collapsed by default.
+Employees shall be grouped under their applicable Direct Manager.
+A Manager may be expanded to display the Employees assigned to that Manager within the selected Cycle and Period.
+Completed Periods shall remain available as read-only historical records.
+Employee Performance Status shall always relate to the selected Annual Performance Cycle.
+Employees shall be grouped under their applicable Direct Manager.Cycle and Period.
+The system shall display the five configured workflow stages and their deadlines once at the Annual Performance Cycle level.
+Each Employee's current workflow status shall be displayed independently, as Employees may progress through the workflow at different times.
+The system shall display the Employees included in the selected Annual Performance Cycle and provide the Admin with access to Employees not included in the Cycle.
+Employees not included in the Cycle shall be identifiable by their Employee information, eligibility status, and exclusion reason, where applicable.
+The Admin shall be able to search and filter Employees not included in the Cycle and initiate authorized manual inclusion.
+Authorized manual inclusion shall be available for Employees with less than six months of service and newly joined Employees, including after the standard Objective Setting and Approval stages have closed.
+Manually included Employees shall follow the standard Manager Objective Setting, Admin Review, and Employee Review workflow without reopening completed stages for other Employees.
+Following successful manual inclusion, the system shall update the Cycle's Employee scope, Manager assignments, and applicable progress counts.
+If an Employee's Direct Manager changes during the Annual Performance Cycle, the Employee shall be displayed under the newly assigned Manager while historical performance records remain preserved.
+Activity Steps
+
+Admin opens the selected Performance Cycle.
+The system displays the Cycle information, including Cycle Name, Performance Year, Frequency, Start Date, End Date, and Cycle Status.
+The system displays the Cycle scope summary, including the number of Employees, Managers, Departments, and Job Titles included in the Cycle.
+The system displays the Employee Performance Status Summary for the Current Period.
+The system identifies and displays the Current Period, Current Stage, and Current Stage Deadline.
+The system displays the Current Period Stage Timeline at the top of the page.
+Based on the configured Frequency, the system displays all generated Performance Periods on the same page.
+The system identifies each Period stage as Completed, Current, or Upcoming.
+The system expands the Current Period stage by default.
+Within the expanded Current Periodstage, the system displays the Period stage summary and the Managers responsible for Employees within the Period.
+Admin may expand a Manager to view the Employees assigned to that Manager within the selected Performance Cycle and their applicable workflow statuses.
+Admin may expand a Manager to view the Employees assigned to that Manager within the selected Period.
+The system displays each Employee's basic organizational information and current Performance Status.
+Admin may select View to open the selected Employee's Performance Details.
+Admin may expand a Completed Stage to review the relevant Manager and Employee information and available historical workflow records for that Stage.
+Admin may expand a Completed Period to review its historical Manager, Employee, and available Period Result information.
+Admin may search and filter the displayed Managers and Employees.
+Where permitted, Admin may select Edit Cycle. Reference: UC-008 – Edit Performance Cycle.
+Admin may access the Employees Not Included list to review Employees excluded from or not included in the selected Performance Cycle.
+The system displays the applicable Employee information, eligibility status, and exclusion reasons.
+Where permitted, Admin may initiate the Manual Employee Inclusion procedure for a selected Employee.
+Notifications
+No business notification is generated by viewing Performance Cycle Details.
+
+Fields
+Field Title
+Field Name
+Optional or Mandatory
+Permission
+Type
+Reviews / Notes
+Cycle Name
+Cycle Name
+—
+Read
+Text
+Selected Performance Cycle
+Performance Year
+Performance Year
+—
+Read
+Year
+Applicable year
+Frequency
+Frequency
+—
+Read
+Dropdown/Text
+Quarterly / Semi-Annual / Annual
+Start Date
+Cycle Start Date
+—
+Read
+Date
+—
+End Date
+Cycle End Date
+—
+Read
+Date
+—
+Cycle Status
+Cycle Status
+—
+Read
+Status
+Draft / Active / Closed
+Employees Count
+Employees in Scope
+—
+Read
+Number
+Total unique Employees included in the Cycle.
+Managers Count
+Managers in Scope
+—
+Read
+Number
+Total Direct Managers responsible for Employees included in the Cycle.
+Departments Count
+Departments in Scope
+—
+Read
+Number
+Number of Departments represented in the Cycle scope.
+Job Titles Count
+Job Titles in Scope
+—
+Read
+Number
+Number of Job Titles represented in the Cycle scope.
+Draft Count
+
+Read
+Number
+Performance Plans currently in Draft.
+Pending Admin Approval Count
+
+Read
+Number
+Performance Plans awaiting Admin review.
+Pending Employee Review Count
+
+Read
+Number
+Performance Plans awaiting Employee review.
+Returned for ModificationReturned to Manager Count
+
+Read
+Number
+Performance Plans returned to the Manager by either the Admin or Employee.
+Goals Approved Count
+
+Read
+Number
+Employees whose Performance Plans have been approved.
+Evaluation In Progress Count
+
+Read
+Number
+Employees currently within the applicable Evaluation stage.
+Pending Final Approval Count
+
+Read
+Number
+Evaluations awaiting Admin final review.
+Finalized Count
+
+Read
+Number
+Employees with finalized results.
+Current Period
+Current Period
+—
+Read
+Text
+Current evaluation Period within the Cycle, e.g., Q3, H2, or Annual.
+Current Stage
+Current Stage
+—
+Read
+Status
+Current applicable workflow stage within the Annual Performance Cycle.Applicable workflow stage based on the Performance record's current status.
+Stage Deadline
+Current Stage Deadline
+—
+Read
+Date
+Configured deadline for the Current Stage.
+Stage Timeline
+Current Period Timeline
+—
+Read
+Timeline
+Displays the workflow stages of the Annual Performance Cycle and is shown once at Cycle level.Displays the workflow stages of the Current Period only and is shown once at Cycle level.
+Periodstage
+Period Name
+—
+Read
+Text
+Q1–Q4 / Applicable workflow stage within the Annual Performance CycleH1–H2 / Annual based on Cycle Frequency.
+Period stage Start Date
+Period Start Date
+—
+Read
+Date
+Start Date of the applicable Periodstage.
+Period stage End Date
+Period End Date
+—
+Read
+Date
+End Date of the applicable Periodstage.
+Period stage Status
+Period Status
+—
+Read
+Status
+Completed / Current / Upcoming.
+Expand / Collapse
+—
+—
+Action
+Accordion
+Expands or collapses the selected Period stage details.
+Manager Name
+Manager Name
+—
+Read
+Text
+Direct Manager responsible for Employees within the selected Stage.Direct Manager responsible for Employees within the Period.
+Job Title
+Manager Job Title
+—
+Read
+Text
+Manager's Job Title.
+Department
+Department
+—
+Read
+Text
+Manager's Department.
+Employees Count
+Employees Count
+—
+Read
+Number
+Number of Employees assigned to the Manager within the selected Cycle and Period.
+Completed Evaluations
+Completed Evaluations
+—
+Read
+Number
+Number of required Employee evaluations completed by the Manager for the Periodcycle.
+Expand / Collapse
+—
+—
+Action
+Accordion
+Displays or hides Employees assigned to the Manager.
+Employee Name
+Employee Name
+—
+Read
+Text
+Employee full name.
+Employee ID
+Employee ID
+—
+Read
+Text
+Employee identifier.
+Job Title
+Job Title
+—
+Read
+Text
+Employee Job Title.
+Business Unit
+Business Unit
+—
+Read
+Text
+Employee Business Unit.
+Department
+Department
+—
+Read
+Text
+Employee Department.
+Performance Status
+Performance Status
+—
+Read
+Status
+Employee's current Performance Status within the selected Cycle and Period.
+Last Updated
+Last Updated
+—
+Read
+Date
+Date of the latest update to the Employee Performance record.
+View
+—
+—
+Action
+Button
+Opens the Employee Performance Details.
+
+Edit Performance Cycle
+Field
+Details
+Procedure Name
+Edit Performance Cycle
+Procedure Code
+UC-008
+User
+Admin
+Description
+Enables the Admin to update permitted Stage Deadlines for the current incomplete stage and future stages without modifying completed historical stages or records.
+Pre-Condition
+A Draft or Active Performance Cycle exists and the Admin selects Edit.
+Business Constraints
+
+A Draft Cycle may be edited before activation.
+For an Active Cycle, dates related to completed stages shall be locked.
+Admin may update dates for the current incomplete stage and future stages only.
+Updated dates must remain within the applicable Cycle dates.
+Stage Deadlines shall remain within the Annual Performance Cycle dates and shall maintain the defined chronological order.
+Stage Deadlines shall remain within the applicable Performance Period and shall maintain the defined chronological order.
+Changes shall not modify historical timestamps or completed workflow records.
+Any change shall be recorded in the Audit History including old value, new value, user and date/time.
+
+Activity Steps
+
+Admin selects Edit.
+System identifies editable and locked stage dates.
+Completed stages are displayed as read-only.
+Admin modifies an allowed current/future deadline.
+System validates the new date against the Annual Performance Cycle boundaries and the configured Stage Deadline sequence.
+System validates the new date against the Cycle and Period boundaries.
+If invalid, system displays validation and prevents saving.
+If valid, Admin saves the changes.
+System updates the applicable schedule and records the change in Audit History.
+System notifies affected users where applicable.
+Notifications
+
+System notifies affected users where applicable. NOT-002
+
+View Manager Dashboard
+Field
+Details
+Procedure Name
+View Manager Dashboard
+Procedure Code
+UC-009
+User
+Manager
+Description
+
+Enables the Manager to monitor Direct Reports across platform, view Team performance status, and access Employee performance records and applicable actions.
+
+Pre-Condition
+Manager accesses the Performance Management Platform.
+Business Constraints
+
+A Manager may be responsible for Direct Reports across multiple Active Performance Cycles simultaneously.
+The Team Summary shall be displayed across the Manager's applicable Direct Reports.
+The system shall display all Performance Cycles applicable to the Manager.
+Each Employee performance record shall identify the applicable Performance Cycle and Period.
+Selecting a Performance Cycle shall filter the Employee records to the selected Cycle.
+Employee Performance Status shall be displayed within the context of the applicable Cycle and Period.
+Direct Reports and organizational information shall reflect the latest successfully synchronized Jisr data.
+If an Employee's Direct Manager changes during an Active Annual Performance Cycle, the Employee shall be displayed under the newly assigned Manager based on the latest successfully synchronized Jisr data, while historical performance records and previous Manager assignments remain preserved.
+Available Employee actions shall be determined based on the Employee's current Performance Status and workflow.
+Historical and finalized Performance records shall remain available as read-only where applicable.
+
+Activity Steps
+Manager opens the Dashboard.
+The system displays the Team Summary, including the total number of Direct Reports and their Performance Status counts.
+The system displays the Manager's applicable Active Performance Cycles.
+For each Active Cycle, the system displays the Cycle Name, Frequency, Current Period, Current Stage, applicable deadline, and number of Direct Reports included in the Cycle.
+Manager may select an Active Performance Cycle.
+The system filters My Team records based on the selected Performance Cycle.
+The system displays the Manager's Direct Reports, including the applicable Cycle Name, Period, and Performance Status for each Employee record.
+Manager may search and filter Direct Reports.
+Manager selects the available action for an Employee based on the Employee's current Performance Status.
+The system opens the applicable Employee Performance Details. Reference: UC-010 – View Employee Performance Details – Manager.
+Notifications
+No notification is generated.
+
+Fields
+Field Title
+Field Name
+Optional or Mandatory
+Permission
+Type
+Reviews / Notes
+Total Employees
+Total Direct Reports
+—
+Read
+Number / Card
+Total unique Direct Reports applicable to the Manager.
+Draft Count
+—
+—
+Read
+Number / Card
+Performance Plans currently in Draft.
+Pending Admin Approval Count
+—
+—
+Read
+Number / Card
+Performance Plans awaiting Admin review.
+Pending Employee Review Count
+—
+—
+Read
+Number / Card
+Performance Plans awaiting Employee review.
+Returned for ModificationReturned to Manager Count
+—
+—
+Read
+Number / Card
+Performance Plans returned to the Manager by either Admin or Employee.
+Goals Approved Count
+—
+—
+Read
+Number / Card
+Performance Plans with approved Objectives.
+Evaluation In Progress Count
+—
+—
+Read
+Number / Card
+Employees currently within the applicable Evaluation stage.
+Pending Final Approval Count
+—
+—
+Read
+Number / Card
+Evaluations awaiting final review.
+Finalized Count
+—
+—
+Read
+Number / Card
+Employees with finalized Performance Results.
+Cycle Name
+Cycle Name
+—
+Read
+Text
+Active Performance Cycle applicable to the Manager.
+Frequency
+Frequency
+—
+Read
+Text
+Quarterly / Semi-Annual / Annual.
+Current Period
+Current Period
+—
+Read
+Text
+Current evaluation Period within the Cycle.
+Current Stage
+Current Stage
+—
+Read
+Status
+Applicable workflow stage based on the Performance record's current status.
+Stage Deadline
+Stage Deadline
+—
+Read
+Date
+Deadline of the Current Stage.
+Employees Count
+Employees in Cycle
+—
+Read
+Number
+Number of the Manager's Direct Reports included in the Cycle.
+Select Cycle
+—
+—
+Action
+Card/Action
+Filters Team Summary and My Team records by the selected Cycle.
+Performance Cycle
+
+Optional
+Edit
+Dropdown
+Filters Employee records by Active Performance Cycle.
+Employee Search
+
+Optional
+Edit
+Search
+Search by Employee Name / Employee ID.
+Department
+
+Optional
+Edit
+Dropdown
+Filters Direct Reports by Department.
+Job Title
+
+Optional
+Edit
+Dropdown
+Filters Direct Reports by Job Title.
+Performance Status
+
+Optional
+Edit
+Dropdown
+Filters records by current Performance Status.
+Employee Name
+Employee Name
+—
+Read
+Text
+Direct Report full name.
+Employee ID
+Employee ID
+—
+Read
+Text
+Employee identifier.
+Job Title
+Job Title
+—
+Read
+Text
+Employee Job Title.
+Department
+Department
+—
+Read
+Text
+Employee Department.
+Cycle Name
+Performance Cycle
+—
+Read
+Text / Label
+Performance Cycle associated with the Employee performance record.
+Period
+Current Period
+—
+Read
+Label
+Applicable Period within the Performance Cycle, e.g., Q3, H2, or Annual.
+Performance Status
+Performance Status
+—
+Read
+Status
+Employee's current Performance Status within the applicable Cycle and Period.
+Last Updated
+Last Updated
+—
+Read
+Date
+Latest update to the Employee Performance record.
+Action
+—
+—
+Action
+Button
+Displays the applicable Employee action or View option based on the current Performance Status.
+
+View Employee Performance Details
+Field
+Details
+Procedure Name
+View Employee Performance Details
+Procedure Code
+UC-010
+User
+Manager
+Description
+
+Enables the Manager to view an authorized Direct Report's Performance Details within the selected Performance Cycle and Period, including Objectives, KPIs, Competencies, available Evaluation Results, Previous Performance, and Workflow History.
+
+Pre-Condition
+Manager selects an authorized Direct Report within the context of a selected Performance Cycle and Period. Reference: UC-009 – View Manager Dashboard.
+Business Constraints
+
+Manager may only access authorized Direct Reports.
+Employee Performance Details shall always be displayed within the context of a specific Performance Cycle and Period.
+The Manager may view the Employee's previous completed Period annual Results and available finalized Annual Results.
+Historical Performance records shall remain read-only.
+The Manager shall be able to download available attachments from Historical Performance records for authorized Direct Reports.
+The Manager may view Workflow History for authorized Direct Reports.
+After the Employee approves the Performance Plan, the approved Objectives, KPIs, Targets, and Weights shall be locked and cannot be modified through the standard workflow.
+After the Employee approves the Performance Plan, the approved Objectives, KPIs, Targets, and Weights shall remain locked unless the Admin explicitly returns the Plan to the Manager for modification before the applicable Manager Evaluation stage begins. During the Manager Evaluation stage, the approved Plan shall remain locked.
+Evaluation information shall be displayed only when available for the selected Periodcycle.
+Competencies shall be displayed based on the Competency Template assigned to the Employee's Job Title and shall remain read-only to the Manager except during the applicable Annual Competency Evaluation.
+Available actions shall depend on the Employee's current Performance Status and applicable workflow stage.
+When an Employee's Direct Manager changes during an Active Annual Performance Cycle, the newly assigned Manager shall be authorized to access the Employee's current Performance record, while historical records and previous Manager assignments remain preserved.
+
+Activity Steps
+Manager opens the selected Employee's Performance Details.
+The system displays the Employee information and the applicable Performance Cycle, Frequency, Period, and Performance Status.
+The system displays the Employee's Objectives and associated KPIs for the selected Periodcycle.
+For each KPI, the system displays the configured Target, Weight, Measurement Type, Unit, and Calculation Direction, where applicable.
+If the selected Period cycle has been evaluated, the system displays the available Actual, Achievement %, Weighted KPI Result, Manager Comment, and Evidence/Attachment.
+The system displays the Employee's assigned Competency Template and Competencies.
+Manager may select Previous Performance to view completed previous Annual Performance Results.
+Manager may select a previous Annual Performance Cycle to view its Objectives, KPIs, and available Evaluation Results as read-only.
+Manager may select Previous Performance to view completed previous Period Results and available finalized Annual Results.
+Manager may select a previous Period to view its Objectives, KPIs, and available Evaluation Results as read-only.
+Manager may view the Employee's Workflow History for the selected Performance record.
+If the Employee's current Performance Status requires Manager action, the system displays the applicable action.
+Manager selects the applicable action, where available, and the system directs the Manager to the related procedure.
+If no Manager action is currently required, the Employee Performance record remains read-only.
+Notifications
+No notification is generated
+
+Fields
+Field Title
+Field Name
+Optional or Mandatory
+Permission
+Type
+Reviews / Notes
+Employee Name
+Employee Name
+—
+Read
+Text
+Employee full name.
+Employee ID
+Employee ID
+—
+Read
+Text
+Employee identifier.
+Job Title
+Job Title
+—
+Read
+Text
+Employee's current Job Title.
+Business Unit
+Business Unit
+—
+Read
+Text
+Employee's Business Unit.
+Department
+Department
+—
+Read
+Text
+Employee's Department.
+Direct Manager
+Direct Manager
+—
+Read
+Text
+Employee's Direct Manager.
+Performance Cycle
+Cycle Name
+—
+Read
+Text
+Performance Cycle associated with the displayed record.
+Performance Year
+Performance Year
+—
+Read
+Year
+Applicable Performance Year.
+Frequency
+Frequency
+—
+Read
+Text
+Monthly / Quarterly / Semi-Annual / Annual.
+Period
+Period
+—
+Read
+Text
+Applicable Period, e.g., M5, Q3, H2, or Annual.
+Performance Status
+Performance Status
+—
+Read
+Status
+Employee's current Performance Status within the selected Cycle and Period.
+Category
+Objective Category
+—
+Read
+Text
+Category assigned to the Objective.
+Objective
+Objective
+—
+Read
+Text
+Employee Objective for the selected Periodcycle.
+KPI
+KPI
+—
+Read
+Text
+KPI associated with the Objective.
+Target
+Target
+—
+Read
+Value
+Target defined for the KPI.
+KPI Weight
+KPI Weight
+—
+Read
+Percentage
+Weight assigned to the KPI within the selected Periodcycle.
+Measurement Type
+Measurement Type
+—
+Read
+Text
+Percentage / Amount / Count / Duration, as configured.
+Unit
+Unit
+—
+Read
+Text
+Measurement unit applicable to the KPI.
+Calculation Direction
+Calculation Direction
+—
+Read
+Text
+Higher is Better / Lower is Better / applicable configured calculation method.
+Actual
+Actual
+—
+Read
+Value
+Actual KPI value entered during evaluation.
+Achievement %
+Achievement Percentage
+—
+Read
+Percentage
+KPI Achievement automatically calculated by the system based on Target, Actual, and Calculation Direction.
+Weighted KPI Result
+Weighted KPI Result
+—
+Read
+Percentage
+KPI Result after applying the configured KPI Weight.
+Manager Comment
+Manager Comment
+—
+Read
+Text
+Manager's evaluation comment, when available.
+Evidence / Attachment
+Evidence
+—
+Read
+Attachment
+Supporting evidence attached during KPI evaluation, when available.
+Annual Objectives ResultPeriod Result
+Period Result
+—
+Read
+Percentage
+Overall calculated result for all applicable weighted KPIs within the selected Periodcycle.
+Competency Template
+Competency Template
+—
+Read
+Text
+Template assigned based on the Employee's applicable Job Title.
+Competency
+Competency Name
+—
+Read
+Text
+Competency included in the assigned Template.
+Description
+Competency Description
+—
+Read
+Text
+Description of the Competency.
+Competency Weight
+Competency Weight
+—
+Read
+Percentage
+Configured weight of the Competency within the Template.
+Competency Rating
+Competency Rating
+—
+Read
+Rating
+Displays the Manager's Annual Competency Rating when the Annual Competency Evaluation has been completed.
+Performance Year
+Performance Year
+—
+Read
+Year
+Year of the historical Performance record.
+Cycle Name
+Cycle Name
+—
+Read
+Text
+Applicable historical Performance Cycle.
+Period
+Period
+—
+Read
+Text
+Completed historical Period.
+Period Result
+Period Result
+—
+Read
+Percentage
+Final calculated result of the completed Period.
+Annual Result
+Annual Result
+—
+Read
+Percentage
+Final Annual Performance Result, when available.
+Final Rating
+Final Rating
+—
+Read
+Rating
+Final Performance Rating, when available.
+View Details
+—
+—
+Action
+Button
+Opens the selected historical Performance record as read-only.
+Action
+Workflow Action
+—
+Read
+Text
+Workflow action performed on the Performance record.
+Performed By
+Performed By
+—
+Read
+Text
+User who performed the action.
+From Status
+Previous Status
+—
+Read
+Status
+Status before the workflow action.
+To Status
+New Status
+—
+Read
+Status
+Status after the workflow action.
+Comment
+Comment
+—
+Read
+Text
+Associated workflow comment, when available.
+Date & Time
+Action Date & Time
+—
+Read
+Date/Time
+Date and time of the workflow action.
+Prepare Employee Objectives & KPIs
+Item
+Details
+Procedure Name
+Prepare Employee Objectives & KPIs
+Procedure Code
+UC-011
+User
+Manager/admin
+Description
+Enables the Manager to prepare measurable Objectives and KPIs for an Employee for the applicable Cycle. The Admin may also create a Performance Plan for an Employee who does not have an existing Plan for the same Cycle.
+Enables the Manager to prepare measurable Objectives and KPIs for an Employee for the applicable Cycle and Period using a Template, previous-period Objectives, or manual creation.
+Pre-Condition
+Employee is included in the applicable Annual Performance Cycle, and the Goal Setting stage is open, or the Employee has been authorized for late inclusion by the Admin.Employee is included in the applicable Performance Cycle and the Goal Setting stage is open for the selected Period.
+Business Constraints
+Manager may Start from Scratch, Use exist Template, copy previous objectives.
+The Performance Plan structure shall follow: Category → Objective → KPI(s).
+Each Objective shall be assigned to one Categories selected from the Admin-managed Objective Categories list.
+Category is a searchable multi-select field.
+Objective shall be entered as free text by the Manager.
+One Objective may contain one or more KPIs.
+Each KPI shall be entered as a separate record under its related Objective.
+Each KPI shall include KPI Name/Description, Measurement Type, Unit, Calculation Direction, Target, and Weight.
+Supported Measurement Types shall be: Percentage, Number / Amount, and Duration/Time.
+Available Unit and Calculation Direction shall be controlled based on the selected Measurement Type where applicable.
+Calculation Direction shall support: Higher is Better and Lower is Better.
+Each KPI shall have a measurable Target compatible with the selected Measurement Type and Unit.
+KPI Actual is not entered during Goal Setting. It is entered by the Manager during the Evaluation stage.
+KPI Achievement % and Weighted KPI Result are not manually entered during Goal Setting and shall be calculated by the system during Evaluation.
+KPI weights across the Employee's Performance Plan for the applicable Period cycle shall total 100% before the plan can be submitted.
+The system shall continuously display the current Total KPI Weight.
+The Manager may add, edit, or delete Objectives and KPIs while the Performance Plan is editable.
+Deleting an Objective shall also remove the KPIs created under that Objective, subject to user confirmation.
+An Objective cannot remain without at least one KPI at the time of submission.
+Competencies are not created or modified by the Manager.
+The applicable Competency Template shall be automatically attached according to the Employee's Job Title.
+Competencies shall be visible from the beginning of the Performance Plan but shall be evaluated annually only.
+SMART Analysis shall be available for the KPIs.
+An KPI with a SMART Score below 70% cannot be submitted.
+AI Wording Improvement may suggest improved Objective/KPI wording but shall not automatically overwrite Manager-entered content.
+The Manager must explicitly select Accept Suggestion before suggested wording replaces the Objective text.
+
+At the beginning of a new Performance Periodcycle, the Manager may copy the Objectives and KPIs from the previous Periodcycle. The copied Objectives and KPIs shall become independent editable records for the new Periodcycle, while the finalized previous Period cycle shall remain unchanged and read-only.
+The Admin may initiate Performance Plan creation for an Employee only when no Performance Plan exists for that Employee within the applicable.
+The system shall prevent duplicate Performance Plans for the same Employee, and Cycle.
+Admin-created Performance Plans shall follow the same mandatory field validations, KPI Weight requirements, and SMART Analysis requirements applicable to Manager-created Plans.
+The system shall record the user and role responsible for creating or modifying the Performance Plan.
+For an Employee manually included by the Admin after the Goal Setting stage has closed, the authorized Manager or Admin may prepare the Employee's Performance Plan through the standard workflow without reopening the Goal Setting stage for other Employees.
+Activity Steps
+Manager user opens Goal Setting for the selected Employee.
+System displays Employee information, applicable Performance Cycle, Performance Year, Frequency, Current Period, and Performance Status.
+System displays the applicable Competencies as read-only based on the Employee's Job Title.
+user Manager selects Start from Scratch, Use exist Template, Copy previous periodcycle.
+If Use exist Template is selected, user Manager selects the required Template from the list of templates (public/private) and the system creates an editable copy for the current Employee and Periodcycle.
+If use Copy pervious periodcycle, System creates an editable copy of the Objectives and KPIs from the immediately preceding Performance Periodcycle.
+user Manager selects one or more Objective Categories from the searchable multi-select list.
+user Manager enters the Objective under category.
+user Manager selects Add KPI under the Objective.
+user Manager enters the KPI and defines:
+Measurement Type: Percentage / Number-Amount / Duration-Time
+Calculation Direction: Higher is Better / Lower is Better
+Target
+Weight (%)
+Manager user may use AI Wording Improvement for the objective/KPI.
+System displays the suggested KPI wording without automatically replacing the original content.
+Manager user may Accept Suggestion or Keep Original.
+Manager user runs SMART Analysis for the KPI.
+System analyzes the KPI and displays the Overall SMART Score, evaluation results for each of the five SMART criteria (Specific, Measurable, Achievable, Relevant, and Time-bound).
+System analyzes the KPI and displays the SMART Score and improvement areas.
+If the SMART Score is below 70%, Manager updates the KPI and may rerun the SMART Analysis.
+Manager user may add additional KPIs under the same Objective using Add KPI.
+Manager user may add additional Objectives under same category using Add Objective.
+System continuously calculates and displays the Total KPI Weight (%) across all KPIs in the Performance Plan.
+Manager user may edit or delete Objectives and KPIs while the Performance Plan remains editable.
+Manager user selects Save Draft to save the Performance.
+When Manager user proceeds to submission, system validates that:
+All mandatory Objective and KPI fields are completed.
+Each category contains at least one Objective
+Each Objective contains at least one KPI.
+Each KPI has a valid Measurement Type, Unit, Calculation Direction, Target, and Weight.
+Each KPI SMART Score is at least 70%.
+Total KPI Weight equals 100%.
+If any validation fails, system prevents submission and highlights the fields/KPIs requiring correction.
+If all validations pass, Manager proceeds with UC-012 – Submit Employee Performance Plan.
+Notifications
+No notification is generated when saving a Draft. Submission notifications are covered under UC-012 – Submit Employee Performance Plan.
+
+Fields
+Field Title
+Field Name
+Optional / Mandatory
+Permission
+Type
+Reviews / Notes
+Employee Name
+Employee Name
+Mandatory
+Read
+Text
+Selected Employee.
+Employee ID
+Employee ID
+Mandatory
+Read
+Text
+Selected Employee ID.
+Job Title
+Job Title
+Mandatory
+Read
+Text
+Employee's current Job Title.
+Department
+Employee department
+Mandatory
+Read
+Text
+Employee's department.
+Business unit
+Employee business unit
+Mandatory
+Read
+Text
+Employee's business unit.
+Performance Cycle
+Performance Cycle
+Mandatory
+Read
+Text
+Applicable Performance Cycle.
+Period
+Period
+Mandatory
+Read
+Text
+Current applicable Period.
+Frequency
+Frequency
+Mandatory
+Read
+Text
+Current applicable frequency.
+Objective Category
+Category
+Mandatory
+Edit
+Multi-Select
+Searchable list of Admin-managed Categories. Manager may select one or more Categories.
+Objective
+Objective
+Mandatory
+Edit
+Text Area
+Manager enters one or more objective under each category.
+KPI
+KPI
+Mandatory
+Edit
+Text Area
+Manager enters one or more KPIs under each Objective.
+Measurement Type
+Measurement Type
+Mandatory
+Edit
+Dropdown
+Percentage / Number or Amount / Duration or Time.
+Calculation Direction
+Calculation Direction
+Mandatory
+Edit
+Dropdown
+Higher is Better / Lower is Better.
+Target
+Target
+Mandatory
+Edit
+Number
+Measurable Target for the KPI.
+Weight
+KPI Weight
+Mandatory
+Edit
+Percentage
+Weight assigned to the KPI. Total KPIs weights must equal 100%.
+AI Wording Improvement
+AI Wording Improvement
+Optional
+Action
+Button
+Suggests improved wording for the selected KPI. Manager may Accept or Keep Original.
+SMART Analysis
+SMART Analysis
+Mandatory*
+Action
+Button
+Runs SMART Analysis for the selected KPI.
+SMART Score
+SMART Score
+Mandatory*
+Read
+Percentage
+Calculated for each KPI. Must be at least 70% before submission.
+Improvement Areas
+Improvement Areas
+Optional
+Read
+Text
+Displays the evaluation details for each of the five SMART criteria (Specific, Measurable, Achievable, Relevant, and Time-bound), including the corresponding feedback and areas requiring improvement.
+Displays areas requiring improvement based on SMART Analysis.
+Total KPI Weight
+Total KPI Weight
+Mandatory
+Read
+Percentage
+Automatically calculated across all KPIs. Must equal 100% before submission.
+Add KPI
+Add KPI
+Optional
+Action
+Button
+Adds another KPI under the same Objective.
+Add Objective
+Add Objective
+Optional
+Action
+Button
+Adds another Objective with its own Category and KPIs.
+Delete
+Delete Objective / KPI
+Optional
+Action
+Icon / Button
+Deletes the selected Objective or KPI while the plan is editable.
+Competencies
+Competencies
+Mandatory
+Read
+Section
+Displays the Competencies automatically assigned based on Employee Job Title. Read-only during Goal Setting.
+Save Draft
+Save Draft
+Optional
+Action
+Button
+Saves entered information without submission validation.
+Continue / Submit
+Continue / Submit
+Mandatory
+Action
+Button
+Validates the Performance Plan and proceeds to UC-012.
+KPI Measurement Rules
+Measurement Type
+Target Example
+Calculation Direction
+Evaluation Logic
+Percentage
+95%
+Higher / Lower is Better
+Manager enters Actual % during evaluation.
+Number / Amount
+100
+Higher / Lower is Better
+Manager enters Actual numeric value during evaluation.
+Duration / Time
+4 Hours
+Higher / Lower is Better
+Manager enters Actual duration during evaluation.
+Submit Employee Performance Plan
+Field
+Details
+Procedure Name
+Submit Employee Performance Plan
+Procedure Code
+UC-012
+User
+Manager
+Description
+
+Enables the Manager to submit the completed Employee Performance Plan to Admin for review and approval.
+
+Pre-Condition
+Manager has prepared the Employee Performance Plan. Reference: UC-011.
+Business Constraints
+
+The Performance Plan shall meet all submission requirements defined in UC-011 – Prepare Employee Objectives & KPIs.
+Total KPI Weight shall equal 100%.
+Each KPI shall meet the required SMART Score of at least 70%.
+The applicable Competency Template shall be attached based on the Employee's Job Title.
+The system shall not allow submission while any required validation is not satisfied.
+Upon successful submission, the Performance Plan shall become read-only for the Manager until returned or the next Manager action is required.
+Performance Plans created and submitted by the Admin shall proceed directly to Employee Review without requiring an additional Admin Review or Approval.
+
+Activity Steps
+
+Manager reviews the completed Performance Plan and selects Submit for Admin Review.
+System validates the Performance Plan against the applicable submission requirements.
+If validation fails, system prevents submission, highlights the applicable Objective/KPI or missing requirement, and keeps the Plan editable.
+Manager resolves the identified issues and may submit again.
+If all validations are successfully completed, system submits the Performance Plan.
+System changes the Performance Plan status to Pending Admin Approval.
+System makes the submitted Performance Plan read-only for the Manager while awaiting Admin review.
+System notifies the Admin that the Performance Plan is awaiting review.
+Notifications
+System notifies the Admin that the Performance Plan is awaiting review. NOT-003
+Review Employee Performance Plan
+Field
+Details
+Procedure Name
+Review Employee Performance Plan
+Procedure Code
+UC-013
+User
+Admin
+Description
+
+Enables Admin to review the submitted Objectives/KPIs, weights, SMART results and attached Competency Template and either Approve or Return the Plan.
+
+Pre-Condition
+Employee Performance Plan status is Pending Admin Approval.
+Business Constraints
+
+Admin shall see the complete submitted Plan.
+Admin may add a comment against an individual Objective/KPI.
+Approval does not require a comment.
+Return requires at least one Objective/KPI-level comment.
+Admin shall not directly rewrite Manager Objectives/KPIs during review.The Admin may edit the submitted Performance Plan during Admin Review, including Objectives, KPIs, Targets, and KPI Weights, before the Plan is forwarded to the Employee for review. All changes shall be recorded in the Audit History.
+If Return is selected without a comment, system shall block the action.
+All review actions/comments remain in Workflow History.
+Returned Performance Plans shall be updated and resubmitted to Admin for approval as defined in UC-015.
+Employee Review shall only be initiated after Admin approval, including plans resubmitted following modification requests.Initial Employee Review shall be initiated after Admin approval. Subsequent Employee Reviews following Employee-requested modifications shall not require additional Admin approval.
+Admin modifications shall be subject to the same mandatory validations applicable to Performance Plan submission, including KPI Weight totals and SMART Score requirements.
+The system shall distinguish between Plans modified directly by the Admin and Plans returned to the Manager for modification.
+Admin editing permissions shall not include Evaluation Data or calculated Performance Results.
+
+Activity Steps
+
+Scenario A – Approve:
+1. Admin reviews the Plan.
+2. Admin selects Approve.
+3. Status becomes Pending Employee Review.
+4. Employee is notified.
+Scenario B – Return:
+1. Admin adds comment(s) against applicable Objective/KPI.
+2. Admin selects Return.
+3. System validates that at least one comment exists.
+4. If no comment exists, system blocks Return and displays validation.
+5. If valid, Status becomes Returned for ModificationReturned to Manager.
+6. Manager is notified.
+Scenario – Admin Edits Submitted Performance Plan:
+Admin opens a Performance Plan with status Pending Admin Approval.
+Admin selects Edit.
+System enables editing of the permitted Performance Plan fields.
+Admin updates the required Objectives, KPIs, Targets, or KPI Weights.
+Admin selects Save.
+System validates the updated Performance Plan.
+If validation is successful, the system saves the changes and records them in the Audit History.
+Admin proceeds with the applicable Plan Review action.
+
+Notifications
+
+Employee is notified. NOT-004.
+Manager is notified. NOT-005.
+
+Review Performance Plan – Employee
+Item
+Details
+Procedure Name
+Review Performance Plan
+Procedure Code
+UC-014
+User
+Employee
+Description
+Enables the Employee to review the proposed Performance Plan and either approve it or request modification.
+Pre-Condition
+Performance Plan status is Pending Employee Review.
+Business Constraints
+Employee may review but cannot directly edit Objectives/KPIs.
+Employee may Approve or Request Modification.
+Modification Request requires a comment.
+Once Employee approves, Objectives/KPIs become locked.
+Approved Objectives remain visible throughout Active Performance.
+Employee shall not see internal Workflow/Audit History between manager and admin.
+The first Modification Request shall return to the Performance Plan creator (Manager or Admin) for modification.First Modification Request returns to Manager.
+
+Second and subsequent Modification Requests shall return to the Performance Plan creator (Manager or Admin) and raise the Requires Admin Attention flag.Second and subsequent Modification Requests also return to Manager but raise Requires Admin Attention.
+
+Requires Admin Attention is a flag, not a workflow status.
+The Requires Admin Attention flag shall provide Admin visibility of repeated Employee Modification Requests without blocking the automatic resubmission of the updated Plan to the Employee.
+Activity Steps
+Scenario A – Approve:
+1. Employee reviews Plan.
+2. Employee selects Approve.
+3. System locks Objectives/KPIs.
+4. Status becomes Active Performance according to the applicable stage.
+Scenario B – First Modification Request:
+1. Employee selects Request Modification.
+2. Employee enters mandatory comment.
+3. Status becomes Returned for Modification.
+4. The Performance Plan creator (Manager or Admin) becomes the action owner.
+5. The Performance Plan creator is notified.3. Status becomes Returned to Manager.
+4. Manager becomes action owner.
+5. Manager is notified.
+
+Scenario C – Second/Subsequent Request:
+1. Employee submits another Modification Request with mandatory comment.
+2. Status becomes Returned for Modification.
+3. The Performance Plan creator (Manager or Admin) remains the action owner.2. Status becomes Returned to Manager.
+3. Manager remains action owner.
+
+4. System raises Requires Admin Attention.
+5. Status becomes Returned for Modification.
+6. The Performance Plan creator (Manager or Admin) remains the action owner.5. Admin and Manager are notified.
+
+76. Admin may review the issue and add a comment to Workflow History shows to both employee and manager.
+Notifications
+NOT-006
+NOT-007
+NOT-008
+Update Returned Performance Plan – Manager
+Item
+Details
+Procedure Name
+Update Returned Performance Plan
+Procedure Code
+UC-015
+User
+Manager / admin
+Description
+Enables the authorized Manager or Admin to review, update, and resubmit a Performance Plan returned by the Admin during Plan Review, returned by the Employee through a Modification Request, or exceptionally reopened by the Admin after Employee approval and before the Manager Evaluation stage begins.Enables the Manager to review, update, and resubmit a Performance Plan returned by either Admin during Plan Review or Employee through a Modification Request.
+Pre-Condition
+Performance Plan status is Returned for ModificationReturned to Manager.
+Business Constraints
+
+The system shall clearly identify whether the Plan was returned by Admin or Employee.
+If returned by Admin, Admin comments shall be displayed against the applicable Objective/KPI.
+If returned by Employee, the Employee's Modification Comment shall be displayed to the Manager.
+The authorized action owner (Manager or Admin) may update the applicable Objectives and KPIs while the Plan is in Returned for Modification status.
+Manager may update the applicable Objectives and KPIs while the Plan is in Returned to Manager status.
+Updated KPIs shall continue to satisfy the applicable KPI configuration and SMART Score ≥70% requirements.
+Total KPI Weight shall remain 100% before resubmission.
+Every resubmission shall be submitted to Admin for review before being sent to Employee, regardless of who originally returned the Plan.Upon resubmission of a Performance Plan returned by the Employee, the system shall automatically forward the updated Plan to the Employee for review without requiring Admin approval. The Admin shall retain visibility of the updated Plan and its Workflow History.
+Previous versions, return details, comments, and Workflow History shall remain preserved.
+Requires Admin Attention is a flag and shall not change the Returned for ModificationReturned to Manager workflow status.
+Only the authorized Manager may edit a returned plan. The Manager shall review the return reason, update the plan, and resubmit it to Admin under the same validation rules. Every resubmission, including after repeated Employee modification requests, requires Admin approval before Employee review.The Admin may reopen an Employee-approved Performance Plan and return it to the Manager for modification only before the applicable Manager Evaluation stage begins.
+Reopening an approved Plan shall require an Admin action and a mandatory reason for modification.
+Once reopened, only the authorized Manager may modify the returned Plan.
+The system shall preserve the previously approved Plan version and record the reopening action in the Audit History.
+Reopening and modification of an approved Plan shall not be permitted during the Manager Evaluation stage or after the applicable Performance Results have been finalized.
+Only the authorized action owner (Manager or Admin) may edit a returned Plan. The action owner shall review the return reason, update the Plan, and resubmit it under the applicable validation rules. Plans returned by the Employee shall be automatically forwarded to the Employee for review, while Plans returned by the Admin shall follow the Admin review process.
+
+Activity Steps
+
+Manager opens a Performance Plan with status Returned for ModificationReturned to Manager.
+System displays the return details including Returned By, Return Date, and Return Source.
+System identifies the applicable return scenario:
+Scenario A – Returned by Admin
+System displays Admin comments against the applicable Objective/KPI, allowing the Manager to identify the specific items requiring correction.
+Scenario B – Returned by Employee
+System displays the Employee's Modification Comment and identifies that the Plan was returned based on an Employee Modification Request.
+Scenario C – Reopen Employee-Approved Performance Plan:
+Manager reviews the return reason and updates the permitted Plan fields.
+Manager resubmits the updated Plan through the employee.
+If the Employee Modification Request requires Admin Attention based on the applicable workflow rule, system displays the Requires Admin Attention indicator without changing the Plan status.
+Manager action owner reviews the return comments and updates the applicable Objectives and/or KPIs.
+Manager action owner may add, edit, or delete Objectives/KPIs as required while the Plan remains editable.
+System applies the same applicable Plan and KPI validations defined during Performance Plan preparation and submission, including KPI SMART requirements and Total KPI Weight.
+Action owner selects Resubmit Updated Plan.
+If validation fails, the system prevents resubmission, highlights the applicable issues, and keeps the Plan editable.
+If validation succeeds, the system identifies the original return source and action owner.
+If the Plan was returned by the Employee, the system changes the status to Pending Employee Review and automatically makes the updated Plan available to the Employee.
+If the Plan was returned by the Admin, the system changes the status to Pending Admin Approval and forwards the updated Plan for Admin review.
+The system makes the Plan read-only for the Manager and sends the applicable notification based on the return source. The Admin retains visibility of all resubmitted Plans.
+System records the resubmission and status change in Workflow History.
+Manager selects Resubmit for Admin Review.
+If validation fails, system prevents resubmission, highlights the applicable issues, and keeps the Plan editable.
+If validation succeeds, system resubmits the updated Performance Plan.
+System changes the status from Returned to Manager to Pending Admin Approval.
+System makes the Plan read-only for the Manager while awaiting Admin review.
+System notifies Admin that the updated Performance Plan is awaiting review.
+System records the resubmission and status change in Workflow History.
+
+Notifications
+NOT-009
+Manage Competency Templates
+Item
+Details
+Procedure Name
+Manage Competency Templates
+Procedure Code
+UC-016
+User
+Admin
+Description
+
+Enables Admin to create and manage Competency Templates by defining Competency Groups and Competencies, configuring their weights, and mapping the Template to applicable Job Titles.
+Enables Admin to create and manage Competency Templates by defining Competency Groups and Competencies and mapping the Templates to applicable Job Titles.
+Pre-Condition
+Admin accesses Competency Bank.
+Business Constraints
+
+Competency Templates are managed by Admin.
+Each Template shall contain one or more Competency Groups.
+Each Group shall have a Group Name and contain at least one Competency.
+Admin may add multiple Competencies under the same Group.
+Each Competency shall include its required details as defined in the Competency Template.
+Each Competency shall include its required details and Weight.
+The system shall continuously calculate the total Competency Weight and validate it against the configured required total weight.
+A Template cannot be activated/used unless the required weight validation is satisfied.
+Templates shall be mapped to one or more applicable Job Titles.
+The applicable Template shall automatically attach to Employees based on their Job Title.
+Admin may edit the Template, add/delete Groups, add/delete Competencies, update Competency details, weights, and Job Title mappings only when the Template is not being used by an Active Performance Cycle.
+If the Template is being used by an Active Performance Cycle, its structure, Competencies , and weights shall not be modified or deleted.
+Competencies are evaluated annually only.
+The system shall prevent assigning a Job Title to multiple Competency Templates.
+When mapping Job Titles, the system shall clearly distinguish between Job Titles that are already assigned to a Competency Template and those that are not assigned.
+The system shall provide an optional translation capability for bilingual Group Names. The generated translation shall remain editable by the Admin and shall not be saved without the Admin's confirmation.
+
+Activity Steps
+Admin opens Competency Bank.
+System displays the available Competency Templates.
+Admin selects Create Template or opens an existing Template.
+For a new Template, Admin enters the required Template information.
+Admin selects Add Group.
+System displays a new Group section.
+Admin enters the Group Name EN - AR.
+Admin selects Add Competency under the Group.
+Admin enters the Competency information and assigns its Weight.
+Admin may add additional Competencies under the same Group.
+Admin may select Add Group to create additional Groups, with each Group containing at least one Competency.
+System continuously calculates and displays the Total Competency Weight across the Template.
+System validates the Total Competency Weight against the configured required total.
+Admin maps the Template to one or more applicable Job Titles.
+Admin saves the Template.
+System validates that each Group contains at least one Competency and that the required weight configuration is satisfied before the Template can be activated/used.
+System uses the applicable Template for Employees based on their mapped Job Title.
+Admin may later open an existing Template and select Edit.
+System checks whether the Template is currently used by an Active Performance Cycle.
+If the Template is not used by an Active Performance Cycle, Admin may update Template information, add/edit/delete Groups, add/edit/delete Competencies, update weights, and update Job Title mappings.
+If the Template is used by an Active Performance Cycle, system prevents changes that would modify the active Template configuration.
+System preserves the Template configuration already associated with applicable Performance records.
+Notifications
+NOT-012
+Evaluate Employee Objectives & KPIs – Manager
+Item
+Details
+Procedure Name
+Evaluate Employee Objectives & KPIs
+Procedure Code
+UC-017
+User
+Manager
+Description
+Enables the Manager to evaluate each Employee's approved KPIs individually, view the Bell Curve guidelines and evaluation progress of Direct Reports, and submit evaluations for Admin review according to whether the Employee is in a Non-Final or Final Performance Period.Enables the Manager to evaluate each Employee's approved KPIs individually, view the Bell Curve guidelines and evaluation progress of Direct Reports, save evaluations as Draft, and submit the complete Manager–Year Group for Admin review in accordance with the applicable Bell Curve limits.
+Pre-Condition
+Active Performance stage has ended, Manager Evaluation stage is open, and Employee Objectives/KPIs are approved and locked.
+Business Constraints
+The approved KPI, Target, Measurement Type, Calculation Direction, and Weight shall be read-only during the Manager Evaluation stage.
+The Manager shall enter the Actual value for each KPI.
+The Actual value shall comply with the configured KPI Measurement Type: Percentage, Number/Amount, or Duration/Time.
+The Manager may enter an optional Comment and attach optional supporting Evidence for each KPI.
+If an Employee's calculated Annual Performance Rating is 4 or 5, the Manager shall be required to attach supporting Evidence before submitting the Employee's annual evaluation for review.
+The system shall display guidance encouraging the Manager to provide supporting evidence where applicable.
+The system shall automatically calculate the KPI Achievement % based on the Target, Actual, and Calculation Direction.
+For Higher is Better, Achievement % shall be calculated as: (Actual ÷ Target) × 100.
+For Lower is Better, Achievement % shall be calculated as: (Target ÷ Actual) × 100.
+For Lower is Better, where Actual = 0, Achievement % shall be treated as 100%.
+KPI Achievement % shall reflect the actual calculated achievement.
+The system shall calculate the Weighted KPI Result = Achievement % × KPI Weight.
+The Manager shall not manually override the calculated Achievement % or Weighted KPI Result.
+The system shall continuously calculate and display the Annual Objectives Result based on all evaluated weighted KPIs.
+The system shall continuously calculate and display the current Period Result based on all evaluated weighted KPIs.
+Missing or invalid Actual values shall block submission of the Evaluation.
+The Manager may save the Evaluation as Draft before submission.
+KPI Achievement % shall be capped at a maximum of 100.
+While evaluating an Employee, the system shall display the applicable Bell Curve guidelines and a reference list of the Manager's eligible Direct Reports.
+The list shall display each Employee's Name, Performance Cycle, , Current Period, Evaluation Status, and available Annual Performance Score and provisional Rating, where calculated.
+The system shall clearly identify Employees whose Annual Evaluations are Completed and those whose evaluations are Pending.
+The system shall clearly identify Employees whose Final Period Evaluations are Completed and those whose evaluations are Pending.
+The reference list and Bell Curve guidelines shall remain visible during the Manager's evaluation activities and shall be read-only.
+For a Non-Final Period, the Manager shall submit each Employee's completed Period Evaluation individually to Admin for approval or return. If Admin returns the evaluation, the Manager shall revise the returned evaluation and resubmit it individually.
+The Manager shall complete and save each Employee's Annual Evaluation as Draft without submitting it individually to Admin.
+For an Employee's Final Period, the Manager shall complete and save the evaluation as Draft without submitting it individually to Admin.
+Completed Annual Final Period Evaluations shall remain editable by the Manager until the Manager–Year Group is submitted to Admin.
+The system shall continuously update the evaluation progress and provisional Bell Curve distribution as Final Periodannual Evaluations are completed or modified.
+Group submission shall require completed Final Period annual Evaluations for all eligible Employees assigned to the Manager–Performance-Year group, including Employees whose applicable Cycles have already ended.
+Upon Submit Group, the system shall validate the complete Manager–Year Group against the configured Bell Curve minimum and maximum limits for each Rating. If compliant, the system shall submit all Annual Performance Scores and calculated Ratings to Admin for group-level review. If non-compliant, submission shall be blocked until the distribution meets the required limits.
+Bell Curve compliance validation shall apply to all Manager–Year Groups regardless of the number of Employees.
+The Manager shall not manually override calculated Annual Performance Scores or Ratings to meet Bell Curve limits. Any adjustments shall be made through permitted KPI Actual values or Competency Ratings before group submission.
+Upon Submit Group, the system shall submit the complete Manager–Year Group, including all Annual Performance Scores and calibrated Final Ratings, to Admin for group-level review.
+Once submitted, the group shall be locked for Manager editing unless returned by Admin.
+Activity Steps
+
+Manager opens the Employee Evaluation during the applicable Manager Evaluation stage.
+System displays the Employee's approved Objectives and KPIs for the applicable Performance Periodcycle.
+For each KPI, system displays the KPI, Measurement Type, Target, Calculation Direction, and Weight as read-only.
+Manager enters the Actual value for each KPI.
+Manager may enter an optional Comment and attach supporting Evidence.
+System validates the Actual value against the applicable KPI Measurement Type.
+System calculates the Achievement % according to the configured Calculation Direction.
+System calculates the Weighted KPI Result based on the calculated Achievement % and KPI Weight.
+System continuously calculates and displays the current Period annual Result.
+Manager may select Save Draft and continue the Evaluation later while the Manager Evaluation stage remains open.
+Once the Manager completes an Employee's Annual Evaluation, the system saves the Evaluation as Draft and updates the Employee's Evaluation Status.
+The system updates the Employee's calculated Annual Performance Score and provisional Rating, where the required evaluation inputs are available.
+The system updates the Manager–Year Group's evaluation progress and provisional Bell Curve distribution.
+The Manager may review and modify saved Annual Evaluations within the same Manager–Year Group before group submission.
+The system checks whether all required Annual Evaluations for the Manager–Year Group are completed.
+Once all required evaluations are complete, the Manager reviews the group results and selects Submit Group.
+The system validates the actual Rating distribution against the configured Bell Curve minimum and maximum limits for each Rating.
+If any Rating distribution falls outside the allowed limits, the system blocks group submission and displays the applicable variance.
+If the distribution is compliant, the system submits the complete Manager–Year Group to Admin for final review and locks the submitted Evaluations for Manager editing unless returned by Admin.
+Once the Manager completes an Employee's evaluation, the system identifies whether the applicable Performance Period is the Employee's Final Period.
+If the Period is Non-Final, the Manager submits the evaluation individually to Admin. Admin may Approve or Return the evaluation for modification.
+If the Period is Final, the Manager saves the evaluation as Draft. The system updates the Employee's completion status, calculated Annual Performance Score, and provisional Bell Curve distribution, where applicable.
+The Manager may review and modify any saved Final Period Evaluation within the same Manager–Year Group before group submission.
+The system checks whether all eligible Direct Reports within Active Performance Cycles for the Performance Year have completed their Final Period Evaluations.
+Once all required evaluations are complete, the Manager reviews the group results and selects Submit Group.
+The system applies the final Bell Curve calibration and submits the complete Manager–Year Group to Admin for final review.
+Notifications
+
+NOT-010
+NOT-011
+
+KPI Calculation scenarios
+KPI Scenario
+Formula
+Example
+Result
+Higher is Better – Target Met
+(Actual ÷ Target) × 100
+Target 100, Actual 100
+100%
+Higher is Better – Below Target
+(Actual ÷ Target) × 100
+Target 100, Actual 80
+80%
+Lower is Better – Target Met
+(Target ÷ Actual) × 100
+Target 10, Actual 10
+100%
+Lower is Better – Worse than Target
+(Target ÷ Actual) × 100
+Target 10, Actual 12.5
+80%
+Lower is Better – Actual = 0
+Special Rule
+Target 10, Actual 0
+100%
+Weighted KPI Result = KPI Achievement % × KPI Weight
+Calculate Period & Annual Objectives Result
+Item
+Details
+Procedure Name
+Calculate Period & Annual Objectives Result
+Procedure Code
+UC-018
+User
+System
+Description
+Calculates the Employee's Annual Objectives Result based on the weighted KPI Achievement Results within the applicable Annual Performance Cycle.Calculates the Employee's Objective Result for each completed Period and aggregates completed Period Results into the Annual Objectives Result based on the applicable Cycle Frequency.
+Pre-Condition
+
+KPI Evaluation for the applicable Performance Period has been completed and all required Actual values are available and valid.KPI Evaluation for the applicable Annual Performance Cycle has been completed, and all required Actual values are available and valid.
+Business Constraints
+KPI weights within each Performance Period shall total 100%.
+KPI Achievement % shall be calculated according to the approved KPI calculation rules defined in UC-017.
+KPI Achievement % shall be calculated in accordance with UC-017 and capped at 100% for both calculation directions
+The system shall calculate each KPI's Weighted Result by applying its assigned KPI Weight to its calculated Achievement %.
+The Annual Objectives Result shall equal the sum of all Weighted KPI Results within the applicable Annual Performance Cycle.The Period Result shall equal the sum of all Weighted KPI Results within the applicable Performance Period.
+
+The Annual Objectives Result shall not be manually modified by the Manager or Admin.The Period Result shall not be manually modified by the Manager or Admin.
+
+Each Non-Final Period shall produce an approved Period Result after individual Admin approval.
+The Final Period shall produce a provisional Period Result until the Manager–Year Group is approved.
+Final Period Results shall remain provisional and editable until the complete Manager–Year Group is submitted for Admin Final Review. Once the group is approved, the Final Period Results shall be finalized and locked. Publication shall follow UC-023.
+Completed Period Results shall not be modified when subsequent Performance Periods begin.
+Each Performance Period Result within the same Performance Cycle shall contribute equally to the Annual Objectives Result.
+For a Quarterly Cycle, the Annual Objectives Result shall be the arithmetic average of Q1, Q2, Q3, and Q4 Final Period Results.
+For a Semi-Annual Cycle, the Annual Objectives Result shall be the arithmetic average of H1 and H2 Final Period Results.
+Approved Non-Final Period Results shall become visible to Employees only upon their scheduled publication under UC-023.
+The Annual Objectives Result shall remain provisional while the Annual Evaluation is in Draft status and until the Manager–Year Group receives Admin Final Approval.
+Upon Admin Final Approval of the Manager–Year Group, the Annual Objectives Result shall be finalized and locked. Publication shall follow UC-023.Final Period Results shall remain provisional and hidden until the approved Annual Group is published.
+
+Any modification to a Draft Annual Evaluation, including modifications after an Admin return, shall trigger recalculation of the affected Employee's Annual Objectives Result.Any modification to a Draft Final Period Evaluation shall trigger recalculation of the affected Employee's Annual Objectives Result.
+
+Draft Annual Objectives Results and provisional Annual Performance Results shall not be published to Employees.Draft Final Period Results and provisional Annual Results shall not be published to Employees.
+Activity Steps
+System retrieves the latest saved KPI Evaluation results for the applicable Annual Performance Cycle.
+System retrieves the calculated Achievement % and assigned Weight for each KPI.
+System calculates the Weighted Result for each KPI.
+System sums all Weighted KPI Results to calculate the Annual Objectives Result.
+System stores the Annual Objectives Result as provisional while the Annual Evaluation remains in Draft status.
+Any modification to the Annual Evaluation before group submission or after an Admin return triggers recalculation of the affected Employee's Annual Objectives Result.
+System retains the Annual Objectives Result as provisional until the complete Manager–Year Group receives Admin Final Approval.
+Upon Admin Final Approval, the system finalizes and locks the Annual Objectives Result. Publication shall follow UC-023.
+System provides the Annual Objectives Result for the Overall Annual Performance calculation, together with the Annual Competency Result and the configured component weights, as defined in UC-020.
+System retrieves the applicable KPI Evaluation results for the Performance Period, using approved results for Non-Final Periods and the latest saved evaluation values for the Final Period.
+System retrieves the calculated Achievement % and assigned Weight for each KPI.
+System calculates the Weighted Result for each KPI.
+System sums all Weighted KPI Results to calculate the Period Result.
+For a Non-Final Period, the system stores and locks the Period Result upon Admin approval and schedules its publication for one calendar day after the applicable Admin Period Review stage deadline.
+For the Final Period, the system calculates and stores the Period Result as provisional while the evaluation remains in Draft status. The Manager may modify the evaluation until the complete Manager–Year Group is submitted to Admin.
+If additional Performance Periods remain in the Cycle, each subsequent Period follows its own Goal Setting, Approval, Active Performance, and Evaluation process.
+Once the Employee's Final Period Evaluation is completed and saved, the system retrieves all previously approved Period Results and the provisional Final Period Result within the applicable Performance Cycle.
+The system calculates the provisional Annual Objectives Result based on the configured Cycle Frequency.
+The system updates the provisional Annual Objectives Result whenever the Manager modifies the Final Period Evaluation before group submission or after an Admin return.
+The system retains the Annual Objectives Result as provisional until the Manager–Year Group receives Admin approval. Once approved, the result is finalized and locked.
+The system provides the Annual Objectives Result for the Overall Annual Performance calculation, together with the Annual Competency Result and the configured component weights, as defined in UC-020.
+Notifications
+No notification is generated
+Frequency Calculation
+Frequency
+Performance Periods
+Annual Objectives Result
+Quarterly
+4 — Q1, Q2, Q3, Q4
+(Q1 + Q2 + Q3 + Q4) ÷ 4
+Semi-Annual
+2 — H1, H2
+(H1 + H2) ÷ 2
+Annual
+1 — Annual
+One Annual EvaluationAnnual Period Result
+Evaluate Employee Competencies – Manager
+Item
+Details
+Procedure Name
+Evaluate Employee Competencies
+Procedure Code
+UC-019
+User
+Manager
+Description
+Enables the Manager to perform the Employee's annual Competency Evaluation during the final Performance Period of the Performance Cycle, using the Competency Template assigned to the Employee based on Job Title.Enables the Manager to perform the Employee's Annual Competency Evaluation during the Manager Evaluation stage of the Annual Performance Cycle, using the Competency Template assigned to the Employee based on Job Title.
+Pre-Condition
+The Employee has an applicable Competency Template assigned based on Job Title, and the Manager Evaluation stage of the final Performance Period is open.The Employee has an applicable Competency Template assigned based on Job Title, and the Manager Evaluation stage of the Annual Performance Cycle is open.
+Business Constraints
+
+Competencies shall be visible to the Manager throughout the Performance Year but shall be evaluated once annually only.
+The Annual Competency Evaluation shall be performed during the Manager Evaluation stage of the Annual Performance Cycle.
+The Annual Competency Evaluation shall be performed during the Manager Evaluation stage of the final Performance Period of the Performance Cycle.
+The final Performance Period shall be determined based on the Cycle Frequency: Q4 for Quarterly, H2 for Semi-Annual, or the Annual Period for Annual Frequency.
+The Manager shall evaluate only the Competencies assigned to the Employee through the applicable Competency Template based on the Employee's Job Title.
+Competency Groups, Competencies, descriptions, and configured weights shall be read-only for the Manager.
+The total Competency Weight within the applicable Competency Template shall equal 100%.
+The Manager shall select a whole-number Rating from 1 to 5 for each Competency.
+The Manager shall enter a score from 1 to 100 for each Competency.
+All applicable Competencies shall be evaluated before the Annual Competency Evaluation can be submitted.
+The system shall convert each Competency Rating into a fixed percentage according to the following mapping: Level 1 = 50%, Level 2 = 70%, Level 3 = 85%, Level 4 = 93%, and Level 5 = 100%.
+The system shall calculate each Competency's Weighted Result based on its entered score and configured Competency Weight.
+The Annual Competency Result (%) shall be calculated as the arithmetic average of the converted percentages of all evaluated Competencies.
+The Annual Competency Result shall equal the sum of all Weighted Competency Results within the applicable Competency Template.
+The Annual Competency Result shall be calculated on a 100% scale before applying the configured Competencies Component Weight in the Overall Annual Performance calculation.
+The Manager shall not manually modify or override the calculated Annual Competency Result.
+The Annual Competency Evaluation shall be independent from the Annual Objectives/KPI Evaluation and shall not be included in the Annual Objectives Result.
+The Annual Competency Evaluation shall be independent from the Objectives/KPI evaluation of the final Performance Period and shall not be included in the final Period Objective Result.
+The Annual Objectives Result and Annual Competency Result shall remain separate components until they are combined in the Overall Annual Performance calculation using the configured component weights.
+The Manager shall save the Annual Competency Evaluation as Draft during the Final Period. Permitted Competency Scores shall remain editable until group submission, and may be reopened for the affected Employee(s) after Admin group return. The result shall be finalized and locked only after group approval.The Manager shall save the Annual Competency Evaluation as Draft during the Manager Evaluation stage. Competency Ratings shall remain editable until Manager–Year Group submission and may be reopened for the affected Employee(s) after an Admin group return. The Annual Competency Result shall be finalized and locked only after Admin Final Approval.
+Activity Steps
+During the Manager Evaluation stage of the final annual Performance Period, the system makes the Annual Competency Evaluation available to the Manager.
+Manager opens the Employee's Annual Competency Evaluation.
+System displays the applicable Competency Template based on the Employee's Job Title.
+For each Competency, system displays the Competency Name, Description, and configured Weight as read-only.
+Manager selects a Rating from 1 to 5 for each Competency.
+System validates that all applicable Competencies have been evaluated and that each selected Rating is a whole number between 1 and 5.
+System converts each Competency Rating into its corresponding percentage using the predefined mapping: Level 1 = 50%, Level 2 = 70%, Level 3 = 85%, Level 4 = 93%, and Level 5 = 100%.
+System calculates the Annual Competency Result (%) as the arithmetic average of the converted percentages of all evaluated Competencies.
+Manager enters a score from 1 to 100 for each Competency.
+System validates that all applicable Competencies have been evaluated and that each entered score is within the allowed range.
+System calculates the Weighted Result for each Competency.
+System calculates the Annual Competency Result by aggregating all Weighted Competency Results.
+Manager save the Annual Competency Evaluation.
+System stores the Annual Competency Result for use in the Overall Annual Performance calculation.
+Once finalized, the Annual Competency Evaluation becomes read-only.
+Notifications
+
+No separate notification is generated for the Competency Evaluation. The Manager is notified through the applicable Evaluation Stage notification.
+
+Calculate Overall Annual Performance
+Item
+Details
+Procedure Name
+Calculate Overall Annual Performance
+Procedure Code
+UC-020
+User
+System
+Description
+Retrieves the Employee's Annual Objectives Result and Annual Competency Result, then combines both components using the configured component weights to calculate the Overall Annual Performance % and determine the corresponding Annual Rating.Calculates the Employee's Annual Objectives Result and Annual Competency Result, then combines both components using the configured component weights to determine the Overall Annual Performance % and corresponding Rating.
+Pre-Condition
+The Employee's Annual Objectives Result and Annual Competency Result are available based on the completed Annual KPI Evaluation and Annual Competency Evaluation. The system shall calculate a provisional Overall Annual Performance Score before Manager–Year Group submission and finalize it only after Admin Final Approval.Previously approved Non-Final Period Results, the completed provisional Final Period Evaluation, and the applicable completed Competency Evaluation are available. The system shall calculate a provisional Annual Score before group submission and finalize it only after group approval.
+Business Constraints
+
+The system shall calculate the Objectives Weighted Contribution by applying the configured Objectives Component Weight to the Annual Objectives Result.
+The system shall calculate the Competencies Weighted Contribution by applying the configured Competencies Component Weight to the Annual Competency Result (%) calculated in UC-019 as the arithmetic average of the converted Competency Rating percentages.
+The system shall calculate the Competencies Weighted Contribution by applying the configured Competencies Component Weight to the Annual Competency Result.
+The Overall Annual Performance % shall equal the sum of the Objectives Weighted Contribution and Competencies Weighted Contribution.
+The system shall retain the calculated Annual Objectives Result, Annual Competency Result, component contributions, and Overall Annual Performance %.
+The system shall calculate and store the full-precision Overall Annual Performance Score and corresponding calculated Annual Rating. The calculated Rating shall remain provisional until the Manager–Year Group passes the Bell Curve validation defined in UC-022 and receives Admin Final Approval.
+The system calculates and stores the full-precision Overall Annual Score and Initial Rating. UC-022 determines the Calibrated Final Rating without changing the Score. The system stores both Ratings separately and routes the complete group to Admin for final approval.
+The system shall calculate the Overall Annual Performance Score and determine the Initial Rating based on the configured Rating Scale.
+The system shall apply Bell Curve calibration as defined in UC-022 to determine the Final Annual Rating without modifying the calculated Annual Performance Score.
+The calculated Annual Rating shall be subject to Admin Final Approval and shall become the official Rating upon publication.
+The calibrated Final Annual Rating shall be subject to Admin group approval and shall become the official Rating upon publication.
+The calculated Rating shall not be manually modified by the Manager or Admin.
+The calculated Overall Annual Performance and Rating shall proceed to the applicable Final Review process before finalization.
+The system shall calculate each Employee's provisional Overall Annual Performance Score once the required Final Periodannual Evaluation and applicable Competency Evaluation are completed.
+The system shall retain the Annual Performance Score separately from the Bell Curve-calibrated Final Annual Rating.
+The Manager shall be able to view available provisional Annual Performance Scores for eligible Direct Reports during the Final Period Evaluation stageManager Evaluation stage.
+Any permitted modification to a Draft Final Periodannual Evaluation shall trigger recalculation of the affected Annual Performance Score and refresh the Manager–Year Group's provisional rating distribution.
+The system shall retain full calculation precision when calculating Overall Annual Performance Scores and determining Ratings. Display rounding shall not affect the calculated Rating or Bell Curve validation.
+The system shall retain full calculation precision for ranking Employees during Bell Curve calibration. Display rounding shall not affect ranking.
+Provisional Annual Performance Scores and Ratings shall not be published as Final Annual Results before group approval and publication.
+
+Activity Steps
+System retrieves the Annual Objectives Result and Annual Competency Result.
+System retrieves the configured Objectives and Competencies Component Weights.
+System calculates the weighted contribution of each component.
+System combines both weighted contributions to calculate the Overall Annual Performance %.
+System maps the Overall Annual Performance % to the applicable Rating based on the configured Rating Scale.
+System maps the Overall Annual Performance % to the applicable Rating.
+System stores the calculated Overall Annual Performance % and Rating.
+The calculated Score and Rating remain provisional until the Manager–Year Group passes Bell Curve validation and receives Admin Final Approval through the applicable Final Review process.The result proceeds to the applicable Final Review process.
+Notifications
+No notification is generated by the calculation itself.
+Calculation
+Calculation
+Formula
+Objectives Contribution
+Annual Objectives Result × Objectives Component Weight
+Competencies Contribution
+Annual Competency Result × Competencies Component Weight
+Overall Annual Performance %
+Objectives Contribution + Competencies Contribution
+
+Rating Scale
+Rating
+Performance Range
+1 – Below Expectations
+0–64%
+2 – Partially Meets
+65–74%
+3 – Meets Expectations
+75–89%
+4 – Exceeds
+90–95%
+5 – Outstanding
+96–100% or above
+Review Final Performance Result – Admin
+Item
+Details
+Procedure Name
+Review Final Performance Result
+Procedure Code
+UC-021
+User
+Admin
+Description
+Enables Admin to review the complete calibrated Final Annual Ratingsannual performance score submitted by a Manager for a Performance Year and either approve the entire Manager–Year Group or return the entire group to the Manager for modification and resubmission.
+Pre-Condition
+
+The complete Manager–Year Group has been submitted for Admin Final Review after all required Annual Evaluations are completed and the calculated Rating distribution complies with the configured Bell Curve limits.For a Non-Final Period, an individual Employee Evaluation has been submitted to Admin.
+For Final Annual Review, the complete calibrated Manager–Year Group has been submitted.
+Business Constraints
+Admin shall review Final Annual Ratings at Manager–Year Group level, including eligible Employees across applicable Performance Cycles within the same Performance Year.
+Admin shall be able to view the complete Employee list within the submitted group, including each Employee's Performance Cycle, Annual Objectives Result, Annual Competency Result, Overall Annual Performance %, and calculated Annual Rating.
+Admin shall be able to view the complete Employee list within the submitted group, including each Employee's Performance Cycle, Annual Objectives Result, Annual Competency Result, Overall Annual Performance %, original score-based Rating, and Bell Curve-calibrated Final Annual Rating.
+Admin shall be able to open each Employee's Annual Evaluation details, including the Annual Objectives Result, Annual Competency Result, Objectives, KPIs, Competencies, Actual values, Evidence, Comments, and Workflow History.
+Admin shall be able to open each Employee's evaluation details, including finalized Non-Final Period Results, provisional Final Period Result, Objectives, KPIs, Competencies, Actual values, Evidence, Comments, and Workflow History.
+Admin shall be able to view the configured Bell Curve Minimum and Maximum limits, allowed Employee counts, and actual calculated Rating distribution for the complete Manager–Year Group.
+Admin shall be able to view the configured Bell Curve Minimum and Maximum limits, allowed Employee counts, and calibrated distribution for the complete group.
+Admin shall be able to Approve or Return the entire Manager–Year Group. Individual Final Annual Ratings shall not be approved or returned independently.
+Admin may identify the affected Employee(s) when returning the group and shall provide a mandatory return reason. Upon return, all Annual Evaluations within the Manager–Year Group shall be reopened for Manager modification, and the entire group must pass Bell Curve validation before resubmission.
+Admin shall identify the affected Employee(s) when returning the group and provide a mandatory reason. Only permitted Final Period Evaluation fields for those Employee(s) shall reopen; the entire group remains returned and must be recalibrated and resubmitted.
+A return comment/reason shall be mandatory when returning the group to the Manager.
+When the group is returned, the Manager shall be able to review and modify the permitted Annual KPI Actual values and Competency Ratings for any Employee within the returned Manager–Year Group.
+When the group is returned, the Manager shall be able to review all Employee evaluations within the group and modify the permitted evaluation values for the Final Performance Period only.
+Approved Objectives, KPIs, Targets, Measurement Types, Calculation Directions, KPI Weights, and Competency Definitions shall remain locked and read-only during the Annual Evaluation review and return process.
+Previously approved Non-Final Period Results, approved Objectives, KPIs, Targets, and KPI Weights shall remain locked and read-only.
+The Manager shall resubmit the complete updated Manager–Year Group to Admin, including Employees whose evaluations were not modified.
+Admin shall not manually override system-calculated Annual Performance Scores or calculated Annual Ratings.
+Admin shall not manually override system-calculated Performance Scores or Bell Curve-calibrated Final Annual Ratings.
+Admin approval shall apply to the complete Manager–Year Group and shall finalize and lock all included Annual Performance Scores and calculated Annual Ratings.
+Admin approval shall apply to the complete Manager–Year Group and shall finalize and lock all included Final Annual Ratings.
+Approved Annual Performance Results and Ratings shall proceed to publication only after approval of the entire Manager–Year Group and according to the applicable publication schedule defined in UC-023.
+Final Annual Ratings shall proceed to publication only after approval of the entire group and according to the applicable publication schedule defined in UC-023.
+All group submissions, review decisions, return reasons, Manager modifications, recalculations, resubmissions, and approvals shall be retained in the Workflow / Audit History.
+
+Activity Steps
+Admin opens the submitted Manager–Year Group awaiting Final Review.
+The system displays all Employees included in the group, their Performance Cycles, Annual Performance Scores, calculated Annual Ratings, and actual Bell Curve distribution.
+The system displays all Employees included in the group, their Performance Cycles, Annual Performance Scores, original Ratings, calibrated Final Annual Ratings, and Bell Curve distribution.
+Admin reviews the group and may open individual Employee evaluation details and supporting information.
+Admin selects either Approve Group or Return Group to Manager.
+Scenario A – Approve Group
+a. Admin selects Approve Group.
+b. The system records Admin approval for the complete Manager–Year Group.
+c. The system finalizes and locks all included Final Annual Ratings.
+d. The approved group proceeds to publication according to UC-023.
+Scenario B – Return Group to Manager
+a. Admin selects Return Group to Manager.
+b. The system requires Admin to enter a return reason/comment and allows Admin to identify the affected Employees.
+c. The system changes the entire group status to Returned for ModificationReturned to Manager and notifies the Manager.
+d. The Manager reviews the return comments and may update the permitted Annual KPI Actual values and Competency Ratings for any Employee within the returned group.
+The Manager reviews the return comments and updates the permitted Final Period Evaluation values for the relevant Employees.
+e. The system recalculates the affected Annual Performance Scores and Ratings and revalidates the complete Manager–Year Group against the configured Bell Curve limits.
+The system recalculates the affected Annual Performance Scores and reapplies Bell Curve calibration to the complete Manager–Year Group.
+f. Once the Bell Curve distribution is compliant, the Manager reviews the updated group results and resubmits the complete group to Admin.
+The Manager reviews the updated group results and resubmits the complete group to Admin.
+g. The system changes the group status to Pending Admin Final Review and notifies Admin.
+h. Admin reviews the resubmitted group and may Approve Group or Return Group to Manager again.
+Notifications
+
+NOT-013
+NOT-014
+NOT-015
+NOT-018
+NOT-019
+NOT-020
+Monitor Performance Rating Distribution (BellCurve)
+Item
+Details
+Procedure Name
+Monitor Performance Rating Distribution
+Procedure Code
+UC-022
+User
+Admin, Manager
+Description
+
+Enables Admin and Manager to monitor Bell Curve guidelines and Employee Rating distributions throughout the Performance Year. The system continuously updates the provisional distribution as evaluations are completed or modified and validates the complete Manager–Year Group against the configured Rating limits before submission for Admin Final Review.Enables Admin and Manager to monitor Bell Curve guidelines and Employee rating distributions throughout the Performance Year, while the system automatically calibrates Final Annual Ratings for each Manager–Year Group based on the configured rating limits and Employees' Overall Annual Performance Scores.
+Pre-Condition
+Annual Performance Scores become available as Employees complete their required Final Period Evaluations and applicable Competency Evaluations.Bell Curve guidelines are configured for the applicable Performance Year. Provisional Rating distributions become available as Employees complete their Annual KPI and Competency Evaluations.
+Business Constraints
+
+The Bell Curve shall be used as a guideline throughout the Performance Year and shall be enforced through mandatory distribution validation before Manager–Year Group submission for Admin Final Review.
+The Bell Curve shall be used as a guideline throughout the Performance Year and shall be applied to calibrate Final Annual Ratings before Admin Final Review.
+Bell Curve guidelines and distribution limits shall be calculated based on all eligible Employees assigned to the same Manager within the applicable Performance Year, regardless of team size.
+Bell Curve guidelines shall be calculated based on the eligible Employee population assigned to the same Manager, regardless of Performance Cycle frequency.
+The Manager shall be able to view Bell Curve guidelines and available evaluation results for their own eligible Direct Reports only.
+Admin shall be able to view the Bell Curve guidelines and distributions for each Manager separately.
+Bell Curve guidelines shall be available as a reference during relevant performance activities, including Goal Setting and Performance Evaluation.
+For each Rating level, the system shall display the configured Minimum %, Maximum %, and corresponding allowed Employee counts. The Minimum Allowed Count shall be calculated by rounding down (floor), and the Maximum Allowed Count by rounding up (ceil), based on the Manager–Year Group size.
+For each Rating level, the system shall display the configured Minimum %, Maximum %, and corresponding allowed Employee counts.
+The system shall distinguish between Employees whose Annual Evaluations are completed and Employees whose evaluations remain pending.
+The system shall distinguish between Employees whose Final Period Evaluations are completed and Employees whose evaluations remain pending.
+As Annual Evaluations are completed or modified, the system shall update the provisional Rating distribution against the configured Bell Curve limits.
+As Final Period Evaluations are completed or modified, the system shall update the provisional rating distribution against the configured Bell Curve limits.
+The provisional distribution shall be informational while Annual Evaluations remain in Draft and shall not prevent the Manager from saving or modifying an individual evaluation.
+The provisional distribution shall be informational while Final Period Evaluations remain in Draft and shall not prevent the Manager from saving or modifying an individual evaluation.
+The system shall automatically recalculate the affected Overall Annual Performance Score and Rating and refresh the provisional Rating distribution whenever a Draft Annual Evaluation is modified.
+Once all eligible Employees within the Manager–Year Group have completed their Annual Evaluations, the system shall validate the calculated Rating distribution against the configured Minimum and Maximum allowed Employee counts for each Rating.
+If the number of Employees in any Rating falls outside the allowed Minimum or Maximum, the system shall block group submission and display the distribution violation. The system shall not automatically move any Employee to a different Rating.
+The system shall automatically recalculate the affected Overall Annual Performance Score and refresh the provisional rating distribution whenever a Draft Final Period Evaluation is modified.
+Once all eligible Employees within the Manager–Year Group have completed their Final Period Evaluations, the system shall calibrate Final Annual Ratings based on their full-precision Overall Annual Performance Scores, including decimal values.
+If the number of Employees assigned to a Rating exceeds its configured Maximum, the system shall move the lowest-scoring Employee within that Rating to the next lower Rating. The process shall repeat where necessary until the applicable allocation limits are satisfied.
+The system shall enforce the configured Minimum and Maximum allocation limits for all Manager–Year Groups, regardless of team size, with no exceptions.
+The system shall enforce the configured Minimum and Maximum allocation limits according to the approved Bell Curve rules.
+Bell Curve calibration shall adjust Final Annual Ratings only. The original calculated Overall Annual Performance Scores shall remain unchanged.
+Admin and Manager shall not manually override calculated Performance Scores or Ratings. To change an Employee's Rating, the Manager shall modify the permitted KPI Actual values or Competency Ratings, and the system shall recalculate the Overall Annual Performance Score and corresponding Rating.
+Admin and Manager shall not manually override calculated Performance Scores or calibrated Final Annual Ratings through the Bell Curve.
+The system shall display the calculated Overall Annual Performance Score and corresponding Rating for each evaluated Employee, together with the Manager–Year Group's provisional or final Rating distribution.
+The system shall display the original score-based Rating and the calibrated Final Annual Rating for each evaluated Employee.
+Final Annual Ratings shall not be finalized or published until the entire Manager–Year Group has been approved by Admin.
+Bell Curve guidelines, provisional distributions, and unpublished Annual Ratings shall not be visible to Employees.
+The Manager shall be able to view the configured Bell Curve Minimum %, Maximum %, and allowed Employee counts for each Rating from the start of the Manager Evaluation stage, before entering any Employee evaluations.
+If an Employee's Direct Manager changes during the Annual Performance Cycle, the Employee shall be included in the new Manager's Manager–Year Group for Bell Curve validation. Historical Manager assignments and evaluation records shall be preserved.
+Activity Steps
+The system displays the configured Bell Curve guidelines, including Minimum %, Maximum %, and allowed Employee counts for each Rating, from the start of the Manager Evaluation stage.
+The system checks whether all eligible Employees within the Manager–Year Group have completed their required Annual Evaluations.
+If evaluations remain pending, the system continues to display the provisional Rating distribution and pending Employee count without enabling group submission.
+As Annual Evaluations are completed or modified, the system recalculates the affected Overall Annual Performance Scores and Ratings and updates the provisional distribution.
+Once all required evaluations are completed, the system validates the complete Manager–Year Group against the configured Minimum and Maximum allowed Employee counts for each Rating.
+If any Rating falls outside its allowed limits, the system displays the violation and blocks group submission.
+The Manager reviews and modifies the permitted KPI Actual values or Competency Ratings for the relevant Employees. The system recalculates the affected Scores and Ratings and revalidates the complete group.
+Once the distribution is compliant, the Manager reviews the group results and submits the complete Manager–Year Group to Admin for Final Review.
+If Admin returns the group, all Annual Evaluations within the group are reopened for Manager modification. The system recalculates affected Scores and Ratings and revalidates the complete group before resubmission.
+Following Admin approval, the calculated Annual Performance Scores and Ratings are finalized and made eligible for publication according to UC-023.
+The system checks whether all eligible Employees within the Manager have completed their required Final Period Evaluations.
+If evaluations remain pending, the system continues to display the provisional distribution and pending Employee count without enabling group submission.
+Once all required evaluations are completed, the system ranks Employees by their full-precision Overall Annual Performance Scores and applies Bell Curve calibration.
+If a Rating exceeds its configured Maximum, the system moves the lowest-scoring Employee in that Rating to the next lower Rating and repeats the adjustment where necessary, subject to the configured allocation rules.
+The system displays the original score-based Ratings, calibrated Final Annual Ratings, and final distribution for the complete Manager.
+The Manager reviews the group results and submits the complete Manager–Year Group to Admin for Final Review.
+If Admin returns the group, the Manager reviews the return reasons and modifies the permitted Final Period Evaluations.
+The system recalculates affected Annual Performance Scores and recalibrates the complete Manager–Year Group.
+The Manager resubmits the complete group to Admin for Final Review.
+Following Admin approval, the calibrated Final Annual Ratings are finalized and made eligible for publication according to UC-023.
+Notifications
+
+No notification is generated.
+
+BellCurve Example
+Employee
+Overall Performance Score
+Original Calculated Rating
+Employee A
+98.75%
+5 – Outstanding
+Employee B
+97.42%
+5 – Outstanding
+Employee C
+97.41%
+5 – Outstanding
+
+Example Assumption: The Maximum Allowed Count for Rating 5 is 2 Employees.
+
+All three Employees have a calculated Rating of 5 – Outstanding, while the Maximum Allowed Count is 2. The system shall display the Bell Curve violation and block Manager–Year Group submission.
+The Manager shall review and modify permitted evaluation inputs as needed. The system shall recalculate the affected Annual Performance Scores and Ratings and revalidate the complete group.
+The system shall not automatically downgrade or reassign any Employee's Rating.
+Although all three Employees initially qualify for Rating 5 (Outstanding), only two Employees are allowed. The system compares their Overall Performance Scores, including decimal values, and automatically moves the Employee with the lowest score (97.41%) to Rating 4.
+If Rating 4 exceeds its allowed limit, the system repeats the same process by moving the lowest-scoring Employee in Rating 4 to Rating 3.
+Finalize & Publish Performance Results
+Item
+Details
+Procedure Name
+Finalize & Publish Performance Results
+Procedure Code
+UC-023
+User
+Admin / System
+Description
+Enables the system to finalize and publish approved Annual Performance Results for each Manager–Year Group according to the applicable Admin Final Review deadline and publication rules.Enables the system to finalize and publish approved Non-Final Period Results individually and approved Final Annual Performance Results at Manager, according to the applicable Admin Review deadlines and publication rules.
+Pre-Condition
+The applicable Non-Final Period Evaluation has been approved individually by Admin, or the complete Manager–Year Group of Final Annual Ratings has been calibrated and approved by Admin.The complete Manager–Year Group has passed Bell Curve validation and received Admin Final Approval.
+Business Constraints
+Non-Final Period Results
+Each Non-Final Period Evaluation shall be reviewed and approved individually by Admin.
+Upon Admin approval, the system shall finalize and lock the applicable Non-Final Period Result.
+Approved Non-Final Period Results shall not be published immediately upon Admin approval.
+The system shall publish each approved Non-Final Period Result one calendar day after the applicable Admin Period Review stage deadline.
+A Non-Final Period Result that has not been approved by Admin shall not be published.
+Final Annual Performance Results
+Annual Performance Results shall not be finalized until the complete Manager–Year Group has passed Bell Curve validation and received Admin Final Approval.
+Final Annual Performance Results shall not be finalized until the complete Manager Group has undergone Bell Curve calibration and received Admin Final Review approval.
+Admin approval shall apply to the entire Manager–Year Group. Individual Annual Performance Results and Ratings shall not be finalized or published independently.
+Admin approval shall apply to the entire Manager Group. Individual Final Annual Ratings shall not be finalized or published independently.
+Once the Manager Group is approved by Admin, the system shall finalize and lock all included Final Annual Performance Results.
+Finalized Annual Performance Results shall not be published immediately upon Admin approval.
+The system shall publish the approved Final Annual Performance Results one calendar day after the applicable Admin Final Review stage deadline.
+Only approved Manager Groups shall be eligible for Annual Results publication.
+Draft, Returned, or Pending Admin Review Annual Results shall not be published.
+Published Performance Results shall remain read-only and shall not be reopened or modified.
+Results Visibility
+Employees shall be able to view their own published Period and Final Annual Performance Results only.
+Managers shall be able to view published Performance Results for their authorized Direct Reports.
+Department Managers shall be able to view published Performance Results for Employees within their authorized Department scope.
+Admin shall be able to view Performance Results for all Employees for performance management administration.
+HCD shall be able to view Performance Results for all Employees across the organization, regardless of reporting line, Department, or organizational hierarchy.
+The system shall record finalization and publication dates, statuses, and relevant actions in the Audit History.
+Activity Steps
+The system identifies whether the approved evaluation relates to a Non-Final Period or a Final Annual Performance Result.
+Scenario A – Non-Final Period Result Publication
+Admin approves the Employee's Non-Final Period Evaluation individually.
+The system finalizes and locks the approved Period Result.
+The system retains the finalized Period Result without publishing it until the applicable publication date.
+The system monitors the applicable Admin Period Review stage deadline.
+One calendar day after the Admin Period Review stage deadline, the system publishes the approved Non-Final Period Result.
+Scenario B a – Final Annual Performance Result Publication
+Admin reviews and approves the complete Manager Group of calibrated Final Annual Ratings, as defined in UC-021.
+The system finalizes and locks all Final Annual Performance Results included in the approved group.
+The system retains the finalized Annual Performance Results without publishing them until the applicable publication date.
+The system monitors the applicable Admin Final Review stage deadline.
+One calendar day after the Admin Final Review stage deadline, the system publishes the approved Final Annual Performance Results for the applicable Manager–Year Group.
+Results Availability
+The system makes the published Annual Performance Results available according to the applicable role-based visibility rules.
+The system makes the published Period or Final Annual Performance Results available according to the applicable role-based visibility rules.
+Employees may view their own published Performance Results.
+Managers and Department Managers may view published Performance Results within their authorized scope, while Admin and HCD may view results according to their assigned permissions.
+The system records the publication date and updates the applicable result status to Published.
+
+Notifications
+NOT-016
+NOT-021
+View Performance Results – Employee
+Item
+Details
+Procedure Name
+View Performance Results – Employee
+Procedure Code
+UC-024
+User
+Employee
+Description
+Enables the Employee to view their own finalized Performance Period Results as they become available and their Final Annual Performance Result after publication.
+Pre-Condition
+At least one Performance Period Result has been finalized and made available to the Employee, or the Final Annual Performance Result has been published.The Employee's Annual Performance Result has been finalized and published in accordance with UC-023.
+Business Constraints
+Employee shall be able to view their own Performance Results only.
+Employees shall be able to view their Annual Performance Results only after publication in accordance with UC-023. Individual KPI Actuals, Achievement Percentages, Weighted KPI Results, Manager Comments, and supporting Evidence shall not be displayed to Employees.
+Employees shall view approved Non-Final Period Results only after scheduled publication. Final Period Results and Final Annual Ratings shall remain hidden until annual group publication. Individual KPI Actuals, Achievement Percentages, Comments and Evidence shall not be displayed to Employees.
+The Employee shall be able to view their approved Objectives, KPIs, Targets, Annual Objectives Result, Annual Competency Result, Overall Annual Performance %, and calculated Final Annual Rating after publication. Individual KPI evaluation details, including Actual, Achievement %, Weighted KPI Result, Manager Comments, and supporting Evidence, shall not be visible to the Employee.
+The Employee shall be able to view their approved Objectives, KPIs, Targets, finalized Period Results, Annual Objectives Result, Annual Competency Result, Overall Annual Performance %, and Final Rating, where applicable. Individual KPI evaluation details, including Actual, Achievement %, Weighted KPI Result, Manager Comments, and supporting Evidence, shall not be visible to the Employee.
+All finalized and published results shall be read-only and shall not be modified by the Employee.
+
+Activity Steps
+Employee opens Performance Results.
+System displays the applicable Performance Year and Performance Cycle.
+System displays the Employee's published Annual Performance Result, if available, in accordance with UC-023.
+System displays the approved Objectives, KPIs, and Targets as read-only, without displaying individual KPI evaluation details.
+System displays the Annual Objectives Result, Annual Competency Result, Overall Annual Performance %, and Final Annual Rating.
+Employee may view the supporting approved Objectives, KPIs, and annual Competency results.
+System displays all published result information as read-only.
+Employee opens Performance Results.
+System displays the applicable Performance Year and Performance Cycle.
+System displays the available finalized Performance Period Results based on the Cycle Frequency.
+Employee selects a completed Performance Period.
+System displays the finalized Objectives, KPIs, Targets, and overall Period Result as read-only, without displaying individual KPI evaluation details.
+Once the Final Annual Performance Result has been published in accordance with UC-023, system displays the Annual Objectives Result, Annual Competency Result, Overall Annual Performance %, and Final Rating.
+Employee may view the supporting finalized Objectives, KPIs, and annual Competency results.
+System displays all finalized result information as read-only.
+Notifications
+No notification is generated by viewing the Result. Publication notification is covered under UC-023.The Employee shall receive a notification when their Performance Results are published, as defined in UC-023
+
+Manage Objective Categories
+Item
+Details
+Procedure Name
+Manage Objective Categories
+Procedure Code
+UC-025
+User
+Admin
+Description
+Enables Admin to add, edit, delete, and view Objective Categories available for Managers when creating or updating Employee Performance Plans.
+Pre-Condition
+Admin is authenticated.
+Business Constraints
+Only Admin shall be authorized to add, edit, and delete Objective Categories.
+Category Name shall be mandatory and unique.
+Admin shall be able to view and search existing Objective Categories.
+Admin shall be able to add new Objective Categories.
+Admin shall be able to edit existing Objective Categories.
+Admin shall be able to delete existing Objective Categories.
+Any Category addition, modification, or deletion shall be reflected immediately in the Category selection list for new Performance Plans and existing editable Performance Plans.
+Changes to Objective Categories shall not retroactively modify previously approved or finalized Performance Plans.
+Deleting a Category shall remove it from the available selection list without deleting its historical references.
+All Category additions, modifications, and deletions shall be recorded in Audit History.
+
+Activity Steps
+
+Scenario A – View Objective Categories
+Admin opens Objective Category Management.
+System displays all currently available Objective Categories.
+Admin may search for a Category by Name.
+Scenario B – Add Objective Category
+Admin selects Add Category.
+System displays the Category creation form.
+Admin enters the Category Name.
+Admin selects Save.
+System validates that the Category Name is provided and unique.
+If valid, system saves the Category.
+The new Category becomes immediately available for new or editable Performance Plans.
+Scenario C – Edit Objective Category
+Admin selects an existing Category and clicks Edit.
+System displays the current Category Name.
+Admin updates the Category Name.
+Admin selects Save.
+System validates the updated information.
+If valid, system saves the changes.
+The updated Category becomes immediately available for new or editable Performance Plans.
+Previously approved or finalized Performance Plans remain unchanged.
+Scenario D – Delete Objective Category
+Admin selects an existing Category and clicks Delete.
+System displays a deletion confirmation message.
+Admin confirms the deletion.
+System removes the Category from the available selection list.
+The deleted Category is no longer available for new selection or updates.
+Previously approved or finalized Performance Plans retain their original Category information.
+Notifications
+No business notification is generated. The system displays a confirmation message after successfully adding, editing, or deleting a Category.
+
+Fields
+Field Title
+Field Name
+Optional / Mandatory
+Permission
+Type
+Reviews / Notes
+Category Name
+Category Name
+Mandatory
+Read / Edit
+Text
+Unique Category Name
+Search
+Search Category
+Optional
+Edit
+Search
+Search by Category Name
+Add Category
+Add Category
+—
+Action
+Button
+Opens Category creation form
+Edit Category
+Edit
+—
+Action
+Button
+Opens selected Category for editing
+Delete Category
+Delete
+—
+Action
+Button
+Displays deletion confirmation
+Save
+Save
+—
+Action
+Button
+Validates and saves changes
+Cancel
+Cancel
+—
+Action
+Button
+Discards unsaved changes
+Configure Annual Performance Component Weights Manage Objective Categories
+Item
+Details
+Procedure Name
+Configure Annual Performance Component Weights
+Procedure Code
+UC-026
+User
+Admin
+Description
+Enables Admin to configure the weight distribution between Annual Objectives and Annual Competencies used to calculate the Employee's Overall Annual Performance Result.
+Pre-Condition
+Admin is authenticated and has permission to access Performance Configuration.
+Business Constraints
+Only Admin shall be authorized to configure Annual Performance Component Weights.
+The Overall Annual Performance Result shall consist of two components: Annual Objectives Result and Annual Competency Result.
+The initial component weights shall be:
+Objectives: 80%
+Competencies: 20%
+Admin shall be able to update the Objectives Component Weight and Competencies Component Weight.
+Both component weights shall be mandatory.
+Each component weight shall be between 0% and 100%.
+The sum of the Objectives Component Weight and Competencies Component Weight shall equal exactly 100%.
+The system shall prevent saving if the total component weight is not equal to 100%.
+The configured weights shall be applied when calculating the Overall Annual Performance Result, as defined in UC-020.
+Changes to the component weights shall not retroactively modify finalized Performance Results.
+The system shall preserve previously applied weight configurations for historical Performance Results.
+All configuration changes shall be recorded in Audit History, including previous values, new values, modified by, and modification date/time.
+Activity Steps
+Scenario A – View Performance Component Weights
+Admin accesses Performance Configuration.
+System displays the current Objectives and Competencies Component Weights.
+System displays the total configured weight.
+Scenario B – Update Performance Component Weights
+Admin selects Edit.
+System enables the Objectives and Competencies Component Weight fields.
+Admin updates one or both component weights.
+System automatically recalculates the Total Weight.
+Admin selects Save.
+System validates that both values are within the allowed range and their total equals 100%.
+If validation fails, system displays an error and prevents saving.
+If validation succeeds, system saves the updated configuration.
+System records the change in Audit History.
+System displays a confirmation message.
+
+Notifications
+No business notification is generated. The system displays a confirmation message upon successful configuration update.
+
+Fields
+Field Title
+Field Name
+Optional / Mandatory
+Permission
+Type
+Reviews / Notes
+Objectives Component Weight
+Objectives Weight (%)
+Mandatory
+Read / Edit
+Percentage
+Initial value: 80%.
+Competencies Component Weight
+Competencies Weight (%)
+Mandatory
+Read / Edit
+Percentage
+Initial value: 20%.
+Total Weight
+Total Component Weight (%)
+—
+Read
+Percentage
+Automatically calculated. Must equal 100%.
+Edit
+Edit Configuration
+—
+Action
+Button
+Enables editing the configured weights.
+Save
+Save Configuration
+—
+Action
+Button
+Validates and saves updated weights.
+Cancel
+Cancel
+—
+Action
+Button
+Discards unsaved changes.
+
+Manage Notification Templates
+Item
+Details
+Procedure Name
+Manage Notification Templates
+Procedure Code
+UC-027
+User
+Admin
+Description
+This procedure enables authorized Admin users to view and manage the content of predefined system notification templates, including notification subjects and message bodies in Arabic and English.
+Business Constraints
+Only authorized Admin users shall be permitted to manage notification template content.
+All notification templates, triggers, and recipients shall be predefined by the system.
+The Admin shall be able to update the Arabic and English subjects and message bodies of existing notification templates.
+The Admin shall not be permitted to create or delete notification types or modify their triggers, recipients, or workflow conditions.
+Changes to notification content shall apply to future notifications only.
+Activity Steps
+Admin opens Notification Management.
+System displays the list of predefined notification templates.
+Admin selects a notification template.
+System displays the notification details.
+Admin selects Edit.
+System allows the Admin to update the Notification Subject and Message Body in Arabic and English.
+Admin selects Save.
+System validates the required fields.
+If validation is successful, the system saves the updated content.
+The system uses the updated template content for subsequent notifications triggered by the applicable workflow.
+
+Notifications
+
+Workflow
+
+Notifications & Messages
+Code
+Recipient
+Notification Subject
+NOT Text (En)
+NOT Text (Ar)
+Related UC
+NOT-001
+Manager
+تفعيل دورة إدارة الأداء - Performance Cycle Activation
+Dear [Manager Name],
+We would like to inform you that Performance Cycle [Cycle Name] for [Performance Year] has been activated. Kindly review your assigned employees and proceed with the required performance planning activities within the specified timeline.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المدير]،
+نود إشعاركم بأنه تم تفعيل دورة إدارة الأداء [اسم الدورة] لعام [سنة الأداء]. نأمل منكم مراجعة الموظفين التابعين لكم والبدء في إجراءات تخطيط الأداء وفق المواعيد المحددة.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-006
+NOT-002
+Affected Users
+تحديث الموعد النهائي لمرحلة إدارة الأداء - Performance Stage Deadline Update
+Dear [Recipient Name],
+Please be informed that the deadline for [Stage Name] within [Cycle / Period] has been updated to [New Date]. Kindly review the revised timeline and ensure that any pending activities are completed before the updated deadline.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المستلم]،
+نود إشعاركم بأنه تم تحديث الموعد النهائي لمرحلة [اسم المرحلة] ضمن [الدورة / الفترة] ليصبح [التاريخ الجديد]. نأمل منكم الاطلاع على الموعد المحدّث واستكمال الإجراءات المطلوبة قبل انتهائه.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-008
+NOT-003
+Admin
+خطة الأداء بانتظار المراجعة - Performance Plan Awaiting Review
+Dear [Admin Name],
+The Performance Plan for [Employee Name] has been submitted by [Manager Name] for [Cycle / Period] and is now awaiting your review. Kindly review the submitted plan and take the appropriate approval or return action.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم مسؤول النظام]،
+نفيدكم بأنه تم تقديم خطة الأداء الخاصة بالموظف [اسم الموظف] من قِبل المدير [اسم المدير] للفترة [الدورة / الفترة]، وهي الآن بانتظار مراجعتكم. نأمل منكم الاطلاع على الخطة واتخاذ الإجراء المناسب بالاعتماد أو الإعادة للتعديل.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-012
+NOT-004
+Employee
+خطة الأداء متاحة للمراجعة - Performance Plan Ready for Review
+Dear [Employee Name],
+Your Performance Plan for [Cycle / Period] is now available for your review.
+Kindly review the assigned Objectives and KPIs, and proceed with either approving the plan or requesting modifications, if needed, within the specified timeline.
+Best regards,
+Talent Management Team.
+Performance Management Team
+عزيزي/عزيزتي [اسم الموظف]،
+نود إشعاركم بأنه تمت مراجعة خطة أدائكم للفترة [الدورة / الفترة] واعتمادها من الجهة المختصة، وأصبحت متاحة لاطلاعكم. نأمل منكم مراجعة الأهداف ومؤشرات الأداء المحددة لكم، ثم اعتماد الخطة أو تقديم طلب تعديل عند الحاجة.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-013
+NOT-005
+Manager
+إعادة خطة الأداء للتعديل - Performance Plan Returned for Modification
+Dear [Manager Name],
+The Performance Plan for [Employee Name] has been returned following the Admin review. Kindly review the provided comments, complete the required modifications, and resubmit the updated plan for approval.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المدير]،
+نود إشعاركم بأنه تمت إعادة خطة الأداء الخاصة بالموظف [اسم الموظف] بعد مراجعتها من قِبل مسؤول إدارة الأداء. نأمل منكم الاطلاع على الملاحظات وإجراء التعديلات المطلوبة، ثم إعادة تقديم الخطة للاعتماد.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-013
+NOT-006
+Manager
+اعتماد خطة الأداء من الموظف - Employee Performance Plan Approval
+Dear [Manager Name],
+We are pleased to inform you that [Employee Name] has reviewed and approved their Performance Plan for [Cycle / Period]. The plan is now confirmed and will proceed according to the applicable performance cycle stages.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المدير]،
+نفيدكم بأن الموظف [اسم الموظف] قد راجع واعتمد خطة أدائه للفترة [الدورة / الفترة]. وبذلك أصبحت الخطة معتمدة، وسيتم استكمال مراحل دورة إدارة الأداء وفق الجدول المحدد.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-014
+NOT-007
+Manager
+طلب تعديل خطة الأداء - Performance Plan Modification Request
+Dear [Manager Name],
+[Employee Name] has submitted a modification request regarding their Performance Plan for [Cycle / Period]. Kindly review the employee's comments and make the necessary updates before resubmitting the plan. Best regards, Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المدير]،
+نود إشعاركم بأن الموظف [اسم الموظف] قد تقدم بطلب تعديل على خطة أدائه للفترة [الدورة / الفترة]. نأمل منكم مراجعة ملاحظات الموظف وإجراء التعديلات اللازمة، ثم إعادة تقديم الخطة لاستكمال إجراءات الاعتماد.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-014
+NOT-008
+Manager, Admin
+طلب تعديل إضافي – Additional Modification Request
+Dear [Recipient Name],
+[Employee Name] has submitted an additional modification request for their Performance Plan for [Cycle / Period]. Kindly review the request and previous comments, and take the necessary action in accordance with the approval process.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المستلم]،
+نفيدكم بأن الموظف [اسم الموظف] قد تقدم بطلب تعديل إضافي على خطة أدائه للفترة [الدورة / الفترة]. نأمل منكم مراجعة الطلب والملاحظات السابقة، واتخاذ الإجراء المناسب.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-014
+NOT-009
+Admin
+خطة الأداء المحدّثة بانتظار المراجعة - Updated Performance Plan Awaiting Review
+Dear [Admin Name],
+The updated Performance Plan for [Employee Name] has been resubmitted by [Manager Name] following the Employee's modification request and has been automatically forwarded to the Employee for review. The updated Plan is available for your visibility.The updated Performance Plan for [Employee Name] has been resubmitted by [Manager Name] following the requested modifications. Kindly review the updated plan and proceed with the appropriate approval action.
+Best regards,
+Performance Management Team.
+عزيزي/عزيزتي [اسم مسؤول النظام]،
+تمت إعادة إرسال خطة الأداء المحدثة الخاصة بالموظف [اسم الموظف] من قِبل [اسم المدير]، وذلك بناءً على طلب التعديل المقدم من الموظف، وتم تحويل الخطة تلقائيًا إلى الموظف لمراجعتها.
+يمكنكم الاطلاع على الخطة المحدثة للعلم والمتابعة.
+نفيدكم بأنه تمت إعادة تقديم خطة الأداء المحدّثة الخاصة بالموظف [اسم الموظف] من قِبل المدير [اسم المدير] بعد استكمال التعديلات المطلوبة. نأمل منكم مراجعة الخطة المحدّثة واستكمال إجراءات الاعتماد.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-015
+NOT-010
+Manager
+بدء مرحلة تقييم الأداء - Performance Evaluation Stage Started
+Dear [Manager Name],
+The Manager Evaluation stage for [Cycle / Period] has commenced. Kindly review the performance of your assigned employees, complete their KPI evaluations, and submit the results before [Deadline].
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المدير]،
+نود إشعاركم ببدء مرحلة تقييم الأداء للفترة [الدورة / الفترة]. نأمل منكم مراجعة أداء الموظفين التابعين لكم، واستكمال تقييم مؤشرات الأداء الخاصة بهم، وتقديم النتائج قبل [الموعد النهائي].
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-017
+NOT-011
+Manager
+تذكير بالموعد النهائي لتقييم الأداء - Performance Evaluation Deadline Reminder
+Dear [Manager Name],
+This is a reminder that the deadline for completing Performance Evaluations for [Cycle / Period] is [Deadline]. Kindly ensure that all outstanding employee evaluations are completed and submitted within the specified timeframe.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+عزيزي/عزيزتي [اسم المدير]،
+نود تذكيركم بأن الموعد النهائي لاستكمال تقييمات الأداء للفترة [الدورة / الفترة] هو [الموعد النهائي]. نأمل منكم استكمال تقييمات الموظفين المعلقة وتقديمها خلال الفترة المحددة، لضمان سير إجراءات إدارة الأداء وفق الجدول المعتمد.
+مع خالص التحية،
+فريق إدارة الأداء.
+UC-017
+NOT-012
+Admin
+عدم وجود نموذج كفاءات للمسمى الوظيفي - Missing Competency Template
+Dear [Admin Name],
+We would like to bring to your attention that no Competency Template is currently assigned to [Job Title]. Kindly review the competency configuration and assign the appropriate template to ensure the applicable performance evaluation requirements are met.
+Best regards,
+عزيزي/عزيزتي [اسم مسؤول النظام]،
+نود إحاطتكم بأنه لا يوجد نموذج كفاءات مرتبط حاليًا بالمسمى الوظيفي [المسمى الوظيفي]. نأمل منكم مراجعة إعدادات الكفاءات وربط النموذج المناسب، لضمان استكمال متطلبات تقييم الأداء ذات العلاقة.
+مع خالص التحية،
+
+UC-016
+NOT-013
+Admin
+مراجعة نتائج الأداء السنوي للمجموعة - Annual Performance Group Awaiting Final Review
+
+Dear [Admin Name],
+The Final Annual Performance Results for [Manager Name]'s employee group for [Performance Year] have been submitted for final review.
+Kindly review the complete group, including the calibrated Final Annual Ratings, and proceed with approval or return the group for modification, where necessary.
+Best regards,
+عزيزي/عزيزتي [اسم مسؤول النظام]،
+نفيدكم بأنه تم تقديم نتائج تقييم الأداء السنوي لمجموعة الموظفين التابعة للمدير [اسم المدير] لعام [سنة الأداء] للمراجعة النهائية.
+نأمل منكم مراجعة نتائج المجموعة كاملة، بما في ذلك التقييمات السنوية النهائية بعد تطبيق منحنى التوزيع، واتخاذ الإجراء المناسب باعتماد المجموعة أو إعادتها للتعديل عند الحاجة.
+مع خالص التحية،
+
+UC-021
+NOT-014
+Manager
+إعادة نتائج الأداء السنوي للمجموعة - Annual Performance Group Returned for Modification
+
+Dear [Manager Name],
+The Final Annual Performance Results for your employee group for [Performance Year] have been returned following Admin review.
+Kindly review the Admin's comments, update the applicable Final Period Evaluations, and resubmit the complete group for final approval.
+Best regards,
+Talent Management Team.
+Performance Management Team.
+
+عزيزي/عزيزتي [اسم المدير]،
+نود إشعاركم بأنه تمت إعادة نتائج تقييم الأداء السنوي لمجموعة الموظفين التابعة لكم لعام [سنة الأداء] بعد مراجعتها من قِبل مسؤول إدارة الأداء.
+نأمل منكم الاطلاع على الملاحظات، وتحديث تقييمات الفترة النهائية المعنية، ثم إعادة تقديم المجموعة كاملة لاستكمال إجراءات الاعتماد النهائي.
+مع خالص التحية،
+فريق إدارة الأداء.
+
+UC-021
+NOT-015
+Admin
+نتائج الأداء السنوي المحدّثة للمجموعة بانتظار المراجعة - Updated Annual Performance Group Awaiting Review
+
+Dear [Admin Name],
+The updated Final Annual Performance Results for [Manager Name]'s employee group for [Performance Year] have been resubmitted following the requested modifications and Bell Curve recalibration.
+Kindly review the complete updated group and proceed with the appropriate final review action.
+Best regards,
+
+عزيزي/عزيزتي [اسم مسؤول النظام]،
+نفيدكم بأنه تمت إعادة تقديم نتائج تقييم الأداء السنوي المحدّثة لمجموعة الموظفين التابعة للمدير [اسم المدير] لعام [سنة الأداء]، بعد استكمال التعديلات المطلوبة وإعادة تطبيق معايرة منحنى التوزيع.
+نأمل منكم مراجعة نتائج المجموعة المحدّثة كاملة واتخاذ الإجراء المناسب لاستكمال المراجعة النهائية.
+مع خالص التحية،
+
+UC-021
+NOT-016
+Employee
+نتيجة تقييم الأداء السنوي متاحة للاطلاع - Annual Performance Result Available
+Dear [Employee Name],
+We would like to inform you that your Annual Performance Evaluation Result for [Performance Year] is now available.
+You may access the {Performance Management Platform} to view your annual performance result.
+Best regards,
+Talent Management Team.
+Performance Management Team
+
+عزيزي/عزيزتي [اسم الموظف]،
+نود إشعاركم بأن نتيجة تقييم أدائكم السنوي لعام [سنة الأداء] أصبحت متاحة للاطلاع عبر }منصة إدارة الأداء{.
+يمكنكم الدخول إلى المنصة للاطلاع على تفاصيل نتيجة تقييم أدائكم السنوي.
+مع خالص التحية،
+فريق إدارة الأداء
+
+UC-023
+NOT-017
+Admin
+ملخص التقدم اليومي لإدارة الأداء - Daily Performance Progress Digest
+
+UC-002
+NOT-018
+
+Admin
+
+تقييم الفترة بانتظار المراجعة - Period Evaluation Awaiting Review
+
+Dear [Admin Name],
+The Performance Evaluation for [Employee Name] for [Cycle / Period] has been submitted by [Manager Name] and is awaiting your review.
+Kindly review the evaluation and proceed with approval or return it for modification.
+Best regards,
+عزيزي/عزيزتي [اسم مسؤول النظام]،
+نفيدكم بأنه تم تقديم تقييم الأداء الخاص بالموظف [اسم الموظف] للفترة [الدورة / الفترة] من قِبل المدير [اسم المدير]، وهو الآن بانتظار مراجعتكم.
+نأمل منكم مراجعة التقييم واتخاذ الإجراء المناسب بالاعتماد أو الإعادة للتعديل.
+مع خالص التحية،
+
+UC-021
+
+NOT-019
+
+Manager
+
+إعادة تقييم الفترة للتعديل - Period Evaluation Returned for Modification
+
+Dear [Manager Name],
+The Performance Evaluation for [Employee Name] for [Cycle / Period] has been returned following Admin review.
+Kindly review the comments, make the required modifications, and resubmit the evaluation for approval.
+Best regards,
+Performance Management Team.
+عزيزي/عزيزتي [اسم المدير]،
+نود إشعاركم بأنه تمت إعادة تقييم الأداء الخاص بالموظف [اسم الموظف] للفترة [الدورة / الفترة] بعد مراجعته من قِبل مسؤول إدارة الأداء.
+نأمل منكم الاطلاع على الملاحظات وإجراء التعديلات المطلوبة، ثم إعادة تقديم التقييم للاعتماد.
+مع خالص التحية،
+فريق إدارة الأداء.
+
+UC-021
+
+NOT-020
+
+Admin
+
+تقييم الفترة المحدّث بانتظار المراجعة - Updated Period Evaluation Awaiting Review
+
+Dear [Admin Name],
+The updated Performance Evaluation for [Employee Name] for [Cycle / Period] has been resubmitted by [Manager Name] following the requested modifications.
+Kindly review the updated evaluation and proceed with the appropriate approval action.
+Best regards,
+
+عزيزي/عزيزتي [اسم مسؤول النظام]،
+نفيدكم بأنه تمت إعادة تقديم تقييم الأداء المحدّث الخاص بالموظف [اسم الموظف] للفترة [الدورة / الفترة] من قِبل المدير [اسم المدير]، بعد استكمال التعديلات المطلوبة.
+نأمل منكم مراجعة التقييم المحدّث واتخاذ الإجراء المناسب للاعتماد.
+مع خالص التحية،
+
+UC-021
+
+NOT-021
+
+Employee
+
+نتيجة تقييم الفترة متاحة للاطلاع - Period Performance Result Available
+
+Dear [Employee Name],
+We would like to inform you that your Performance Evaluation Result for [Cycle / Period] is now available.
+You may access the {Performance Management Platform} to view your Period Performance Result.
+Best regards,
+Performance Management Team.
+
+عزيزي/عزيزتي [اسم الموظف]،
+نود إشعاركم بأن نتيجة تقييم أدائكم للفترة [الدورة / الفترة] أصبحت متاحة للاطلاع عبر {منصة إدارة الأداء}.
+يمكنكم الدخول إلى المنصة للاطلاع على تفاصيل نتيجة تقييم الفترة.
+مع خالص التحية،
+فريق إدارة الأداء.
+
+UC-023
+
+NOT-022
+Employee
+Performance Cycle Activation – إشعار بتفعيل دورة الأداء
+Dear [Employee Name],
+Performance Cycle [Cycle Name] has been activated, and you have been included in this cycle.
+عزيزي/عزيزتي [اسم الموظف]،
+نود إشعارك بأنه تم تفعيل دورة الأداء [اسم الدورة]، وقد تم إدراجك ضمن الموظفين المشمولين بهذه الدورة.
+
+UC-006
+
+Request Status
+Status
+Description
+Draft
+Performance Plan is being prepared by the Manager
+Pending Admin Approval
+Plan is awaiting Admin review
+Pending Employee Review
+Plan is awaiting Employee review
+Returned for ModificationReturned to Manager
+Plan/Evaluation requires Manager action
+Goals Approved
+Objectives and KPIs have been approved
+Evaluation In Progress
+Performance Evaluation is in progress
+Pending Final Approval
+Performance Result is awaiting Admin Final Review
+Finalized
+Performance Result has been approved and finalized
+
+Artificial Intelligence
+AI Service
+Description
+User
+Applicable Area
+AI Wording Improvement
+Provides suggested improvements to KPI wording without automatically replacing the Manager's original input
+Manager
+Goal Setting
+SMART Analysis
+Analyzes each KPI against SMART criteria and provides a SMART Score and improvement areas
+Manager
+Goal Setting
+
+Attachments
+#
+Attachment Name
+Description / Purpose
+Related Requirement / Section
+Provided By
+Attachment
+1
+Bell Curve Reference
+Business reference for Bell Curve guidelines and rating distribution requirements.
+Bell Curve Guidelines
+Business
+
+2
+KPI Reference & TD Notes
+Business reference for KPI requirements and Talent Development notes.
+Objectives & KPIs / Goal Setting
+Business

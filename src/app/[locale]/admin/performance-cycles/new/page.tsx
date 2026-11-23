@@ -1,3 +1,17 @@
+import { getTranslations } from "next-intl/server";
 import { AppShell } from "@/components/layout/app-shell";
 import ApiPerformanceCycleWorkspace from "@/features/api/performance-cycle-workspace";
-export default function Page(){return <AppShell role="admin" title="Create performance cycle" subtitle="Set cycle dates, stage deadlines and employee scope."><ApiPerformanceCycleWorkspace mode="create"/></AppShell>;}
+
+export default async function Page() {
+  const t = await getTranslations("PerformanceCycles");
+  return (
+    <AppShell
+      role="admin"
+      title={t("pages.createTitle")}
+      subtitle={t("pages.createSubtitle")}
+      backHref="/admin/performance-cycles"
+    >
+      <ApiPerformanceCycleWorkspace mode="create" />
+    </AppShell>
+  );
+}

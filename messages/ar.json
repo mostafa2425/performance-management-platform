@@ -25,6 +25,7 @@
     "settings": "الإعدادات",
     "switchDemoRole": "تبديل الدور التجريبي",
     "breadcrumb": "مسار التنقل",
+    "back": "العودة",
     "notifications": "الإشعارات",
     "lastUpdated": "آخر تحديث الآن",
     "copyright": "© 2026 Perform. جميع الحقوق محفوظة.",
@@ -503,7 +504,245 @@
     "text106": "مديرون",
     "text107": "عرض التفاصيل",
     "text108": "لا توجد دورات تطابق عوامل التصفية",
-    "text109": "سجلات وفلاتر تجريبية فقط. الإنشاء والتفعيل ونطاق الموظفين وأهلية Jisr والإشعارات وتقدم سير العمل غير محفوظة أو مرتبطة بـBackend APIs."
+    "text109": "سجلات وفلاتر تجريبية فقط. الإنشاء والتفعيل ونطاق الموظفين وأهلية Jisr والإشعارات وتقدم سير العمل غير محفوظة أو مرتبطة بـBackend APIs.",
+    "pages": {
+      "listTitle": "دورات الأداء",
+      "listSubtitle": "إعداد وإدارة دورات الأداء السنوية.",
+      "createTitle": "إنشاء دورة أداء",
+      "createSubtitle": "حدد أسماء الدورة وسنة الأداء وتاريخ البداية ومواعيد المراحل.",
+      "detailTitle": "إدارة دورة الأداء",
+      "detailSubtitle": "راجع حالة الدورة وجدول المراحل والنطاق والأهلية قبل التفعيل.",
+      "editTitle": "تعديل مواعيد الدورة",
+      "editSubtitle": "عدّل مواعيد المراحل ضمن تواريخ الدورة."
+    },
+    "actions": {
+      "createCycle": "إنشاء دورة",
+      "createDraft": "إنشاء مسودة",
+      "cancel": "إلغاء",
+      "activate": "تفعيل",
+      "deleteDraft": "حذف المسودة",
+      "previewEligibility": "معاينة الأهلية",
+      "saveScope": "حفظ النطاق",
+      "editScope": "تعديل النطاق",
+      "backToList": "العودة للقائمة",
+      "viewDetails": "عرض التفاصيل",
+      "editCycle": "تعديل الدورة",
+      "saveDeadlines": "حفظ المواعيد",
+      "manualInclude": "تضمين",
+      "confirmInclude": "تضمين الموظف",
+      "resetFilters": "إعادة ضبط"
+    },
+    "confirm": {
+      "activate": "تفعيل هذه الدورة؟ لا يمكن التراجع عن هذا الإجراء.",
+      "deleteDraft": "حذف مسودة الدورة؟"
+    },
+    "toast": {
+      "created": "تم إنشاء الدورة",
+      "activated": "تم تفعيل الدورة",
+      "deleted": "تم حذف المسودة",
+      "scopeSaved": "تم حفظ نطاق الدورة"
+    },
+    "fields": {
+      "nameEn": "الاسم (إنجليزي)",
+      "nameAr": "الاسم (عربي)",
+      "performanceYear": "سنة الأداء",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ النهاية",
+      "cycle": "الدورة",
+      "year": "السنة",
+      "start": "البداية",
+      "end": "النهاية",
+      "status": "الحالة",
+      "stage": "المرحلة",
+      "deadline": "الموعد النهائي",
+      "cutoff": "الإغلاق",
+      "includeEmployees": "الموظفون المشمولون",
+      "excludeEmployees": "استبعاد موظفين",
+      "departments": "الإدارات",
+      "jobTitles": "المسميات الوظيفية",
+      "employee": "الموظف",
+      "source": "المصدر",
+      "dates": "التواريخ",
+      "jobTitlesCount": "المسميات الوظيفية",
+      "employeesInScope": "الموظفون في النطاق",
+      "managersInScope": "المديرون",
+      "departmentsCount": "الأقسام",
+      "excludedCount": "المستبعدون",
+      "reason": "السبب",
+      "action": "الإجراء",
+      "user": "المستخدم",
+      "oldValue": "القيمة السابقة",
+      "newValue": "القيمة الجديدة",
+      "dateTime": "التاريخ / الوقت",
+      "manager": "المدير",
+      "employeeCode": "الرمز",
+      "attention": "يتطلب متابعة الإدارة",
+      "deadlineDate": "الموعد النهائي"
+    },
+    "placeholders": {
+      "nameEn": "e.g. 2026 Annual Performance Cycle",
+      "nameAr": "مثال: دورة الأداء السنوية 2026",
+      "performanceYear": "مثال: 2026",
+      "startDate": "اختر تاريخ البداية",
+      "stageDeadline": "اختر الموعد النهائي",
+      "searchEmployees": "ابحث بالاسم أو الرقم أو البريد",
+      "selectEmployees": "اختر الموظفين",
+      "includeEmployees": "ابحث عن موظفين",
+      "excludeEmployees": "ابحث عن موظفين",
+      "departments": "ابحث عن إدارات",
+      "jobTitles": "ابحث عن مسميات وظيفية"
+    },
+    "scope": {
+      "selectAll": "تحديد الكل",
+      "clearAll": "مسح",
+      "selectedCount": "{count} من {total}",
+      "includedSummary": "{count} مشمول",
+      "excludedSummary": "{count} مستبعد",
+      "departmentsSummary": "{count} إدارات",
+      "jobTitlesSummary": "{count} مسميات",
+      "netSummary": "{count} ضمن النطاق",
+      "included": "مشمول",
+      "excluded": "مستبعد",
+      "noEmployees": "لا يوجد موظفون",
+      "noOptions": "لا توجد خيارات",
+      "loadingEmployees": "جاري تحميل الموظفين…",
+      "managersSummary": "{count} مديرين"
+    },
+    "sections": {
+      "cycleInfo": "بيانات الدورة",
+      "cycleInfoHint": "الاسم باللغتين وسنة الأداء وتاريخ بداية الدورة.",
+      "stageDeadlines": "مواعيد المراحل",
+      "stageDeadlinesHint": "يجب أن تكون المواعيد في أو بعد تاريخ البداية وبالترتيب الزمني.",
+      "stageSchedule": "جدول المراحل",
+      "cycleScope": "نطاق الدورة",
+      "cycleScopeHint": "حدد المشمولين في مسودة الدورة قبل التفعيل.",
+      "eligibilityPreview": "معاينة الأهلية"
+    },
+    "table": {
+      "empty": "لا توجد دورات بعد. أنشئ أول مسودة للبدء.",
+      "previewEmpty": "تم تحميل المعاينة. لا توجد صفوف أعضاء لهذا النطاق.",
+      "deadlineTooltip": "تاريخ الموعد النهائي للمرحلة",
+      "cutoffTooltip": "وقت الإغلاق النهائي لهذه المرحلة"
+    },
+    "status": {
+      "draft": "مسودة",
+      "active": "نشطة",
+      "closed": "مغلقة",
+      "unknown": "غير معروف"
+    },
+    "validation": {
+      "nameEnRequired": "الاسم الإنجليزي مطلوب",
+      "nameEnMin": "يجب ألا يقل الاسم الإنجليزي عن 3 أحرف",
+      "nameArRequired": "الاسم العربي مطلوب",
+      "nameArMin": "يجب ألا يقل الاسم العربي عن 3 أحرف",
+      "yearRequired": "سنة الأداء مطلوبة",
+      "yearInteger": "أدخل سنة صحيحة",
+      "yearRange": "يجب أن تكون السنة بين {min} و {max}",
+      "startDateRequired": "تاريخ البداية مطلوب",
+      "stageRequired": "موعد {stage} مطلوب",
+      "stageAfterStart": "يجب أن يكون {stage} في أو بعد تاريخ البداية",
+      "stageOrder": "يجب أن يكون {stage} في أو بعد موعد المرحلة السابقة",
+      "overlapEmployees": "لا يمكن أن يظهر الموظف نفسه في قائمتي الشمول والاستبعاد"
+    },
+    "stages": {
+      "goal_setting": {
+        "label": "تحديد الأهداف",
+        "hint": "يضع المديرون أهداف الموظفين ويرسلونها لاعتماد الإدارة."
+      },
+      "employee_review": {
+        "label": "مراجعة الموظف",
+        "hint": "يراجع الموظفون أهدافهم المعتمدة ويقرّون بها."
+      },
+      "active_performance": {
+        "label": "الأداء الفعلي",
+        "hint": "ينفّذ الموظفون أهدافهم خلال فترة الأداء."
+      },
+      "manager_evaluation": {
+        "label": "تقييم المدير",
+        "hint": "يقيّم المديرون الموظفين ويكملون التقييمات."
+      },
+      "admin_final_review": {
+        "label": "المراجعة النهائية",
+        "hint": "تقوم الإدارة بمعايرة التقديرات واعتماد نتائج الدورة."
+      }
+    },
+    "filters": {
+      "search": "ابحث باسم الدورة...",
+      "year": "السنة",
+      "status": "الحالة",
+      "allYears": "كل السنوات",
+      "allStatuses": "كل الحالات"
+    },
+    "timeline": {
+      "title": "الجدول الزمني للمراحل",
+      "completed": "مكتملة",
+      "current": "الحالية",
+      "upcoming": "القادمة"
+    },
+    "editor": {
+      "title": "مواعيد المراحل",
+      "lockedStage": "مقفلة",
+      "lockedHint": "لا يمكن تغيير المراحل المكتملة.",
+      "noChanges": "لا توجد تغييرات في المواعيد للحفظ",
+      "saved": "تم تحديث المواعيد",
+      "outsideCycle": "يجب أن تقع {stage} ضمن تواريخ الدورة ({start} – {end})",
+      "auditTitle": "سجل التغييرات (هذه الجلسة)",
+      "auditEmpty": "لم يتم حفظ أي تغييرات بعد.",
+      "closedNotEditable": "لا يمكن تعديل الدورات المغلقة.",
+      "cycleDates": "تواريخ الدورة"
+    },
+    "progress": {
+      "title": "تقدم الخطط",
+      "not_started": "لم تبدأ",
+      "draft": "مسودة",
+      "pending_admin_approval": "بانتظار اعتماد الإدارة",
+      "returned_to_manager": "معادة للمدير",
+      "pending_employee_review": "بانتظار مراجعة الموظف",
+      "goals_approved": "تم اعتماد الأهداف",
+      "pendingFinal": "بانتظار الاعتماد النهائي",
+      "finalized": "النتائج النهائية",
+      "searchEmployee": "ابحث باسم الموظف...",
+      "employeesCount": "{count} موظفين",
+      "required": "مطلوب",
+      "noManager": "بدون مدير",
+      "noRows": "لا توجد بيانات حالة الخطط.",
+      "unknownStatus": "غير معروف"
+    },
+    "notIncluded": {
+      "title": "الموظفون غير المشمولين",
+      "removedMissed": "الأعضاء المستبعدون / الفائتون",
+      "none": "لا يوجد موظفون مستبعدون.",
+      "includeTitle": "تضمين موظف",
+      "reasonLabel": "سبب التضمين",
+      "reasonRequired": "السبب مطلوب",
+      "included": "تم تضمين الموظف",
+      "blocked": "ضمن دورة نشطة أخرى",
+      "removed": "مستبعد",
+      "missed": "فائت",
+      "loadPreviewHint": "شغّل معاينة الأهلية لعرض الموظفين غير المشمولين.",
+      "readOnly": "للعرض فقط"
+    },
+    "eligibility": {
+      "status": {
+        "included": "مشمول",
+        "under_6_months": "أقل من 6 أشهر",
+        "in_other_active_cycle": "ضمن دورة نشطة أخرى",
+        "excluded": "مستبعد",
+        "excluded_by_scope": "خارج النطاق",
+        "excluded_rule": "مستبعد بقاعدة",
+        "excluded_override": "مستبعد باستثناء",
+        "excluded_manual": "مستبعد يدوياً",
+        "no_competency_template": "بدون قالب كفاءات",
+        "terminated": "منتهي الخدمة",
+        "joining_date_missing": "تاريخ التعيين غير موجود",
+        "removed": "مستبعد",
+        "missed": "فائت"
+      },
+      "activationNotIncluded": "غير مشمولين عند التفعيل"
+    },
+    "summary": {
+      "managers": "المديرون"
+    }
   },
   "Notifications": {
     "text001": "مركز الإشعارات",
@@ -673,7 +912,7 @@
     "text006": "لعمل أفضل.",
     "text007": "مرحباً بعودتك",
     "text008": "سجّل الدخول إلى حسابك",
-    "text009": "أدخل بيانات العمل للانتقال إلى لوحة متابعة الأداء الخاصة بك.",
+    "text009": "استخدم حساب منصة إدارة الأداء لمتابعة دورة الأداء.",
     "text010": "البريد الإلكتروني للعمل",
     "text011": "أدخل البريد الإلكتروني",
     "text012": "أدخل بريداً إلكترونياً صحيحاً",
@@ -684,7 +923,7 @@
     "text017": "تسجيل الدخول",
     "text018": "أو المتابعة باستخدام",
     "text019": "المتابعة باستخدام Microsoft",
-    "text020": "وضع تجريبي · استخدم أي بريد إلكتروني وكلمة مرور لفتح النموذج.",
+    "text020": "حسابات تجريبية · كلمة المرور هي password",
     "text021": "تحتاج مساعدة؟ تواصل مع فريق الموارد البشرية.",
     "text022": "الخصوصية",
     "text023": "الشروط"

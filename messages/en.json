@@ -25,6 +25,7 @@
     "settings": "Settings",
     "switchDemoRole": "Switch demo role",
     "breadcrumb": "Breadcrumb",
+    "back": "Go back",
     "notifications": "Notifications",
     "lastUpdated": "Last updated just now",
     "copyright": "© 2026 Perform. All rights reserved.",
@@ -503,7 +504,245 @@
     "text106": "managers",
     "text107": "View details",
     "text108": "No cycles match these filters",
-    "text109": "Demo records and filters only. Create, activation, employee scope, Jisr eligibility, notifications and workflow progress are not persisted or connected to Backend APIs."
+    "text109": "Demo records and filters only. Create, activation, employee scope, Jisr eligibility, notifications and workflow progress are not persisted or connected to Backend APIs.",
+    "pages": {
+      "listTitle": "Performance cycles",
+      "listSubtitle": "Configure and manage annual performance cycles.",
+      "createTitle": "Create performance cycle",
+      "createSubtitle": "Set cycle names, year, start date and stage deadlines.",
+      "detailTitle": "Manage performance cycle",
+      "detailSubtitle": "Review cycle status, stage schedule, scope and eligibility before activation.",
+      "editTitle": "Edit cycle deadlines",
+      "editSubtitle": "Adjust stage deadlines within the cycle dates."
+    },
+    "actions": {
+      "createCycle": "Create cycle",
+      "createDraft": "Create draft",
+      "cancel": "Cancel",
+      "activate": "Activate",
+      "deleteDraft": "Delete draft",
+      "previewEligibility": "Preview eligibility",
+      "saveScope": "Save scope",
+      "editScope": "Edit scope",
+      "backToList": "Back to list",
+      "viewDetails": "View details",
+      "editCycle": "Edit cycle",
+      "saveDeadlines": "Save deadlines",
+      "manualInclude": "Include",
+      "confirmInclude": "Include employee",
+      "resetFilters": "Reset"
+    },
+    "confirm": {
+      "activate": "Activate this cycle? This cannot be undone.",
+      "deleteDraft": "Delete this draft cycle?"
+    },
+    "toast": {
+      "created": "Cycle created",
+      "activated": "Cycle activated",
+      "deleted": "Draft deleted",
+      "scopeSaved": "Cycle scope saved"
+    },
+    "fields": {
+      "nameEn": "Name (English)",
+      "nameAr": "Name (Arabic)",
+      "performanceYear": "Performance year",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "cycle": "Cycle",
+      "year": "Year",
+      "start": "Start",
+      "end": "End",
+      "status": "Status",
+      "stage": "Stage",
+      "deadline": "Deadline",
+      "cutoff": "Cutoff",
+      "includeEmployees": "Include employees",
+      "excludeEmployees": "Exclude employees",
+      "departments": "Departments",
+      "jobTitles": "Job titles",
+      "employee": "Employee",
+      "source": "Source",
+      "dates": "Dates",
+      "jobTitlesCount": "Job titles",
+      "employeesInScope": "Employees in scope",
+      "managersInScope": "Managers",
+      "departmentsCount": "Departments",
+      "excludedCount": "Excluded",
+      "reason": "Reason",
+      "action": "Action",
+      "user": "User",
+      "oldValue": "Old value",
+      "newValue": "New value",
+      "dateTime": "Date / time",
+      "manager": "Manager",
+      "employeeCode": "Code",
+      "attention": "Admin attention",
+      "deadlineDate": "Deadline"
+    },
+    "placeholders": {
+      "nameEn": "e.g. 2026 Annual Performance Cycle",
+      "nameAr": "مثال: دورة الأداء السنوية 2026",
+      "performanceYear": "e.g. 2026",
+      "startDate": "Select start date",
+      "stageDeadline": "Select deadline",
+      "searchEmployees": "Search by name, code or email",
+      "selectEmployees": "Select employees",
+      "includeEmployees": "Search employees",
+      "excludeEmployees": "Search employees",
+      "departments": "Search departments",
+      "jobTitles": "Search job titles"
+    },
+    "scope": {
+      "selectAll": "Select all",
+      "clearAll": "Clear",
+      "selectedCount": "{count} of {total}",
+      "includedSummary": "{count} included",
+      "excludedSummary": "{count} excluded",
+      "departmentsSummary": "{count} departments",
+      "jobTitlesSummary": "{count} job titles",
+      "netSummary": "{count} in scope",
+      "included": "Included",
+      "excluded": "Excluded",
+      "noEmployees": "No employees",
+      "noOptions": "No options",
+      "loadingEmployees": "Loading employees…",
+      "managersSummary": "{count} managers"
+    },
+    "sections": {
+      "cycleInfo": "Cycle information",
+      "cycleInfoHint": "Bilingual name, performance year and cycle start date.",
+      "stageDeadlines": "Stage deadlines",
+      "stageDeadlinesHint": "Deadlines must be on or after the start date and in chronological order.",
+      "stageSchedule": "Stage schedule",
+      "cycleScope": "Cycle scope",
+      "cycleScopeHint": "Choose who is included in this draft cycle before activation.",
+      "eligibilityPreview": "Eligibility preview"
+    },
+    "table": {
+      "empty": "No cycles yet. Create the first draft to start.",
+      "previewEmpty": "Preview loaded. No member rows were returned for this scope.",
+      "deadlineTooltip": "Stage deadline date",
+      "cutoffTooltip": "Hard cutoff timestamp for this stage"
+    },
+    "status": {
+      "draft": "Draft",
+      "active": "Active",
+      "closed": "Closed",
+      "unknown": "Unknown"
+    },
+    "validation": {
+      "nameEnRequired": "English name is required",
+      "nameEnMin": "English name must be at least 3 characters",
+      "nameArRequired": "Arabic name is required",
+      "nameArMin": "Arabic name must be at least 3 characters",
+      "yearRequired": "Performance year is required",
+      "yearInteger": "Enter a valid year",
+      "yearRange": "Year must be between {min} and {max}",
+      "startDateRequired": "Start date is required",
+      "stageRequired": "{stage} deadline is required",
+      "stageAfterStart": "{stage} must be on or after the start date",
+      "stageOrder": "{stage} must be on or after the previous stage deadline",
+      "overlapEmployees": "The same employee cannot appear in both include and exclude lists"
+    },
+    "stages": {
+      "goal_setting": {
+        "label": "Goal setting",
+        "hint": "Managers set and submit employee goals for admin approval."
+      },
+      "employee_review": {
+        "label": "Employee review",
+        "hint": "Employees review and acknowledge their approved goals."
+      },
+      "active_performance": {
+        "label": "Active performance",
+        "hint": "Employees execute against goals during the performance period."
+      },
+      "manager_evaluation": {
+        "label": "Manager evaluation",
+        "hint": "Managers score employees and complete evaluations."
+      },
+      "admin_final_review": {
+        "label": "Admin final review",
+        "hint": "Admins calibrate ratings and finalize cycle results."
+      }
+    },
+    "filters": {
+      "search": "Search cycle name...",
+      "year": "Year",
+      "status": "Status",
+      "allYears": "All years",
+      "allStatuses": "All statuses"
+    },
+    "timeline": {
+      "title": "Stage timeline",
+      "completed": "Completed",
+      "current": "Current",
+      "upcoming": "Upcoming"
+    },
+    "editor": {
+      "title": "Stage deadlines",
+      "lockedStage": "Locked",
+      "lockedHint": "Completed stages cannot be changed.",
+      "noChanges": "No deadline changes to save",
+      "saved": "Deadlines updated",
+      "outsideCycle": "{stage} must be within the cycle dates ({start} – {end})",
+      "auditTitle": "Change audit (this session)",
+      "auditEmpty": "No changes saved yet.",
+      "closedNotEditable": "Closed cycles cannot be edited.",
+      "cycleDates": "Cycle dates"
+    },
+    "progress": {
+      "title": "Plan progress",
+      "not_started": "Not started",
+      "draft": "Draft",
+      "pending_admin_approval": "Pending admin approval",
+      "returned_to_manager": "Returned to manager",
+      "pending_employee_review": "Pending employee review",
+      "goals_approved": "Goals approved",
+      "pendingFinal": "Pending final approval",
+      "finalized": "Finalized results",
+      "searchEmployee": "Search employee name...",
+      "employeesCount": "{count} employees",
+      "required": "Required",
+      "noManager": "No manager",
+      "noRows": "No plan status rows.",
+      "unknownStatus": "Unknown"
+    },
+    "notIncluded": {
+      "title": "Not included employees",
+      "removedMissed": "Removed / missed members",
+      "none": "No excluded employees.",
+      "includeTitle": "Include employee",
+      "reasonLabel": "Reason for inclusion",
+      "reasonRequired": "Reason is required",
+      "included": "Employee included",
+      "blocked": "Assigned to another active cycle",
+      "removed": "Removed",
+      "missed": "Missed",
+      "loadPreviewHint": "Run the eligibility preview to see employees who are not included.",
+      "readOnly": "Read-only"
+    },
+    "eligibility": {
+      "status": {
+        "included": "Included",
+        "under_6_months": "Under 6 months",
+        "in_other_active_cycle": "In another active cycle",
+        "excluded": "Excluded",
+        "excluded_by_scope": "Outside scope",
+        "excluded_rule": "Excluded by rule",
+        "excluded_override": "Excluded by override",
+        "excluded_manual": "Manually excluded",
+        "no_competency_template": "No competency template",
+        "terminated": "Terminated",
+        "joining_date_missing": "Joining date missing",
+        "removed": "Removed",
+        "missed": "Missed"
+      },
+      "activationNotIncluded": "Not included at activation"
+    },
+    "summary": {
+      "managers": "Managers"
+    }
   },
   "Notifications": {
     "text001": "NOTIFICATION CENTER",
@@ -673,7 +912,7 @@
     "text006": "Built for better work.",
     "text007": "WELCOME BACK",
     "text008": "Sign in to your workspace",
-    "text009": "Enter your work credentials to continue to your performance dashboard.",
+    "text009": "Use your PMP account to continue the performance cycle.",
     "text010": "Work email",
     "text011": "Please enter your email",
     "text012": "Enter a valid email",
@@ -684,7 +923,7 @@
     "text017": "Sign in",
     "text018": "OR CONTINUE WITH",
     "text019": "Continue with Microsoft",
-    "text020": "Demo mode · Any valid email and password will open the prototype.",
+    "text020": "Demo accounts · password is password",
     "text021": "Need help? Contact your HR team.",
     "text022": "Privacy",
     "text023": "Terms"
