@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, Button, Card, Col, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { FormInstance } from "antd";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
@@ -194,6 +194,7 @@ export function PlanContentEditor({
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const [objectiveModalOpen, setObjectiveModalOpen] = useState(false);
   const [objectiveForm] = Form.useForm();
+  const addObjectiveRef = useRef<((value: ObjectiveDraft) => void) | null>(null);
   const measurementTypes = (units as KpiUnitsMeta).measurement_types || [];
   const watchedObjectives = Form.useWatch("objectives", form) || [];
   const weightTotal = watchedObjectives.reduce(
@@ -228,7 +229,9 @@ export function PlanContentEditor({
       </div>
 
       <Form.List name="objectives">
-        {(fields, { add, remove }) => (
+        {(fields, { add, remove }) => {
+          addObjectiveRef.current = add;
+          return (
           <>
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
               <Button
@@ -348,7 +351,8 @@ export function PlanContentEditor({
               </Card>
             )})}
           </>
-        )}
+          );
+        }}
       </Form.List>
       <Modal
         open={objectiveModalOpen}
@@ -364,7 +368,7 @@ export function PlanContentEditor({
           form={objectiveForm}
           layout="vertical"
           onFinish={(values) => {
-            add(values);
+            addObjectiveRef.current?.(values);
             setObjectiveModalOpen(false);
             objectiveForm.resetFields();
           }}
