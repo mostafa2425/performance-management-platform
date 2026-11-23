@@ -219,46 +219,36 @@ export function PlanContentEditor({
               : t("Must equal 100% before submit.", "يجب أن يساوي 100% قبل الإرسال.")
           }
         />
-        <Space>
-          <Button
-            type="primary"
-            ghost
-            icon={<PlusOutlined />}
-            onClick={() => {
-              const current = form.getFieldValue("objectives") || [];
-              form.setFieldsValue({
-                objectives: [
-                  ...current,
-                  {
-                    text: "",
-                    category_id: undefined,
-                    kpis: [
-                      {
-                        name: "",
-                        measurement_type: "number_amount",
-                        unit: "count",
-                        direction: "higher",
-                        target: null,
-                        baseline: null,
-                        weight_pct: 0,
-                      },
-                    ],
-                  },
-                ],
-              });
-            }}
-          >
-            {t("Add objective", "إضافة هدف")}
-          </Button>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            {t("Save draft", "حفظ المسودة")}
-          </Button>
-        </Space>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {t("Save draft", "حفظ المسودة")}
+        </Button>>
       </div>
 
       <Form.List name="objectives">
-        {(fields, { remove }) => (
+        {(fields, { add, remove }) => (
           <>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+              <Button
+                type="primary"
+                ghost
+                icon={<PlusOutlined />}
+                onClick={() => add({
+                  text: "",
+                  category_id: undefined,
+                  kpis: [{
+                    name: "",
+                    measurement_type: "number_amount",
+                    unit: "count",
+                    direction: "higher",
+                    target: null,
+                    baseline: null,
+                    weight_pct: 0,
+                  }],
+                })}
+              >
+                {t("Add objective", "إضافة هدف")}
+              </Button>
+            </div>
             {fields.map((field) => {
               const objectiveId = form.getFieldValue(["objectives", field.name, "id"]);
               const objectiveCategoryId = form.getFieldValue(["objectives", field.name, "category_id"]);
