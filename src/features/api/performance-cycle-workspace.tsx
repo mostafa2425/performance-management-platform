@@ -29,7 +29,7 @@ export default function ApiPerformanceCycleWorkspace({mode,cycleId}:{mode:"list"
   </Form>
  </Card>;
  if(mode==="detail"){
-  if(cycle.isLoading)return <Spin/>; if(cycle.isError)return <Alert type="error" message={(cycle.error as Error).message}/>; if(!cycle.data)return <Empty/>;
+  if(cycle.isLoading)return <Spin/>; if(cycle.isError)return <Alert type="error" title={(cycle.error as Error).message}/>; if(!cycle.data)return <Empty/>;
   const c=cycle.data; const candidates=(employees.data as any)?.data||[];
   return <Space direction="vertical" size={16} style={{width:"100%"}}>
    <Card title={typeof c.name==="object"?(ar?c.name.ar:c.name.en):c.name} extra={<Tag color={c.status==="active"?"green":c.status==="draft"?"blue":"default"}>{c.status}</Tag>}>
@@ -45,6 +45,6 @@ export default function ApiPerformanceCycleWorkspace({mode,cycleId}:{mode:"list"
   </Space>;
  }
  return <Card title={t("Performance cycles","دورات الأداء")} extra={<Button type="primary" href={`/${ar?"ar":"en"}/admin/performance-cycles/new`}>{t("Create cycle","إنشاء دورة")}</Button>}>
-  {cycles.isLoading?<Spin/>:cycles.isError?<Alert type="error" message={(cycles.error as Error).message}/>:<Table rowKey="id" dataSource={(cycles.data as any)?.data||[]} pagination={{pageSize:10}} columns={[{title:t("Cycle","الدورة"),render:(_:any,r:any)=>typeof r.name==="object"?(ar?r.name.ar:r.name.en):r.name},{title:t("Year","السنة"),dataIndex:"performance_year"},{title:t("Start","البداية"),dataIndex:"start_date"},{title:t("End","النهاية"),dataIndex:"end_date"},{title:t("Status","الحالة"),dataIndex:"status",render:(v:string)=><Tag color={v==="active"?"green":v==="draft"?"blue":"default"}>{v}</Tag>},{title:"",render:(_:any,r:any)=><Button href={`/${ar?"ar":"en"}/admin/performance-cycles/${r.id}`}>{t("Manage","إدارة")}</Button>}]}/>} 
+  {cycles.isLoading?<Spin/>:cycles.isError?<Alert type="error" title={(cycles.error as Error).message}/>:<Table rowKey="id" dataSource={(cycles.data as any)?.data||[]} pagination={{pageSize:10}} columns={[{title:t("Cycle","الدورة"),render:(_:any,r:any)=>typeof r.name==="object"?(ar?r.name.ar:r.name.en):r.name},{title:t("Year","السنة"),dataIndex:"performance_year"},{title:t("Start","البداية"),dataIndex:"start_date"},{title:t("End","النهاية"),dataIndex:"end_date"},{title:t("Status","الحالة"),dataIndex:"status",render:(v:string)=><Tag color={v==="active"?"green":v==="draft"?"blue":"default"}>{v}</Tag>},{title:"",render:(_:any,r:any)=><Button href={`/${ar?"ar":"en"}/admin/performance-cycles/${r.id}`}>{t("Manage","إدارة")}</Button>}]}/>} 
  </Card>;
 }
