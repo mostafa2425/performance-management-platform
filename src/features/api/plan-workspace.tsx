@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Col,
+  Modal,
   Empty,
   Row,
   Select,
@@ -126,6 +127,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const [dialog, setDialog] = useState(false);
   const [form] = Form.useForm();
   const [adminEditMode, setAdminEditMode] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(false);
 
   const cycles = useQuery({
     queryKey: queryKeys.cycles,
@@ -187,6 +189,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     onSuccess: async (plan: any) => {
       message.success(ar ? "تم إنشاء مسودة الخطة" : "Plan draft created");
       setSelectedPlan(plan);
+      setEditorOpen(true);
       await invalidatePlanQueries(plan.id);
     },
     onError: (error: Error) => {
@@ -238,6 +241,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     onSuccess: async (plan: any) => {
       message.success(ar ? "تم حفظ محتوى الخطة" : "Plan content saved");
       setSelectedPlan(plan);
+      setEditorOpen(false);
       if (mode === "admin") setAdminEditMode(false);
       await invalidatePlanQueries(plan.id);
     },
@@ -558,44 +562,44 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                         ) : null}
 
                         {mode === "admin" && canEdit && !adminEditMode ? (
-                          <Button type="primary" onClick={() => setAdminEditMode(true)}>
+                          <Button type="primary" onClick={() => {
+                            setAdminEditMode(true);
+                            setEditorOpen(true);
+                          }}>
                             {t("Edit submitted plan", "تعديل الخطة المرسلة")}
+                          </Button>
+                        ) : null}
+                        {mode === "manager" && canEdit ? (
+                          <Button type="primary" onClick={() => setEditorOpen(true)}>
+                            {t("Edit objectives & KPIs", "تعديل الأهداف والمؤشرات")}
                           </Button>
                         ) : null}
                         {mode === "admin" && adminEditMode ? (
                           <Button onClick={() => {
                             form.setFieldsValue({ objectives: toDraftObjectives(detail.data?.objectives || []) });
+                            setEditorOpen(false);
                             setAdminEditMode(false);
                           }}>
                             {t("Cancel editing", "إلغاء التعديل")}
                           </Button>
                         ) : null}
-                        {canEditContent ? (
-                          <PlanContentEditor
-                            form={form}
-                            categories={(categories.data || []) as any}
-                            units={(units.data || {}) as KpiUnitsMeta}
-                            ar={ar}
-                            loading={saveContent.isPending}
-                            openComments={planDetails.open_comments}
-                            onSave={(objectives) =>
-                              saveContent.mutate({
-                                id: planDetails.id,
-                                body: {
-                                  version: planDetails.version,
-                                  objectives: toApiObjectives(objectives),
-                                },
-                              })
-                            }
+                        {mode === "employee" && planDetails.content_visible === false ? (
+                          <Alert
+                            type="info"
+                            showIcon
+                            title={t("Waiting for Manager Submission", "في انتظار إرسال المدير للخطة")}
+                            description={t(
+                              "Your manager has not yet submitted your objectives for review. You cannot comment or approve until they submit.",
+                              "لم يقم مديرك بإرسال أهدافك للمراجعة بعد. لن تتمكن من التعليق أو الاعتماد قبل إرسال الخطة."
+                            )}
                           />
-                        ) : (
-                          <PlanReadonlyTree
-                            ar={ar}
-                            objectives={planDetails.objectives}
-                            openComments={planDetails.open_comments}
-                            contentVisible={planDetails.content_visible !== false}
-                          />
-                        )}
+                        ) : null}
+                        <PlanReadonlyTree
+                          ar={ar}
+                          objectives={planDetails.objectives}
+                          openComments={planDetails.open_comments}
+                          contentVisible={planDetails.content_visible !== false}
+                        />
 
                         <ActionButtons
                           actions={planDetails.allowed_actions || []}
@@ -632,6 +636,37 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
             )}
           </Card>
         )}
+
+        <Modal
+          open={editorOpen}
+          title={t("Edit performance objectives & KPIs", "تعديل أهداف ومؤشرات الأداء")}
+          width={1080}
+          onCancel={() => {
+            form.setFieldsValue({ objectives: toDraftObjectives(detail.data?.objectives || []) });
+            setEditorOpen(false);
+            if (mode === "admin") setAdminEditMode(false);
+          }}
+          footer={null}
+          destroyOnHidden={false}
+          styles={{ body: { maxHeight: "calc(100vh - 190px)", overflowY: "auto", paddingTop: 16 } }}
+        >
+          {canEditContent && planDetails ? (
+            <PlanContentEditor
+              form={form}
+              categories={(categories.data || []) as any}
+              units={(units.data || {}) as KpiUnitsMeta}
+              ar={ar}
+              loading={saveContent.isPending}
+              openComments={planDetails.open_comments}
+              onSave={(objectives) => saveContent.mutate({
+                id: planDetails.id,
+                body: { version: planDetails.version, objectives: toApiObjectives(objectives) },
+              })}
+            />
+          ) : (
+            <Spin />
+          )}
+        </Modal>
 
         <PlanActionModal
           open={dialog}
