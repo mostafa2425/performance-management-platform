@@ -1089,6 +1089,7 @@
     "filterDepartment": "الإدارة",
     "filterStatus": "حالة الموظف",
     "managerName": "اسم المدير",
+    "managerEmail": "البريد الإلكتروني",
     "managerEmployeeId": "الرقم الوظيفي للمدير",
     "jobTitle": "المسمى الوظيفي",
     "businessUnit": "وحدة الأعمال",
