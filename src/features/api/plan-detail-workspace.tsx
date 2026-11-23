@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { App, Alert, Button, Card, Col, Descriptions, Empty, Form, Row, Space, Spin, Tag, Typography } from "antd";
-import { ArrowLeftOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { App, Alert, Button, Card, Descriptions, Form, Space, Spin, Tag, Typography } from "antd";
+import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
@@ -107,7 +107,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     if (!plan) return;
     form.setFieldsValue({ objectives: toDraftObjectives(plan.objectives || []) });
     if (mode === "manager" && plan.allowed_actions?.includes("edit_content")) setEditing(true);
-  }, [plan?.id, plan?.version, form, mode]);
+  }, [plan?.id, form, mode]);
 
   const refresh = async (id?: number) => {
     await qc.invalidateQueries({ queryKey: queryKeys.plans });
