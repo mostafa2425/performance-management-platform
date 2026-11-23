@@ -114,7 +114,6 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   useEffect(() => {
     if (!plan) return;
     form.setFieldsValue({ objectives: toDraftObjectives(plan.objectives || []) });
-    if (mode === "manager" && plan.allowed_actions?.includes("edit_content")) setEditing(true);
   }, [plan?.id, form, mode]);
 
   const refresh = async (id?: number) => {
