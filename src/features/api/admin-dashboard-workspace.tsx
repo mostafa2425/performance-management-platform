@@ -26,6 +26,15 @@ import {
   SearchOutlined,
   TeamOutlined,
   UserOutlined,
+  FileTextOutlined,
+  ClockCircleOutlined,
+  AuditOutlined,
+  EyeOutlined,
+  RollbackOutlined,
+  PlayCircleOutlined,
+  BarChartOutlined,
+  CheckCircleOutlined,
+  SafetyCertificateOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
@@ -669,14 +678,14 @@ export default function AdminDashboardWorkspace() {
   const summaryCards = [
     { key: "total", label: "totalEmployees", value: employees.length, color: "#1677ff", icon: <TeamOutlined /> },
     { key: "not_started", label: "notStarted", value: summary.not_started, color: "#8c8c8c", icon: <UserOutlined /> },
-    { key: "draft", label: "draft", value: summary.draft, color: "#1677ff" },
-    { key: "pending_admin_approval", label: "pendingAdminApproval", value: summary.pending_admin_approval, color: "#d48806" },
-    { key: "pending_employee_review", label: "pendingEmployeeReview", value: summary.pending_employee_review, color: "#722ed1" },
-    { key: "returned_to_manager", label: "returnedForModification", value: summary.returned_to_manager, color: "#fa8c16" },
-    { key: "active_performance", label: "activePerformance", value: summary.active_performance, color: "#389e0d" },
-    { key: "evaluation_in_progress", label: "evaluationInProgress", value: summary.evaluation_in_progress, color: "#08979c" },
-    { key: "pending_final_approval", label: "pendingFinalApproval", value: summary.pending_final_approval, color: "#d46b08" },
-    { key: "finalized", label: "finalized", value: summary.finalized, color: "#237804" },
+    { key: "draft", label: "draft", value: summary.draft, color: "#1677ff", icon: <FileTextOutlined /> },
+    { key: "pending_admin_approval", label: "pendingAdminApproval", value: summary.pending_admin_approval, color: "#d48806", icon: <ClockCircleOutlined /> },
+    { key: "pending_employee_review", label: "pendingEmployeeReview", value: summary.pending_employee_review, color: "#722ed1", icon: <EyeOutlined /> },
+    { key: "returned_to_manager", label: "returnedForModification", value: summary.returned_to_manager, color: "#fa8c16", icon: <RollbackOutlined /> },
+    { key: "active_performance", label: "activePerformance", value: summary.active_performance, color: "#389e0d", icon: <PlayCircleOutlined /> },
+    { key: "evaluation_in_progress", label: "evaluationInProgress", value: summary.evaluation_in_progress, color: "#08979c", icon: <BarChartOutlined /> },
+    { key: "pending_final_approval", label: "pendingFinalApproval", value: summary.pending_final_approval, color: "#d46b08", icon: <AuditOutlined /> },
+    { key: "finalized", label: "finalized", value: summary.finalized, color: "#237804", icon: <SafetyCertificateOutlined /> },
   ];
 
   const cycleOptions = cycles.map((cycle) => ({
@@ -764,17 +773,12 @@ export default function AdminDashboardWorkspace() {
       title={t("text057")}
       subtitle={t("text058")}
     >
-      <Space orientation="vertical" size={20} style={{ width: "100%" }}>
+      <Space orientation="vertical" size={16} style={{ width: "100%" }}>
         <Row justify="space-between" align="middle" gutter={[12, 12]}>
           <Col>
-            <Space orientation="vertical" size={2}>
-              <Typography.Title level={4} style={{ margin: 0 }}>
-                {t("text059")}
-              </Typography.Title>
-              <Typography.Text type="secondary">
-                {t("text060")}
-              </Typography.Text>
-            </Space>
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              {t("text059")}
+            </Typography.Title>
           </Col>
           <Col>
             <Button icon={<ReloadOutlined />} onClick={() => dashboard.refetch()} loading={dashboard.isFetching}>
@@ -991,13 +995,15 @@ export default function AdminDashboardWorkspace() {
                   {
                     title: t("managerName"),
                     fixed: "start",
-                    width: 220,
+                    width: 190,
                     render: (_: unknown, row: ManagerRow) => (
-                      <Space orientation="vertical" size={0}>
-                        <Typography.Text strong>{row.manager?.full_name || t("unknownManager")}</Typography.Text>
-                        <Typography.Text type="secondary">{row.manager?.email || "—"}</Typography.Text>
-                      </Space>
+                      <Typography.Text strong>{row.manager?.full_name || t("unknownManager")}</Typography.Text>
                     ),
+                  },
+                  {
+                    title: t("managerEmail"),
+                    width: 220,
+                    render: (_: unknown, row: ManagerRow) => row.manager?.email || "—",
                   },
                   {
                     title: t("managerEmployeeId"),
