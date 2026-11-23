@@ -1,6 +1,7 @@
 "use client";
 
-import { Alert, Button, Card, Col, Form, Input, InputNumber, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
+import { useState } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { FormInstance } from "antd";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
@@ -191,6 +192,8 @@ export function PlanContentEditor({
   onSave,
 }: Props) {
   const t = (en: string, arabic: string) => (ar ? arabic : en);
+  const [objectiveModalOpen, setObjectiveModalOpen] = useState(false);
+  const [objectiveForm] = Form.useForm();
   const measurementTypes = (units as KpiUnitsMeta).measurement_types || [];
   const watchedObjectives = Form.useWatch("objectives", form) || [];
   const weightTotal = watchedObjectives.reduce(
@@ -221,7 +224,7 @@ export function PlanContentEditor({
         />
         <Button type="primary" htmlType="submit" loading={loading}>
           {t("Save draft", "حفظ المسودة")}
-        </Button>>
+        </Button>
       </div>
 
       <Form.List name="objectives">
@@ -232,19 +235,15 @@ export function PlanContentEditor({
                 type="primary"
                 ghost
                 icon={<PlusOutlined />}
-                onClick={() => add({
-                  text: "",
-                  category_id: undefined,
-                  kpis: [{
-                    name: "",
-                    measurement_type: "number_amount",
-                    unit: "count",
-                    direction: "higher",
-                    target: null,
-                    baseline: null,
-                    weight_pct: 0,
-                  }],
-                })}
+                onClick={() => {
+                  objectiveForm.resetFields();
+                  objectiveForm.setFieldsValue({
+                    text: "",
+                    category_id: undefined,
+                    kpis: [{ name: "", measurement_type: "number_amount", unit: "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
+                  });
+                  setObjectiveModalOpen(true);
+                }}
               >
                 {t("Add objective", "إضافة هدف")}
               </Button>
@@ -351,6 +350,72 @@ export function PlanContentEditor({
           </>
         )}
       </Form.List>
+      <Modal
+        open={objectiveModalOpen}
+        title={t("Add objective", "إضافة هدف")}
+        width={820}
+        onCancel={() => setObjectiveModalOpen(false)}
+        onOk={() => objectiveForm.submit()}
+        okText={t("Add objective", "إضافة الهدف")}
+        cancelText={t("Cancel", "إلغاء")}
+        destroyOnHidden
+      >
+        <Form
+          form={objectiveForm}
+          layout="vertical"
+          onFinish={(values) => {
+            add(values);
+            setObjectiveModalOpen(false);
+            objectiveForm.resetFields();
+          }}
+        >
+          <Form.Item name="category_id" label={t("Category", "التصنيف")} rules={[{ required: true }]}>
+            <Select showSearch optionFilterProp="label" options={categories.map((category) => ({ value: category.id, label: bilingual(category.name, ar) }))} />
+          </Form.Item>
+          <Form.Item name="text" label={t("Objective text", "نص الهدف")} rules={[{ required: true }]}>
+            <Input.TextArea rows={3} />
+          </Form.Item>
+          <Form.List name="kpis">
+            {(kpiFields, { add: addKpi, remove: removeKpi }) => (
+              <Space direction="vertical" size={12} style={{ width: "100%" }}>
+                {kpiFields.map((field, index) => (
+                  <Card key={field.key} size="small" title={t("KPI", "مؤشر الأداء") + " " + (index + 1)}
+                    extra={kpiFields.length > 1 ? (
+                      <Popconfirm title={t("Delete KPI?", "حذف المؤشر؟")} okText={t("Delete", "حذف")} cancelText={t("Cancel", "إلغاء")} okButtonProps={{ danger: true }} onConfirm={() => removeKpi(field.name)}>
+                        <Button danger type="text" icon={<DeleteOutlined />}>{t("Delete", "حذف")}</Button>
+                      </Popconfirm>
+                    ) : null}>
+                    <Form.Item name={[field.name, "name"]} label={t("KPI name", "اسم المؤشر")} rules={[{ required: true }]}><Input /></Form.Item>
+                    <Row gutter={[12, 0]}>
+                      <Col xs={24} md={12}>
+                        <Form.Item name={[field.name, "measurement_type"]} label={t("Type", "النوع")} rules={[{ required: true }]}>
+                          <Select options={measurementTypes.map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))} />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} md={12}>
+                        <Form.Item name={[field.name, "unit"]} label={t("Unit", "الوحدة")} rules={[{ required: true }]}>
+                          <Select options={(measurementTypes[0]?.units || []).map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))} />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} md={12}>
+                        <Form.Item name={[field.name, "direction"]} label={t("Direction", "الاتجاه")} rules={[{ required: true }]}>
+                          <Select options={[{ value: "higher", label: t("Higher is better", "الأعلى أفضل") }, { value: "lower", label: t("Lower is better", "الأقل أفضل") }]} />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} md={12}><Form.Item name={[field.name, "target"]} label={t("Target", "المستهدف")} rules={[{ required: true }]}><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
+                      <Col xs={24} md={12}><Form.Item name={[field.name, "baseline"]} label={t("Baseline", "خط الأساس")}><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
+                      <Col xs={24} md={12}><Form.Item name={[field.name, "weight_pct"]} label={t("Weight %", "الوزن %")} rules={[{ required: true }]}><InputNumber min={0} max={100} step={0.01} style={{ width: "100%" }} /></Form.Item></Col>
+                    </Row>
+                  </Card>
+                ))}
+                <Button type="dashed" block icon={<PlusOutlined />} onClick={() => addKpi({ name: "", measurement_type: "number_amount", unit: "count", direction: "higher", target: null, baseline: null, weight_pct: 0 })}>
+                  {t("Add KPI", "إضافة مؤشر")}
+                </Button>
+              </Space>
+            )}
+          </Form.List>
+        </Form>
+      </Modal>
     </Form>
   );
 }
