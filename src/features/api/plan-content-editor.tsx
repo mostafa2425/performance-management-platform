@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Button, Card, Col, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Collapse, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
 import { useRef, useState } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { FormInstance } from "antd";
@@ -232,122 +232,134 @@ export function PlanContentEditor({
         {(fields, { add, remove }) => {
           addObjectiveRef.current = add;
           return (
-          <>
-            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
-              <Button
-                type="primary"
-                ghost
-                icon={<PlusOutlined />}
-                onClick={() => {
-                  objectiveForm.resetFields();
-                  objectiveForm.setFieldsValue({
-                    text: "",
-                    category_id: undefined,
-                    kpis: [{ name: "", measurement_type: "number_amount", unit: measurementTypes.find((item) => item.value === "number_amount")?.units?.[0]?.value || "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
-                  });
-                  setObjectiveModalOpen(true);
-                }}
-              >
-                {t("Add objective", "إضافة هدف")}
-              </Button>
-            </div>
-            {fields.map((field) => {
-              const objectiveId = form.getFieldValue(["objectives", field.name, "id"]);
-              const objectiveCategoryId = form.getFieldValue(["objectives", field.name, "category_id"]);
-              const categoryLabel = bilingual(categories.find((item) => item.id === objectiveCategoryId)?.name, ar);
-              return (
-              <Card
-                key={field.key}
-                size="small"
-                style={{ marginBottom: 16, borderRadius: 12 }}
-                title={
-                  <Space wrap size={8}>
-                    <Typography.Text strong>{`${t("Objective", "الهدف")} ${field.name + 1}`}</Typography.Text>
-                    {categoryLabel ? <Tag>{categoryLabel}</Tag> : null}
-                    <Tag color="cyan">{(form.getFieldValue(["objectives", field.name, "kpis"]) || []).length} {t("KPIs", "مؤشرات")}</Tag>
-                  </Space>
-                }
-                extra={
-                  <Popconfirm
-                    title={t("Delete objective?", "حذف الهدف؟")}
-                    description={t("All KPIs under this objective will also be deleted.", "سيتم حذف جميع مؤشرات الأداء التابعة لهذا الهدف أيضاً.")}
-                    okText={t("Delete", "حذف")}
-                    cancelText={t("Keep", "إلغاء")}
-                    okButtonProps={{ danger: true }}
-                    onConfirm={() => remove(field.name)}
-                  >
-                    <Button danger type="text" icon={<DeleteOutlined />}>
-                      {t("Delete objective", "حذف الهدف")}
-                    </Button>
-                  </Popconfirm>
-                }
-              >
-                <InlineComments
-                  openComments={openComments}
-                  target="objective"
-                  id={objectiveId}
-                  ar={ar}
+            <>
+              <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+                <Button
+                  type="primary"
+                  ghost
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    objectiveForm.resetFields();
+                    objectiveForm.setFieldsValue({
+                      text: "",
+                      category_id: undefined,
+                      kpis: [{ name: "", measurement_type: "number_amount", unit: measurementTypes.find((item) => item.value === "number_amount")?.units?.[0]?.value || "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
+                    });
+                    setObjectiveModalOpen(true);
+                  }}
+                >
+                  {t("Add objective", "إضافة هدف")}
+                </Button>
+              </div>
+              {fields.length ? (
+                <Collapse
+                  bordered={false}
+                  defaultActiveKey={fields.map((field) => String(field.key))}
+                  items={fields.map((field) => {
+                    const objectiveId = form.getFieldValue(["objectives", field.name, "id"]);
+                    const objectiveCategoryId = form.getFieldValue(["objectives", field.name, "category_id"]);
+                    const categoryLabel = bilingual(categories.find((item) => item.id === objectiveCategoryId)?.name, ar);
+                    const kpiCount = (form.getFieldValue(["objectives", field.name, "kpis"]) || []).length;
+                    return {
+                      key: String(field.key),
+                      label: (
+                        <Space wrap size={8}>
+                          <Typography.Text strong>{`${t("Objective", "الهدف")} ${field.name + 1}`}</Typography.Text>
+                          {categoryLabel ? <Tag>{categoryLabel}</Tag> : null}
+                          <Tag color="cyan">{kpiCount} {t("KPIs", "مؤشرات")}</Tag>
+                        </Space>
+                      ),
+                      extra: (
+                        <Popconfirm
+                          title={t("Delete objective?", "حذف الهدف؟")}
+                          description={t("All KPIs under this objective will also be deleted.", "سيتم حذف جميع مؤشرات الأداء التابعة لهذا الهدف أيضاً.")}
+                          okText={t("Delete", "حذف")}
+                          cancelText={t("Keep", "إلغاء")}
+                          okButtonProps={{ danger: true }}
+                          onConfirm={() => remove(field.name)}
+                        >
+                          <Button danger type="text" size="small" icon={<DeleteOutlined />}>
+                            {t("Delete", "حذف")}
+                          </Button>
+                        </Popconfirm>
+                      ),
+                      children: (
+                        <div style={{ padding: "4px 2px 8px" }}>
+                          <InlineComments openComments={openComments} target="objective" id={objectiveId} ar={ar} />
+                          <Form.Item name={[field.name, "id"]} hidden>
+                            <Input />
+                          </Form.Item>
+                          <Form.Item
+                            name={[field.name, "category_id"]}
+                            label={t("Category", "التصنيف")}
+                            rules={[{ required: true, message: t("Category is required", "التصنيف مطلوب") }]}
+                          >
+                            <Select
+                              showSearch
+                              optionFilterProp="label"
+                              options={categories.map((category) => ({
+                                value: category.id,
+                                label: bilingual(category.name, ar),
+                              }))}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            name={[field.name, "text"]}
+                            label={t("Objective text", "نص الهدف")}
+                            rules={[{ required: true, message: t("Objective text is required", "نص الهدف مطلوب") }]}
+                          >
+                            <Input.TextArea rows={2} />
+                          </Form.Item>
+                          <Form.List name={[field.name, "kpis"]}>
+                            {(kpiFields, kpiOps) => (
+                              <Space orientation="vertical" style={{ width: "100%" }} size={8}>
+                                {kpiFields.map((kpiField) => (
+                                  <KpiFields
+                                    key={kpiField.key}
+                                    objectiveIndex={field.name}
+                                    kpiField={kpiField}
+                                    measurementTypes={measurementTypes}
+                                    ar={ar}
+                                    t={t}
+                                    canRemove={kpiFields.length > 1}
+                                    onRemove={() => kpiOps.remove(kpiField.name)}
+                                    openComments={openComments}
+                                  />
+                                ))}
+                                <Button
+                                  type="dashed"
+                                  icon={<PlusOutlined />}
+                                  onClick={() =>
+                                    kpiOps.add({
+                                      name: "",
+                                      measurement_type: "number_amount",
+                                      unit: "count",
+                                      direction: "higher",
+                                      target: null,
+                                      baseline: null,
+                                      weight_pct: 0,
+                                    })
+                                  }
+                                >
+                                  {t("Add KPI", "إضافة مؤشر")}
+                                </Button>
+                              </Space>
+                            )}
+                          </Form.List>
+                        </div>
+                      ),
+                    };
+                  })}
                 />
-                <Form.Item name={[field.name, "id"]} hidden>
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name={[field.name, "category_id"]}
-                  label={t("Category", "التصنيف")}
-                  rules={[{ required: true, message: t("Category is required", "التصنيف مطلوب") }]}
-                >
-                  <Select
-                    showSearch
-                    optionFilterProp="label"
-                    options={categories.map((category) => ({
-                      value: category.id,
-                      label: bilingual(category.name, ar),
-                    }))}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name={[field.name, "text"]}
-                  label={t("Objective text", "نص الهدف")}
-                  rules={[{ required: true, message: t("Objective text is required", "نص الهدف مطلوب") }]}
-                >
-                  <Input.TextArea rows={2} />
-                </Form.Item>
-                <Form.List name={[field.name, "kpis"]}>
-                  {(kpiFields, kpiOps) => (
-                    <Space orientation="vertical" style={{ width: "100%" }} size={8}>
-                      {kpiFields.map((kpiField) => (
-                        <KpiFields
-                          key={kpiField.key}
-                          objectiveIndex={field.name}
-                          kpiField={kpiField}
-                          measurementTypes={measurementTypes}
-                          ar={ar}
-                          t={t}
-                          canRemove={kpiFields.length > 1}
-                          onRemove={() => kpiOps.remove(kpiField.name)}
-                          openComments={openComments}
-                        />
-                      ))}
-                      <Button
-                        type="dashed"
-                        icon={<PlusOutlined />}
-                        onClick={() =>
-                          kpiOps.add({
-                            name: "",
-                            measurement_type: "number_amount",
-                            unit: "count",
-                            direction: "higher",
-                            target: null,
-                            baseline: null,
-                            weight_pct: 0,
-                          })
-                        }
-                      >
-                        {t("Add KPI", "إضافة مؤشر")}
-                      </Button>
-                    </Space>
-                  )}
-                </Form.List>
+              ) : (
+                <Card size="small" style={{ textAlign: "center", color: "rgba(0,0,0,.45)" }}>
+                  {t("No objectives added yet. Use Add objective to get started.", "لم تتم إضافة أهداف بعد. اضغط على إضافة هدف للبدء.")}
+                </Card>
+              )}
+            </>
+          );
+        }}
+      </Form.List>
               </Card>
             )})}
           </>
