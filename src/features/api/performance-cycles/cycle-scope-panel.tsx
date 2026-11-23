@@ -15,8 +15,7 @@ import {
 } from "antd";
 import { CheckCircleFilled } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { cyclesApi, employeesApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
 import { previewQueryKey } from "./shared";
@@ -62,8 +61,6 @@ export function CycleScopePanel({
   onActivate: () => Promise<unknown> | void;
 }) {
   const t = useTranslations("PerformanceCycles");
-  const locale = useLocale();
-  const router = useRouter();
   const { message, modal } = App.useApp();
   const qc = useQueryClient();
   const [form] = Form.useForm();
@@ -181,12 +178,13 @@ export function CycleScopePanel({
         title: t("toast.scopeSaved"),
         icon: <CheckCircleFilled style={{ color: "#52c41a" }} />,
         okText: t("actions.activate"),
-        cancelText: t("actions.backToList"),
+        cancelText: t("actions.close"),
         onOk: async () => {
-          await onActivate();
-        },
-        onCancel: () => {
-          router.push(`/${locale}/admin/performance-cycles`);
+          try {
+            await onActivate();
+          } catch {
+            // Detailed activation errors are shown by CycleDetail.
+          }
         },
       });
     },

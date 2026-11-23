@@ -525,6 +525,7 @@
       "saveScope": "حفظ النطاق",
       "editScope": "تعديل النطاق",
       "backToList": "العودة للقائمة",
+      "close": "إغلاق",
       "viewDetails": "عرض التفاصيل",
       "editCycle": "تعديل الدورة",
       "saveDeadlines": "حفظ المواعيد",
@@ -541,6 +542,10 @@
       "activated": "تم تفعيل الدورة",
       "deleted": "تم حذف المسودة",
       "scopeSaved": "تم حفظ نطاق الدورة"
+    },
+    "errors": {
+      "activationFailed": "تعذر تفعيل الدورة",
+      "activationCandidatesHint": "{count} موظفون في النطاق غير مؤهلين. راجع الأسباب أدناه، ثم عدّل النطاق أو أغلق الدورات النشطة الأخرى."
     },
     "fields": {
       "nameEn": "الاسم (إنجليزي)",

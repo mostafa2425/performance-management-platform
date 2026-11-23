@@ -27,6 +27,7 @@ import {
   previewSummaryObject,
 } from "./cycle-summary-cards";
 import { CycleTimeline } from "./cycle-timeline";
+import { showCycleActivationError } from "./cycle-activation-error";
 import {
   bilingual,
   countFromScope,
@@ -40,7 +41,7 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
   const locale = useLocale();
   const ar = locale === "ar";
   const router = useRouter();
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
   const qc = useQueryClient();
   const [showPreview, setShowPreview] = useState(false);
 
@@ -69,7 +70,7 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
       await qc.invalidateQueries({ queryKey: queryKeys.adminCycles });
       await cycle.refetch();
     },
-    onError: (error: Error) => message.error(error.message),
+    onError: (error: Error) => showCycleActivationError(modal, error, t),
   });
 
   const remove = useMutation({

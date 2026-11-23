@@ -129,11 +129,23 @@ export const timelineStatusColor: Record<StageTimelineStatus, string> = {
   upcoming: "default",
 };
 
-export function reasonText(reason: unknown): string {
+function isBilingual(value: unknown): value is { ar?: string; en?: string } {
+  return (
+    !!value &&
+    typeof value === "object" &&
+    ("ar" in (value as object) || "en" in (value as object)) &&
+    !("cycle_id" in (value as object)) &&
+    !("cycle_name" in (value as object))
+  );
+}
+
+export function reasonText(reason: unknown, ar = false): string {
   if (reason == null || reason === "") return "—";
   if (typeof reason === "string") return reason;
   if (Array.isArray(reason)) {
-    const parts = reason.map((r) => (r === "—" ? "" : reasonText(r))).filter((r) => r && r !== "—");
+    const parts = reason
+      .map((r) => (r === "—" ? "" : reasonText(r, ar)))
+      .filter((r) => r && r !== "—");
     return parts.length ? parts.join(", ") : "—";
   }
   if (typeof reason === "object") {
@@ -141,9 +153,19 @@ export function reasonText(reason: unknown): string {
     if (typeof r.message === "string") return r.message;
     if (typeof r.reason === "string") return r.reason;
     if (typeof r.code === "string") return r.code;
+    if (r.cycle_name != null || r.cycle_id != null) {
+      const name = bilingual(r.cycle_name, ar);
+      if (name !== "—") return name;
+      if (r.cycle_id != null) return `#${r.cycle_id}`;
+    }
+    if (isBilingual(reason)) return bilingual(reason, ar);
     const parts = Object.entries(r)
       .filter(([, v]) => v != null && v !== "")
-      .map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`);
+      .map(([k, v]) => {
+        if (isBilingual(v)) return `${k}: ${bilingual(v, ar)}`;
+        if (v && typeof v === "object") return `${k}: ${reasonText(v, ar)}`;
+        return `${k}: ${String(v)}`;
+      });
     return parts.length ? parts.join(", ") : "—";
   }
   return String(reason);

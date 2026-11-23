@@ -57,7 +57,7 @@ export function CycleEligibilityPreview({
     },
     {
       title: t("fields.reason"),
-      render: (_: unknown, row: any) => reasonText(row.reason ?? row.reasons),
+      render: (_: unknown, row: any) => reasonText(row.reason ?? row.reasons, ar),
     },
   ];
 

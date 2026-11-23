@@ -525,6 +525,7 @@
       "saveScope": "Save scope",
       "editScope": "Edit scope",
       "backToList": "Back to list",
+      "close": "Close",
       "viewDetails": "View details",
       "editCycle": "Edit cycle",
       "saveDeadlines": "Save deadlines",
@@ -541,6 +542,10 @@
       "activated": "Cycle activated",
       "deleted": "Draft deleted",
       "scopeSaved": "Cycle scope saved"
+    },
+    "errors": {
+      "activationFailed": "Cannot activate cycle",
+      "activationCandidatesHint": "{count} employees in scope are not eligible. Review the reasons below, then adjust scope or close the other active cycles."
     },
     "fields": {
       "nameEn": "Name (English)",
