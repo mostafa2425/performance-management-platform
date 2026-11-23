@@ -5,7 +5,7 @@ import { resultsApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
 export default function ApiEmployeeResultsWorkspace(){
  const ar=useLocale()==="ar"; const q=useQuery({queryKey:["results","me"],queryFn:()=>resultsApi.mine()}); const t=(en:string,a:string)=>ar?a:en;
- if(q.isLoading)return <Spin/>; if(q.isError)return <Alert type="error" showIcon message={(q.error as Error).message}/>;
+ if(q.isLoading)return <Spin/>; if(q.isError)return <Alert type="error" showIcon title={(q.error as Error).message}/>;
  const rows=q.data||[]; if(!rows.length)return <Empty description={t("No published results are available yet.","لا توجد نتائج منشورة متاحة حتى الآن.")}/>;
  return <Card title={t("My published performance results","نتائج أدائي المنشورة")}>
   <Table rowKey="id" dataSource={rows} pagination={{pageSize:10}} expandable={{expandedRowRender:(r:any)=><div>{(r.objectives||[]).map((o:any,i:number)=><Card size="small" key={i} title={o.text}>{(o.kpis||[]).map((k:any,j:number)=><Typography.Paragraph key={j}>{k.name} · {t("Target","المستهدف")}: {k.target} · {(k.weight_bp/100).toFixed(2)}%</Typography.Paragraph>)}</Card>)}</div>}} columns={[
