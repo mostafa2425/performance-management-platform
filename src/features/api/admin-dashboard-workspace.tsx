@@ -17,6 +17,7 @@ import {
   Statistic,
   Table,
   Tag,
+  Tooltip,
   Typography,
 } from "antd";
 import {
@@ -268,7 +269,7 @@ function progressForCycle(cycle: DashboardCycle, finalizedIds: Set<number>) {
   if (cycle.current_stage === "goal_setting") {
     labelKey = "plansSubmitted";
     done = cycle.members.filter((member) =>
-      ["pending_admin_approval", "pending_employee_review", "returned_to_manager", "goals_approved"].includes(
+      ["pending_admin_approval", "pending_employee_review", "goals_approved"].includes(
         String(member.display_status),
       ),
     ).length;
@@ -778,7 +779,9 @@ export default function AdminDashboardWorkspace() {
                 <Col key={item.key} xs={12} sm={8} lg={6} xxl={item.key === "total" ? 6 : 4}>
                   <Card size="small" style={{ height: "100%", borderInlineStart: "3px solid " + item.color }}>
                     <Statistic
-                      title={t(item.label)}
+                      title={item.key === "not_started" ? (
+                        <Tooltip title={t("notStartedDefinition")}>{t(item.label)}</Tooltip>
+                      ) : t(item.label)}
                       value={item.value}
                       valueStyle={{ fontSize: 25, fontWeight: 650, color: "rgba(0,0,0,.88)" }}
                       prefix={item.icon}
@@ -1055,7 +1058,7 @@ export default function AdminDashboardWorkspace() {
       <Drawer
         open={selectedManagerId != null}
         onClose={() => setSelectedManagerId(null)}
-        width={900}
+        width="min(900px, 100vw)"
         title={
           selectedManager?.manager?.full_name
             ? t("managerEmployeesTitle", { name: selectedManager.manager.full_name })
