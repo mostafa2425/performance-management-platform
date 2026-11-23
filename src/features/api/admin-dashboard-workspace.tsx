@@ -461,7 +461,7 @@ async function loadAdminDashboard(): Promise<DashboardData> {
           employee,
           cycle,
           joiningDate:
-            typeof reason?.joining_date === "string" ? reason.joining_date : employee.joining_date,
+            (typeof reason?.joining_date === "string" ? reason.joining_date : employee.joining_date) || "",
           eligibleFrom:
             typeof reason?.eligible_from === "string"
               ? reason.eligible_from
