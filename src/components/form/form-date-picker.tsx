@@ -18,7 +18,10 @@ export function FormDatePicker({ value, onChange, style, ...props }: Props) {
       {...props}
       style={{ width: "100%", ...style }}
       value={parsed && parsed.isValid() ? parsed : null}
-      onChange={(next) => onChange?.(next ? next.format("YYYY-MM-DD") : null)}
+      onChange={(next) => {
+        const selected = Array.isArray(next) ? next[0] : next;
+        onChange?.(selected ? selected.format("YYYY-MM-DD") : null);
+      }}
     />
   );
 }
