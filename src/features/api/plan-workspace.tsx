@@ -24,7 +24,7 @@ import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { ApiRequestError } from "@/lib/api/client";
 import { PlanContentEditor } from "./plan-content-editor";
-import type { KpiUnitsMeta } from "@/lib/api/types";
+import type { KpiUnitsMeta, Plan as ApiPlan } from "@/lib/api/types";
 
 type PlanMode = "manager" | "employee" | "admin";
 
