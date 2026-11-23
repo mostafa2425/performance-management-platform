@@ -189,6 +189,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     onSuccess: async (plan: any) => {
       message.success(ar ? "تم إنشاء مسودة الخطة" : "Plan draft created");
       setSelectedPlan(plan);
+      setAdminEditMode(mode === "admin");
       setEditorOpen(true);
       await invalidatePlanQueries(plan.id);
     },
