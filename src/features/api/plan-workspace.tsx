@@ -1,83 +1,37 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import {
   Alert,
   App,
   Button,
   Card,
   Col,
-  Modal,
   Empty,
   Row,
   Select,
   Space,
   Spin,
   Table,
-  Tabs,
   Tag,
   Typography,
 } from "antd";
-import { Form } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { cyclesApi, metaApi, plansApi } from "@/lib/api/endpoints";
+import { cyclesApi, plansApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { ApiRequestError } from "@/lib/api/client";
-import { PlanContentEditor } from "./plan-content-editor";
-import type { KpiUnitsMeta, Plan } from "@/lib/api/types";
+import type { Plan } from "@/lib/api/types";
 import { PlanActionModal } from "./plans/plan-action-modal";
-import { PlanHistoryPanel } from "./plans/plan-history-panel";
-import { PlanSnapshotsPanel } from "./plans/plan-snapshots-panel";
-import { PlanReadonlyTree } from "./plans/plan-readonly-tree";
 import {
-  formatInstant,
   planStatusTag,
   resolveActionLabel,
-  returnSourceLabel,
   workflowActions,
   type PlanMode,
 } from "./plans/plan-shared";
-
-function toDraftObjectives(objectives: any[] = []) {
-  return objectives.map((objective) => ({
-    id: objective.id,
-    category_id: objective.category_id,
-    text: objective.text || "",
-    kpis: (objective.kpis || []).map((kpi: any) => ({
-      id: kpi.id,
-      name: kpi.name || "",
-      measurement_type: kpi.measurement_type || "number_amount",
-      unit: kpi.unit || "count",
-      direction: kpi.direction === "lower" ? "lower" : "higher",
-      target: kpi.target == null ? null : Number(kpi.target),
-      baseline:
-        kpi.baseline == null || kpi.baseline === ""
-          ? null
-          : Number(kpi.baseline),
-      weight_pct: Number(((kpi.weight_bp || 0) / 100).toFixed(2)),
-    })),
-  }));
-}
-
-function toApiObjectives(objectives: any[]) {
-  return objectives.map((objective) => ({
-    ...(objective.id ? { id: objective.id } : {}),
-    category_id: objective.category_id,
-    text: objective.text,
-    kpis: (objective.kpis || []).map((kpi: any) => ({
-      ...(kpi.id ? { id: kpi.id } : {}),
-      name: kpi.name,
-      measurement_type: kpi.measurement_type,
-      unit: kpi.unit,
-      direction: kpi.direction,
-      target: kpi.target,
-      baseline: kpi.baseline ?? null,
-      weight_bp: Math.round((kpi.weight_pct || 0) * 100),
-    })),
-  }));
-}
 
 function ActionButtons({
   actions,
@@ -116,7 +70,9 @@ function ActionButtons({
 }
 
 export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
-  const ar = useLocale() === "ar";
+  const locale = useLocale();
+  const router = useRouter();
+  const ar = locale === "ar";
   const { message } = App.useApp();
   const qc = useQueryClient();
   const [cycleId, setCycleId] = useState<number>();
@@ -125,9 +81,6 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [pendingAction, setPendingAction] = useState("");
   const [dialog, setDialog] = useState(false);
-  const [form] = Form.useForm();
-  const [adminEditMode, setAdminEditMode] = useState(false);
-  const [editorOpen, setEditorOpen] = useState(false);
 
   const cycles = useQuery({
     queryKey: queryKeys.cycles,
@@ -155,23 +108,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     queryFn: () => plansApi.get(selectedPlan.id),
     enabled: Boolean(selectedPlan?.id),
   });
-  const categories = useQuery({
-    queryKey: ["meta", "objective-categories"],
-    queryFn: metaApi.objectiveCategories,
-    enabled: Boolean(selectedPlan),
-  });
-  const units = useQuery({
-    queryKey: ["meta", "kpi-units"],
-    queryFn: metaApi.kpiUnits,
-    enabled: Boolean(selectedPlan),
-  });
 
-  useEffect(() => {
-    if (!detail.data) return;
-    form.setFieldsValue({
-      objectives: toDraftObjectives(detail.data.objectives || []),
-    });
-  }, [detail.data, form]);
 
   const invalidatePlanQueries = async (planId?: number) => {
     await qc.invalidateQueries({ queryKey: queryKeys.plans });
@@ -189,9 +126,8 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     onSuccess: async (plan: any) => {
       message.success(ar ? "تم إنشاء مسودة الخطة" : "Plan draft created");
       setSelectedPlan(plan);
-      setAdminEditMode(mode === "admin");
-      setEditorOpen(true);
       await invalidatePlanQueries(plan.id);
+      router.push(`/${locale}/${mode === "admin" ? "admin/plan-reviews" : mode === "manager" ? "manager/objectives" : "employee/objectives"}/${plan.id}`);
     },
     onError: (error: Error) => {
       const apiError = error as ApiRequestError;
@@ -236,24 +172,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     onError: (error: Error) => message.error(error.message),
   });
 
-  const saveContent = useMutation({
-    mutationFn: ({ id, body }: { id: number; body: any }) =>
-      plansApi.saveContent(id, body),
-    onSuccess: async (plan: any) => {
-      message.success(ar ? "تم حفظ محتوى الخطة" : "Plan content saved");
-      setSelectedPlan(plan);
-      setEditorOpen(false);
-      if (mode === "admin") setAdminEditMode(false);
-      await invalidatePlanQueries(plan.id);
-    },
-    onError: (error: Error) => {
-      const apiError = error as ApiRequestError;
-      const firstField = apiError.fields
-        ? Object.values(apiError.fields)[0]?.[0]
-        : undefined;
-      message.error(firstField || apiError.message);
-    },
-  });
+
 
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const cycleOptions = (cycles.data || []).map((c: any) => ({
@@ -262,15 +181,6 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   }));
   const rows = ((plans.data as any)?.data || []) as Plan[];
   const members = (status.data as any)?.data || [];
-  const planDetails = detail.data || selectedPlan;
-  const canEdit = planDetails?.allowed_actions?.includes("edit_content");
-  const canEditContent = canEdit && (mode !== "admin" || adminEditMode);
-  const showHistory = mode !== "employee";
-
-  useEffect(() => {
-    setAdminEditMode(false);
-  }, [selectedPlan?.id]);
-
   const openAction = (plan: any, action: string) => {
     setSelectedPlan(plan);
     setPendingAction(action);
@@ -426,17 +336,13 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                   ar ? `${n} خطة` : `${n} plan${n === 1 ? "" : "s"}`,
               }}
               scroll={{ x: "max-content" }}
-              rowClassName={(record) =>
-                selectedPlan?.id === record.id
-                  ? "plan-row plan-row-selected"
-                  : "plan-row"
-              }
+              rowClassName={() => "plan-row"}
               onRow={(record) => ({
-                onClick: () => setSelectedPlan(record),
+                onClick: () => router.push(`/${locale}/${mode === "admin" ? "admin/plan-reviews" : mode === "manager" ? "manager/objectives" : "employee/objectives"}/${record.id}`),
                 onKeyDown: (e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
-                    setSelectedPlan(record);
+                    router.push(`/${locale}/${mode === "admin" ? "admin/plan-reviews" : mode === "manager" ? "manager/objectives" : "employee/objectives"}/${record.id}`);
                   }
                 },
                 tabIndex: 0,
@@ -492,188 +398,11 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
           )}
         </Card>
 
-        {selectedPlan && (
-          <Card
-            title={t("Plan details", "تفاصيل الخطة")}
-            extra={
-              <Button onClick={() => setSelectedPlan(null)} type="text">
-                {t("Close", "إغلاق")}
-              </Button>
-            }
-          >
-            {detail.isLoading ? (
-              <div style={{ display: "grid", placeItems: "center", minHeight: 160 }}>
-                <Spin />
-              </div>
-            ) : detail.isError ? (
-              <Alert
-                type="error"
-                showIcon
-                title={(detail.error as Error).message}
-              />
-            ) : (
-              <Tabs
-                items={[
-                  {
-                    key: "content",
-                    label: t("Objectives & KPIs", "الأهداف والمؤشرات"),
-                    children: (
-                      <Space orientation="vertical" size={12} style={{ width: "100%" }}>
-                        <Space wrap size={[8, 8]}>
-                          <Typography.Text strong>
-                            {planDetails.employee?.name ||
-                              planDetails.employee?.full_name}
-                          </Typography.Text>
-                          {planDetails.employee?.code ? (
-                            <Typography.Text type="secondary">
-                              #{planDetails.employee.code}
-                            </Typography.Text>
-                          ) : null}
-                          {planStatusTag(planDetails.display_status, ar)}
-                          {planDetails.requires_admin_attention ? (
-                            <Tag color="orange">
-                              {t("Requires admin attention", "يتطلب متابعة الإدارة")}
-                            </Tag>
-                          ) : null}
-                        </Space>
-
-                        {planDetails.display_status === "returned_to_manager" ||
-                        planDetails.status === "returned" ? (
-                          <Alert
-                            type="warning"
-                            showIcon
-                            title={returnSourceLabel(planDetails.return_source, ar)}
-                            description={
-                              planDetails.open_comments ? (
-                                <span>
-                                  {planDetails.open_comments.actor?.name || "—"} ·{" "}
-                                  {formatInstant(
-                                    planDetails.open_comments.created_at,
-                                    ar,
-                                  )}
-                                </span>
-                              ) : (
-                                t(
-                                  "Review the comments, update the plan, then resubmit.",
-                                  "راجع الملاحظات وحدّث الخطة ثم أعد الإرسال.",
-                                )
-                              )
-                            }
-                          />
-                        ) : null}
-
-                        {mode === "admin" && canEdit && !adminEditMode ? (
-                          <Button type="primary" onClick={() => {
-                            setAdminEditMode(true);
-                            setEditorOpen(true);
-                          }}>
-                            {t("Edit submitted plan", "تعديل الخطة المرسلة")}
-                          </Button>
-                        ) : null}
-                        {mode === "manager" && canEdit ? (
-                          <Button type="primary" onClick={() => setEditorOpen(true)}>
-                            {t("Edit objectives & KPIs", "تعديل الأهداف والمؤشرات")}
-                          </Button>
-                        ) : null}
-                        {mode === "admin" && adminEditMode ? (
-                          <Button onClick={() => {
-                            form.setFieldsValue({ objectives: toDraftObjectives(detail.data?.objectives || []) });
-                            setEditorOpen(false);
-                            setAdminEditMode(false);
-                          }}>
-                            {t("Cancel editing", "إلغاء التعديل")}
-                          </Button>
-                        ) : null}
-                        {mode === "employee" && planDetails.content_visible === false ? (
-                          <Alert
-                            type="info"
-                            showIcon
-                            title={t("Waiting for Manager Submission", "في انتظار إرسال المدير للخطة")}
-                            description={t(
-                              "Your manager has not yet submitted your objectives for review. You cannot comment or approve until they submit.",
-                              "لم يقم مديرك بإرسال أهدافك للمراجعة بعد. لن تتمكن من التعليق أو الاعتماد قبل إرسال الخطة."
-                            )}
-                          />
-                        ) : null}
-                        <PlanReadonlyTree
-                          ar={ar}
-                          objectives={planDetails.objectives}
-                          openComments={planDetails.open_comments}
-                          contentVisible={planDetails.content_visible !== false}
-                        />
-
-                        <ActionButtons
-                          actions={planDetails.allowed_actions || []}
-                          ar={ar}
-                          plan={planDetails}
-                          onAction={(action) => openAction(planDetails, action)}
-                        />
-                      </Space>
-                    ),
-                  },
-                  ...(showHistory
-                    ? [
-                        {
-                          key: "history",
-                          label: t("Workflow history", "سجل سير العمل"),
-                          children: (
-                            <PlanHistoryPanel
-                              planId={planDetails.id}
-                              ar={ar}
-                            />
-                          ),
-                        },
-                        {
-                          key: "versions",
-                          label: t("Plan versions", "إصدارات الخطة"),
-                          children: (
-                            <PlanSnapshotsPanel planId={planDetails.id} ar={ar} />
-                          ),
-                        },
-                      ]
-                    : []),
-                ]}
-              />
-            )}
-          </Card>
-        )}
-
-        <Modal
-          open={editorOpen}
-          title={t("Edit performance objectives & KPIs", "تعديل أهداف ومؤشرات الأداء")}
-          width={1080}
-          onCancel={() => {
-            form.setFieldsValue({ objectives: toDraftObjectives(detail.data?.objectives || []) });
-            setEditorOpen(false);
-            if (mode === "admin") setAdminEditMode(false);
-          }}
-          footer={null}
-          destroyOnHidden={false}
-          styles={{ body: { maxHeight: "calc(100vh - 190px)", overflowY: "auto", paddingTop: 16 } }}
-        >
-          {canEditContent && planDetails ? (
-            <PlanContentEditor
-              form={form}
-              categories={(categories.data || []) as any}
-              units={(units.data || {}) as KpiUnitsMeta}
-              ar={ar}
-              loading={saveContent.isPending}
-              openComments={planDetails.open_comments}
-              onSave={(objectives) => saveContent.mutate({
-                id: planDetails.id,
-                body: { version: planDetails.version, objectives: toApiObjectives(objectives) },
-              })}
-            />
-          ) : (
-            <Spin />
-          )}
-        </Modal>
-
         <PlanActionModal
           open={dialog}
           action={pendingAction}
           ar={ar}
-          plan={detail.data || planDetails}
+          plan={detail.data || selectedPlan}
           loading={transition.isPending || removePlan.isPending}
           onCancel={() => {
             setDialog(false);
@@ -691,7 +420,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
               id: selectedPlan.id,
               action: pendingAction,
               body: {
-                version: (detail.data || planDetails).version,
+                version: (detail.data || selectedPlan).version,
                 ...payload,
               },
             });
@@ -702,7 +431,6 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
       <style>{`
         .plan-row { cursor: pointer; transition: background-color 0.15s ease; }
         .plan-row:hover > td { background: rgba(22, 119, 255, 0.06) !important; }
-        .plan-row-selected > td { background: rgba(22, 119, 255, 0.1) !important; }
         .plan-row:focus-visible { outline: 2px solid #1677ff; outline-offset: -2px; }
       `}</style>
     </AppShell>
