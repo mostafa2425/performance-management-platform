@@ -360,12 +360,6 @@ export function PlanContentEditor({
           );
         }}
       </Form.List>
-              </Card>
-            )})}
-          </>
-          );
-        }}
-      </Form.List>
       <Modal
         open={objectiveModalOpen}
         title={t("Add objective", "إضافة هدف")}
