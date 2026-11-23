@@ -133,7 +133,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
       const existingId = (apiError as any)?.details?.plan_id;
       if (existingId) {
         message.info(ar ? "الخطة موجودة مسبقاً" : "Plan already exists");
-        setSelectedPlan({ id: existingId });
+        router.push(`/${locale}/${mode === "admin" ? "admin/plan-reviews" : mode === "manager" ? "manager/objectives" : "employee/objectives"}/${existingId}`);
         return;
       }
       message.error(error.message);
