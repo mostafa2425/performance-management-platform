@@ -29,6 +29,7 @@ import {
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useAuthSession } from "@/lib/auth/session";
 import { AppShell } from "@/components/layout/app-shell";
 import { adminApi, cyclesApi, employeesApi, resultsApi } from "@/lib/api/endpoints";
@@ -172,9 +173,12 @@ function emptyCounts(): Record<StatusKey, number> {
 }
 
 function addMonths(dateValue: string, months: number): string {
-  const date = new Date(dateValue + "T00:00:00");
+  const date = new Date(dateValue + "T12:00:00");
   date.setMonth(date.getMonth() + months);
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return year + "-" + month + "-" + day;
 }
 
 function getCycleName(cycle: DashboardCycle, locale: string): string {
@@ -451,7 +455,7 @@ function downloadCsv(filename: string, rows: Array<Array<unknown>>) {
   anchor.href = url;
   anchor.download = filename;
   anchor.click();
-  URL.revokeObjectURL(url);
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export default function AdminDashboardWorkspace() {
@@ -459,6 +463,7 @@ export default function AdminDashboardWorkspace() {
   const ar = locale === "ar";
   const t = useTranslations("AdminDashboard");
   const { user, isReady, isAuthenticated } = useAuthSession();
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [cycleId, setCycleId] = useState<number | undefined>();
   const [businessUnitId, setBusinessUnitId] = useState<number | undefined>();
@@ -850,7 +855,7 @@ export default function AdminDashboardWorkspace() {
                       title: t("action"),
                       fixed: "end" as const,
                       render: (_: unknown, cycle: DashboardCycle) => (
-                        <Button type="link" onClick={() => (window.location.href = "/" + locale + "/admin/performance-cycles/" + cycle.id)}>
+                        <Button type="link" onClick={() => router.push("/" + locale + "/admin/performance-cycles/" + cycle.id)}>
                           {t("viewCycle")}
                         </Button>
                       ),
