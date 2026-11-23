@@ -177,20 +177,6 @@ function KpiFields({
           </Form.Item>
         </Col>
       </Row>
-      {canRemove && (
-        <Popconfirm
-          title={t("Remove this KPI?", "هل تريد حذف مؤشر الأداء؟")}
-          description={t("This KPI will be removed from the objective.", "سيتم حذف هذا المؤشر من الهدف.")}
-          okText={t("Remove", "حذف")}
-          cancelText={t("Cancel", "إلغاء")}
-          okButtonProps={{ danger: true }}
-          onConfirm={onRemove}
-        >
-          <Button danger type="link">
-            {t("Remove KPI", "حذف المؤشر")}
-          </Button>
-        </Popconfirm>
-      )}
     </Card>
   );
 }
@@ -275,7 +261,6 @@ export function PlanContentEditor({
           <>
             {fields.map((field) => {
               const objectiveId = form.getFieldValue(["objectives", field.name, "id"]);
-              const objectiveText = form.getFieldValue(["objectives", field.name, "text"]);
               const objectiveCategoryId = form.getFieldValue(["objectives", field.name, "category_id"]);
               const categoryLabel = bilingual(categories.find((item) => item.id === objectiveCategoryId)?.name, ar);
               return (
