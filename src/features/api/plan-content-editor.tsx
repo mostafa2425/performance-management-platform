@@ -243,7 +243,7 @@ export function PlanContentEditor({
                   objectiveForm.setFieldsValue({
                     text: "",
                     category_id: undefined,
-                    kpis: [{ name: "", measurement_type: "number_amount", unit: "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
+                    kpis: [{ name: "", measurement_type: "number_amount", unit: measurementTypes.find((item) => item.value === "number_amount")?.units?.[0]?.value || "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
                   });
                   setObjectiveModalOpen(true);
                 }}
@@ -393,7 +393,10 @@ export function PlanContentEditor({
                     <Row gutter={[12, 0]}>
                       <Col xs={24} md={12}>
                         <Form.Item name={[field.name, "measurement_type"]} label={t("Type", "النوع")} rules={[{ required: true }]}>
-                          <Select options={measurementTypes.map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))} />
+                          <Select
+                            options={measurementTypes.map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))}
+                            onChange={(value) => objectiveForm.setFieldValue(["kpis", field.name, "unit"], measurementTypes.find((item) => item.value === value)?.units?.[0]?.value)}
+                          />
                         </Form.Item>
                       </Col>
                       <Col xs={24} md={12}>
@@ -420,7 +423,7 @@ export function PlanContentEditor({
                     </Row>
                   </Card>
                 ))}
-                <Button type="dashed" block icon={<PlusOutlined />} onClick={() => addKpi({ name: "", measurement_type: "number_amount", unit: "count", direction: "higher", target: null, baseline: null, weight_pct: 0 })}>
+                <Button type="dashed" block icon={<PlusOutlined />} onClick={() => addKpi({ name: "", measurement_type: "number_amount", unit: measurementTypes.find((item) => item.value === "number_amount")?.units?.[0]?.value || "count", direction: "higher", target: null, baseline: null, weight_pct: 0 })}>
                   {t("Add KPI", "إضافة مؤشر")}
                 </Button>
               </Space>
