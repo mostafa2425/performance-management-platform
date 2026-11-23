@@ -1033,8 +1033,8 @@ export default function AdminDashboardWorkspace() {
               extra={<Tag color="warning">{(data?.exclusions || []).length}</Tag>}
             >
               {(data?.exclusions || []).length ? (
-                <Table
-                  rowKey={(row: AnyRecord) => String(row.employee.id) + "-" + String(row.cycle.id)}
+                <Table<ExclusionRecord>
+                  rowKey={(row) => String(row.employee.id) + "-" + String(row.cycle.id)}
                   size="small"
                   pagination={{ pageSize: 5 }}
                   scroll={{ x: 700 }}
@@ -1042,15 +1042,15 @@ export default function AdminDashboardWorkspace() {
                   columns={[
                     {
                       title: t("employeeName"),
-                      render: (_: unknown, row: AnyRecord) => row.employee.full_name,
+                      render: (_: unknown, row: ExclusionRecord) => row.employee.full_name,
                     },
                     {
                       title: t("employeeId"),
-                      render: (_: unknown, row: AnyRecord) => row.employee.code || row.employee.id,
+                      render: (_: unknown, row: ExclusionRecord) => row.employee.code || row.employee.id,
                     },
                     {
                       title: t("cycleName"),
-                      render: (_: unknown, row: AnyRecord) => getCycleName(row.cycle, locale),
+                      render: (_: unknown, row: ExclusionRecord) => getCycleName(row.cycle, locale),
                     },
                     {
                       title: t("joiningDate"),
