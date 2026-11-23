@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Alert, App, Button, Card, Empty, Select, Space, Spin, Table, Tag, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { cyclesApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
@@ -58,6 +59,8 @@ function useManagerCycle() {
 
 export function ApiManagerTeamWorkspace() {
   const ar = useLocale() === "ar";
+  const locale = useLocale();
+  const router = useRouter();
   const { cycleId, setCycleId, options, cycles } = useManagerCycle();
   const t = (e: string, a: string) => (ar ? a : e);
   const q = useQuery({
@@ -71,7 +74,10 @@ export function ApiManagerTeamWorkspace() {
     <AppShell
       role="manager"
       title={t("My team", "فريقي")}
-      subtitle={t("Live team membership and plan status for the selected cycle.", "أعضاء الفريق وحالة الخطط المباشرة للدورة المحددة.")}
+      subtitle={t(
+        "UC-010 · Open a direct report to view performance details for the selected cycle.",
+        "UC-010 · افتح موظفاً مباشراً لعرض تفاصيل الأداء للدورة المحددة.",
+      )}
     >
       <Card>
         <Select
@@ -92,14 +98,39 @@ export function ApiManagerTeamWorkspace() {
           <Table
             rowKey="cycle_member_id"
             dataSource={rows}
+            rowClassName={() => "team-row"}
+            onRow={(record) => ({
+              onClick: () => {
+                const id = record.employee?.id;
+                if (id == null) return;
+                router.push(`/${locale}/manager/team/${id}`);
+              },
+              onKeyDown: (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  const id = record.employee?.id;
+                  if (id == null) return;
+                  router.push(`/${locale}/manager/team/${id}`);
+                }
+              },
+              tabIndex: 0,
+              role: "button",
+              "aria-label": t("View employee performance details", "عرض تفاصيل أداء الموظف"),
+            })}
             columns={[
               {
-                title: t("Employee", "الموظف"),
-                render: (_: any, r: any) => r.employee?.name || r.employee?.full_name,
+                title: t("Code", "الرقم"),
+                width: 100,
+                render: (_: any, r: any) =>
+                  r.employee?.code ? `#${r.employee.code}` : "—",
               },
               {
-                title: t("Employee code", "الرقم الوظيفي"),
-                render: (_: any, r: any) => r.employee?.code || "—",
+                title: t("Employee", "الموظف"),
+                render: (_: any, r: any) => (
+                  <Typography.Text style={{ color: "#000", fontWeight: 500 }}>
+                    {r.employee?.name || r.employee?.full_name || "—"}
+                  </Typography.Text>
+                ),
               },
               {
                 title: t("Plan status", "حالة الخطة"),
@@ -112,10 +143,32 @@ export function ApiManagerTeamWorkspace() {
                 render: (v: boolean) =>
                   v ? <Tag color="orange">{t("Required", "مطلوب")}</Tag> : "—",
               },
+              {
+                title: t("Actions", "الإجراءات"),
+                width: 160,
+                render: (_: any, r: any) => (
+                  <Button
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const id = r.employee?.id;
+                      if (id == null) return;
+                      router.push(`/${locale}/manager/team/${id}`);
+                    }}
+                  >
+                    {t("Open details", "فتح التفاصيل")}
+                  </Button>
+                ),
+              },
             ]}
           />
         )}
       </Card>
+      <style>{`
+        .team-row { cursor: pointer; transition: background-color 0.15s ease; }
+        .team-row:hover > td { background: rgba(22, 119, 255, 0.06) !important; }
+        .team-row:focus-visible { outline: 2px solid #1677ff; outline-offset: -2px; }
+      `}</style>
     </AppShell>
   );
 }

@@ -1,0 +1,152 @@
+"use client";
+
+import { Tag } from "antd";
+
+export type PlanMode = "manager" | "employee" | "admin";
+
+export type OpenComment = {
+  id?: number | null;
+  body: string;
+  target: "plan" | "objective" | "kpi" | string;
+};
+
+export type OpenComments = {
+  event_id?: number;
+  action?: string;
+  return_source?: "admin" | "employee" | "admin_reopen" | string | null;
+  actor?: { id?: number; name?: string } | null;
+  created_at?: string;
+  comments?: OpenComment[];
+} | null;
+
+export const PLAN_STATUS_META: Record<
+  string,
+  { en: string; ar: string; color?: string }
+> = {
+  not_started: { en: "Not started", ar: "لم تبدأ" },
+  draft: { en: "Draft", ar: "مسودة", color: "blue" },
+  pending_admin_approval: {
+    en: "Pending admin approval",
+    ar: "بانتظار اعتماد الإدارة",
+    color: "gold",
+  },
+  returned_to_manager: {
+    en: "Returned for modification",
+    ar: "معاد للتعديل",
+    color: "orange",
+  },
+  pending_employee_review: {
+    en: "Pending employee review",
+    ar: "بانتظار مراجعة الموظف",
+    color: "purple",
+  },
+  goals_approved: { en: "Goals approved", ar: "تم اعتماد الأهداف", color: "green" },
+};
+
+const ACTION_LABELS: Record<string, [string, string]> = {
+  edit_content: ["Edit", "تعديل"],
+  delete: ["Delete draft", "حذف المسودة"],
+  submit: ["Submit", "إرسال"],
+  resubmit: ["Resubmit updated plan", "إعادة إرسال الخطة المحدّثة"],
+  approve: ["Approve", "اعتماد"],
+  return: ["Return", "إعادة للتعديل"],
+  employee_approve: ["Approve plan", "اعتماد الخطة"],
+  request_modification: ["Request changes", "طلب تعديل"],
+  attention_comment: ["Add attention note", "إضافة ملاحظة متابعة"],
+  reopen: ["Reopen plan", "إعادة فتح الخطة"],
+};
+
+export function resolveActionLabel(
+  action: string,
+  ar: boolean,
+  plan?: { display_status?: string; status?: string } | null,
+) {
+  if (
+    action === "submit" &&
+    (plan?.display_status === "returned_to_manager" || plan?.status === "returned")
+  ) {
+    return actionLabel("resubmit", ar);
+  }
+  return actionLabel(action, ar);
+}
+
+const HISTORY_ACTION_LABELS: Record<string, [string, string]> = {
+  plan_created: ["Plan created", "تم إنشاء الخطة"],
+  plan_content_saved: ["Content saved", "تم حفظ المحتوى"],
+  plan_submitted: ["Submitted", "تم الإرسال"],
+  plan_approved_by_admin: ["Approved by admin", "اعتمدتها الإدارة"],
+  plan_returned: ["Returned", "أُعيدت"],
+  plan_approved_by_employee: ["Approved by employee", "اعتمدها الموظف"],
+  plan_modification_requested: ["Modification requested", "طُلب تعديل"],
+  plan_attention_comment: ["Admin attention note", "ملاحظة متابعة الإدارة"],
+  plan_reopened: ["Reopened", "أُعيد فتحها"],
+};
+
+export function bilingual(
+  value: { ar?: string; en?: string } | string | null | undefined,
+  ar: boolean,
+) {
+  if (!value) return "—";
+  if (typeof value === "string") return value;
+  return ar ? value.ar || value.en || "—" : value.en || value.ar || "—";
+}
+
+export function actionLabel(action: string, ar: boolean) {
+  const pair = ACTION_LABELS[action];
+  return pair ? (ar ? pair[1] : pair[0]) : action.replaceAll("_", " ");
+}
+
+export function historyActionLabel(action: string, ar: boolean) {
+  const pair = HISTORY_ACTION_LABELS[action];
+  return pair ? (ar ? pair[1] : pair[0]) : action.replaceAll("_", " ");
+}
+
+export function returnSourceLabel(source: string | null | undefined, ar: boolean) {
+  if (source === "admin") return ar ? "أعادتها الإدارة" : "Returned by admin";
+  if (source === "employee") return ar ? "طلب تعديل من الموظف" : "Returned by employee";
+  if (source === "admin_reopen") return ar ? "أُعيد فتحها من الإدارة" : "Reopened by admin";
+  return ar ? "مصدر الإعادة غير معروف" : "Unknown return source";
+}
+
+export function planStatusTag(value?: string | null, ar?: boolean) {
+  if (!value) return <Tag style={{ marginInlineEnd: 0 }}>—</Tag>;
+  const meta = PLAN_STATUS_META[value];
+  const label = meta ? (ar ? meta.ar : meta.en) : value.replaceAll("_", " ");
+  return (
+    <Tag color={meta?.color} style={{ marginInlineEnd: 0 }}>
+      {label}
+    </Tag>
+  );
+}
+
+export function formatInstant(value?: string | null, ar?: boolean) {
+  if (!value) return "—";
+  try {
+    return new Intl.DateTimeFormat(ar ? "ar-SA" : "en-GB", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(new Date(value));
+  } catch {
+    return value;
+  }
+}
+
+export function weightPct(bp?: number | null) {
+  return Number((((bp || 0) / 100)).toFixed(2));
+}
+
+export function commentsForTarget(
+  openComments: OpenComments,
+  target: "plan" | "objective" | "kpi",
+  id?: number | null,
+) {
+  return (openComments?.comments || []).filter((comment) => {
+    if (comment.target !== target) return false;
+    if (target === "plan") return true;
+    return Number(comment.id) === Number(id);
+  });
+}
+
+export function workflowActions(actions: string[] = []) {
+  return actions.filter((action) => action !== "edit_content");
+}

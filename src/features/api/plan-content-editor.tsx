@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Card, Col, Form, Input, InputNumber, Row, Select, Space, Typography } from "antd";
+import { Alert, Button, Card, Col, Form, Input, InputNumber, Row, Select, Space, Typography } from "antd";
 import type { FormInstance } from "antd";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
+import { commentsForTarget, type OpenComments } from "./plans/plan-shared";
 
 type ObjectiveDraft = {
   id?: number;
@@ -26,8 +27,37 @@ type Props = {
   units: KpiUnitsMeta | Record<string, never>;
   ar: boolean;
   loading?: boolean;
+  openComments?: OpenComments;
   onSave: (objectives: ObjectiveDraft[]) => void;
 };
+
+function InlineComments({
+  openComments,
+  target,
+  id,
+  ar,
+}: {
+  openComments?: OpenComments;
+  target: "plan" | "objective" | "kpi";
+  id?: number | null;
+  ar: boolean;
+}) {
+  const comments = commentsForTarget(openComments || null, target, id);
+  if (!comments.length) return null;
+  return (
+    <Space orientation="vertical" size={6} style={{ width: "100%", marginBottom: 12 }}>
+      {comments.map((comment, index) => (
+        <Alert
+          key={`${target}-${id}-${index}`}
+          type="warning"
+          showIcon
+          title={ar ? "ملاحظة تحتاج معالجة" : "Comment to address"}
+          description={comment.body}
+        />
+      ))}
+    </Space>
+  );
+}
 
 function bilingual(value: { ar?: string; en?: string } | string | undefined, ar: boolean) {
   if (!value) return "";
@@ -43,6 +73,7 @@ function KpiFields({
   t,
   canRemove,
   onRemove,
+  openComments,
 }: {
   objectiveIndex: number;
   kpiField: { key: number; name: number };
@@ -51,14 +82,17 @@ function KpiFields({
   t: (en: string, arabic: string) => string;
   canRemove: boolean;
   onRemove: () => void;
+  openComments?: OpenComments;
 }) {
   const form = Form.useFormInstance();
   const measurementType = Form.useWatch(["objectives", objectiveIndex, "kpis", kpiField.name, "measurement_type"], form);
+  const kpiId = Form.useWatch(["objectives", objectiveIndex, "kpis", kpiField.name, "id"], form);
   const unitOptions =
     measurementTypes.find((item) => item.value === measurementType)?.units || measurementTypes[0]?.units || [];
 
   return (
     <Card size="small" type="inner" title={t("KPI", "مؤشر أداء")}>
+      <InlineComments openComments={openComments} target="kpi" id={kpiId} ar={ar} />
       <Form.Item name={[kpiField.name, "id"]} hidden>
         <Input />
       </Form.Item>
@@ -125,7 +159,15 @@ function KpiFields({
   );
 }
 
-export function PlanContentEditor({ form, categories, units, ar, loading, onSave }: Props) {
+export function PlanContentEditor({
+  form,
+  categories,
+  units,
+  ar,
+  loading,
+  openComments,
+  onSave,
+}: Props) {
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const measurementTypes = (units as KpiUnitsMeta).measurement_types || [];
   const watchedObjectives = Form.useWatch("objectives", form) || [];
@@ -134,6 +176,7 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
       sum + (objective?.kpis || []).reduce((kpiSum, kpi) => kpiSum + (Number(kpi?.weight_pct) || 0), 0),
     0,
   );
+  const weightReady = Math.abs(weightTotal - 100) < 0.01;
 
   return (
     <Form
@@ -141,10 +184,19 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
       layout="vertical"
       onFinish={(values) => onSave(values.objectives || [])}
     >
+      <InlineComments openComments={openComments} target="plan" ar={ar} />
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
-        <Typography.Text type={Math.abs(weightTotal - 100) < 0.01 ? "success" : "warning"}>
-          {t("Total KPI weight", "إجمالي وزن المؤشرات")}: {weightTotal.toFixed(2)}%
-        </Typography.Text>
+        <Alert
+          type={weightReady ? "success" : "warning"}
+          showIcon
+          style={{ flex: 1, minWidth: 240 }}
+          title={`${t("Total KPI weight", "إجمالي وزن المؤشرات")}: ${weightTotal.toFixed(2)}%`}
+          description={
+            weightReady
+              ? t("Ready for submission checks.", "جاهز لفحوصات الإرسال.")
+              : t("Must equal 100% before submit.", "يجب أن يساوي 100% قبل الإرسال.")
+          }
+        />
         <Space>
           <Button
             onClick={() => {
@@ -174,7 +226,7 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
             {t("Add objective", "إضافة هدف")}
           </Button>
           <Button type="primary" htmlType="submit" loading={loading}>
-            {t("Save plan", "حفظ الخطة")}
+            {t("Save draft", "حفظ المسودة")}
           </Button>
         </Space>
       </div>
@@ -182,7 +234,9 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
       <Form.List name="objectives">
         {(fields, { remove }) => (
           <>
-            {fields.map((field) => (
+            {fields.map((field) => {
+              const objectiveId = form.getFieldValue(["objectives", field.name, "id"]);
+              return (
               <Card
                 key={field.key}
                 size="small"
@@ -194,6 +248,12 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
                   </Button>
                 }
               >
+                <InlineComments
+                  openComments={openComments}
+                  target="objective"
+                  id={objectiveId}
+                  ar={ar}
+                />
                 <Form.Item name={[field.name, "id"]} hidden>
                   <Input />
                 </Form.Item>
@@ -203,6 +263,8 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
                   rules={[{ required: true, message: t("Category is required", "التصنيف مطلوب") }]}
                 >
                   <Select
+                    showSearch
+                    optionFilterProp="label"
                     options={categories.map((category) => ({
                       value: category.id,
                       label: bilingual(category.name, ar),
@@ -229,6 +291,7 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
                           t={t}
                           canRemove={kpiFields.length > 1}
                           onRemove={() => kpiOps.remove(kpiField.name)}
+                          openComments={openComments}
                         />
                       ))}
                       <Button
@@ -251,7 +314,7 @@ export function PlanContentEditor({ form, categories, units, ar, loading, onSave
                   )}
                 </Form.List>
               </Card>
-            ))}
+            )})}
           </>
         )}
       </Form.List>

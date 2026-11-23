@@ -1,18 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   App,
   Button,
   Card,
+  Col,
   Empty,
-  Input,
-  Modal,
+  Row,
   Select,
   Space,
   Spin,
   Table,
+  Tabs,
   Tag,
   Typography,
 } from "antd";
@@ -24,9 +25,18 @@ import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { ApiRequestError } from "@/lib/api/client";
 import { PlanContentEditor } from "./plan-content-editor";
-import type { KpiUnitsMeta } from "@/lib/api/types";
-
-type PlanMode = "manager" | "employee" | "admin";
+import type { KpiUnitsMeta, Plan } from "@/lib/api/types";
+import { PlanActionModal } from "./plans/plan-action-modal";
+import { PlanHistoryPanel } from "./plans/plan-history-panel";
+import { PlanReadonlyTree } from "./plans/plan-readonly-tree";
+import {
+  formatInstant,
+  planStatusTag,
+  resolveActionLabel,
+  returnSourceLabel,
+  workflowActions,
+  type PlanMode,
+} from "./plans/plan-shared";
 
 function toDraftObjectives(objectives: any[] = []) {
   return objectives.map((objective) => ({
@@ -67,64 +77,39 @@ function toApiObjectives(objectives: any[]) {
   }));
 }
 
-function actionLabel(action: string, ar: boolean) {
-  const labels: Record<string, [string, string]> = {
-    edit_content: ["Edit", "تعديل"],
-    delete: ["Delete", "حذف"],
-    submit: ["Submit", "إرسال"],
-    approve: ["Approve", "اعتماد"],
-    return: ["Return", "إعادة"],
-    request_modification: ["Request changes", "طلب تعديل"],
-    attention_comment: ["Flag for admin", "تنبيه الإدارة"],
-    reopen: ["Reopen", "إعادة فتح"],
-  };
-  const pair = labels[action];
-  return pair ? (ar ? pair[1] : pair[0]) : action;
-}
-
-const PLAN_STATUS_META: Record<
-  string,
-  {
-    en: string;
-    ar: string;
-    tone: "active" | "blue" | "gold" | "orange" | "purple" | "default";
-  }
-> = {
-  not_started: { en: "Not started", ar: "لم تبدأ", tone: "default" },
-  draft: { en: "Draft", ar: "مسودة", tone: "blue" },
-  pending_admin_approval: {
-    en: "Pending admin approval",
-    ar: "بانتظار اعتماد الإدارة",
-    tone: "gold",
-  },
-  returned_to_manager: {
-    en: "Returned to manager",
-    ar: "معاد للمدير",
-    tone: "orange",
-  },
-  pending_employee_review: {
-    en: "Pending employee review",
-    ar: "بانتظار مراجعة الموظف",
-    tone: "purple",
-  },
-  goals_approved: {
-    en: "Goals approved",
-    ar: "تم اعتماد الأهداف",
-    tone: "active",
-  },
-};
-
-function planStatusTag(value?: string | null, ar?: boolean) {
-  if (!value) return <Tag style={{ marginInlineEnd: 0 }}>—</Tag>;
-  const meta = PLAN_STATUS_META[value];
-  const label = meta ? (ar ? meta.ar : meta.en) : value.replaceAll("_", " ");
-  if (meta?.tone === "active")
-    return <span className="table-status-active">{label}</span>;
-  const color = meta?.tone === "default" ? undefined : meta?.tone;
+function ActionButtons({
+  actions,
+  ar,
+  plan,
+  onAction,
+}: {
+  actions: string[];
+  ar: boolean;
+  plan?: { display_status?: string; status?: string } | null;
+  onAction: (action: string) => void;
+}) {
+  const items = workflowActions(actions);
+  if (!items.length) return <span>—</span>;
   return (
-    <Tag color={color} style={{ marginInlineEnd: 0 }}>
-      {label}
-    </Tag>
+    <Space wrap size={[6, 6]} onClick={(e) => e.stopPropagation()}>
+      {items.map((action) => (
+        <Button
+          key={action}
+          size="small"
+          type={
+            action === "approve" ||
+            action === "submit" ||
+            action === "employee_approve"
+              ? "primary"
+              : "default"
+          }
+          danger={action === "return" || action === "delete"}
+          onClick={() => onAction(action)}
+        >
+          {resolveActionLabel(action, ar, plan)}
+        </Button>
+      ))}
+    </Space>
   );
 }
 
@@ -133,28 +118,33 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const { message } = App.useApp();
   const qc = useQueryClient();
   const [cycleId, setCycleId] = useState<number>();
+  const [statusFilter, setStatusFilter] = useState<string>();
+  const [attentionOnly, setAttentionOnly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
-  const [dialog, setDialog] = useState(false);
   const [pendingAction, setPendingAction] = useState("");
-  const [comment, setComment] = useState("");
+  const [dialog, setDialog] = useState(false);
   const [form] = Form.useForm();
 
   const cycles = useQuery({
     queryKey: queryKeys.cycles,
     queryFn: cyclesApi.mine,
   });
+  const listParams = useMemo(() => {
+    const filter: Record<string, unknown> = {};
+    if (cycleId) filter.cycle_id = cycleId;
+    if (statusFilter) filter.status = statusFilter;
+    if (attentionOnly) filter.requires_admin_attention = 1;
+    return { per_page: 100, ...(Object.keys(filter).length ? { filter } : {}) };
+  }, [cycleId, statusFilter, attentionOnly]);
+
   const plans = useQuery({
-    queryKey: [...queryKeys.plans, mode, cycleId],
-    queryFn: () =>
-      plansApi.list({
-        ...(cycleId ? { filter: { cycle_id: cycleId } } : {}),
-        per_page: 100,
-      }),
+    queryKey: [...queryKeys.plans, mode, listParams],
+    queryFn: () => plansApi.list(listParams),
   });
   const status = useQuery({
     queryKey: ["cycles", cycleId, "plan-status"],
     queryFn: () => cyclesApi.planStatus(cycleId!, { per_page: 100 }),
-    enabled: mode === "manager" && Boolean(cycleId),
+    enabled: (mode === "manager" || mode === "admin") && Boolean(cycleId),
   });
   const detail = useQuery({
     queryKey: [...queryKeys.plans, "detail", selectedPlan?.id],
@@ -179,17 +169,34 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     });
   }, [detail.data, form]);
 
+  const invalidatePlanQueries = async (planId?: number) => {
+    await qc.invalidateQueries({ queryKey: queryKeys.plans });
+    await qc.invalidateQueries({ queryKey: ["cycles", cycleId, "plan-status"] });
+    if (planId) {
+      await qc.invalidateQueries({
+        queryKey: [...queryKeys.plans, "detail", planId],
+      });
+      await qc.invalidateQueries({ queryKey: ["plans", planId, "history"] });
+    }
+  };
+
   const create = useMutation({
     mutationFn: (id: number) => plansApi.create(id),
     onSuccess: async (plan: any) => {
       message.success(ar ? "تم إنشاء مسودة الخطة" : "Plan draft created");
       setSelectedPlan(plan);
-      await qc.invalidateQueries({ queryKey: queryKeys.plans });
-      await qc.invalidateQueries({
-        queryKey: ["cycles", cycleId, "plan-status"],
-      });
+      await invalidatePlanQueries(plan.id);
     },
-    onError: (error: Error) => message.error(error.message),
+    onError: (error: Error) => {
+      const apiError = error as ApiRequestError;
+      const existingId = (apiError as any)?.details?.plan_id;
+      if (existingId) {
+        message.info(ar ? "الخطة موجودة مسبقاً" : "Plan already exists");
+        setSelectedPlan({ id: existingId });
+        return;
+      }
+      message.error(error.message);
+    },
   });
 
   const transition = useMutation({
@@ -202,16 +209,12 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
       action: string;
       body: any;
     }) => plansApi.transition(id, action, body),
-    onSuccess: async () => {
+    onSuccess: async (plan: any) => {
       message.success(ar ? "تم تنفيذ الإجراء" : "Workflow action completed");
       setDialog(false);
-      setComment("");
-      await qc.invalidateQueries({ queryKey: queryKeys.plans });
-      if (selectedPlan?.id) {
-        await qc.invalidateQueries({
-          queryKey: [...queryKeys.plans, "detail", selectedPlan.id],
-        });
-      }
+      setPendingAction("");
+      if (plan?.id) setSelectedPlan(plan);
+      await invalidatePlanQueries(plan?.id || selectedPlan?.id);
     },
     onError: (error: Error) => message.error(error.message),
   });
@@ -220,8 +223,9 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     mutationFn: (id: number) => plansApi.remove(id),
     onSuccess: async () => {
       message.success(ar ? "تم حذف المسودة" : "Draft deleted");
+      const id = selectedPlan?.id;
       setSelectedPlan(null);
-      await qc.invalidateQueries({ queryKey: queryKeys.plans });
+      await invalidatePlanQueries(id);
     },
     onError: (error: Error) => message.error(error.message),
   });
@@ -232,10 +236,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     onSuccess: async (plan: any) => {
       message.success(ar ? "تم حفظ محتوى الخطة" : "Plan content saved");
       setSelectedPlan(plan);
-      await qc.invalidateQueries({ queryKey: queryKeys.plans });
-      await qc.invalidateQueries({
-        queryKey: [...queryKeys.plans, "detail", plan.id],
-      });
+      await invalidatePlanQueries(plan.id);
     },
     onError: (error: Error) => {
       const apiError = error as ApiRequestError;
@@ -251,36 +252,32 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     value: c.id,
     label: `${typeof c.name === "object" ? (ar ? c.name.ar : c.name.en) : c.name} · ${c.performance_year}`,
   }));
-  const rows = (plans.data as any)?.data || [];
+  const rows = ((plans.data as any)?.data || []) as Plan[];
   const members = (status.data as any)?.data || [];
   const planDetails = detail.data || selectedPlan;
   const canEdit = planDetails?.allowed_actions?.includes("edit_content");
+  const showHistory = mode !== "employee";
 
-  const doAction = () => {
-    if (!selectedPlan) return;
-    const body: any = { version: planDetails.version };
-    if (["request_modification", "attention_comment"].includes(pendingAction))
-      body.comment = comment;
-    if (pendingAction === "reopen") body.reason = comment;
-    if (pendingAction === "return") {
-      body.comment = comment;
-      const objective = planDetails.objectives?.[0];
-      const kpi = objective?.kpis?.[0];
-      body.comments = [
-        objective
-          ? { target: "objective", id: objective.id, body: comment }
-          : kpi
-            ? { target: "kpi", id: kpi.id, body: comment }
-            : null,
-      ].filter(Boolean);
-    }
-    if (pendingAction === "delete") {
-      removePlan.mutate(selectedPlan.id);
+  const openAction = (plan: any, action: string) => {
+    setSelectedPlan(plan);
+    setPendingAction(action);
+    // Return needs the objective/KPI tree; wait for detail if the list row is slim.
+    if (action === "return" && !plan?.objectives?.length && plan?.id !== detail.data?.id) {
       setDialog(false);
+      // detail query will load after selection; open modal once tree is present
       return;
     }
-    transition.mutate({ id: selectedPlan.id, action: pendingAction, body });
+    setDialog(true);
   };
+
+  useEffect(() => {
+    if (!pendingAction || pendingAction !== "return") return;
+    if (!selectedPlan?.id) return;
+    if (dialog) return;
+    if (detail.data?.id === selectedPlan.id && (detail.data.objectives || []).length >= 0) {
+      setDialog(true);
+    }
+  }, [pendingAction, selectedPlan?.id, detail.data, dialog]);
 
   const title =
     mode === "admin"
@@ -291,17 +288,17 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const subtitle =
     mode === "admin"
       ? t(
-          "Approve or return submitted plans.",
-          "اعتماد أو إعادة الخطط المُرسلة.",
+          "UC-013 · Review, edit, approve, or return submitted plans.",
+          "UC-013 · راجع وعدّل واعتمد أو أعد الخطط المُرسلة.",
         )
       : mode === "manager"
         ? t(
-            "Create, edit, and submit plans for your team.",
-            "أنشئ وعدّل وأرسل خطط فريقك.",
+            "UC-011 / UC-015 · Prepare objectives & KPIs and update returned plans.",
+            "UC-011 / UC-015 · إعداد الأهداف والمؤشرات وتحديث الخطط المعادة.",
           )
         : t(
-            "Review your plan and approve or request changes.",
-            "راجع خطتك واعتمدها أو اطلب تعديلاً.",
+            "UC-014 · Review your plan and approve or request changes.",
+            "UC-014 · راجع خطتك واعتمدها أو اطلب تعديلاً.",
           );
 
   return (
@@ -312,35 +309,64 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
       title={title}
       subtitle={subtitle}
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 16,
-          width: "100%",
-        }}
-      >
+      <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%" }}>
         <Card>
-          {mode !== "employee" && (
-            <Select
-              allowClear
-              style={{ width: 320, maxWidth: "100%", marginBottom: 16 }}
-              placeholder={t("Select cycle", "اختر الدورة")}
-              options={cycleOptions}
-              value={cycleId}
-              onChange={setCycleId}
-            />
-          )}
-          {mode === "manager" && cycleId && (
+          <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
+            {mode !== "employee" && (
+              <Col xs={24} md={8}>
+                <Select
+                  allowClear
+                  style={{ width: "100%" }}
+                  placeholder={t("Select cycle", "اختر الدورة")}
+                  options={cycleOptions}
+                  value={cycleId}
+                  onChange={setCycleId}
+                />
+              </Col>
+            )}
+            {mode === "admin" && (
+              <>
+                <Col xs={12} md={6}>
+                  <Select
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder={t("Stored status", "الحالة المخزنة")}
+                    value={statusFilter}
+                    onChange={setStatusFilter}
+                    options={[
+                      { value: "pending_admin", label: t("Pending admin", "بانتظار الإدارة") },
+                      { value: "returned", label: t("Returned", "معادة") },
+                      { value: "pending_employee", label: t("Pending employee", "بانتظار الموظف") },
+                      { value: "approved", label: t("Approved", "معتمدة") },
+                      { value: "draft", label: t("Draft", "مسودة") },
+                    ]}
+                  />
+                </Col>
+                <Col xs={12} md={6}>
+                  <Button
+                    block
+                    type={attentionOnly ? "primary" : "default"}
+                    onClick={() => setAttentionOnly((v) => !v)}
+                  >
+                    {t("Needs attention", "تتطلب متابعة")}
+                  </Button>
+                </Col>
+              </>
+            )}
+          </Row>
+
+          {(mode === "manager" || mode === "admin") && cycleId && (
             <Card
               size="small"
-              title={t("Start a plan", "بدء خطة")}
+              title={t("Start a plan (UC-011)", "بدء خطة (UC-011)")}
               style={{ marginBottom: 16 }}
             >
               <Select
+                showSearch
+                optionFilterProp="label"
                 style={{ width: "100%" }}
                 placeholder={t(
-                  "Select a team member without a plan",
+                  "Select a member without a plan",
                   "اختر عضواً بلا خطة",
                 )}
                 options={members
@@ -357,18 +383,13 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
               />
             </Card>
           )}
+
           {plans.isLoading ? (
-            <div
-              style={{ display: "grid", placeItems: "center", minHeight: 180 }}
-            >
+            <div style={{ display: "grid", placeItems: "center", minHeight: 180 }}>
               <Spin />
             </div>
           ) : plans.isError ? (
-            <Alert
-              type="error"
-              showIcon
-              title={(plans.error as Error).message}
-            />
+            <Alert type="error" showIcon title={(plans.error as Error).message} />
           ) : rows.length === 0 ? (
             <Empty description={t("No plans yet.", "لا توجد خطط بعد.")} />
           ) : (
@@ -382,11 +403,10 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                   ar ? `${n} خطة` : `${n} plan${n === 1 ? "" : "s"}`,
               }}
               scroll={{ x: "max-content" }}
-              locale={{ emptyText: t("No plans yet.", "لا توجد خطط بعد.") }}
               rowClassName={(record) =>
                 selectedPlan?.id === record.id
-                  ? "clickable-row clickable-row-selected"
-                  : "clickable-row"
+                  ? "plan-row plan-row-selected"
+                  : "plan-row"
               }
               onRow={(record) => ({
                 onClick: () => setSelectedPlan(record),
@@ -403,67 +423,46 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
               columns={[
                 {
                   title: t("Code", "الرقم"),
-                  dataIndex: "code",
                   width: 100,
-                  render: (_: unknown, row: ApiPlan) => (row.employee?.code ? `#${row.employee.code}` : "—"),
+                  render: (_: unknown, row: Plan) =>
+                    row.employee?.code ? `#${row.employee.code}` : "—",
                 },
                 {
                   title: t("Employee", "الموظف"),
                   ellipsis: true,
-                  render: (_: any, r: any) => (
-                    <div className="table-primary-cell">
-                      <strong>
-                        {r.employee?.name || r.employee?.full_name || "—"}
-                      </strong>
-                    
-                    </div>
+                  render: (_: unknown, r: Plan) => (
+                    <Typography.Text style={{ color: "#000", fontWeight: 500 }}>
+                      {r.employee?.name || (r.employee as any)?.full_name || "—"}
+                    </Typography.Text>
                   ),
                 },
                 {
                   title: t("Status", "الحالة"),
                   dataIndex: "display_status",
-                  width: 200,
+                  width: 210,
                   render: (v: string) => planStatusTag(v, ar),
+                },
+                {
+                  title: t("Attention", "متابعة"),
+                  width: 120,
+                  render: (_: unknown, r: Plan) =>
+                    r.requires_admin_attention ? (
+                      <Tag color="orange">{t("Required", "مطلوب")}</Tag>
+                    ) : (
+                      "—"
+                    ),
                 },
                 {
                   title: t("Actions", "الإجراءات"),
                   width: 280,
-                  render: (_: any, r: any) => {
-                    const actions = (r.allowed_actions || []).filter(
-                      (action: string) => action !== "edit_content",
-                    );
-                    if (actions.length === 0) {
-                      return <span className="table-muted-code">—</span>;
-                    }
-                    return (
-                      <Space
-                        wrap
-                        size={[6, 6]}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {actions.map((action: string) => (
-                          <Button
-                            key={action}
-                            size="small"
-                            type={
-                              action === "approve" || action === "submit"
-                                ? "primary"
-                                : "default"
-                            }
-                            danger={action === "return" || action === "delete"}
-                            onClick={() => {
-                              setSelectedPlan(r);
-                              setPendingAction(action);
-                              setComment("");
-                              setDialog(true);
-                            }}
-                          >
-                            {actionLabel(action, ar)}
-                          </Button>
-                        ))}
-                      </Space>
-                    );
-                  },
+                  render: (_: unknown, r: Plan) => (
+                    <ActionButtons
+                      actions={r.allowed_actions || []}
+                      ar={ar}
+                      plan={r}
+                      onAction={(action) => openAction(r, action)}
+                    />
+                  ),
                 },
               ]}
             />
@@ -480,13 +479,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
             }
           >
             {detail.isLoading ? (
-              <div
-                style={{
-                  display: "grid",
-                  placeItems: "center",
-                  minHeight: 160,
-                }}
-              >
+              <div style={{ display: "grid", placeItems: "center", minHeight: 160 }}>
                 <Spin />
               </div>
             ) : detail.isError ? (
@@ -496,142 +489,148 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                 title={(detail.error as Error).message}
               />
             ) : (
-              <>
-                <Space wrap style={{ marginBottom: 12 }} size={[8, 8]}>
-                  <Typography.Text strong>
-                    {planDetails.employee?.name ||
-                      planDetails.employee?.full_name}
-                  </Typography.Text>
-                  {planDetails.employee?.code ? (
-                    <span className="table-muted-code">
-                      #{planDetails.employee.code}
-                    </span>
-                  ) : null}
-                  {planStatusTag(planDetails.display_status, ar)}
-                </Space>
-                {!planDetails.content_visible && (
-                  <Alert
-                    type="info"
-                    showIcon
-                    title={t(
-                      "Plan content is not visible yet for your role.",
-                      "محتوى الخطة غير ظاهر لصلاحيتك حالياً.",
-                    )}
-                  />
-                )}
-                {canEdit ? (
-                  <PlanContentEditor
-                    form={form}
-                    categories={(categories.data || []) as any}
-                    units={(units.data || {}) as KpiUnitsMeta}
-                    ar={ar}
-                    loading={saveContent.isPending}
-                    onSave={(objectives) =>
-                      saveContent.mutate({
-                        id: planDetails.id,
-                        body: {
-                          version: planDetails.version,
-                          objectives: toApiObjectives(objectives),
-                        },
-                      })
-                    }
-                  />
-                ) : (
-                  (planDetails.objectives || []).map(
-                    (objective: any, index: number) => (
-                      <Card
-                        size="small"
-                        key={objective.id || index}
-                        title={objective.text}
-                        style={{ marginBottom: 8 }}
-                      >
-                        {(objective.kpis || []).map((kpi: any) => (
-                          <Typography.Paragraph
-                            key={kpi.id}
-                            style={{ marginBottom: 4 }}
-                          >
-                            {kpi.name} · {t("Target", "المستهدف")}: {kpi.target}{" "}
-                            · {t("Weight", "الوزن")}:{" "}
-                            {(kpi.weight_bp / 100).toFixed(2)}%
-                          </Typography.Paragraph>
-                        ))}
-                      </Card>
+              <Tabs
+                items={[
+                  {
+                    key: "content",
+                    label: t("Objectives & KPIs", "الأهداف والمؤشرات"),
+                    children: (
+                      <Space orientation="vertical" size={12} style={{ width: "100%" }}>
+                        <Space wrap size={[8, 8]}>
+                          <Typography.Text strong>
+                            {planDetails.employee?.name ||
+                              planDetails.employee?.full_name}
+                          </Typography.Text>
+                          {planDetails.employee?.code ? (
+                            <Typography.Text type="secondary">
+                              #{planDetails.employee.code}
+                            </Typography.Text>
+                          ) : null}
+                          {planStatusTag(planDetails.display_status, ar)}
+                          {planDetails.requires_admin_attention ? (
+                            <Tag color="orange">
+                              {t("Requires admin attention", "يتطلب متابعة الإدارة")}
+                            </Tag>
+                          ) : null}
+                        </Space>
+
+                        {planDetails.display_status === "returned_to_manager" ||
+                        planDetails.status === "returned" ? (
+                          <Alert
+                            type="warning"
+                            showIcon
+                            title={returnSourceLabel(planDetails.return_source, ar)}
+                            description={
+                              planDetails.open_comments ? (
+                                <span>
+                                  {planDetails.open_comments.actor?.name || "—"} ·{" "}
+                                  {formatInstant(
+                                    planDetails.open_comments.created_at,
+                                    ar,
+                                  )}
+                                </span>
+                              ) : (
+                                t(
+                                  "Review the comments, update the plan, then resubmit.",
+                                  "راجع الملاحظات وحدّث الخطة ثم أعد الإرسال.",
+                                )
+                              )
+                            }
+                          />
+                        ) : null}
+
+                        {canEdit ? (
+                          <PlanContentEditor
+                            form={form}
+                            categories={(categories.data || []) as any}
+                            units={(units.data || {}) as KpiUnitsMeta}
+                            ar={ar}
+                            loading={saveContent.isPending}
+                            openComments={planDetails.open_comments}
+                            onSave={(objectives) =>
+                              saveContent.mutate({
+                                id: planDetails.id,
+                                body: {
+                                  version: planDetails.version,
+                                  objectives: toApiObjectives(objectives),
+                                },
+                              })
+                            }
+                          />
+                        ) : (
+                          <PlanReadonlyTree
+                            ar={ar}
+                            objectives={planDetails.objectives}
+                            openComments={planDetails.open_comments}
+                            contentVisible={planDetails.content_visible !== false}
+                          />
+                        )}
+
+                        <ActionButtons
+                          actions={planDetails.allowed_actions || []}
+                          ar={ar}
+                          plan={planDetails}
+                          onAction={(action) => openAction(planDetails, action)}
+                        />
+                      </Space>
                     ),
-                  )
-                )}
-                {(planDetails.allowed_actions || []).filter(
-                  (action: string) => action !== "edit_content",
-                ).length > 0 && (
-                  <Space wrap style={{ marginTop: 12 }}>
-                    {(planDetails.allowed_actions || [])
-                      .filter((action: string) => action !== "edit_content")
-                      .map((action: string) => (
-                        <Button
-                          key={action}
-                          type={
-                            action === "approve" || action === "submit"
-                              ? "primary"
-                              : "default"
-                          }
-                          danger={action === "return" || action === "delete"}
-                          onClick={() => {
-                            setPendingAction(action);
-                            setComment("");
-                            setDialog(true);
-                          }}
-                        >
-                          {actionLabel(action, ar)}
-                        </Button>
-                      ))}
-                  </Space>
-                )}
-              </>
+                  },
+                  ...(showHistory
+                    ? [
+                        {
+                          key: "history",
+                          label: t("Workflow history", "سجل سير العمل"),
+                          children: (
+                            <PlanHistoryPanel
+                              planId={planDetails.id}
+                              ar={ar}
+                            />
+                          ),
+                        },
+                      ]
+                    : []),
+                ]}
+              />
             )}
           </Card>
         )}
 
-        <Modal
+        <PlanActionModal
           open={dialog}
-          title={actionLabel(pendingAction, ar)}
-          onCancel={() => setDialog(false)}
-          onOk={doAction}
-          confirmLoading={transition.isPending || removePlan.isPending}
-          okButtonProps={{
-            disabled:
-              detail.isLoading ||
-              ([
-                "return",
-                "request_modification",
-                "attention_comment",
-                "reopen",
-              ].includes(pendingAction) &&
-                !comment.trim()),
+          action={pendingAction}
+          ar={ar}
+          plan={detail.data || planDetails}
+          loading={transition.isPending || removePlan.isPending}
+          onCancel={() => {
+            setDialog(false);
+            setPendingAction("");
           }}
-        >
-          {[
-            "return",
-            "request_modification",
-            "attention_comment",
-            "reopen",
-          ].includes(pendingAction) ? (
-            <Input.TextArea
-              rows={4}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder={t("Add a required comment", "أضف تعليقاً مطلوباً")}
-            />
-          ) : (
-            <Alert
-              type="warning"
-              showIcon
-              title={t(
-                "This updates the official plan workflow.",
-                "سيؤدي هذا إلى تحديث سير عمل الخطة رسمياً.",
-              )}
-            />
-          )}
-        </Modal>
+          onConfirm={(payload) => {
+            if (!selectedPlan) return;
+            if (pendingAction === "delete") {
+              removePlan.mutate(selectedPlan.id);
+              setDialog(false);
+              setPendingAction("");
+              return;
+            }
+            transition.mutate({
+              id: selectedPlan.id,
+              action: pendingAction,
+              body: {
+                version: (detail.data || planDetails).version,
+                ...payload,
+              },
+            });
+          }}
+        />
       </div>
+
+      <style>{`
+        .plan-row { cursor: pointer; transition: background-color 0.15s ease; }
+        .plan-row:hover > td { background: rgba(22, 119, 255, 0.06) !important; }
+        .plan-row-selected > td { background: rgba(22, 119, 255, 0.1) !important; }
+        .plan-row:focus-visible { outline: 2px solid #1677ff; outline-offset: -2px; }
+      `}</style>
     </AppShell>
   );
 }
