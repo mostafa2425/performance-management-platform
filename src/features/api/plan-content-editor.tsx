@@ -397,8 +397,16 @@ export function PlanContentEditor({
                         </Form.Item>
                       </Col>
                       <Col xs={24} md={12}>
-                        <Form.Item name={[field.name, "unit"]} label={t("Unit", "الوحدة")} rules={[{ required: true }]}>
-                          <Select options={(measurementTypes[0]?.units || []).map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))} />
+                        <Form.Item noStyle shouldUpdate={(previous, current) => previous.kpis?.[field.name]?.measurement_type !== current.kpis?.[field.name]?.measurement_type}>
+                          {() => {
+                            const selectedType = objectiveForm.getFieldValue(["kpis", field.name, "measurement_type"]);
+                            const unitOptions = measurementTypes.find((item) => item.value === selectedType)?.units || [];
+                            return (
+                              <Form.Item name={[field.name, "unit"]} label={t("Unit", "الوحدة")} rules={[{ required: true }]}>
+                                <Select options={unitOptions.map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))} />
+                              </Form.Item>
+                            );
+                          }}
                         </Form.Item>
                       </Col>
                       <Col xs={24} md={12}>
