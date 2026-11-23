@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { App, Alert, Button, Card, Col, Descriptions, Form, Row, Space, Spin, Tag, Typography } from "antd";
+import { App, Alert, Button, Card, Col, Form, Row, Space, Spin, Tag, Typography } from "antd";
 import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
@@ -165,6 +165,39 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const historyVisible = mode !== "employee";
   const employeeName = plan?.employee?.name || plan?.employee?.full_name || "—";
   const pageTitle = t("Plan details", "تفاصيل الخطة");
+  const cycleLabel = cycle
+    ? String(typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name) + " · " + cycle.performance_year
+    : `#${plan.cycle_id}`;
+  const employeeInfo: Array<[string, React.ReactNode]> = [
+    [t("Employee", "الموظف"), employeeProfile?.full_name || employeeName],
+    [t("Employee code", "كود الموظف"), employeeProfile?.code || plan.employee?.code || "—"],
+    [t("Email", "البريد الإلكتروني"), employeeProfile?.email || "—"],
+    [t("Department", "الإدارة"), employeeProfile?.department?.name || "—"],
+    [t("Job title", "المسمى الوظيفي"), employeeProfile?.job_title?.name || "—"],
+    [t("Business unit", "قطاع الأعمال"), employeeProfile?.business_unit?.name || "—"],
+    [t("Location", "الموقع"), employeeProfile?.location?.name || "—"],
+    [t("Line manager ID", "رقم المدير المباشر"), employeeProfile?.line_manager_id ?? "—"],
+  ];
+  const planInfo: Array<[string, React.ReactNode]> = [
+    [t("Performance cycle", "دورة الأداء"), cycleLabel],
+    [t("Current stage", "المرحلة الحالية"), cycle?.current_stage || "—"],
+    [t("Plan version", "إصدار الخطة"), plan.version ?? "—"],
+    [t("Created by role", "دور منشئ الخطة"), plan.author_role || "—"],
+    [t("Created at", "تاريخ الإنشاء"), formatInstant(plan.created_at, ar)],
+    [t("Last updated", "آخر تحديث"), formatInstant(plan.updated_at, ar)],
+  ];
+  const renderInfoCards = (items: Array<[string, React.ReactNode]>) => (
+    <Row gutter={[10, 10]}>
+      {items.map(([label, value]) => (
+        <Col xs={12} sm={8} md={6} lg={6} key={label}>
+          <Card size="small" style={{ height: "100%", borderRadius: 10 }} bodyStyle={{ padding: "12px 14px" }}>
+            <Typography.Text type="secondary" style={{ fontSize: 12 }}>{label}</Typography.Text>
+            <div style={{ fontWeight: 600, marginTop: 5, lineHeight: 1.45, overflowWrap: "anywhere" }}>{value || "—"}</div>
+          </Card>
+        </Col>
+      ))}
+    </Row>
+  );
 
   if (!Number.isFinite(planId) || planId <= 0) {
     return <AppShell role={mode} title={pageTitle}><Alert type="error" title={t("Invalid plan ID", "رقم الخطة غير صحيح")} /></AppShell>;
@@ -198,47 +231,22 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             </Space>
           }
           extra={<Typography.Text type="secondary">{t("Plan", "الخطة")} #{plan.id}</Typography.Text>}
+          bodyStyle={{ padding: 16 }}
         >
-          {mode === "employee" ? (
-            <Row gutter={[10, 10]}>
-              {[
-                [t("Department", "الإدارة"), employeeProfile?.department?.name],
-                [t("Job title", "المسمى الوظيفي"), employeeProfile?.job_title?.name],
-                [t("Business unit", "قطاع الأعمال"), employeeProfile?.business_unit?.name],
-                [t("Location", "الموقع"), employeeProfile?.location?.name],
-                [t("Performance cycle", "دورة الأداء"), cycle ? String(typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name) + " · " + cycle.performance_year : "#" + plan.cycle_id],
-                [t("Current stage", "المرحلة الحالية"), cycle?.current_stage],
-              ].map(([label, value]) => (
-                <Col xs={12} sm={8} md={8} key={String(label)}>
-                  <Card size="small" style={{ height: "100%" }}>
-                    <Typography.Text type="secondary" style={{ fontSize: 12 }}>{label}</Typography.Text>
-                    <div style={{ fontWeight: 600, marginTop: 4 }}>{value || "—"}</div>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          ) : (
-            <Descriptions
-              size="small"
-              column={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-              items={[
-                { key: "employee", label: t("Employee", "الموظف"), children: employeeProfile?.full_name || employeeName },
-                { key: "code", label: t("Employee code", "كود الموظف"), children: employeeProfile?.code || plan.employee?.code || "—" },
-                { key: "email", label: t("Email", "البريد الإلكتروني"), children: employeeProfile?.email || "—" },
-                { key: "businessUnit", label: t("Business unit", "قطاع الأعمال"), children: employeeProfile?.business_unit?.name || "—" },
-                { key: "department", label: t("Department", "الإدارة"), children: employeeProfile?.department?.name || "—" },
-                { key: "location", label: t("Location", "الموقع"), children: employeeProfile?.location?.name || "—" },
-                { key: "jobTitle", label: t("Job title", "المسمى الوظيفي"), children: employeeProfile?.job_title?.name || "—" },
-                { key: "manager", label: t("Line manager ID", "رقم المدير المباشر"), children: employeeProfile?.line_manager_id ?? "—" },
-                { key: "cycle", label: t("Performance cycle", "دورة الأداء"), children: cycle ? String(typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name) + " · " + cycle.performance_year : "#" + plan.cycle_id },
-                { key: "stage", label: t("Current stage", "المرحلة الحالية"), children: cycle?.current_stage || "—" },
-                { key: "version", label: t("Plan version", "إصدار الخطة"), children: plan.version ?? "—" },
-                { key: "author", label: t("Created by role", "دور منشئ الخطة"), children: plan.author_role || "—" },
-                { key: "created", label: t("Created at", "تاريخ الإنشاء"), children: formatInstant(plan.created_at, ar) },
-                { key: "updated", label: t("Last updated", "آخر تحديث"), children: formatInstant(plan.updated_at, ar) },
-              ]}
-            />
-          )}
+          <Space direction="vertical" size={18} style={{ width: "100%" }}>
+            <div>
+              <Typography.Text strong style={{ display: "block", marginBottom: 10 }}>
+                {t("Employee information", "بيانات الموظف")}
+              </Typography.Text>
+              {renderInfoCards(employeeInfo)}
+            </div>
+            <div>
+              <Typography.Text strong style={{ display: "block", marginBottom: 10 }}>
+                {t("Plan information", "بيانات الخطة")}
+              </Typography.Text>
+              {renderInfoCards(planInfo)}
+            </div>
+          </Space>
         </Card>
 
         {plan.return_source ? (
