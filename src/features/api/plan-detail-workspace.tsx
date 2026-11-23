@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { ApiRequestError } from "@/lib/api/client";
-import { cyclesApi, metaApi, plansApi } from "@/lib/api/endpoints";
+import { authApi, cyclesApi, employeesApi, metaApi, plansApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
 import type { KpiUnitsMeta } from "@/lib/api/types";
 import { PlanContentEditor } from "./plan-content-editor";
@@ -97,6 +97,14 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   });
   const plan = planQuery.data as any;
   const cycles = useQuery({ queryKey: queryKeys.cycles, queryFn: cyclesApi.mine });
+  const employeeProfileQuery = useQuery({
+    queryKey: ["plan-employee-profile", mode, plan?.employee?.id],
+    queryFn: () => mode === "employee" ? authApi.me() : employeesApi.get(plan.employee.id),
+    enabled: Boolean(plan?.employee?.id),
+  });
+  const employeeProfile = mode === "employee"
+    ? employeeProfileQuery.data?.employee
+    : employeeProfileQuery.data;
   const categories = useQuery({ queryKey: ["meta", "objective-categories"], queryFn: metaApi.objectiveCategories });
   const units = useQuery({ queryKey: ["meta", "kpi-units"], queryFn: metaApi.kpiUnits });
   const cycle = useMemo(() => (cycles.data || []).find((item: any) => item.id === plan?.cycle_id), [cycles.data, plan?.cycle_id]);
@@ -195,8 +203,14 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             size="small"
             column={{ xs: 1, sm: 2, md: 3, lg: 4 }}
             items={[
-              { key: "employee", label: t("Employee", "الموظف"), children: employeeName },
-              { key: "code", label: t("Employee code", "كود الموظف"), children: plan.employee?.code || "—" },
+              { key: "employee", label: t("Employee", "الموظف"), children: employeeProfile?.full_name || employeeName },
+              { key: "code", label: t("Employee code", "كود الموظف"), children: employeeProfile?.code || plan.employee?.code || "—" },
+              { key: "email", label: t("Email", "البريد الإلكتروني"), children: employeeProfile?.email || "—" },
+              { key: "businessUnit", label: t("Business unit", "قطاع الأعمال"), children: employeeProfile?.business_unit?.name || "—" },
+              { key: "department", label: t("Department", "الإدارة"), children: employeeProfile?.department?.name || "—" },
+              { key: "location", label: t("Location", "الموقع"), children: employeeProfile?.location?.name || "—" },
+              { key: "jobTitle", label: t("Job title", "المسمى الوظيفي"), children: employeeProfile?.job_title?.name || "—" },
+              { key: "manager", label: t("Line manager ID", "رقم المدير المباشر"), children: employeeProfile?.line_manager_id ?? "—" },
               { key: "cycle", label: t("Performance cycle", "دورة الأداء"), children: cycle ? `${typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name} · ${cycle.performance_year}` : `#${plan.cycle_id}` },
               { key: "stage", label: t("Current stage", "المرحلة الحالية"), children: cycle?.current_stage || "—" },
               { key: "version", label: t("Plan version", "إصدار الخطة"), children: plan.version ?? "—" },
