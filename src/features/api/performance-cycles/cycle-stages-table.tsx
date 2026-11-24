@@ -1,5 +1,6 @@
-import { DataTable } from "@/components/ui/data-table";
 "use client";
+
+import { DataTable } from "@/components/ui/data-table";
 
 import { Table, Tooltip } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
