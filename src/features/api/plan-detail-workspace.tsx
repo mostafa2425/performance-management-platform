@@ -82,7 +82,6 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const ar = locale === "ar";
   const { message } = App.useApp();
   const qc = useQueryClient();
-  const [form] = Form.useForm();
   const [editing, setEditing] = useState(false);
   const [adminEditMode, setAdminEditMode] = useState(false);
   const [pendingAction, setPendingAction] = useState("");
@@ -111,11 +110,6 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const cycle = useMemo(() => (cycles.data || []).find((item: any) => item.id === plan?.cycle_id), [cycles.data, plan?.cycle_id]);
   const canEdit = Boolean(plan?.allowed_actions?.includes("edit_content"));
   const canEditContent = canEdit && (mode !== "admin" || adminEditMode);
-
-  useEffect(() => {
-    if (!planData) return;
-    form.setFieldsValue({ objectives: toDraftObjectives(planData.objectives || []) });
-  }, [planData?.id, form, mode]);
 
   const refresh = async (id?: number) => {
     await qc.invalidateQueries({ queryKey: queryKeys.plans });
@@ -287,7 +281,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
               ) : (
                 <Space>
                   {editing ? (
-                    <Button onClick={() => { form.setFieldsValue({ objectives: toDraftObjectives(plan.objectives || []) }); setEditing(false); setAdminEditMode(false); }}>
+                    <Button onClick={() => { setEditing(false); setAdminEditMode(false); }}>
                       {t("Cancel editing", "إلغاء التعديل")}
                     </Button>
                   ) : (
@@ -305,7 +299,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
               <Alert type="error" showIcon title={t("Could not load objective categories or KPI units.", "تعذر تحميل تصنيفات الأهداف أو وحدات المؤشرات.")} />
             ) : (
               <PlanContentEditor
-                form={form}
+                initialObjectives={toDraftObjectives(plan.objectives || [])}
                 categories={(categories.data || []) as any}
                 units={(units.data || {}) as KpiUnitsMeta}
                 ar={ar}
