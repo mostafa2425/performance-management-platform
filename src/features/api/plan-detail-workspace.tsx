@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { App, Alert, Button, Card, Col, Row, Space, Spin, Tag, Typography } from "antd";
+import { App, Alert, Button, Card, Col, Row, Space, Skeleton, Tag, Typography } from "antd";
 import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
@@ -199,7 +199,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     return <AppShell role={mode} title={pageTitle}><Alert type="error" title={t("Invalid plan ID", "رقم الخطة غير صحيح")} /></AppShell>;
   }
   if (planQuery.isLoading) {
-    return <AppShell role={mode} title={pageTitle}><div style={{ minHeight: 300, display: "grid", placeItems: "center" }}><Spin size="large" /></div></AppShell>;
+    return <AppShell role={mode} title={pageTitle}><div style={{ minHeight: 300, display: "grid", placeItems: "center" }}><Skeleton active /></div></AppShell>;
   }
   if (planQuery.isError || !planData) {
     return <AppShell role={mode} title={pageTitle}><Alert type="error" showIcon title={(planQuery.error as Error)?.message || t("Plan not found", "لم يتم العثور على الخطة")} action={<Button onClick={() => router.push(listPath)}>{t("Back to plans", "العودة للخطط")}</Button>} /></AppShell>;
@@ -298,7 +298,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           }
         >
           {editing && canEditContent ? (
-            categories.isLoading || units.isLoading ? <Spin /> : categories.isError || units.isError ? (
+            categories.isLoading || units.isLoading ? <Skeleton active /> : categories.isError || units.isError ? (
               <Alert type="error" showIcon title={t("Could not load objective categories or KPI units.", "تعذر تحميل تصنيفات الأهداف أو وحدات المؤشرات.")} />
             ) : (
               <PlanContentEditor
