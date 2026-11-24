@@ -266,7 +266,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
 
         {mode === "employee" && plan.content_visible === false ? (
           <div style={{ maxWidth: 720, width: "100%" }}>
-          <Alert type="info" showIcon message={t("Waiting for Manager Submission", "في انتظار إرسال المدير للخطة")}
+          <Alert type="info" showIcon title={t("Waiting for Manager Submission", "في انتظار إرسال المدير للخطة")}
             description={t("Your manager has not submitted your objectives for review yet. You cannot comment or approve until the plan is submitted.", "لم يرسل مديرك الأهداف للمراجعة بعد. لن تتمكن من التعليق أو الاعتماد قبل إرسال الخطة.")}
           />
           </div>
