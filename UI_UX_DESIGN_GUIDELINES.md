@@ -202,3 +202,42 @@ A migrated screen is complete only when:
 - Loading, empty, error, and disabled states remain visually coherent.
 - No new TypeScript, lint, build, or browser-console errors are introduced.
 - The screen has been visually checked at desktop and mobile widths.
+
+## 13. BRD alignment and role-specific presentation guardrails
+
+The visual system must support the workflows defined in `Performance_managment_platform_V1.2.pdf`. Visual consistency must never weaken role permissions or reveal information earlier than the BRD allows.
+
+### Admin experiences
+
+- Admin dashboard summaries should make Employee Status Summary, Active Performance Cycles, and Manager Progress easy to scan.
+- Manager Progress and employee lists should support the BRD-defined search/filter dimensions where the underlying feature provides them (for example name, Employee ID, email, cycle, business unit, department, job title, and status).
+- Cycle lists and cycle details should clearly distinguish Draft, Active, and Closed, and present performance year, scope, dates, and current stage where applicable.
+- Admin employee details are read-only for employee/organizational information and plan content unless a specific Admin business action is available.
+- Authorized Admin details may include KPI Actual, Achievement %, Weighted KPI Result, Manager Comments, and Evidence; use clear grouping and dense but readable detail layouts.
+- Bell Curve and final review screens are operational review tools. Preserve group context, configured limits, validation failures, allowed actions, and audit history; do not style provisional values as finalized results.
+
+### Manager experiences
+
+- Manager Dashboard is the primary visual reference. It should prioritize direct-report totals, status distribution, active cycle context, team progress, and the direct-report table.
+- Manager data must remain scoped to authorized Direct Reports and the applicable performance cycle.
+- Employee/person rows should show identity clearly (name and Employee ID separately), applicable cycle, current performance status, and only the action allowed by the current workflow state.
+- Manager employee details may show authorized workflow history and evaluation details. Preserve the distinction between editable fields, read-only fields, provisional scores, and finalized results.
+- Manager–Year Group and Bell Curve views must retain group-level context and validation visibility; do not force these specialized tables into a simple employee-list layout.
+
+### Employee experiences
+
+- Employee views should emphasize their own assigned objectives, KPIs, targets, weights, competencies, current status, and next available action, subject to the applicable workflow stage.
+- Approved objectives/KPI targets and published results are read-only where required by the BRD.
+- Employee Performance Results must be visible only after finalization and publication.
+- Employee-facing published results may show Annual Objectives Result, Annual Competency Result, Overall Annual Performance %, and Final Annual Rating.
+- Never expose individual KPI Actuals, Achievement %, Weighted KPI Results, Manager Comments, or supporting Evidence in Employee Results.
+- Do not expose internal Manager/Admin workflow or audit discussions to Employees when the BRD restricts that history.
+
+### Cross-role business constraints to preserve during UI work
+
+- Employee inclusion/exclusion, active-cycle uniqueness, manager reassignment, and historical manager records must remain governed by the BRD and backend rules.
+- A visual status badge must reflect the actual workflow status; do not invent a new status or infer permissions from colors.
+- Workflow actions must be driven by the backend's allowed actions/permissions and existing feature logic.
+- Provisional and draft annual results must never be visually presented as published/final results.
+- Notifications, templates, recipients, and triggers remain controlled by existing business rules; UI consistency does not authorize changing them.
+
