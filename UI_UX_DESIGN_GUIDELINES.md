@@ -241,3 +241,13 @@ The visual system must support the workflows defined in `Performance_managment_p
 - Provisional and draft annual results must never be visually presented as published/final results.
 - Notifications, templates, recipients, and triggers remain controlled by existing business rules; UI consistency does not authorize changing them.
 
+## 14. Shared DataTable component contract
+
+- Use `@/components/ui/data-table` (`DataTable`) as the standard entry point for every Ant Design data table in application screens.
+- Do not import `Table` directly from `antd` in feature/page components. Import `DataTable` and retain the existing Ant Design Table props, columns, row keys, renderers, pagination, sorting, filtering, selection, expandable rows, fixed columns, and summaries.
+- `DataTable` owns the shared visual class and responsive wrapper. Feature-level `className` values may add layout or domain-specific behavior but must not replace the shared visual baseline.
+- Legacy `AppTable` must delegate to `DataTable`; do not create a second table styling implementation.
+- Use a feature-specific variant only when the data model requires a materially different layout (for example a Bell Curve distribution or a cycle-stage matrix). Keep typography, header treatment, border rhythm, surface, and interaction states aligned with the shared tokens.
+- Keep native HTML tables only for semantic non-interactive tabular content where an Ant Design data table would add unnecessary interaction; style them using the same tokens and document the exception.
+- Empty/loading/error states should be rendered by the owning screen or passed through Ant Design's `locale` / `loading` props; the shared component must not swallow API errors or invent data.
+
