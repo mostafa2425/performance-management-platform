@@ -152,3 +152,35 @@
     transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
   }
 }
+
+/* Manager employee details — cycle context and review workspace */
+.manager-employee-detail {
+  display: flex;
+  gap: 16px;
+}
+.manager-employee-detail > .ant-card {
+  border-color: #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .045);
+}
+.manager-employee-detail > .ant-card > .ant-card-body { padding: 18px; }
+.manager-employee-detail > .ant-card .ant-tabs-nav { margin-bottom: 16px; }
+.manager-employee-detail > .ant-card .ant-tabs-tab {
+  padding-block: 10px;
+  font-weight: 600;
+}
+.manager-employee-detail .ant-descriptions-bordered .ant-descriptions-item-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+.manager-employee-detail .ant-descriptions-bordered .ant-descriptions-item-content {
+  color: #17243a;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 767px) {
+  .manager-employee-detail > .ant-card > .ant-card-body { padding: 14px; }
+  .manager-employee-detail > .ant-card .ant-tabs-nav-list { max-width: 100%; }
+  .manager-employee-detail > .ant-card .ant-tabs-tab { padding-inline: 8px; }
+}
