@@ -174,7 +174,10 @@ export function CycleStageEditor({
           {t("editor.cycleDates")}: {c.start_date || "—"} – {c.end_date || "—"}
         </Typography.Paragraph>
         {closed ? (
-          <Alert type="warning" showIcon title={t("editor.closedNotEditable")} />
+          <>
+            <Form form={form} component={false} />
+            <Alert type="warning" showIcon title={t("editor.closedNotEditable")} />
+          </>
         ) : (
           <Form
             key={JSON.stringify(initialValues)}
