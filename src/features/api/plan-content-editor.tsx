@@ -387,7 +387,7 @@ export function PlanContentEditor({
           </Form.Item>
           <Form.List name="kpis">
             {(kpiFields, { add: addKpi, remove: removeKpi }) => (
-              <Space direction="vertical" size={12} style={{ width: "100%" }}>
+              <Space orientation="vertical" size={12} style={{ width: "100%" }}>
                 {kpiFields.map((field, index) => (
                   <Card key={field.key} size="small" title={t("KPI", "مؤشر الأداء") + " " + (index + 1)}
                     extra={kpiFields.length > 1 ? (
