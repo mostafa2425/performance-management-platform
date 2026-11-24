@@ -14,7 +14,7 @@ import {
   Row,
   Select,
   Space,
-  Spin,
+  Skeleton,
   Tag,
   Typography,
 } from "antd";
@@ -354,7 +354,7 @@ export default function ApiEmployeesWorkspace() {
         </Row>
 
         {list.isLoading ? (
-          <Spin />
+          <Skeleton active />
         ) : list.isError ? (
           <Alert type="error" title={(list.error as Error).message} />
         ) : (
@@ -438,7 +438,7 @@ export default function ApiEmployeesWorkspace() {
         destroyOnHidden
       >
         {detail.isLoading && !detailEmployee ? (
-          <Spin />
+          <Skeleton active />
         ) : detail.isError && !detailEmployee ? (
           <Alert type="error" title={(detail.error as Error).message} />
         ) : detailEmployee ? (
