@@ -24,11 +24,9 @@ export default function LoginPage() {
   const { login, isReady, isAuthenticated, user } = useAuthSession();
   const [form] = Form.useForm<{ email: string; password: string }>();
   const [loading, setLoading] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    setMounted(true);
     document.title = translate("pageTitle");
   }, [translate]);
 
@@ -52,10 +50,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
-  if (!mounted) {
-    return <main className="login-screen" dir={ar ? "rtl" : "ltr"} />;
-  }
 
   return (
     <main className="login-screen" dir={ar ? "rtl" : "ltr"}>
