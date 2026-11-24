@@ -87,7 +87,7 @@ export default function ApiManagerEvaluationWorkspace() {
       )}
     >
       <div className="manager-evaluation-workspace">
-        <Card className="evaluation-plan-picker" bordered>
+        <Card className="evaluation-plan-picker" variant="outlined">
           <div className="evaluation-picker-copy">
             <span className="evaluation-eyebrow">{t("Evaluation workspace", "مساحة التقييم")}</span>
             <Typography.Title level={5}>{t("Choose an employee plan", "اختر خطة الموظف")}</Typography.Title>
