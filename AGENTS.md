@@ -48,3 +48,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Preserve bilingual English/Arabic support and verify RTL using CSS logical properties. Every new user-facing string must use the existing localization system.
 - For broad UI migrations, inventory the target screens first and migrate in small role-based batches. Run lint, typecheck, tests, and build where available; inspect console warnings and verify desktop/mobile plus LTR/RTL before declaring completion.
 - Do not apply global Ant Design overrides that unintentionally change modal, compact, inline, or specialized controls. Prefer scoped reusable variants and semantic wrappers.
+
+- When UI work affects performance dashboards, employee details, evaluation, Bell Curve, final review, or published results, verify role visibility and workflow requirements against `Performance_managment_platform_V1.2.pdf` (BRD) and the relevant API guide. Do not expose Employee-hidden KPI Actuals, Achievement %, Weighted KPI Results, Manager Comments, Evidence, or restricted internal workflow history in Employee-facing screens.
+- Keep provisional/draft results visually distinct from finalized and published results. Use existing backend status and allowed-action data; never infer permissions from a visual status.
