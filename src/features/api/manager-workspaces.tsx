@@ -1,7 +1,8 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useEffect, useState } from "react";
-import { Alert, App, Button, Card, Empty, Select, Space, Spin, Table, Tag, Typography } from "antd";
+import { Alert, App, Button, Card, Empty, Select, Space, Spin, Tag, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { cyclesApi } from "@/lib/api/endpoints";
@@ -95,7 +96,7 @@ export function ApiManagerTeamWorkspace() {
         ) : !cycleId ? (
           <Empty description={t("Select a cycle to view your team.", "اختر دورة لعرض فريقك.")} />
         ) : (
-          <Table
+          <DataTable
             rowKey="cycle_member_id"
             dataSource={rows}
             rowClassName={() => "team-row"}
@@ -243,7 +244,7 @@ export function ApiManagerGroupWorkspace() {
                     {t("Latest submission", "آخر إرسال")}: {g.latest_submission_no ?? "—"}
                   </Typography.Text>
                 </Space>
-                <Table
+                <DataTable
                   rowKey="level"
                   pagination={false}
                   dataSource={g.allowed || []}
@@ -278,7 +279,7 @@ export function ApiManagerGroupWorkspace() {
                 </Button>
               </Card>
               <Card title={t("Team evaluation status", "حالة تقييم الفريق")}>
-                <Table
+                <DataTable
                   rowKey="cycle_member_id"
                   dataSource={rows}
                   columns={[
