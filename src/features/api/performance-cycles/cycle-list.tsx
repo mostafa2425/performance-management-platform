@@ -13,7 +13,7 @@ import {
   Input,
   Row,
   Select,
-  Spin,
+  Skeleton,
 } from "antd";
 import {
   DeleteOutlined,
@@ -160,7 +160,7 @@ export function CycleList() {
       </Row>
       {cycles.isLoading ? (
         <div style={{ display: "grid", placeItems: "center", minHeight: 180 }}>
-          <Spin />
+          <Skeleton active />
         </div>
       ) : cycles.isError ? (
         <Alert type="error" showIcon title={(cycles.error as Error).message} />
