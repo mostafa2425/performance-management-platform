@@ -193,14 +193,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     setDialog(true);
   };
 
-  useEffect(() => {
-    if (!pendingAction || pendingAction !== "return") return;
-    if (!selectedPlan?.id) return;
-    if (dialog) return;
-    if (detail.data?.id === selectedPlan.id && (detail.data.objectives || []).length >= 0) {
-      setDialog(true);
-    }
-  }, [pendingAction, selectedPlan?.id, detail.data, dialog]);
+  const dialogOpen = dialog || (pendingAction === "return" && Boolean(selectedPlan?.id) && detail.data?.id === selectedPlan?.id);
 
   const title =
     mode === "admin"
