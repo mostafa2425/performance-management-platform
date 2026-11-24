@@ -28,6 +28,7 @@ The legacy `AppTable` in `src/components/ui-antd-primitives.tsx` now delegates t
 - `src/features/api/performance-cycles/cycle-eligibility-preview.tsx`
 - `src/features/api/performance-cycles/cycle-not-included-panel.tsx`
 - `src/features/api/performance-cycles/cycle-stage-editor.tsx`
+- `src/features/workspaces/performance-workflow-workspaces.tsx` (Bell Curve employee distribution and Manager–Year Group matrix converted from custom div grids to semantic DataTable columns)
 
 Feature-specific classes may continue to control column layout and domain-specific density. They must not fork the shared header, text, border, surface, and hover system.
 
@@ -104,6 +105,7 @@ Browser DevTools Console and visual screenshots for every route have not been ve
 ## 7. Current follow-up status
 
 - The Manager Dashboard's custom table CSS was narrowed to preserve only layout and draft-row status treatment; shared DataTable styles now own its table header, cell rhythm, hover, and pagination.
+- Bell Curve and Manager–Year Group custom div-based grids were converted to semantic DataTable columns; their distribution charts and policy warnings remain feature-specific.
 - Removed several unused imports/variables and refactored three React state effects to derive UI state instead of synchronously setting state inside effects.
 - A fresh CI run is required to confirm these latest lint cleanups. The previous confirmed quality run still had Lint failures; typecheck, tests, and production build passed.
 - Browser console and authenticated role-based route verification remain outstanding.
