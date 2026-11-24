@@ -117,6 +117,7 @@ export function ApiManagerTeamWorkspace() {
               onChange={setCycleId}
               options={options}
               loading={cycles.isFetching}
+              loading={cycles.isFetching}
             />
           </div>
         </Card>
