@@ -10610,7 +10610,7 @@ textarea.ant-input {
   --pmp-table-accent: #0d9488;
 }
 
-.ant-table-wrapper:not(.ant-table-wrapper .manager-team-table) {
+.ant-table-wrapper:not(.manager-team-table) {
   max-width: 100%;
 }
 .ant-table-wrapper .ant-table {
