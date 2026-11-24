@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
-import { Alert, App, Button, Card, Col, Empty, Form, Row, Space, Spin, Tag, Typography } from "antd";
+import { Alert, App, Button, Card, Col, Empty, Form, Row, Space, Skeleton, Tag, Typography } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -83,7 +83,7 @@ export function CycleStageEditor({
   if (!cycleProp && loaded.isLoading) {
     return (
       <div style={{ display: "grid", placeItems: "center", minHeight: 220 }}>
-        <Spin size="large" />
+        <Skeleton active />
       </div>
     );
   }
