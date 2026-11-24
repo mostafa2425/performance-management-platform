@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import {Alert,Card,Col,Empty,Row,Spin,Tag,Typography} from "antd";
+import {Alert,Card,Col,Empty,Row,Skeleton,Tag,Typography} from "antd";
 import {useQuery} from "@tanstack/react-query";
 import {useLocale} from "next-intl";
 import {AppShell} from "@/components/layout/app-shell";
@@ -18,7 +18,7 @@ export default function EmployeeDashboardWorkspace(){
  const cycles=rowsOf(cq.data).filter((c:any)=>c.my_roles?.member),plans=rowsOf(pq.data),results=rowsOf(rq.data).filter((r:any)=>r.published===true),plan=plans[0];
  const busy=!isReady||cq.isLoading||pq.isLoading||rq.isLoading,error=cq.error||pq.error||rq.error;
  return <AppShell title={t("My performance","أدائي")} subtitle={t("Your current plan and published annual results.","خطتك الحالية ونتائجك السنوية المنشورة.")}>
- {busy?<Spin/>:error?<Alert type="error" showIcon title={(error as Error).message}/>:<>
+ {busy?<Skeleton active/>:error?<Alert type="error" showIcon title={(error as Error).message}/>:<>
  <Row gutter={[12,12]} style={{marginBottom:16}}><Col xs={24} md={8}><Card><Typography.Text type="secondary">{t("Active cycles","الدورات النشطة")}</Typography.Text><Typography.Title level={2}>{cycles.length}</Typography.Title></Card></Col><Col xs={24} md={8}><Card><Typography.Text type="secondary">{t("My plan status","حالة خطتي")}</Typography.Text><Typography.Title level={4}>{plan?.status?.label||"—"}</Typography.Title></Card></Col><Col xs={24} md={8}><Card><Typography.Text type="secondary">{t("Published results","النتائج المنشورة")}</Typography.Text><Typography.Title level={2}>{results.length}</Typography.Title></Card></Col></Row>
  <Card title={t("My performance plan","خطة الأداء الخاصة بي")} style={{marginBottom:16}}>{plan?<><Row gutter={16}><Col xs={24} md={12}><Typography.Text type="secondary">{t("Cycle","الدورة")}</Typography.Text><div><Typography.Text strong>{localized(plan.cycle?.name,ar)||plan.cycle?.performance_year||"—"}</Typography.Text></div></Col><Col xs={24} md={12}><Typography.Text type="secondary">{t("Status","الحالة")}</Typography.Text><div><Tag color="processing">{plan.status?.label||"—"}</Tag></div></Col></Row><div style={{marginTop:12}}><Link href={"/"+locale+"/employee/objectives"}>{t("Open my objectives","عرض أهدافي")} →</Link></div></>:<Empty description={t("No performance plan is available yet.","لا توجد خطة أداء متاحة حتى الآن.")}/>}</Card>
  <Card title={t("My active cycles","دوراتي النشطة")} style={{marginBottom:16}}>{cycles.length?<Row gutter={[12,12]}>{cycles.map((c:any)=><Col xs={24} md={12} key={c.id}><Card size="small"><Typography.Text strong>{localized(c.name,ar)}</Typography.Text><div><Tag color="blue">{c.current_stage||"—"}</Tag></div><Typography.Text type="secondary">{t("Performance year","سنة الأداء")}: {c.performance_year||"—"}</Typography.Text></Card></Col>)}</Row>:<Empty description={t("No active cycle","لا توجد دورة نشطة")}/>}</Card>
