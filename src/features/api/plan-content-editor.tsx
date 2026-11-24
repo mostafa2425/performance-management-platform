@@ -3,7 +3,6 @@
 import { Alert, Button, Card, Col, Collapse, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
 import { useRef, useState } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import type { FormInstance } from "antd";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
 import { commentsForTarget, type OpenComments } from "./plans/plan-shared";
 
@@ -24,7 +23,7 @@ type ObjectiveDraft = {
 };
 
 type Props = {
-  form: FormInstance<{ objectives: ObjectiveDraft[] }>;
+  initialObjectives: ObjectiveDraft[];
   categories: ObjectiveCategory[];
   units: KpiUnitsMeta | Record<string, never>;
   ar: boolean;
@@ -183,7 +182,7 @@ function KpiFields({
 }
 
 export function PlanContentEditor({
-  form,
+  initialObjectives,
   categories,
   units,
   ar,
@@ -192,6 +191,7 @@ export function PlanContentEditor({
   onSave,
 }: Props) {
   const t = (en: string, arabic: string) => (ar ? arabic : en);
+  const [form] = Form.useForm<{ objectives: ObjectiveDraft[] }>();
   const [objectiveModalOpen, setObjectiveModalOpen] = useState(false);
   const [objectiveForm] = Form.useForm();
   const addObjectiveRef = useRef<((value: ObjectiveDraft) => void) | null>(null);
@@ -208,6 +208,7 @@ export function PlanContentEditor({
     <Form
       form={form}
       layout="vertical"
+      initialValues={{ objectives: initialObjectives }}
       onFinish={(values) => onSave(values.objectives || [])}
     >
       <InlineComments openComments={openComments} target="plan" ar={ar} />
