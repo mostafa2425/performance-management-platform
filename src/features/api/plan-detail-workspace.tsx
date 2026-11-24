@@ -16,7 +16,7 @@ import { PlanReadonlyTree } from "./plans/plan-readonly-tree";
 import { PlanActionModal } from "./plans/plan-action-modal";
 import { PlanHistoryPanel } from "./plans/plan-history-panel";
 import { PlanSnapshotsPanel } from "./plans/plan-snapshots-panel";
-import "./plan-detail-workspace.css";
+
 import { formatInstant, planStatusTag, resolveActionLabel, returnSourceLabel, workflowActions, type PlanMode } from "./plans/plan-shared";
 
 function toDraftObjectives(objectives: any[] = []) {
