@@ -14,8 +14,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
+      - id: install
+        run: npm install
+      - name: Lint
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: npm run lint
+      - name: Typecheck
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: npm run typecheck
+      - name: Tests
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: npm test
+      - name: Production build
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: npm run build
