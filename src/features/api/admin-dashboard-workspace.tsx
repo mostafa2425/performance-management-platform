@@ -246,7 +246,7 @@ function getEmployeeStatus(
 ): StatusKey {
   if (!membership) return "not_started";
   const { cycle, member } = membership;
-  const displayStatus = String(member?.display_status || "");
+  const displayStatus = typeof member?.status === "object" ? member.status?.key || "" : String(member?.status || "");
   const managerId = asId(member?.current_manager_id ?? member?.manager_id);
   const group = cycle.groups.find((item) => managerIdForGroup(item) === managerId);
   const groupStatus = String(group?.status || "");
@@ -257,11 +257,11 @@ function getEmployeeStatus(
 
   if (displayStatus === "not_started" || !member?.plan_id) return "no_plan_yet";
   if (displayStatus === "draft") return "draft";
-  if (displayStatus === "pending_admin_approval") return "pending_admin_approval";
-  if (displayStatus === "pending_employee_review") return "pending_employee_review";
-  if (displayStatus === "returned_to_manager") return "returned_to_manager";
+  if (displayStatus === "pending_admin") return "pending_admin_approval";
+  if (displayStatus === "pending_employee") return "pending_employee_review";
+  if (displayStatus === "returned") return "returned_to_manager";
 
-  if (displayStatus === "goals_approved") {
+  if (displayStatus === "approved") {
     if (cycle.current_stage === "active_performance") return "active_performance";
     if (
       cycle.current_stage === "manager_evaluation" ||
@@ -306,7 +306,7 @@ function progressForCycle(cycle: DashboardCycle, finalizedIds: Set<number>) {
     ).length;
   } else if (cycle.current_stage === "employee_review") {
     labelKey = "plansApproved";
-    done = cycle.members.filter((member) => member.display_status === "goals_approved").length;
+    done = cycle.members.filter((member) => (typeof member.status === "object" ? member.status?.key : member.status) === "approved").length;
   } else if (cycle.current_stage === "active_performance") {
     labelKey = "approvedPlans";
     done = cycle.members.filter((member) => member.display_status === "goals_approved").length;
