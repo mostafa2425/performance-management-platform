@@ -75,8 +75,6 @@ export function ApiManagerTeamWorkspace() {
         .some((value) => String(value || "").toLocaleLowerCase().includes(term));
     });
   }, [rows, search, status]);
-  const count = (key: string) => rows.filter((row) => (row.status?.key || "not_started") === key).length;
-  const needsAttention = rows.filter((row) => row.requires_admin_attention).length;
   const statusOptions = [
     { value: "not_started", label: t("Not started", "لم تبدأ") },
     { value: "draft", label: t("Draft", "مسودة") },
@@ -129,21 +127,23 @@ export function ApiManagerTeamWorkspace() {
           </Card>
         ) : (
           <>
-            <Row gutter={[10, 10]} className="manager-team-summary">
-              {[
-                { key: "total", label: t("Direct reports", "الموظفون المباشرون"), value: rows.length },
-                { key: "approved", label: t("Goals approved", "الأهداف المعتمدة"), value: count("approved") },
-                { key: "pending", label: t("Pending review", "بانتظار المراجعة"), value: count("pending_admin") + count("pending_employee") },
-                { key: "attention", label: t("Needs attention", "تتطلب متابعة"), value: needsAttention },
-              ].map((item) => (
-                <Col xs={12} sm={6} key={item.key}>
-                  <Card size="small" className={`manager-team-stat manager-team-stat-${item.key}`} variant="outlined">
-                    <Typography.Text type="secondary">{item.label}</Typography.Text>
-                    <Typography.Title level={3}>{item.value}</Typography.Title>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+            {/* Summary cards intentionally disabled; keep the team list as the primary focus.
+                        <Row gutter={[10, 10]} className="manager-team-summary">
+                          {[
+                            { key: "total", label: t("Direct reports", "الموظفون المباشرون"), value: rows.length },
+                            { key: "approved", label: t("Goals approved", "الأهداف المعتمدة"), value: count("approved") },
+                            { key: "pending", label: t("Pending review", "بانتظار المراجعة"), value: count("pending_admin") + count("pending_employee") },
+                            { key: "attention", label: t("Needs attention", "تتطلب متابعة"), value: needsAttention },
+                          ].map((item) => (
+                            <Col xs={12} sm={6} key={item.key}>
+                              <Card size="small" className={`manager-team-stat manager-team-stat-${item.key}`} variant="outlined">
+                                <Typography.Text type="secondary">{item.label}</Typography.Text>
+                                <Typography.Title level={3}>{item.value}</Typography.Title>
+                              </Card>
+                            </Col>
+                          ))}
+                        </Row>
+            */}
 
             <Card className="manager-team-list-card" variant="outlined">
               <div className="manager-team-list-heading">
