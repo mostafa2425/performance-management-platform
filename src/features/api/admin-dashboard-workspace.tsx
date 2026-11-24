@@ -52,8 +52,7 @@ type AnyRecord = {
   manager_id?: number | string;
   current_manager_id?: number | string | null;
   plan_id?: number | string | null;
-  display_status?: string;
-  status?: string;
+  status?: string | { key?: string; label?: string };
   finalized_at?: string | null;
   cycle_id?: number | string;
   employee?: {
@@ -300,8 +299,8 @@ function progressForCycle(cycle: DashboardCycle, finalizedIds: Set<number>) {
   if (cycle.current_stage === "goal_setting") {
     labelKey = "plansSubmitted";
     done = cycle.members.filter((member) =>
-      ["pending_admin_approval", "pending_employee_review", "goals_approved"].includes(
-        String(member.display_status),
+      ["pending_admin", "pending_employee", "approved"].includes(
+        typeof member.status === "object" ? member.status?.key || "" : String(member.status || ""),
       ),
     ).length;
   } else if (cycle.current_stage === "employee_review") {
@@ -309,7 +308,7 @@ function progressForCycle(cycle: DashboardCycle, finalizedIds: Set<number>) {
     done = cycle.members.filter((member) => (typeof member.status === "object" ? member.status?.key : member.status) === "approved").length;
   } else if (cycle.current_stage === "active_performance") {
     labelKey = "approvedPlans";
-    done = cycle.members.filter((member) => member.display_status === "goals_approved").length;
+    done = cycle.members.filter((member) => (typeof member.status === "object" ? member.status?.key : member.status) === "approved").length;
   } else if (cycle.current_stage === "manager_evaluation") {
     labelKey = "evaluationsCompleted";
     done = cycle.members.filter((member) => {
