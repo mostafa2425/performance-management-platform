@@ -86,11 +86,25 @@
 .plan-detail-workspace .ant-tag { border-radius: 6px; font-weight: 600; }
 .plan-detail-workspace .plan-detail-support-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: stretch;
+  width: 100%;
 }
-.plan-detail-workspace .plan-detail-support-grid > .ant-card { min-width: 0; }
+.plan-detail-workspace .plan-detail-support-grid > .ant-card {
+  min-width: 0;
+  width: 100%;
+}
+.plan-detail-workspace .plan-detail-snapshots .ant-card-body {
+  width: 100%;
+}
+.plan-detail-workspace .plan-detail-snapshots .ant-collapse,
+.plan-detail-workspace .plan-detail-snapshots .ant-collapse-item,
+.plan-detail-workspace .plan-detail-snapshots .ant-collapse-content,
+.plan-detail-workspace .plan-detail-snapshots .ant-collapse-content-box {
+  width: 100%;
+  min-width: 0;
+}
 .plan-detail-workspace .plan-detail-history .ant-timeline { margin-top: 4px; }
 .plan-detail-workspace .plan-detail-snapshots .ant-collapse { border: 0; }
 .plan-detail-workspace .plan-detail-snapshots .ant-collapse-item { border-bottom-color: #edf1f5; }
@@ -137,7 +151,6 @@
   .plan-detail-workspace .plan-detail-section > .ant-card-body { padding: 14px; }
   .plan-detail-workspace .plan-detail-hero-card .ant-card-body { padding: 14px; }
   .plan-detail-workspace .plan-detail-hero-card .ant-card-head { padding-inline: 14px; }
-  .plan-detail-workspace .plan-detail-support-grid { grid-template-columns: minmax(0, 1fr); }
   .plan-detail-workspace .plan-detail-workflow .ant-card-body {
     align-items: flex-start;
     flex-direction: column;
