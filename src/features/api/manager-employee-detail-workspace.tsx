@@ -154,7 +154,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                     </Button>
                   </Link>
                 )}
-                {member?.display_status === "goals_approved" ? (
+                {member?.status?.key === "approved" ? (
                   <Link href={`/${locale}/manager/evaluation`}>
                     <Button>{t("Go to evaluation", "الانتقال للتقييم")}</Button>
                   </Link>
@@ -185,7 +185,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                 {person.code ? (
                   <Typography.Text type="secondary">#{person.code}</Typography.Text>
                 ) : null}
-                {planStatusTag(member?.display_status, ar)}
+                {planStatusTag(member?.status, ar)}
                 {member?.requires_admin_attention ? (
                   <Tag color="orange">
                     {t("Requires admin attention", "يتطلب متابعة الإدارة")}
