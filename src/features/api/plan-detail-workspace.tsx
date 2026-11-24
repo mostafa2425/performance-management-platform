@@ -217,7 +217,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
       subtitle={t("Review employee information, objectives, KPIs and workflow.", "راجع بيانات الموظف والأهداف ومؤشرات الأداء وسير العمل.")}
     >
       <div style={{ width: "100%", maxWidth: mode === "employee" ? 1040 : "100%", marginInline: "auto" }}>
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space orientation="vertical" size={16} style={{ width: "100%" }}>
         <Button icon={<ArrowLeftOutlined />} onClick={() => router.push(listPath)} type="text">
           {t("Back to objectives", "العودة إلى الأهداف")}
         </Button>
@@ -234,7 +234,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           extra={<Typography.Text type="secondary">{t("Plan", "الخطة")} #{plan.id}</Typography.Text>}
           bodyStyle={{ padding: 16 }}
         >
-          <Space direction="vertical" size={18} style={{ width: "100%" }}>
+          <Space orientation="vertical" size={18} style={{ width: "100%" }}>
             <div>
               <Typography.Text strong style={{ display: "block", marginBottom: 10 }}>
                 {t("Employee information", "بيانات الموظف")}
@@ -257,7 +257,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             showIcon
             title={returnSourceLabel(plan.return_source, ar)}
             description={
-              <Space direction="vertical" size={4}>
+              <Space orientation="vertical" size={4}>
                 <Typography.Text>{plan.open_comments?.actor?.name || "—"} · {formatInstant(plan.open_comments?.created_at, ar)}</Typography.Text>
                 {plan.open_comments?.comments?.map((comment: any, index: number) => (
                   <Typography.Text key={index}>{comment.body}</Typography.Text>
@@ -325,7 +325,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
         </Card>
 
         <Card title={t("Workflow actions", "إجراءات سير العمل")}>
-          <Space direction="vertical" size={12} style={{ width: "100%" }}>
+          <Space orientation="vertical" size={12} style={{ width: "100%" }}>
             {plan.allowed_actions?.length ? (
               <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
             ) : <Typography.Text type="secondary">{t("No actions are available at this stage.", "لا توجد إجراءات متاحة في هذه المرحلة.")}</Typography.Text>}
