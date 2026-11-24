@@ -5,7 +5,7 @@ import { AppButton, AppInput, AppSelect } from "@/components/ui-antd-primitives"
 import { AppShell } from "@/components/layout/app-shell";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
-import { Activity, CalendarDays, CheckCircle2, Clock3, Download, FileClock, Filter, LockKeyhole, Search, ShieldCheck, UserRound, Users } from "lucide-react";
+import { Activity, CalendarDays, CheckCircle2, Clock3, FileClock, Filter, LockKeyhole, Search, ShieldCheck, UserRound, Users } from "lucide-react";
 
 type Role="employee"|"manager"|"department"|"hcd"|"admin";
 type RecordItem={id:string;name:string;employeeId:string;role:string;department:string;manager:string;year:string;cycle:string;period:string;result:string;rating:string;status:"Published"|"Finalized"|"Pending";objectives:string;competencies:string;actuals:string;achievement:string;weighted:string;comment:string;managerHistory:string};
