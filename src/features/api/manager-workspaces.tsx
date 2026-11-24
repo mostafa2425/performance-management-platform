@@ -10,7 +10,6 @@ import { cyclesApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { planStatusTag } from "./plans/plan-shared";
-import { planStatusTag } from "./plans/plan-shared";
 
 type StatusMeta = { en: string; ar: string; color: string };
 
