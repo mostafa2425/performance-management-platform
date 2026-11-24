@@ -9,6 +9,12 @@ import {
   returnSourceLabel,
 } from "./plan-shared";
 
+function formatHistoryValue(value: unknown): string {
+  if (typeof value === "string") return value.replaceAll("_", " ");
+  if (typeof value === "number") return String(value);
+  return "—";
+}
+
 export function PlanHistoryPanel({
   planId,
   ar,
@@ -51,8 +57,8 @@ export function PlanHistoryPanel({
             </div>
             {(event.from || event.to) && (
               <Typography.Paragraph style={{ marginBottom: 4 }} type="secondary">
-                {(event.from || "—").replaceAll("_", " ")} →{" "}
-                {(event.to || "—").replaceAll("_", " ")}
+                {formatHistoryValue(event.from)} →{" "}
+                {formatHistoryValue(event.to)}
               </Typography.Paragraph>
             )}
             {event.return_source ? (
