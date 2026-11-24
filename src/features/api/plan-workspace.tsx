@@ -399,7 +399,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
         </Card>
 
         <PlanActionModal
-          open={dialog}
+          open={dialogOpen}
           action={pendingAction}
           ar={ar}
           plan={detail.data || selectedPlan}
