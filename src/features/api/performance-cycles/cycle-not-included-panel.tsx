@@ -1,7 +1,8 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useMemo, useState } from "react";
-import { Alert, App, Button, Card, Form, Input, Modal, Spin, Table, Tag } from "antd";
+import { Alert, App, Button, Card, Form, Input, Modal, Spin, Tag } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { adminApi, cyclesApi } from "@/lib/api/endpoints";
@@ -131,7 +132,7 @@ export function CycleNotIncludedPanel({ cycleId, status }: { cycleId: string; st
       ) : membersError ? (
         <Alert type="error" showIcon title={(membersError as Error).message} />
       ) : (
-        <Table
+        <DataTable
           rowKey={(r: any) => r.id ?? r.cycle_member_id ?? r.employee?.id}
           size="middle"
           dataSource={removedMissed}
