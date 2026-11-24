@@ -62,12 +62,15 @@
   box-shadow: none;
 }
 .plan-detail-workspace .ant-btn-primary {
-  border-color: #0d9488;
-  background: #0d9488;
+  border-color: var(--ant-btn-color-base, #0d9488);
+  background: var(--ant-btn-color-base, #0d9488);
+  color: #fff;
 }
-.plan-detail-workspace .ant-btn-primary:hover {
-  border-color: #0f766e !important;
-  background: #0f766e !important;
+.plan-detail-workspace .ant-btn-primary:hover,
+.plan-detail-workspace .ant-btn-primary:focus-visible {
+  border-color: var(--ant-btn-color-base, #0d9488) !important;
+  background: var(--ant-btn-color-base, #0d9488) !important;
+  filter: brightness(.94);
 }
 .plan-detail-workspace .ant-collapse {
   border-color: #e2e8f0;
