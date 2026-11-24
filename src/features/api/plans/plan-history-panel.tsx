@@ -11,7 +11,8 @@ import {
 
 function formatHistoryValue(value: unknown): string {
   if (typeof value === "string") return value.replaceAll("_", " ");
-  if (typeof value === "number") return String(value);\n  if (value && typeof value === "object" && "label" in value) return String((value as { label?: unknown }).label || (value as { key?: unknown }).key || "—");
+  if (typeof value === "number") return String(value);
+  if (value && typeof value === "object" && "label" in value) return String((value as { label?: unknown }).label || (value as { key?: unknown }).key || "—");
   return "—";
 }
 
