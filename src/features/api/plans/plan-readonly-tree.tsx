@@ -1,5 +1,7 @@
 "use client";
 
+import "../plan-detail-workspace.css";
+
 import { Alert, Card, Collapse, Empty, Progress, Row, Col, Space, Statistic, Tag, Typography } from "antd";
 import { bilingual, commentsForTarget, type OpenComments, weightPct } from "./plan-shared";
 
