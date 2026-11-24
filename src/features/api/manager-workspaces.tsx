@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/ui/data-table";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, App, Button, Card, Empty, Select, Space, Spin, Tag, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -45,7 +45,7 @@ function StatusTag({ value, ar, map }: { value?: string | null; ar: boolean; map
 
 function useManagerCycle() {
   const cycles = useQuery({ queryKey: ["cycles"], queryFn: cyclesApi.mine });
-  const [cycleId, setCycleId] = useState<number>();
+  const [selectedCycleId, setSelectedCycleId] = useState<number | null | undefined>(undefined);
   const options = (cycles.data || [])
     .filter((c: any) => c.my_roles?.manager || c.my_roles?.member)
     .map((c: any) => ({ value: c.id as number, label: `${c.name?.en || c.name} · ${c.performance_year}` }));
