@@ -20,7 +20,7 @@
 .plan-detail-workspace .plan-detail-hero-card { overflow: hidden; }
 .plan-detail-workspace .plan-detail-hero-card > .ant-card-head {
   min-height: 60px;
-  background: linear-gradient(105deg, #0b172b 0%, #1e293b 100%);
+  background: linear-gradient(110deg, #10243b 0%, #153b4a 100%);
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .plan-detail-workspace .plan-detail-hero-card .ant-card-head-title,
