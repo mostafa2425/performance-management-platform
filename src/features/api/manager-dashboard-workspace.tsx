@@ -16,7 +16,7 @@ import {
   Progress,
   Row,
   Select,
-  Spin,
+  Skeleton,
   Tag,
   Typography,
 } from "antd";
@@ -308,7 +308,7 @@ export default function ManagerDashboardWorkspace() {
       )}
     >
       {busy ? (
-        <Spin />
+        <Skeleton active />
       ) : error ? (
         <Alert type="error" showIcon title={(error as Error).message} />
       ) : (
@@ -333,7 +333,7 @@ export default function ManagerDashboardWorkspace() {
 
           <section className="manager-metrics-grid" aria-label={t("Team metrics", "مؤشرات الفريق")}>
             {metrics.map((metric) => (
-              <Card key={metric.key} className={`manager-metric-card manager-metric-${metric.tone}`} bordered>
+              <Card key={metric.key} className={`manager-metric-card manager-metric-${metric.tone}`} variant="outlined">
                 <div className="manager-metric-label">{metric.label}</div>
                 <div className="manager-metric-value-row">
                   <span className="manager-metric-value">{metric.value}</span>
@@ -412,7 +412,7 @@ export default function ManagerDashboardWorkspace() {
             )}
           </section>
 
-          <Card className="manager-team-card" bordered>
+          <Card className="manager-team-card" variant="outlined">
             <div className="manager-team-header">
               <div className="manager-team-title">
                 <Typography.Title level={5}>{t("My team", "فريقي")}</Typography.Title>
