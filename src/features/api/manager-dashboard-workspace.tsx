@@ -320,7 +320,12 @@ export default function ManagerDashboardWorkspace() {
             </div>
             <Button
               className="manager-refresh-button"
-              onClick={() => {\n                queryClient.invalidateQueries({ queryKey: ["manager-dashboard-cycles"] });\n                queryClient.invalidateQueries({ queryKey: ["manager-plan-status"] });\n                queryClient.invalidateQueries({ queryKey: ["manager-team-evaluations"] });\n                queryClient.invalidateQueries({ queryKey: ["manager-team-group"] });\n              }}
+              onClick={() => {
+                queryClient.invalidateQueries({ queryKey: ["manager-dashboard-cycles"] });
+                queryClient.invalidateQueries({ queryKey: ["manager-plan-status"] });
+                queryClient.invalidateQueries({ queryKey: ["manager-team-evaluations"] });
+                queryClient.invalidateQueries({ queryKey: ["manager-team-group"] });
+              }}
             >
               ↻ <span>{t("Refresh", "تحديث")}</span>
             </Button>
