@@ -40,7 +40,7 @@ export const PLAN_STATUS_META: Record<
     ar: "بانتظار مراجعة الموظف",
     color: "purple",
   },
-  goals_approved: { en: "Goals approved", ar: "تم اعتماد الأهداف", color: "green" },
+  approved: { en: "Goals approved", ar: "الأهداف معتمدة", color: "green" },
 };
 
 const ACTION_LABELS: Record<string, [string, string]> = {
@@ -59,11 +59,11 @@ const ACTION_LABELS: Record<string, [string, string]> = {
 export function resolveActionLabel(
   action: string,
   ar: boolean,
-  plan?: { display_status?: string; status?: string } | null,
+  plan?: { status?: { key?: string } | null } | null,
 ) {
   if (
     action === "submit" &&
-    (plan?.display_status === "returned_to_manager" || plan?.status === "returned")
+    plan?.status?.key === "returned"
   ) {
     return actionLabel("resubmit", ar);
   }
