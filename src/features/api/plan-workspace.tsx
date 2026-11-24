@@ -15,7 +15,7 @@ import {
   Row,
   Select,
   Space,
-  Spin,
+  Skeleton,
   Tag,
   Typography,
 } from "antd";
@@ -312,7 +312,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
 
           {plans.isLoading ? (
             <div style={{ display: "grid", placeItems: "center", minHeight: 180 }}>
-              <Spin />
+              <Skeleton active />
             </div>
           ) : plans.isError ? (
             <Alert type="error" showIcon title={(plans.error as Error).message} />
