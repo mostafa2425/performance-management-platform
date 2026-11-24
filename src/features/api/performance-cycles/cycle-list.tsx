@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useMemo, useState } from "react";
@@ -12,7 +13,6 @@ import {
   Row,
   Select,
   Spin,
-  Table,
 } from "antd";
 import {
   DeleteOutlined,
@@ -164,7 +164,7 @@ export function CycleList() {
       ) : cycles.isError ? (
         <Alert type="error" showIcon title={(cycles.error as Error).message} />
       ) : (
-        <Table
+        <DataTable
           rowKey="id"
           dataSource={rows}
           pagination={{ pageSize: 10 }}
