@@ -8,17 +8,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { cyclesApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
-import { AppShell } from "@/components/layout/app-shell";\nimport { planStatusTag } from "./plans/plan-shared";
+import { AppShell } from "@/components/layout/app-shell";
+import { planStatusTag } from "./plans/plan-shared";\nimport { planStatusTag } from "./plans/plan-shared";
 
 type StatusMeta = { en: string; ar: string; color: string };
 
 const PLAN_DISPLAY_STATUS: Record<string, StatusMeta> = {
   not_started: { en: "Not started", ar: "لم تبدأ", color: "default" },
   draft: { en: "Draft", ar: "مسودة", color: "blue" },
-  pending_admin_approval: { en: "Pending admin approval", ar: "بانتظار اعتماد الإدارة", color: "gold" },
-  returned_to_manager: { en: "Returned to manager", ar: "معاد للمدير", color: "orange" },
-  pending_employee_review: { en: "Pending employee review", ar: "بانتظار مراجعة الموظف", color: "purple" },
-  goals_approved: { en: "Goals approved", ar: "تم اعتماد الأهداف", color: "green" },
 };
 
 const EVALUATION_STATUS: Record<string, StatusMeta> = {
@@ -136,8 +133,8 @@ export function ApiManagerTeamWorkspace() {
               },
               {
                 title: t("Plan status", "حالة الخطة"),
-                dataIndex: "display_status",
-                render: (v: string) => <StatusTag value={v} ar={ar} map={PLAN_DISPLAY_STATUS} />,
+                dataIndex: "status",
+                render: (v: { key?: string; label?: string }) => planStatusTag(v, ar),
               },
               {
                 title: t("Admin attention", "يتطلب متابعة الإدارة"),
