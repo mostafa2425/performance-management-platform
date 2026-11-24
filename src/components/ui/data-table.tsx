@@ -27,9 +27,10 @@ export function DataTable<RecordType extends object = Record<string, unknown>>({
   ...props
 }: DataTableProps<RecordType>) {
   const classes = ["pmp-data-table", className].filter(Boolean).join(" ");
+  const isLoading = Boolean(props.loading);
 
   return (
-    <div className="pmp-data-table-region" role={ariaLabel ? "region" : undefined} aria-label={ariaLabel}>
+    <div className="pmp-data-table-region" role={ariaLabel ? "region" : undefined} aria-label={ariaLabel} aria-busy={isLoading}>
       <Table<RecordType> size={size} {...props} className={classes} />
     </div>
   );
