@@ -53,7 +53,8 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
     const acc: Record<string, number> = {};
     for (const k of planStatusKeys) acc[k] = 0;
     for (const r of rows) {
-      const k = r.status?.key;
+      const statusKey = r.status?.key;
+      const k = ({ pending_admin: "pending_admin_approval", pending_employee: "pending_employee_review", returned: "returned_to_manager", approved: "goals_approved" } as Record<string, string>)[statusKey] || statusKey;
       if (k in acc) acc[k] += 1;
     }
     return acc;
@@ -166,7 +167,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                   {
                     title: t("fields.status"),
                     dataIndex: "status",
-                    render: (v: { key?: string; label?: string }) => <Tag color={PLAN_DISPLAY_STATUS[v?.key || ""]?.color ?? "default"}>{v?.label || "—"}</Tag>,
+                    render: (v: { key?: string; label?: string }) => <Tag color={PLAN_DISPLAY_STATUS[({ pending_admin: "pending_admin_approval", pending_employee: "pending_employee_review", returned: "returned_to_manager", approved: "goals_approved" } as Record<string, string>)[v?.key || ""] || v?.key || ""]?.color ?? "default"}>{v?.label || "—"}</Tag>,
                   },
                   {
                     title: t("fields.attention"),
