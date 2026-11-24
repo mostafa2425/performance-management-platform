@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Divider, Empty, Select, Space, Typography } from "antd";
+import { Button, Divider, Empty, Select, Skeleton, Space, Typography } from "antd";
 import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 
@@ -58,13 +58,16 @@ export function OptionsMultiSelect({
     return String(option?.label ?? "").toLowerCase().includes(q);
   };
 
+  if (loading) {
+    return <Skeleton.Input active block />;
+  }
+
   return (
     <Select
       mode="multiple"
       value={value}
       onChange={onChange}
       options={selectableOptions}
-      loading={loading}
       disabled={disabled}
       allowClear
       showSearch
@@ -80,9 +83,7 @@ export function OptionsMultiSelect({
         <Typography.Text type="secondary">+{omitted.length}</Typography.Text>
       )}
       notFoundContent={
-        loading ? null : (
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={emptyText ?? t("scope.noOptions")} />
-        )
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={emptyText ?? t("scope.noOptions")} />
       }
       optionLabelProp="label"
       prefix={
