@@ -2,7 +2,7 @@
 
 import { AppShell } from "@/components/layout/app-shell";
 import { useLocale } from "next-intl";
-import { Activity, AlertTriangle, ArrowUpRight, Building2, CheckCircle2, ClipboardList, FileBarChart2, Layers3, ShieldCheck, Users } from "lucide-react";
+import { Activity, AlertTriangle, Building2, CheckCircle2, ClipboardList, FileBarChart2, Layers3, ShieldCheck, Users } from "lucide-react";
 
 type Role = "department" | "hcd";
 type Row = { name: string; detail: string; value: string; status: string; tone: "good" | "risk" | "neutral" };
