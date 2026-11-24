@@ -100,21 +100,23 @@ export default function ApiManagerEvaluationWorkspace() {
           </div>
           <div className="evaluation-picker-control">
             <Typography.Text strong>{t("Approved plan", "الخطة المعتمدة")}</Typography.Text>
-            <Select
-              showSearch
-              optionFilterProp="label"
-              className="evaluation-plan-select"
-              placeholder={t("Select an approved plan to evaluate", "اختر خطة معتمدة لتقييمها")}
-              value={planId}
-              onChange={setPlanId}
-              options={rows.map((plan: any) => ({
-                value: plan.id,
-                label: `${plan.employee?.name || plan.employee?.full_name || plan.id} · ${plan.display_status} · #${plan.id}`,
-              }))}
-              notFoundContent={plans.isLoading ? <div className="evaluation-select-loading"><Skeleton active title={false} paragraph={{ rows: 2, width: ["88%", "62%"] }} /></div> : undefined}
-            />
+            {plans.isLoading ? (
+              <Skeleton.Input active block className="evaluation-plan-select-skeleton" />
+            ) : (
+              <Select
+                showSearch
+                optionFilterProp="label"
+                className="evaluation-plan-select"
+                placeholder={t("Select an approved plan to evaluate", "اختر خطة معتمدة لتقييمها")}
+                value={planId}
+                onChange={setPlanId}
+                options={rows.map((plan: any) => ({
+                  value: plan.id,
+                  label: `${plan.employee?.name || plan.employee?.full_name || plan.id} · ${plan.display_status} · #${plan.id}`,
+                }))}
+              />
+            )}
           </div>
-          {plans.isLoading ? <Skeleton.Input active size="small" block={false} /> : null}
           {plans.isError ? <Alert type="error" showIcon title={(plans.error as Error).message} /> : null}
         </Card>
 
