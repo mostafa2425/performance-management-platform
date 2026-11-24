@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { Table, Tooltip } from "antd";
@@ -15,7 +16,7 @@ export function CycleStagesTable({ stages }: { stages: StageRow[] }) {
   const t = useTranslations("PerformanceCycles");
 
   return (
-    <Table
+    <DataTable
       rowKey="stage"
       pagination={false}
       size="middle"
