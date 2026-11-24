@@ -126,7 +126,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
       )}
       backHref="/manager/team"
     >
-      <Space orientation="vertical" size={16} style={{ width: "100%" }}>
+      <Space className="manager-employee-detail" orientation="vertical" size={16} style={{ width: "100%" }}>
         <Card>
           <Row gutter={[12, 12]} align="middle">
             <Col xs={24} md={10}>
