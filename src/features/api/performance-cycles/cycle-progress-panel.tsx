@@ -1,7 +1,8 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useMemo, useState } from "react";
-import { Alert, Card, Col, Collapse, Empty, Input, Row, Space, Spin, Statistic, Table, Tag, Typography } from "antd";
+import { Alert, Card, Col, Collapse, Empty, Input, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { adminApi, cyclesApi, resultsApi } from "@/lib/api/endpoints";
@@ -147,7 +148,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
               </Space>
             ),
             children: (
-              <Table
+              <DataTable
                 rowKey={(r: any) => r.cycle_member_id ?? r.employee?.id}
                 size="small"
                 pagination={false}
