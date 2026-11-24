@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { App, Alert, Button, Card, Col, Form, Row, Space, Spin, Tag, Typography } from "antd";
+import { App, Alert, Button, Card, Col, Row, Space, Spin, Tag, Typography } from "antd";
 import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
