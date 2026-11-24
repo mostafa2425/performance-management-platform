@@ -1,2 +1,2 @@
-import DashboardPage from "@/features/api/dashboard-workspace";
-export default function Page(){return <DashboardPage/>;}
+import ManagerDashboardWorkspace from "@/features/api/manager-dashboard-workspace";
+export default function Page(){return <ManagerDashboardWorkspace/>;}
