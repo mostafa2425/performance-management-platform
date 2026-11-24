@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Alert, Button, Card, Col, Empty, Row, Spin, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Empty, Row, Skeleton, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
@@ -72,7 +72,7 @@ export default function DashboardPage() {
       subtitle={t("Focus on the next step in the performance cycle.", "ركز على الخطوة التالية في دورة الأداء.")}
     >
       {busy ? (
-        <Spin />
+        <Skeleton active />
       ) : error ? (
         <Alert type="error" showIcon title={(error as Error).message} />
       ) : (
