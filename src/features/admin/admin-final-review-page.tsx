@@ -3,7 +3,7 @@
 import { AppButton, AppInput, AppTextArea, AppCheckbox, AppTable, AppDetails } from "@/components/ui-antd-primitives";
 
 import { AppShell } from "@/components/layout/app-shell";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { AlertTriangle, CheckCircle2, Clock3, FileCheck2, MessageSquare, ShieldCheck, Users, XCircle } from "lucide-react";
 
