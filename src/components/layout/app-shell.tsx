@@ -80,19 +80,17 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const t = useTranslations("Shell");
   const isAr = locale === "ar";
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      return typeof window !== "undefined" && window.sessionStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
   const resolvedRole = user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee";
   const activeRole = resolvedRole;
   const displayName = user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`);
   const displayEmail = user?.email || t(`profile.${activeRole}.role`);
-
-  useEffect(() => {
-    try {
-      setCollapsed(window.sessionStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "1");
-    } catch {
-      /* ignore */
-    }
-  }, []);
 
   useEffect(() => {
     if (!isReady) return;
