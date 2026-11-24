@@ -1074,7 +1074,7 @@ export default function AdminDashboardWorkspace() {
               styles={{ header: { minHeight: 54, paddingInline: 18, borderBottomColor: "#e8edf3" }, body: { padding: 0 } }}
             >
               {(data?.exclusions || []).length ? (
-                <Table<ExclusionRecord>
+                <DataTable<ExclusionRecord>
                   rowKey={(row) => String(row.employee.id) + "-" + String(row.cycle.id)}
                   size="small"
                   pagination={{ pageSize: 5 }}
