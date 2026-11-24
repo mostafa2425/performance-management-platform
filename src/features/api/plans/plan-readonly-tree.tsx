@@ -84,6 +84,7 @@ export function PlanReadonlyTree({
                 return (
                   <Col xs={24} md={12} key={kpi.id ?? kpiIndex}>
                     <Card
+                      className="plan-kpi-card"
                       size="small"
                       title={kpi.name || t("Untitled KPI", "مؤشر بلا اسم")}
                       extra={<Tag color="blue">{weightPct(kpi.weight_bp).toFixed(2)}%</Tag>}
@@ -136,7 +137,7 @@ export function PlanReadonlyTree({
   });
 
   return (
-    <Space direction="vertical" size={14} style={{ width: "100%" }}>
+    <Space className="plan-readonly-tree" direction="vertical" size={14} style={{ width: "100%" }}>
       {planComments.length > 0 ? (
         <div style={{ maxWidth: 760, width: "100%" }}>
           <Alert
@@ -150,13 +151,13 @@ export function PlanReadonlyTree({
 
       <Row gutter={[12, 12]}>
         <Col xs={12} md={8}>
-          <Card size="small"><Statistic title={t("Objectives", "الأهداف")} value={rows.length} /></Card>
+          <Card className="plan-summary-card" size="small"><Statistic title={t("Objectives", "الأهداف")} value={rows.length} /></Card>
         </Col>
         <Col xs={12} md={8}>
-          <Card size="small"><Statistic title={t("KPIs", "مؤشرات الأداء")} value={kpiCount} /></Card>
+          <Card className="plan-summary-card" size="small"><Statistic title={t("KPIs", "مؤشرات الأداء")} value={kpiCount} /></Card>
         </Col>
         <Col xs={24} md={8}>
-          <Card size="small">
+          <Card className="plan-summary-card plan-summary-card-weight" size="small">
             <Statistic
               title={t("Total KPI weight", "إجمالي أوزان المؤشرات")}
               value={totalWeight}
