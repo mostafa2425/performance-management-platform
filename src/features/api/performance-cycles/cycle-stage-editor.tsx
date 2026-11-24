@@ -1,7 +1,8 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useMemo, useState } from "react";
-import { Alert, App, Button, Card, Col, Empty, Form, Row, Space, Spin, Table, Tag, Typography } from "antd";
+import { Alert, App, Button, Card, Col, Empty, Form, Row, Space, Spin, Tag, Typography } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -227,7 +228,7 @@ export function CycleStageEditor({
       </Card>
 
       <Card title={t("editor.auditTitle")}>
-        <Table
+        <DataTable
           rowKey={(r) => `${r.stage}-${r.at}`}
           size="small"
           pagination={false}
