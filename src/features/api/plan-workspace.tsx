@@ -235,6 +235,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                   style={{ width: "100%" }}
                   placeholder={t("Select cycle", "اختر الدورة")}
                   options={cycleOptions}
+                  loading={cycles.isFetching}
                   value={cycleId}
                   onChange={setCycleId}
                 />
@@ -305,23 +306,19 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                       m.cycle_member_id,
                   }))}
                 onChange={(id) => create.mutate(id)}
-                loading={create.isPending}
+                loading={status.isFetching || create.isPending}
               />
             </Card>
           )}
 
-          {plans.isLoading ? (
-            <div style={{ display: "grid", placeItems: "center", minHeight: 180 }}>
-              <Skeleton active />
-            </div>
-          ) : plans.isError ? (
+          {plans.isError && rows.length === 0 ? (
             <Alert type="error" showIcon title={(plans.error as Error).message} />
-          ) : rows.length === 0 ? (
-            <Empty description={t("No plans yet.", "لا توجد خطط بعد.")} />
           ) : (
             <DataTable
               rowKey="id"
               size="middle"
+              loading={plans.isFetching}
+              locale={{ emptyText: <Empty description={t("No plans yet.", "لا توجد خطط بعد.")} /> }}
               dataSource={rows}
               pagination={{
                 pageSize: 8,
