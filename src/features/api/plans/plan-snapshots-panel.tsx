@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Collapse, Empty, Space, Spin, Tag, Typography } from "antd";
+import { Alert, Collapse, Empty, Space, Skeleton, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { plansApi } from "@/lib/api/endpoints";
 import { PlanReadonlyTree } from "./plan-readonly-tree";
@@ -20,7 +20,7 @@ export function PlanSnapshotsPanel({ planId, ar }: { planId: number; ar: boolean
     enabled: Boolean(planId),
   });
 
-  if (snapshots.isLoading) return <Spin />;
+  if (snapshots.isLoading) return <Skeleton active />;
   if (snapshots.isError) {
     return <Alert type="error" showIcon title={(snapshots.error as Error).message} />;
   }
