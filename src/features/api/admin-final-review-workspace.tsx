@@ -1,5 +1,6 @@
-import { DataTable } from "@/components/ui/data-table";
 "use client";
+
+import { DataTable } from "@/components/ui/data-table";
 import { useState } from "react";
 import { Alert, App, Button, Card, Empty, Form, Input, Modal, Select, Space, Spin, Tag } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
