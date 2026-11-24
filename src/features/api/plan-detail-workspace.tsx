@@ -321,26 +321,29 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           )}
         </Card>
 
-        <Card className="plan-detail-section plan-detail-workflow" title={t("Workflow actions", "إجراءات سير العمل")}>
-          <Space orientation="vertical" size={12} style={{ width: "100%" }}>
-            {plan.allowed_actions?.length ? (
-              <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
-            ) : <Typography.Text type="secondary">{t("No actions are available at this stage.", "لا توجد إجراءات متاحة في هذه المرحلة.")}</Typography.Text>}
-            <Typography.Text type="secondary">
-              {t("Actions are controlled by your role, plan state and cycle deadlines.", "تتحدد الإجراءات وفقاً لصلاحيتك وحالة الخطة ومواعيد الدورة.")}
-            </Typography.Text>
-          </Space>
-        </Card>
+        <div className={historyVisible ? "plan-detail-workflow-grid" : undefined}>
+          <Card className="plan-detail-section plan-detail-workflow" title={t("Workflow actions", "إجراءات سير العمل")}>
+            <Space orientation="vertical" size={12} style={{ width: "100%" }}>
+              {plan.allowed_actions?.length ? (
+                <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
+              ) : <Typography.Text type="secondary">{t("No actions are available at this stage.", "لا توجد إجراءات متاحة في هذه المرحلة.")}</Typography.Text>}
+              <Typography.Text type="secondary">
+                {t("Actions are controlled by your role, plan state and cycle deadlines.", "تتحدد الإجراءات وفقاً لصلاحيتك وحالة الخطة ومواعيد الدورة.")}
+              </Typography.Text>
+            </Space>
+          </Card>
 
-        {historyVisible ? (
-          <div className="plan-detail-support-grid">
+          {historyVisible ? (
             <Card className="plan-detail-section plan-detail-history" title={t("Workflow history", "سجل سير العمل")}>
               <PlanHistoryPanel planId={plan.id} ar={ar} />
             </Card>
-            <Card className="plan-detail-section plan-detail-snapshots" title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
-              <PlanSnapshotsPanel planId={plan.id} ar={ar} />
-            </Card>
-          </div>
+          ) : null}
+        </div>
+
+        {historyVisible ? (
+          <Card className="plan-detail-section plan-detail-snapshots" title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
+            <PlanSnapshotsPanel planId={plan.id} ar={ar} />
+          </Card>
         ) : null}
 
         <PlanActionModal
