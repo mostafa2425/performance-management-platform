@@ -1,5 +1,7 @@
 "use client";
 
+import { DataTable } from "@/components/ui/data-table";
+
 import { AppButton, AppInput, AppTextArea, AppSelect } from "@/components/ui-antd-primitives";
 import {useState} from "react";
 import { Alert, Collapse, Empty, Space } from "antd";
@@ -63,7 +65,17 @@ export function PerformanceCalculationWorkspace(){
 
 export function BellCurveMonitoringWorkspace({role="admin"}:{role?:"admin"|"hcd"}){
  const t=useTranslations("ObjectivePlan");const rows=[{name:"Sara Ahmed",score:96.8,rating:5},{name:"Omar Khaled",score:88.2,rating:3},{name:"Mona Ali",score:72.4,rating:2},{name:"Youssef Hassan",score:93.1,rating:4},{name:"Nada Hany",score:64.8,rating:1},{name:"Karim Adel",score:91.4,rating:4}];const dist=[1,2,3,4,5].map(n=>({n,count:rows.filter(x=>x.rating===n).length}));
- return <AppShell role={role} title={t("text107")} subtitle={t("text108")}><section className="panel pw-calc-panel"><header><div><h2>{t("text109")}</h2><p>{t("text110")}</p></div><Users/></header><div className="pw-distribution-grid">{dist.map(x=><article key={x.n}><span>{t("text111")} {x.n}</span><strong>{x.count}</strong><div className="pw-distribution-track"><span style={{width:(x.count/rows.length*100)+"%"}}/></div><small>{(x.count/rows.length*100).toFixed(1)}%</small></article>)}</div><div className="pw-bell-table"><div className="pw-bell-row head"><span>{t("text029")}</span><span>{t("text112")}</span><span>{t("text113")}</span></div>{rows.map(x=><div className="pw-bell-row" key={x.name}><span>{x.name}</span><b>{x.score.toFixed(2)}%</b><span>{x.rating} · {getRating(x.score)?.label}</span></div>)}</div><div className="pw-policy-block"><AlertTriangle/><div><strong>{t("text114")}</strong><p>{t("text115")}</p></div></div></section><div className="admin-demo-note"><ShieldCheck size={15}/>{t("text116")}</div></AppShell>;
+ return <AppShell role={role} title={t("text107")} subtitle={t("text108")}><section className="panel pw-calc-panel"><header><div><h2>{t("text109")}</h2><p>{t("text110")}</p></div><Users/></header><div className="pw-distribution-grid">{dist.map(x=><article key={x.n}><span>{t("text111")} {x.n}</span><strong>{x.count}</strong><div className="pw-distribution-track"><span style={{width:(x.count/rows.length*100)+"%"}}/></div><small>{(x.count/rows.length*100).toFixed(1)}%</small></article>)}</div><DataTable
+  rowKey="name"
+  dataSource={rows}
+  pagination={false}
+  scroll={{ x: "max-content" }}
+  columns={[
+    { title: t("text029"), dataIndex: "name" },
+    { title: t("text112"), dataIndex: "score", render: (score: number) => `${score.toFixed(2)}%` },
+    { title: t("text113"), render: (_: unknown, row: (typeof rows)[number]) => `${row.rating} · ${getRating(row.score)?.label ?? "—"}` },
+  ]}
+/><div className="pw-policy-block"><AlertTriangle/><div><strong>{t("text114")}</strong><p>{t("text115")}</p></div></div></section><div className="admin-demo-note"><ShieldCheck size={15}/>{t("text116")}</div></AppShell>;
 }
 
 export function ManagerYearGroupWorkspace(){
@@ -74,7 +86,18 @@ export function ManagerYearGroupWorkspace(){
  return <AppShell role="manager" title={t("text109")} subtitle={t("text117")}>
  <section className="panel pw-bell-hero"><div><span className="readonly-pill">2026 · Manager–Year Group</span><h2>{t("text118")}</h2><p>{t("text119")}</p></div><div><strong>{complete}/{members.length}</strong><span>{t("text120")}</span></div></section>
  <div className="pw-plan-summary"><div><span>{t("text121")}</span><strong>{members.length}</strong></div><div><span>{t("text122")}</span><strong>{complete}</strong></div><div><span>{t("text123")}</span><strong>{members.length-complete}</strong></div><div><span>{t("text124")}</span><strong className="pw-bad">{t("text125")}</strong></div></div>
- <section className="panel pw-calc-panel"><h2>{t("text126")}</h2><div className="pw-bell-table"><div className="pw-bell-row head"><span>{t("text029")}</span><span>{t("text127")}</span><span>{t("text128")}</span><span>{t("text129")}</span></div>{members.map(x=><div className="pw-bell-row" key={x.id}><span>{x.name} · {x.id}</span><span className={x.period?"pw-good":"pw-bad"}>{x.period?t("text130"):t("text123")}</span><span className={x.competencies?"pw-good":"pw-bad"}>{x.competencies?t("text130"):t("text123")}</span><b>{x.score===null?"—":x.score.toFixed(1)+"%"}</b></div>)}</div></section>
+ <section className="panel pw-calc-panel"><h2>{t("text126")}</h2><DataTable
+  rowKey="id"
+  dataSource={members}
+  pagination={false}
+  scroll={{ x: "max-content" }}
+  columns={[
+    { title: t("text029"), render: (_: unknown, row: (typeof members)[number]) => `${row.name} · ${row.id}` },
+    { title: t("text127"), dataIndex: "period", render: (value: boolean) => <span className={value ? "pw-good" : "pw-bad"}>{value ? t("text130") : t("text123")}</span> },
+    { title: t("text128"), dataIndex: "competencies", render: (value: boolean) => <span className={value ? "pw-good" : "pw-bad"}>{value ? t("text130") : t("text123")}</span> },
+    { title: t("text129"), dataIndex: "score", render: (value: number | null) => value === null ? "—" : `${value.toFixed(1)}%` },
+  ]}
+/></section>
  <section className="panel pw-calc-panel"><h2>{t("text131")}</h2><div className="pw-distribution-grid">{dist.map(x=><article key={x.rating}><span>{t("text111")} {x.rating}</span><strong>{x.count}</strong><small>{t("text132")}</small></article>)}</div><div className="pw-policy-block"><AlertTriangle/><div><strong>{t("text133")}</strong><p>{t("text134")}</p></div></div></section>
  <div className="admin-demo-note"><ShieldCheck size={15}/>{t("text135")}</div>
  </AppShell>;
