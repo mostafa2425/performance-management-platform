@@ -9725,18 +9725,6 @@ body {
   height: 100%;
   background: #4e8eb4;
 }
-.pw-bell-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1.4fr;
-  padding: 11px;
-  border-bottom: 1px solid #edf0f4;
-  font-size: 18px;
-}
-.pw-bell-row.head {
-  font-weight: 750;
-  background: #f7f9fb;
-  color: #64748b;
-}
 .pw-policy-block {
   display: flex;
   align-items: flex-start;
@@ -9780,12 +9768,6 @@ body {
   }
   .pw-distribution-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .pw-bell-row {
-    grid-template-columns: 1.4fr 1fr 1.2fr;
-    overflow-wrap: anywhere;
-    font-size: 14px;
-    padding: 8px;
   }
   .pw-context {
     align-items: stretch;
