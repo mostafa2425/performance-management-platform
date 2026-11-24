@@ -66,7 +66,8 @@ export function CycleScopePanel({
   const qc = useQueryClient();
   const [form] = Form.useForm();
   const [editingState, setEditingState] = useState<{ cycleId: string; value: boolean | null }>({ cycleId, value: null });
-  const editing = editingState.cycleId === cycleId ? editingState.value : null;\n  const setEditing = (value: boolean | null) => setEditingState({ cycleId, value });
+  const editing = editingState.cycleId === cycleId ? editingState.value : null;
+  const setEditing = (value: boolean | null) => setEditingState({ cycleId, value });
 
   const included = Form.useWatch("employees", form) as Array<string | number> | undefined;
   const excluded = Form.useWatch("excluded_employees", form) as Array<string | number> | undefined;
