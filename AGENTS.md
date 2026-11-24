@@ -7,3 +7,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Ant Design deprecation prevention
+
+- For Ant Design `Space`, always use `orientation="vertical"` or `orientation="horizontal"`. Never use the deprecated `direction` prop.
+- Before finishing any UI change, search the entire `src` tree for deprecated Space usage, including multiline JSX:
+  `rg -n -U '<Space\\b[^>]*\\bdirection\\s*=' src`
+- The search must return no matches. Do not blindly rename `direction` on other components; this rule applies specifically to Ant Design `Space`.
+- Check the browser console after UI changes for Ant Design deprecation warnings. Fix the source component rather than suppressing the warning.
