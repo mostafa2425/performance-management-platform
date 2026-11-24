@@ -161,9 +161,6 @@ export function CycleScopePanel({
     [scope],
   );
 
-  useEffect(() => {
-    setEditing(null);
-  }, [cycleId]);
 
   const isEditing = editing ?? !hasConfiguredScope(scope);
 
