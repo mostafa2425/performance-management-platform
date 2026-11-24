@@ -28,10 +28,14 @@ export function DataTable<RecordType extends object = Record<string, unknown>>({
 }: DataTableProps<RecordType>) {
   const classes = ["pmp-data-table", className].filter(Boolean).join(" ");
   const isLoading = Boolean(props.loading);
+  const pagination = props.pagination === false ? false : {
+    hideOnSinglePage: true,
+    ...(typeof props.pagination === "object" ? props.pagination : {}),
+  };
 
   return (
     <div className="pmp-data-table-region" role={ariaLabel ? "region" : undefined} aria-label={ariaLabel} aria-busy={isLoading}>
-      <Table<RecordType> size={size} {...props} className={classes} />
+      <Table<RecordType> size={size} {...props} pagination={pagination} className={classes} />
     </div>
   );
 }
