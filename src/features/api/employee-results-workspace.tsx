@@ -1,5 +1,6 @@
-import { DataTable } from "@/components/ui/data-table";
 "use client";
+
+import { DataTable } from "@/components/ui/data-table";
 import { Alert, Card, Empty, Spin, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { resultsApi } from "@/lib/api/endpoints";
