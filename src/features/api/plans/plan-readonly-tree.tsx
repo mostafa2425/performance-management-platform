@@ -8,7 +8,7 @@ import { bilingual, commentsForTarget, type OpenComments, weightPct } from "./pl
 function CommentList({ comments, ar }: { comments: Array<{ body: string }>; ar: boolean }) {
   if (!comments.length) return null;
   return (
-    <Space direction="vertical" size={6} style={{ width: "100%", marginTop: 10 }}>
+    <Space orientation="vertical" size={6} style={{ width: "100%", marginTop: 10 }}>
       {comments.map((comment, index) => (
         <Alert
           key={`comment-${index}`}
@@ -77,7 +77,7 @@ export function PlanReadonlyTree({
         </Space>
       ),
       children: (
-        <Space direction="vertical" size={12} style={{ width: "100%" }}>
+        <Space orientation="vertical" size={12} style={{ width: "100%" }}>
           <CommentList ar={ar} comments={commentsForTarget(openComments || null, "objective", objective.id)} />
           {kpis.length ? (
             <Row gutter={[12, 12]}>
@@ -139,14 +139,14 @@ export function PlanReadonlyTree({
   });
 
   return (
-    <Space className="plan-readonly-tree" direction="vertical" size={14} style={{ width: "100%" }}>
+    <Space className="plan-readonly-tree" orientation="vertical" size={14} style={{ width: "100%" }}>
       {planComments.length > 0 ? (
         <div style={{ maxWidth: 760, width: "100%" }}>
           <Alert
             type="warning"
             showIcon
             title={t("Plan-level comments", "ملاحظات على مستوى الخطة")}
-            description={<Space direction="vertical" size={4}>{planComments.map((comment, index) => <span key={index}>{comment.body}</span>)}</Space>}
+            description={<Space orientation="vertical" size={4}>{planComments.map((comment, index) => <span key={index}>{comment.body}</span>)}</Space>}
           />
         </div>
       ) : null}
