@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { cyclesApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
-import { AppShell } from "@/components/layout/app-shell";
+import { AppShell } from "@/components/layout/app-shell";\nimport { planStatusTag } from "./plans/plan-shared";
 
 type StatusMeta = { en: string; ar: string; color: string };
 
