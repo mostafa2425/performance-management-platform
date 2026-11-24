@@ -95,7 +95,8 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     queryFn: () => plansApi.get(planId),
     enabled: Number.isFinite(planId) && planId > 0,
   });
-  const plan = planQuery.data as any;
+  const planData = planQuery.data;
+  const plan = (planData ?? {}) as any;
   const cycles = useQuery({ queryKey: queryKeys.cycles, queryFn: cyclesApi.mine });
   const employeeProfileQuery = useQuery({
     queryKey: ["plan-employee-profile", mode, plan?.employee?.id],
@@ -112,9 +113,9 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const canEditContent = canEdit && (mode !== "admin" || adminEditMode);
 
   useEffect(() => {
-    if (!plan) return;
-    form.setFieldsValue({ objectives: toDraftObjectives(plan.objectives || []) });
-  }, [plan?.id, form, mode]);
+    if (!planData) return;
+    form.setFieldsValue({ objectives: toDraftObjectives(planData.objectives || []) });
+  }, [planData?.id, form, mode]);
 
   const refresh = async (id?: number) => {
     await qc.invalidateQueries({ queryKey: queryKeys.plans });
@@ -205,7 +206,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   if (planQuery.isLoading) {
     return <AppShell role={mode} title={pageTitle}><div style={{ minHeight: 300, display: "grid", placeItems: "center" }}><Spin size="large" /></div></AppShell>;
   }
-  if (planQuery.isError || !plan) {
+  if (planQuery.isError || !planData) {
     return <AppShell role={mode} title={pageTitle}><Alert type="error" showIcon title={(planQuery.error as Error)?.message || t("Plan not found", "لم يتم العثور على الخطة")} action={<Button onClick={() => router.push(listPath)}>{t("Back to plans", "العودة للخطط")}</Button>} /></AppShell>;
   }
 
