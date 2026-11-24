@@ -15,3 +15,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
   `rg -n -U '<Space\\b[^>]*\\bdirection\\s*=' src`
 - The search must return no matches. Do not blindly rename `direction` on other components; this rule applies specifically to Ant Design `Space`.
 - Check the browser console after UI changes for Ant Design deprecation warnings. Fix the source component rather than suppressing the warning.
+
+## Ant Design Form instance lifecycle
+
+- Every `Form.useForm()` instance must be connected to a mounted `<Form form={form}>` during the component render lifecycle.
+- Do not create a form instance in a component while rendering its `<Form>` only conditionally (for example, only after an API query resolves, only in edit mode, or only when a modal opens). Keep the owning `<Form>` mounted with conditional fields/content, or move `Form.useForm()` into the child component that is mounted together with that `<Form>`.
+- When a form is used inside a modal, ensure the modal/form mounting strategy keeps the instance connected before calling `submit`, `validateFields`, `setFieldsValue`, or `resetFields`.
+- Before finishing form changes, inspect every `Form.useForm()` and confirm its matching `<Form form={form}>` is mounted on every render path where the instance exists. Check the browser console for the unconnected-instance warning; do not suppress it.
