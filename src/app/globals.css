@@ -10698,3 +10698,44 @@ textarea.ant-input {
   }
 }
 
+/* Shared DataTable component layout contract */
+.pmp-data-table-region {
+  width: 100%;
+  min-width: 0;
+}
+.pmp-data-table {
+  width: 100%;
+  min-width: 0;
+}
+.pmp-data-table .ant-table {
+  background: #fff;
+}
+.pmp-data-table .ant-table-content,
+.pmp-data-table .ant-table-body {
+  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-width: thin;
+}
+.pmp-data-table .ant-table-cell {
+  overflow-wrap: anywhere;
+}
+.pmp-data-table .ant-empty {
+  margin-block: 20px;
+}
+.pmp-data-table .ant-table-placeholder > td {
+  padding: 22px 14px !important;
+}
+@media (max-width: 767px) {
+  .pmp-data-table-region {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+  .pmp-data-table .ant-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .pmp-data-table .ant-pagination .ant-pagination-options {
+    margin-inline-start: auto;
+  }
+}
+
