@@ -165,8 +165,8 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                   },
                   {
                     title: t("fields.status"),
-                    dataIndex: "display_status",
-                    render: (v: string) => statusTag(v),
+                    dataIndex: "status",
+                    render: (v: { key?: string; label?: string }) => <Tag color={PLAN_DISPLAY_STATUS[v?.key || ""]?.color ?? "default"}>{v?.label || "—"}</Tag>,
                   },
                   {
                     title: t("fields.attention"),
