@@ -130,14 +130,17 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
         <Card>
           <Row gutter={[12, 12]} align="middle">
             <Col xs={24} md={10}>
-              <Select
-                style={{ width: "100%" }}
-                placeholder={t("Select cycle", "اختر الدورة")}
-                options={cycleOptions}
-                value={cycleId}
-                onChange={setCycleId}
-                loading={cycles.isLoading}
-              />
+              {cycles.isLoading ? (
+                <Skeleton.Input active block />
+              ) : (
+                <Select
+                  style={{ width: "100%" }}
+                  placeholder={t("Select cycle", "اختر الدورة")}
+                  options={cycleOptions}
+                  value={cycleId}
+                  onChange={setCycleId}
+                />
+              )}
             </Col>
             <Col xs={24} md={14}>
               <Space wrap>
