@@ -1052,6 +1052,8 @@
     "text058": "Organization-wide performance status, active cycles and manager progress.",
     "text059": "Employee status summary",
     "text060": "Each employee is counted once using their current workflow status.",
+    "metricsLabel": "Metrics",
+    "managerProgressSubtitle": "Track manager coverage and employee plan status across active cycles.",
     "refresh": "Refresh",
     "loadFailed": "Unable to load the Admin Dashboard",
     "retry": "Retry",
