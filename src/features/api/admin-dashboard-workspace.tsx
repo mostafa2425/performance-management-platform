@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useMemo, useState } from "react";
@@ -15,7 +16,6 @@ import {
   Space,
   Spin,
   Statistic,
-  Table,
   Tag,
   Tooltip,
   Typography,
@@ -873,7 +873,7 @@ export default function AdminDashboardWorkspace() {
               styles={{ header: { minHeight: 54, paddingInline: 18, borderBottomColor: "#e8edf3" }, body: { padding: 0 } }}
             >
               {cycles.length ? (
-                <Table
+                <DataTable
                   rowKey="id"
                   size="small"
                   pagination={false}
@@ -1020,7 +1020,7 @@ export default function AdminDashboardWorkspace() {
               </Row>
               </div>
 
-              <Table
+              <DataTable
                 rowKey="managerId"
                 size="small"
                 dataSource={managerRows}
@@ -1140,7 +1140,7 @@ export default function AdminDashboardWorkspace() {
                 <Typography.Text type="secondary">{selectedManager.manager?.job_title?.name || "—"} · {selectedManager.manager?.department?.name || "—"}</Typography.Text>
               </Col>
             </Row>
-            <Table
+            <DataTable
               rowKey="id"
               size="small"
               dataSource={selectedManagerEmployees}
