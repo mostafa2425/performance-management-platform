@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -14,7 +15,6 @@ import {
   Select,
   Space,
   Spin,
-  Table,
   Tag,
   Typography,
 } from "antd";
@@ -325,7 +325,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
           ) : rows.length === 0 ? (
             <Empty description={t("No plans yet.", "لا توجد خطط بعد.")} />
           ) : (
-            <Table
+            <DataTable
               rowKey="id"
               size="middle"
               dataSource={rows}
