@@ -222,7 +222,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                   {
                     key: "status",
                     label: t("Performance status", "حالة الأداء"),
-                    children: planStatusTag(member?.display_status, ar),
+                    children: planStatusTag(member?.status, ar),
                   },
                   {
                     key: "manager",
