@@ -15,7 +15,7 @@ import {
   Row,
   Select,
   Space,
-  Spin,
+  Skeleton,
   Statistic,
   Tag,
   Tooltip,
@@ -791,7 +791,7 @@ export default function AdminDashboardWorkspace() {
         </Row>
 
         {loading ? (
-          <Card><div style={{ minHeight: 180, display: "grid", placeItems: "center" }}><Spin size="large" /></div></Card>
+          <Card><div style={{ minHeight: 180, display: "grid", placeItems: "center" }}><Skeleton active /></div></Card>
         ) : error ? (
           <Alert
             type="error"
