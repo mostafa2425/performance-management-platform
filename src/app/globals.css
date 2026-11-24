@@ -10706,6 +10706,26 @@ textarea.ant-input {
 .pmp-data-table .ant-table-placeholder > td {
   padding: 22px 14px !important;
 }
+.pmp-data-table .ant-pagination .ant-pagination-item-active {
+  border-color: var(--app-primary);
+}
+.pmp-data-table .ant-pagination .ant-pagination-item-active a,
+.pmp-data-table .ant-pagination .ant-pagination-item:hover a,
+.pmp-data-table .ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
+.pmp-data-table .ant-pagination .ant-pagination-next:hover .ant-pagination-item-link {
+  color: var(--app-primary);
+}
+.pmp-data-table .ant-pagination .ant-pagination-item:hover,
+.pmp-data-table .ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
+.pmp-data-table .ant-pagination .ant-pagination-next:hover .ant-pagination-item-link {
+  border-color: var(--app-primary);
+}
+.pmp-data-table .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: #f2f5fa;
+}
+.pmp-data-table .ant-table-thead > tr > th {
+  color: var(--app-primary);
+}
 @media (max-width: 767px) {
   .pmp-data-table-region {
     overflow-x: auto;
