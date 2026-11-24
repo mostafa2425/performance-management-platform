@@ -13,8 +13,8 @@ import {
   InputNumber,
   Row,
   Select,
+  Skeleton,
   Space,
-  Spin,
   Statistic,
   Tag,
   Typography,
@@ -111,10 +111,10 @@ export default function ApiManagerEvaluationWorkspace() {
                 value: plan.id,
                 label: `${plan.employee?.name || plan.employee?.full_name || plan.id} · ${plan.display_status} · #${plan.id}`,
               }))}
-              notFoundContent={plans.isLoading ? <Spin size="small" /> : undefined}
+              notFoundContent={plans.isLoading ? <div className="evaluation-select-loading"><Skeleton active title={false} paragraph={{ rows: 2, width: ["88%", "62%"] }} /></div> : undefined}
             />
           </div>
-          {plans.isLoading ? <Spin size="small" /> : null}
+          {plans.isLoading ? <Skeleton.Input active size="small" block={false} /> : null}
           {plans.isError ? <Alert type="error" showIcon title={(plans.error as Error).message} /> : null}
         </Card>
 
@@ -135,7 +135,7 @@ export default function ApiManagerEvaluationWorkspace() {
         ) : null}
 
         {planId && evaluation.isLoading ? (
-          <Card className="evaluation-loading"><Spin size="large" /></Card>
+          <Card className="evaluation-loading"><Skeleton active title={{ width: "38%" }} paragraph={{ rows: 4, width: ["100%", "92%", "76%", "48%"] }} /></Card>
         ) : null}
 
         {planId && evaluation.isError ? (
