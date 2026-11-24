@@ -158,16 +158,18 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
             </strong>
             <small>People & performance</small>
           </div>
-          {/* <Button
-            type="text"
+          {/* <AppButton
+            type="button"
+              variant="text"
             className="shell-icon-btn sidebar-collapse-btn"
             aria-label={collapsed ? t("openMenu") : t("closeMenu")}
             title={collapsed ? t("openMenu") : t("closeMenu")}
             icon={collapsed ? <PanelLeftOpen size={18} strokeWidth={2.2} /> : <PanelLeftClose size={18} strokeWidth={2.2} />}
             onClick={toggleCollapsed}
           /> */}
-          <Button
-            type="text"
+          <AppButton
+            type="button"
+              variant="text"
             className="shell-icon-btn sidebar-close"
             aria-label={t("closeMenu")}
             icon={<X size={18} strokeWidth={2.2} />}
@@ -208,15 +210,17 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
       <div className="app-main">
         <header className="topbar">
           <div className="topbar-left">
-            <Button
-              type="text"
+            <AppButton
+              type="button"
+              variant="text"
               className="shell-icon-btn mobile-menu"
               aria-label={t("openMenu")}
               icon={<Menu size={20} strokeWidth={2.2} />}
               onClick={() => setMobileOpen(true)}
             />
-            <Button
-              type="text"
+            <AppButton
+              type="button"
+              variant="text"
               className="shell-icon-btn desktop-sidebar-toggle"
               aria-label={collapsed ? t("openMenu") : t("closeMenu")}
               title={collapsed ? t("openMenu") : t("closeMenu")}
@@ -250,8 +254,9 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
                 ع
               </Link>
             </div>
-            <Button
-              type="text"
+            <AppButton
+              type="button"
+              variant="text"
               className="shell-icon-btn logout-button"
               aria-label={t("signOut")}
               title={t("signOut")}
