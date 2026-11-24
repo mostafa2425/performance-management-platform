@@ -332,17 +332,20 @@ export function ApiManagerGroupWorkspace() {
             value={cycleId}
             onChange={setCycleId}
             options={options}
+            loading={cycles.isFetching}
           />
         </Card>
-        {cycles.isLoading || group.isLoading || team.isLoading ? (
-          <Skeleton active />
+        {!cycleId ? (
+          <Empty description={t("Select a cycle.", "اختر دورة.")} />
         ) : group.isError ? (
           <Alert type="error" title={(group.error as Error).message} />
-        ) : !cycleId ? (
-          <Empty description={t("Select a cycle.", "اختر دورة.")} />
         ) : (
-          g && (
-            <>
+          <>
+            {group.isFetching ? (
+              <Card title={t("Group readiness", "جاهزية المجموعة")}>
+                <Skeleton active paragraph={{ rows: 3 }} />
+              </Card>
+            ) : g ? (
               <Card
                 title={t("Group readiness", "جاهزية المجموعة")}
                 extra={<StatusTag value={g.status} ar={ar} map={GROUP_STATUS} />}
@@ -392,35 +395,36 @@ export function ApiManagerGroupWorkspace() {
                   {t("Submit complete group", "إرسال المجموعة كاملة")}
                 </Button>
               </Card>
-              <Card title={t("Team evaluation status", "حالة تقييم الفريق")}>
-                <DataTable
-                  rowKey="cycle_member_id"
-                  dataSource={rows}
-                  columns={[
-                    {
-                      title: t("Employee", "الموظف"),
-                      render: (_: any, r: any) => r.employee?.name || r.employee?.full_name,
-                    },
-                    {
-                      title: t("Evaluation status", "حالة التقييم"),
-                      dataIndex: "status",
-                      render: (v: string) => <StatusTag value={v} ar={ar} map={EVALUATION_STATUS} />,
-                    },
-                    {
-                      title: t("Overall score", "النتيجة الإجمالية"),
-                      render: (_: any, r: any) => (r.overall_bp == null ? "—" : `${(r.overall_bp / 100).toFixed(2)}%`),
-                    },
-                    { title: t("Rating", "التقدير"), dataIndex: "rating_level" },
-                    {
-                      title: t("Evidence required", "يتطلب دليل"),
-                      dataIndex: "requires_evidence",
-                      render: (v: boolean) => (v ? t("Yes", "نعم") : "—"),
-                    },
-                  ]}
-                />
-              </Card>
-            </>
-          )
+            ) : null}
+            <Card title={t("Team evaluation status", "حالة تقييم الفريق")}>
+              <DataTable
+                rowKey="cycle_member_id"
+                dataSource={rows}
+                loading={team.isFetching}
+                columns={[
+                  {
+                    title: t("Employee", "الموظف"),
+                    render: (_: any, r: any) => r.employee?.name || r.employee?.full_name,
+                  },
+                  {
+                    title: t("Evaluation status", "حالة التقييم"),
+                    dataIndex: "status",
+                    render: (v: string) => <StatusTag value={v} ar={ar} map={EVALUATION_STATUS} />,
+                  },
+                  {
+                    title: t("Overall score", "النتيجة الإجمالية"),
+                    render: (_: any, r: any) => (r.overall_bp == null ? "—" : `${(r.overall_bp / 100).toFixed(2)}%`),
+                  },
+                  { title: t("Rating", "التقدير"), dataIndex: "rating_level" },
+                  {
+                    title: t("Evidence required", "يتطلب دليل"),
+                    dataIndex: "requires_evidence",
+                    render: (v: boolean) => (v ? t("Yes", "نعم") : "—"),
+                  },
+                ]}
+              />
+            </Card>
+          </>
         )}
       </Space>
     </AppShell>
