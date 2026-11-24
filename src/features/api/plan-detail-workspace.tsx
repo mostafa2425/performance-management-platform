@@ -167,7 +167,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const pageTitle = t("Plan details", "تفاصيل الخطة");
   const cycleLabel = cycle
     ? String(typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name) + " · " + cycle.performance_year
-    : `#${plan.cycle_id}`;
+    : "#" + String(plan.cycle_id);
   const employeeInfo: Array<[string, React.ReactNode]> = [
     [t("Employee", "الموظف"), employeeProfile?.full_name || employeeName],
     [t("Employee code", "كود الموظف"), employeeProfile?.code || plan.employee?.code || "—"],
