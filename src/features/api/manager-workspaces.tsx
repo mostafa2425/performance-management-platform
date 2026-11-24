@@ -47,14 +47,14 @@ function useManagerCycle() {
   const cycles = useQuery({ queryKey: ["cycles"], queryFn: cyclesApi.mine });
   const [selectedCycleId, setSelectedCycleId] = useState<number | null | undefined>(undefined);
   const options = (cycles.data || [])
-    .filter((c: any) => c.my_roles?.manager || c.my_roles?.member)
-    .map((c: any) => ({ value: c.id as number, label: `${c.name?.en || c.name} · ${c.performance_year}` }));
+    .filter((cycle: { my_roles?: { manager?: boolean; member?: boolean }; id: number; name?: { en?: string } | string; performance_year?: number }) => cycle.my_roles?.manager || cycle.my_roles?.member)
+    .map((cycle: { id: number; name?: { en?: string } | string; performance_year?: number }) => ({
+      value: cycle.id,
+      label: `${typeof cycle.name === "object" ? cycle.name?.en ?? "" : cycle.name ?? ""} · ${cycle.performance_year ?? ""}`,
+    }));
   const firstOptionId = options[0]?.value;
-
-  useEffect(() => {
-    if (firstOptionId == null) return;
-    setCycleId((prev) => (prev == null ? firstOptionId : prev));
-  }, [firstOptionId]);
+  const cycleId = selectedCycleId === undefined ? firstOptionId : selectedCycleId ?? undefined;
+  const setCycleId = (value: number | undefined) => setSelectedCycleId(value ?? null);
 
   return { cycleId, setCycleId, options, cycles };
 }
