@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Empty, Spin, Timeline, Typography } from "antd";
+import { Alert, Empty, Skeleton, Timeline, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { plansApi } from "@/lib/api/endpoints";
 import {
@@ -33,7 +33,7 @@ export function PlanHistoryPanel({
   });
 
   if (!planId) return null;
-  if (history.isLoading) return <Spin />;
+  if (history.isLoading) return <Skeleton active />;
   if (history.isError) {
     return <Alert type="error" showIcon title={(history.error as Error).message} />;
   }
