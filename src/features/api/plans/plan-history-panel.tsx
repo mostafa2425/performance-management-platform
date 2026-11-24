@@ -46,7 +46,7 @@ export function PlanHistoryPanel({
   return (
     <Timeline
       items={rows.map((event) => ({
-        children: (
+        content: (
           <div>
             <Typography.Text strong>
               {historyActionLabel(event.action, ar)}
