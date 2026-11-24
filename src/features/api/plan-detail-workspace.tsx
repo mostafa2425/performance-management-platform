@@ -221,7 +221,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             <Space wrap size={10}>
               <Typography.Title level={4} style={{ margin: 0 }}>{employeeName}</Typography.Title>
               {plan.employee?.code ? <Tag>#{plan.employee.code}</Tag> : null}
-              {planStatusTag(plan.display_status, ar)}
+              {planStatusTag(plan.status, ar)}
               {plan.requires_admin_attention ? <Tag color="orange">{t("Needs attention", "تحتاج إلى متابعة")}</Tag> : null}
             </Space>
           }
