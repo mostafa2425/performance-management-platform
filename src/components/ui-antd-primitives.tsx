@@ -5,10 +5,10 @@ import { Button, Checkbox, Collapse, Input, Select } from "antd";
 import type { ButtonProps, InputProps, TableColumnsType } from "antd";
 import { DataTable } from "@/components/ui/data-table";
 
-type NativeButtonProps = Omit<ButtonProps, "type" | "htmlType"> & { type?: "button" | "submit" | "reset" };
-export function AppButton({ type = "button", children, className, ...props }: NativeButtonProps) {
+type NativeButtonProps = Omit<ButtonProps, "type" | "htmlType"> & { type?: "button" | "submit" | "reset"; variant?: ButtonProps["type"] };
+export function AppButton({ type = "button", variant, children, className, ...props }: NativeButtonProps) {
   const primary = (className ?? "").split(" ").some((name) => ["primary", "pw-primary", "cfg-primary", "login-submit", "mo-primary"].includes(name));
-  return <Button {...props} className={className} type={primary ? "primary" : "default"} htmlType={type}>{children}</Button>;
+  return <Button {...props} className={className} type={variant ?? (primary ? "primary" : "default")} htmlType={type}>{children}</Button>;
 }
 
 export function AppInput(props: InputProps) {
