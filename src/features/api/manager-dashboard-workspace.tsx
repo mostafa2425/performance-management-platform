@@ -175,6 +175,11 @@ export default function ManagerDashboardWorkspace() {
     planStatusQueries.some((query) => query.isLoading) ||
     evaluationQueries.some((query) => query.isLoading) ||
     groupQueries.some((query) => query.isLoading);
+  const refreshing =
+    cyclesQuery.isFetching ||
+    planStatusQueries.some((query) => query.isFetching) ||
+    evaluationQueries.some((query) => query.isFetching) ||
+    groupQueries.some((query) => query.isFetching);
   const error =
     cyclesQuery.error ||
     planStatusQueries.find((query) => query.error)?.error ||
@@ -320,6 +325,7 @@ export default function ManagerDashboardWorkspace() {
             </div>
             <Button
               className="manager-refresh-button"
+              loading={refreshing}
               onClick={() => {
                 queryClient.invalidateQueries({ queryKey: ["manager-dashboard-cycles"] });
                 queryClient.invalidateQueries({ queryKey: ["manager-plan-status"] });
