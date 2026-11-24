@@ -1,8 +1,9 @@
-import { DataTable } from "@/components/ui/data-table";
 "use client";
 
+import { DataTable } from "@/components/ui/data-table";
+
 import type { ReactNode } from "react";
-import { Table, Tag } from "antd";
+import { Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useLocale, useTranslations } from "next-intl";
 import {
