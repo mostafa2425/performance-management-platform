@@ -29,7 +29,7 @@ export function DataTable<RecordType extends object = Record<string, unknown>>({
 
   return (
     <div className="pmp-data-table-region" role={ariaLabel ? "region" : undefined} aria-label={ariaLabel}>
-      <Table<RecordType> {...props} className={classes} />
+      <Table<RecordType> size={size} {...props} className={classes} />
     </div>
   );
 }
