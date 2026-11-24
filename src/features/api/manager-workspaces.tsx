@@ -215,7 +215,7 @@ export function ApiManagerTeamWorkspace() {
                     key: "employee",
                     render: (_: any, record: any) => {
                       const name = record.employee?.name || record.employee?.full_name || "—";
-                      const initials = String(name).split(/\\s+/).slice(0, 2).map((part: string) => part[0] || "").join("").toLocaleUpperCase();
+                      const initials = String(name).split(/\s+/).slice(0, 2).map((part: string) => part[0] || "").join("").toLocaleUpperCase();
                       return (
                         <Space size={10}>
                           <Avatar size={36}>{initials}</Avatar>
