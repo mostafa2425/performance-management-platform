@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Alert, Button, Input, Modal, Select, Space } from "antd";
 import { resolveActionLabel } from "./plan-shared";
 
@@ -24,7 +24,11 @@ type Props = {
   }) => void;
 };
 
-export function PlanActionModal({
+export function PlanActionModal(props: Props) {
+  return <PlanActionModalContent key={`${props.open}-${props.action}-${props.plan?.id ?? "none"}`} {...props} />;
+}
+
+function PlanActionModalContent({
   open,
   action,
   ar,
@@ -39,13 +43,6 @@ export function PlanActionModal({
   const [selectedTarget, setSelectedTarget] = useState<string>();
   const [itemBody, setItemBody] = useState("");
 
-  useEffect(() => {
-    if (!open) return;
-    setComment("");
-    setItemComments([]);
-    setSelectedTarget(undefined);
-    setItemBody("");
-  }, [open, action, plan?.id]);
 
   const targetOptions = useMemo(() => {
     const options: Array<{ value: string; label: string }> = [];
