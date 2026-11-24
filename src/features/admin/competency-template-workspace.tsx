@@ -29,7 +29,7 @@ const uid=()=>Math.random().toString(36).slice(2,9);
 export default function CompetencyTemplateWorkspace(){
  const ar=useLocale()==="ar";const t=useTranslations("CompetencyTemplates");
  const [templates,setTemplates]=useState(seed);const [selected,setSelected]=useState<string|null>(null);const [query,setQuery]=useState("");const [filter,setFilter]=useState("All");const [notice,setNotice]=useState("");const [error,setError]=useState("");
- const current=templates.find(x=>x.id===selected)??null;const [draft,setDraft]=useState<Template|null>(null);
+const [draft,setDraft]=useState<Template|null>(null);
  const start=(template?:Template,copy=false)=>{const base=template??{id:"TPL-"+String(templates.length+1).padStart(3,"0"),nameEn:"",nameAr:"",status:"Draft" as const,jobTitles:[],groups:[{id:uid(),nameEn:"",nameAr:"",competencies:[makeCompetency(uid(),"","","","",100)]}],usedInActiveCycle:false,updatedAt:"—"};setDraft({...base,id:copy?"TPL-"+String(templates.length+1).padStart(3,"0"):base.id,status:"Draft",nameEn:copy?base.nameEn+" (Copy)":base.nameEn,jobTitles:copy?[]:[...base.jobTitles],groups:base.groups.map(g=>({...g,id:copy?uid():g.id,competencies:g.competencies.map(c=>({...c,id:copy?uid():c.id}))})),usedInActiveCycle:false});setSelected(base.id);setError("");setNotice("");};
  const total=useMemo(()=>draft?.groups.reduce((sum,g)=>sum+g.competencies.reduce((s,c)=>s+(Number(c.weight)||0),0),0)??0,[draft]);
  const assigned=new Map<string,string>();templates.forEach(x=>x.jobTitles.forEach(j=>assigned.set(j,x.id)));
