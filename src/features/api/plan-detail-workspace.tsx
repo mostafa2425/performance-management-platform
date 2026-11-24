@@ -16,6 +16,7 @@ import { PlanReadonlyTree } from "./plans/plan-readonly-tree";
 import { PlanActionModal } from "./plans/plan-action-modal";
 import { PlanHistoryPanel } from "./plans/plan-history-panel";
 import { PlanSnapshotsPanel } from "./plans/plan-snapshots-panel";
+import "./plan-detail-workspace.css";
 import { formatInstant, planStatusTag, resolveActionLabel, returnSourceLabel, workflowActions, type PlanMode } from "./plans/plan-shared";
 
 function toDraftObjectives(objectives: any[] = []) {
@@ -185,7 +186,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     <Row gutter={[10, 10]}>
       {items.map(([label, value]) => (
         <Col xs={12} sm={8} md={6} lg={6} key={label}>
-          <Card size="small" style={{ height: "100%", borderRadius: 10 }} styles={{ body: { padding: "12px 14px" } }}>
+          <Card className="plan-detail-info-card" size="small" style={{ height: "100%", borderRadius: 10 }} styles={{ body: { padding: "12px 14px" } }}>
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>{label}</Typography.Text>
             <div style={{ fontWeight: 600, marginTop: 5, lineHeight: 1.45, overflowWrap: "anywhere" }}>{value || "—"}</div>
           </Card>
@@ -210,13 +211,14 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
       title={pageTitle}
       subtitle={t("Review employee information, objectives, KPIs and workflow.", "راجع بيانات الموظف والأهداف ومؤشرات الأداء وسير العمل.")}
     >
-      <div style={{ width: "100%", maxWidth: mode === "employee" ? 1040 : "100%", marginInline: "auto" }}>
+      <div className="plan-detail-workspace" style={{ width: "100%", maxWidth: mode === "employee" ? 1040 : "100%", marginInline: "auto" }}>
       <Space orientation="vertical" size={16} style={{ width: "100%" }}>
         <Button icon={<ArrowLeftOutlined />} onClick={() => router.push(listPath)} type="text">
           {t("Back to objectives", "العودة إلى الأهداف")}
         </Button>
 
         <Card
+          className="plan-detail-hero-card"
           title={
             <Space wrap size={10}>
               <Typography.Title level={4} style={{ margin: 0 }}>{employeeName}</Typography.Title>
@@ -271,6 +273,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
         ) : null}
 
         <Card
+          className="plan-detail-section plan-detail-objectives"
           title={t("Objectives & KPIs", "الأهداف ومؤشرات الأداء")}
           extra={
             canEdit ? (
@@ -318,7 +321,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           )}
         </Card>
 
-        <Card title={t("Workflow actions", "إجراءات سير العمل")}>
+        <Card className="plan-detail-section plan-detail-workflow" title={t("Workflow actions", "إجراءات سير العمل")}>
           <Space orientation="vertical" size={12} style={{ width: "100%" }}>
             {plan.allowed_actions?.length ? (
               <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
@@ -330,12 +333,12 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
         </Card>
 
         {historyVisible ? (
-          <Card title={t("Workflow history", "سجل سير العمل")}>
+          <Card className="plan-detail-section plan-detail-history" title={t("Workflow history", "سجل سير العمل")}>
             <PlanHistoryPanel planId={plan.id} ar={ar} />
           </Card>
         ) : null}
         {historyVisible ? (
-          <Card title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
+          <Card className="plan-detail-section plan-detail-snapshots" title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
             <PlanSnapshotsPanel planId={plan.id} ar={ar} />
           </Card>
         ) : null}
