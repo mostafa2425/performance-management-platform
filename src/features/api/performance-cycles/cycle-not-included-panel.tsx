@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
-import { Alert, App, Button, Card, Form, Input, Modal, Spin, Tag } from "antd";
+import { Alert, App, Button, Card, Form, Input, Modal, Skeleton, Tag } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { adminApi, cyclesApi } from "@/lib/api/endpoints";
@@ -81,7 +81,7 @@ export function CycleNotIncludedPanel({ cycleId, status }: { cycleId: string; st
       <Card title={t("notIncluded.title")}>
         {preview.isLoading ? (
           <div style={{ display: "grid", placeItems: "center", minHeight: 100 }}>
-            <Spin />
+            <Skeleton active />
           </div>
         ) : preview.isError ? (
           <Alert type="info" showIcon title={t("notIncluded.loadPreviewHint")} />
@@ -128,7 +128,7 @@ export function CycleNotIncludedPanel({ cycleId, status }: { cycleId: string; st
     <Card title={t("notIncluded.removedMissed")}>
       {membersLoading ? (
         <div style={{ display: "grid", placeItems: "center", minHeight: 100 }}>
-          <Spin />
+          <Skeleton active />
         </div>
       ) : membersError ? (
         <Alert type="error" showIcon title={(membersError as Error).message} />
