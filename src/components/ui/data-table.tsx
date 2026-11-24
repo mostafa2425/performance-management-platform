@@ -2,7 +2,6 @@
 
 import { Table } from "antd";
 import type { TableProps } from "antd";
-import type { Key, ReactNode } from "react";
 
 export type DataTableProps<RecordType extends object = Record<string, unknown>> =
   TableProps<RecordType> & {
@@ -29,7 +28,7 @@ export function DataTable<RecordType extends object = Record<string, unknown>>({
   const classes = ["pmp-data-table", className].filter(Boolean).join(" ");
 
   return (
-    <div className="pmp-data-table-region" aria-label={ariaLabel}>
+    <div className="pmp-data-table-region" role={ariaLabel ? "region" : undefined} aria-label={ariaLabel}>
       <Table<RecordType> {...props} className={classes} />
     </div>
   );
