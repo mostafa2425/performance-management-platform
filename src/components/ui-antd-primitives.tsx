@@ -58,7 +58,7 @@ export function AppTable({ children, className }: { children?: React.ReactNode; 
     const cells = React.Children.toArray((row.props as { children?: React.ReactNode }).children).filter(React.isValidElement) as React.ReactElement[];
     return Object.fromEntries(cells.map((cell, index) => [`cell_${index}`, (cell.props as { children?: React.ReactNode }).children]).concat([["key", String(rowIndex)]])) as Record<string, React.ReactNode>;
   });
-  return <DataTable className={className} size="small" bordered pagination={false} scroll={{ x: "max-content" }} columns={columns} dataSource={dataSource} rowKey="key" locale={{ emptyText: "—" }} />;
+  return <DataTable className={className} size="middle" pagination={false} scroll={{ x: "max-content" }} columns={columns} dataSource={dataSource} rowKey="key" locale={{ emptyText: "—" }} />;
 }
 
 export function AppDetails({ children, className, open }: { children?: React.ReactNode; className?: string; open?: boolean }) {
