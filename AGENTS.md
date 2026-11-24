@@ -37,3 +37,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - If the console or user report contains only a fragment such as `svg`, do not guess at the cause. Request or inspect the complete error message and stack trace, then trace it to the exact component or asset before changing code.
 - Validate SVG usage in JSX and assets only when the full error points to SVG rendering or loading; do not make speculative global SVG changes.
 - Before completing a UI fix, run the relevant repository-wide searches above and inspect the browser console on the affected screen(s). Record any remaining unverified runtime behavior clearly.
+
+## Project-wide UI/UX design reference
+
+- Before implementing or changing UI in any role or feature, read `UI_UX_DESIGN_GUIDELINES.md` at the repository root.
+- Treat the Manager Dashboard Team Overview as the visual reference for shared design language: compact spacing, white bordered surfaces, slate typography, teal primary actions, restrained amber draft states, responsive KPI wrapping, employee identity cells, status pills, and clean table headers/rows.
+- Apply the guidelines to Admin, Manager, Employee, and shared experiences. Reuse shared components/tokens where practical; do not copy the manager dashboard layout into unrelated pages.
+- All project tables should converge on the documented table treatment, while preserving domain-specific columns, matrix layouts, data behavior, permissions, sorting, filtering, pagination, and actions.
+- Keep UI-only work separate from API contracts and business workflows. Never alter endpoint calls, payloads, role checks, allowed actions, or workflow transitions merely to achieve visual consistency.
+- Preserve bilingual English/Arabic support and verify RTL using CSS logical properties. Every new user-facing string must use the existing localization system.
+- For broad UI migrations, inventory the target screens first and migrate in small role-based batches. Run lint, typecheck, tests, and build where available; inspect console warnings and verify desktop/mobile plus LTR/RTL before declaring completion.
+- Do not apply global Ant Design overrides that unintentionally change modal, compact, inline, or specialized controls. Prefer scoped reusable variants and semantic wrappers.
