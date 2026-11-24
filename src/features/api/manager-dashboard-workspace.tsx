@@ -1,6 +1,7 @@
 "use client";
 
 import "./manager-dashboard-workspace.css";
+import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
@@ -16,7 +17,6 @@ import {
   Row,
   Select,
   Spin,
-  Table,
   Tag,
   Typography,
 } from "antd";
@@ -463,7 +463,7 @@ export default function ManagerDashboardWorkspace() {
               </Col>
             </Row>
 
-            <Table
+            <DataTable
               className="manager-team-table"
               rowKey={(row: any) => String(row.cycle_member_id)}
               columns={columns}
