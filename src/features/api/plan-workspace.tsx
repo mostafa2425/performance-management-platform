@@ -360,9 +360,9 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                 },
                 {
                   title: t("Status", "الحالة"),
-                  dataIndex: "display_status",
+                  dataIndex: "status",
                   width: 210,
-                  render: (v: string) => planStatusTag(v, ar),
+                  render: (v: Plan["status"]) => planStatusTag(v, ar),
                 },
                 {
                   title: t("Attention", "متابعة"),
