@@ -51,3 +51,5 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - When UI work affects performance dashboards, employee details, evaluation, Bell Curve, final review, or published results, verify role visibility and workflow requirements against `Performance_managment_platform_V1.2.pdf` (BRD) and the relevant API guide. Do not expose Employee-hidden KPI Actuals, Achievement %, Weighted KPI Results, Manager Comments, Evidence, or restricted internal workflow history in Employee-facing screens.
 - Keep provisional/draft results visually distinct from finalized and published results. Use existing backend status and allowed-action data; never infer permissions from a visual status.
+
+- All application data tables must use `@/components/ui/data-table` (`DataTable`). Do not import Ant Design `Table` directly into feature/page components. Preserve existing Table props and business behavior. Legacy `AppTable` must delegate to `DataTable`; specialized layouts may use scoped classes but must retain shared visual tokens.
