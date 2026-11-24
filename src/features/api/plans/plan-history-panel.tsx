@@ -45,6 +45,7 @@ export function PlanHistoryPanel({
 
   return (
     <Timeline
+      mode="alternate"
       items={rows.map((event) => ({
         content: (
           <div>
