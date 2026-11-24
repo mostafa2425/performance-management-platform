@@ -1,7 +1,6 @@
 "use client";
 
 import { AppButton } from "@/components/ui-antd-primitives";
-import { Button } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -142,8 +141,9 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   return (
     <div className={`app-frame ${collapsed ? "sidebar-collapsed" : ""}`} dir={isAr ? "rtl" : "ltr"}>
       {mobileOpen && (
-        <button
+        <AppButton
           type="button"
+          variant="text"
           className="mobile-scrim"
           aria-label={t("closeNavigation")}
           onClick={() => setMobileOpen(false)}
