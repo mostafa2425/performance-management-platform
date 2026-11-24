@@ -185,7 +185,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     <Row gutter={[10, 10]}>
       {items.map(([label, value]) => (
         <Col xs={12} sm={8} md={6} lg={6} key={label}>
-          <Card size="small" style={{ height: "100%", borderRadius: 10 }} bodyStyle={{ padding: "12px 14px" }}>
+          <Card size="small" style={{ height: "100%", borderRadius: 10 }} styles={{ body: { padding: "12px 14px" } }}>
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>{label}</Typography.Text>
             <div style={{ fontWeight: 600, marginTop: 5, lineHeight: 1.45, overflowWrap: "anywhere" }}>{value || "—"}</div>
           </Card>
@@ -226,7 +226,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             </Space>
           }
           extra={<Typography.Text type="secondary">{t("Plan", "الخطة")} #{plan.id}</Typography.Text>}
-          bodyStyle={{ padding: 16 }}
+          styles={{ body: { padding: 16 } }}
         >
           <Space orientation="vertical" size={18} style={{ width: "100%" }}>
             <div>
