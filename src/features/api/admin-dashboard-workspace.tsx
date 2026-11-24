@@ -805,10 +805,10 @@ export default function AdminDashboardWorkspace() {
             <section>
               <Row align="middle" justify="space-between" style={{ marginBottom: 10 }}>
                 <Typography.Text strong style={{ color: "#475569", fontSize: 13, letterSpacing: ".04em", textTransform: "uppercase" }}>
-                  {t("employeeStatusSummary")}
+                  {t("text059")}
                 </Typography.Text>
                 <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  {summaryCards.length} {t("metrics")}
+                  {summaryCards.length} {t("metricsLabel")}
                 </Typography.Text>
               </Row>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 175px), 1fr))", gap: 12 }}>
