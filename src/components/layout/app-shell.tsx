@@ -1,6 +1,7 @@
 "use client";
 
 import { AppButton } from "@/components/ui-antd-primitives";
+import { Button } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
