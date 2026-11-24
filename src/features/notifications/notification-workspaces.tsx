@@ -5,7 +5,7 @@ import { AppButton, AppInput, AppTextArea } from "@/components/ui-antd-primitive
 import Link from "next/link";
 import {useLocale, useTranslations} from "next-intl";
 import { useMemo, useState } from "react";
-import { Bell, Check, CheckCheck, Clock3, FileText, Filter, MailOpen, Search, Settings2, ShieldCheck } from "lucide-react";
+import { Bell, Check, CheckCheck, Clock3, Filter, MailOpen, Search, Settings2, ShieldCheck } from "lucide-react";
 
 type Role = "employee" | "manager" | "department" | "hcd" | "admin";
 type Notice = { id:string; code:string; role:Role[]; title:string; body:string; date:string; unread:boolean; href:string; category:string };
@@ -25,7 +25,7 @@ const seed:Notice[] = [
 ];
 const roleLabel=(r:Role,ar:boolean)=>({employee:ar?"الموظف":"Employee",manager:ar?"المدير":"Manager",department:ar?"مدير الإدارة":"Department Manager",hcd:"HCD",admin:ar?"مسؤول النظام":"Admin"}[r]);
 export function NotificationsWorkspace({role}:{role:Role}){
- const ar=useLocale()==="ar";const translate=useTranslations("Notifications");const t=(en:string,a:string)=>ar?a:en;
+ const ar=useLocale()==="ar";const translate=useTranslations("Notifications");
  const [items,setItems]=useState(seed.filter(n=>n.role.includes(role)));
  const [filter,setFilter]=useState<"all"|"unread"|"read">("all");const [query,setQuery]=useState("");
  const filtered=useMemo(()=>items.filter(n=>(filter==="all"||(filter==="unread"?n.unread:!n.unread))&&(!query||[n.title,n.body,n.code].some(v=>v.toLowerCase().includes(query.toLowerCase())))),[items,filter,query]);
