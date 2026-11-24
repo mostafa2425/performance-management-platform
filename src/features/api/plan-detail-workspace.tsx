@@ -333,14 +333,14 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
         </Card>
 
         {historyVisible ? (
-          <Card className="plan-detail-section plan-detail-history" title={t("Workflow history", "سجل سير العمل")}>
-            <PlanHistoryPanel planId={plan.id} ar={ar} />
-          </Card>
-        ) : null}
-        {historyVisible ? (
-          <Card className="plan-detail-section plan-detail-snapshots" title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
-            <PlanSnapshotsPanel planId={plan.id} ar={ar} />
-          </Card>
+          <div className="plan-detail-support-grid">
+            <Card className="plan-detail-section plan-detail-history" title={t("Workflow history", "سجل سير العمل")}>
+              <PlanHistoryPanel planId={plan.id} ar={ar} />
+            </Card>
+            <Card className="plan-detail-section plan-detail-snapshots" title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
+              <PlanSnapshotsPanel planId={plan.id} ar={ar} />
+            </Card>
+          </div>
         ) : null}
 
         <PlanActionModal
