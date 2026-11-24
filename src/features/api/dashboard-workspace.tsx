@@ -147,7 +147,7 @@ export default function DashboardPage() {
                         {p.employee?.name || p.employee?.full_name || `Plan #${p.id}`}
                       </Typography.Text>
                       <div>
-                        <Tag>{p.display_status || p.status}</Tag>
+                        <Tag>{p.status?.label || "—"}</Tag>
                       </div>
                     </div>
                   ))
