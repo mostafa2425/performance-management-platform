@@ -10598,3 +10598,103 @@ textarea.ant-input {
   border-bottom-left-radius: 0 !important;
   border-left: 0 !important;
 }
+
+/* Project-wide table visual baseline — see UI_UX_DESIGN_GUIDELINES.md */
+:root {
+  --pmp-table-header-bg: #f8fafc;
+  --pmp-table-row-hover: #f8fafc;
+  --pmp-table-border: #e2e8f0;
+  --pmp-table-row-border: #f1f5f9;
+  --pmp-table-text: #475569;
+  --pmp-table-muted: #64748b;
+  --pmp-table-accent: #0d9488;
+}
+
+.ant-table-wrapper:not(.ant-table-wrapper .manager-team-table) {
+  max-width: 100%;
+}
+.ant-table-wrapper .ant-table {
+  color: var(--pmp-table-text);
+  font-size: 12px;
+}
+.ant-table-wrapper .ant-table-container {
+  border-radius: 10px;
+}
+.ant-table-wrapper .ant-table-thead > tr > th {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--pmp-table-border);
+  background: var(--pmp-table-header-bg);
+  color: var(--pmp-table-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+.ant-table-wrapper .ant-table-thead > tr > th::before {
+  display: none !important;
+}
+.ant-table-wrapper .ant-table-tbody > tr > td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--pmp-table-row-border);
+  color: var(--pmp-table-text);
+  transition: background-color .15s ease;
+}
+.ant-table-wrapper .ant-table-tbody > tr:hover > td {
+  background: var(--pmp-table-row-hover);
+}
+.ant-table-wrapper .ant-pagination {
+  margin-block: 12px;
+}
+.ant-table-wrapper .ant-pagination .ant-pagination-item-active {
+  border-color: var(--pmp-table-accent);
+  background: var(--pmp-table-accent);
+}
+.ant-table-wrapper .ant-pagination .ant-pagination-item-active a {
+  color: #fff;
+}
+
+/* Legacy/native data tables share the same header, divider and row rhythm. */
+.team-table th,
+.year-group-table th,
+.admin-final-table th,
+.cycle-table th,
+.cycle-roster-table th,
+.ct-table th,
+.cfg-table th,
+.employee-kpi-table th,
+.evaluation-kpi-table th {
+  background: var(--pmp-table-header-bg);
+  color: var(--pmp-table-muted);
+  border-bottom: 1px solid var(--pmp-table-border);
+  font-size: 11px;
+  font-weight: 700;
+}
+.team-table td,
+.year-group-table td,
+.admin-final-table td,
+.cycle-table td,
+.cycle-roster-table td,
+.ct-table td,
+.cfg-table td,
+.employee-kpi-table td,
+.evaluation-kpi-table td {
+  border-bottom: 1px solid var(--pmp-table-row-border);
+  color: var(--pmp-table-text);
+}
+.team-table tbody tr:hover td,
+.year-group-table tbody tr:hover td,
+.admin-final-table tbody tr:hover td,
+.cycle-table tbody tr:hover td,
+.cycle-roster-table tbody tr:hover td,
+.ct-table tbody tr:hover td,
+.cfg-table tbody tr:hover td {
+  background: var(--pmp-table-row-hover);
+}
+
+@media (max-width: 767px) {
+  .ant-table-wrapper .ant-table-thead > tr > th {
+    padding: 9px 10px;
+  }
+  .ant-table-wrapper .ant-table-tbody > tr > td {
+    padding: 9px 10px;
+  }
+}
+
