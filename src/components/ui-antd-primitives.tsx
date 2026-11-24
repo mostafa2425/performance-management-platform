@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Button, Checkbox, Collapse, Input, Select, Table } from "antd";
+import { Button, Checkbox, Collapse, Input, Select } from "antd";
 import type { ButtonProps, InputProps, TableColumnsType } from "antd";
+import { DataTable } from "@/components/ui/data-table";
 
 type NativeButtonProps = Omit<ButtonProps, "type" | "htmlType"> & { type?: "button" | "submit" | "reset" };
 export function AppButton({ type = "button", children, className, ...props }: NativeButtonProps) {
@@ -57,7 +58,7 @@ export function AppTable({ children, className }: { children?: React.ReactNode; 
     const cells = React.Children.toArray((row.props as { children?: React.ReactNode }).children).filter(React.isValidElement) as React.ReactElement[];
     return Object.fromEntries(cells.map((cell, index) => [`cell_${index}`, (cell.props as { children?: React.ReactNode }).children]).concat([["key", String(rowIndex)]])) as Record<string, React.ReactNode>;
   });
-  return <Table className={className} size="small" bordered pagination={false} scroll={{ x: "max-content" }} columns={columns} dataSource={dataSource} rowKey="key" locale={{ emptyText: "—" }} />;
+  return <DataTable className={className} size="small" bordered pagination={false} scroll={{ x: "max-content" }} columns={columns} dataSource={dataSource} rowKey="key" locale={{ emptyText: "—" }} />;
 }
 
 export function AppDetails({ children, className, open }: { children?: React.ReactNode; className?: string; open?: boolean }) {
