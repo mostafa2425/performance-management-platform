@@ -773,12 +773,15 @@ export default function AdminDashboardWorkspace() {
       title={t("text057")}
       subtitle={t("text058")}
     >
-      <Space orientation="vertical" size={16} style={{ width: "100%" }}>
+      <Space orientation="vertical" size={20} style={{ width: "100%" }}>
         <Row justify="space-between" align="middle" gutter={[12, 12]}>
           <Col>
-            <Typography.Title level={4} style={{ margin: 0 }}>
+            <Typography.Title level={3} style={{ margin: 0, letterSpacing: "-0.02em" }}>
               {t("text059")}
             </Typography.Title>
+            <Typography.Text type="secondary">
+              {t("text058")}
+            </Typography.Text>
           </Col>
           <Col>
             <Button icon={<ReloadOutlined />} onClick={() => dashboard.refetch()} loading={dashboard.isFetching}>
@@ -799,22 +802,44 @@ export default function AdminDashboardWorkspace() {
           />
         ) : (
           <>
-            <Row gutter={[12, 12]}>
-              {summaryCards.map((item) => (
-                <Col key={item.key} xs={12} sm={8} lg={6} xxl={item.key === "total" ? 6 : 4}>
-                  <Card size="small" style={{ height: "100%", borderInlineStart: "3px solid " + item.color }}>
-                    <Statistic
-                      title={item.key === "not_started" ? (
+            <section>
+              <Row align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+                <Typography.Text strong style={{ color: "#475569", fontSize: 13, letterSpacing: ".04em", textTransform: "uppercase" }}>
+                  {t("employeeStatusSummary")}
+                </Typography.Text>
+                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  {summaryCards.length} {t("metrics")}
+                </Typography.Text>
+              </Row>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 175px), 1fr))", gap: 12 }}>
+                {summaryCards.map((item) => (
+                  <Card
+                    key={item.key}
+                    size="small"
+                    styles={{ body: { padding: "13px 14px" } }}
+                    style={{
+                      height: "100%",
+                      border: "1px solid #e2e8f0",
+                      borderTop: "3px solid " + item.color,
+                      borderRadius: 11,
+                      boxShadow: "0 1px 2px rgba(15,23,42,.025)",
+                    }}
+                  >
+                    <div style={{ color: "#64748b", fontSize: 12, fontWeight: 500, minHeight: 18 }}>
+                      {item.key === "not_started" ? (
                         <Tooltip title={t("notStartedDefinition")}>{t(item.label)}</Tooltip>
                       ) : t(item.label)}
-                      value={item.value}
-                      valueStyle={{ fontSize: 25, fontWeight: 650, color: "rgba(0,0,0,.88)" }}
-                      prefix={item.icon}
-                    />
+                    </div>
+                    <Space align="center" size={9} style={{ marginTop: 8 }}>
+                      <span style={{ color: item.color, fontSize: 18, display: "inline-flex" }}>{item.icon}</span>
+                      <Typography.Text strong style={{ fontSize: 25, lineHeight: 1.1, color: "#0f172a" }}>
+                        {item.value.toLocaleString(locale)}
+                      </Typography.Text>
+                    </Space>
                   </Card>
-                </Col>
-              ))}
-            </Row>
+                ))}
+              </div>
+            </section>
 
             {(data?.evaluationIncomplete || data?.eligibilityIncomplete) && (
               <Alert
@@ -842,13 +867,15 @@ export default function AdminDashboardWorkspace() {
             )}
 
             <Card
-              title={t("activeCycles")}
-              extra={<Tag color="blue">{cycles.length} · {t("active")}</Tag>}
+              title={<Typography.Text strong style={{ fontSize: 15 }}>{t("activeCycles")}</Typography.Text>}
+              extra={<Tag color="blue" style={{ borderRadius: 20, paddingInline: 10 }}>{cycles.length} · {t("active")}</Tag>}
+              style={{ borderRadius: 12, borderColor: "#e2e8f0", overflow: "hidden" }}
+              styles={{ header: { minHeight: 54, paddingInline: 18, borderBottomColor: "#e8edf3" }, body: { padding: 0 } }}
             >
               {cycles.length ? (
                 <Table
                   rowKey="id"
-                  size="middle"
+                  size="small"
                   pagination={false}
                   scroll={{ x: 900 }}
                   dataSource={cycles}
@@ -913,7 +940,12 @@ export default function AdminDashboardWorkspace() {
             </Card>
 
             <Card
-              title={t("managerProgress")}
+              title={
+                <div>
+                  <Typography.Text strong style={{ fontSize: 15 }}>{t("managerProgress")}</Typography.Text>
+                  <div><Typography.Text type="secondary" style={{ fontSize: 12 }}>{t("managerProgressSubtitle")}</Typography.Text></div>
+                </div>
+              }
               extra={
                 <Button
                   icon={<DownloadOutlined />}
@@ -923,8 +955,11 @@ export default function AdminDashboardWorkspace() {
                   {t("export")}
                 </Button>
               }
+              style={{ borderRadius: 12, borderColor: "#e2e8f0", overflow: "hidden" }}
+              styles={{ header: { minHeight: 58, paddingInline: 18, borderBottomColor: "#e8edf3" }, body: { padding: 0 } }}
             >
-              <Row gutter={[10, 10]} style={{ marginBottom: 16 }}>
+              <div style={{ padding: 14, background: "#f8fafc", borderBottom: "1px solid #e8edf3" }}>
+              <Row gutter={[10, 10]}>
                 <Col xs={24} md={8}>
                   <Input
                     allowClear
@@ -983,12 +1018,13 @@ export default function AdminDashboardWorkspace() {
                   />
                 </Col>
               </Row>
+              </div>
 
               <Table
                 rowKey="managerId"
-                size="middle"
+                size="small"
                 dataSource={managerRows}
-                scroll={{ x: 1800 }}
+                scroll={{ x: 1250 }}
                 pagination={{ pageSize: 10, showSizeChanger: true, showTotal: (total) => t("managerCount", { count: total }) }}
                 locale={{ emptyText: t("noManagers") }}
                 columns={[
@@ -1013,13 +1049,9 @@ export default function AdminDashboardWorkspace() {
                   { title: t("jobTitle"), width: 160, render: (_: unknown, row: ManagerRow) => row.manager?.job_title?.name || "—" },
                   { title: t("businessUnit"), width: 160, render: (_: unknown, row: ManagerRow) => row.manager?.business_unit?.name || "—" },
                   { title: t("department"), width: 150, render: (_: unknown, row: ManagerRow) => row.manager?.department?.name || "—" },
-                  { title: t("totalEmployees"), width: 110, align: "center" as const, render: (_: unknown, row: ManagerRow) => row.total },
-                  ...STATUS_KEYS.map((key) => ({
-                    title: t("status." + key),
-                    width: 125,
-                    align: "center" as const,
-                    render: (_: unknown, row: ManagerRow) => row.counts[key],
-                  })),
+                  { title: t("totalEmployees"), width: 105, align: "center" as const, render: (_: unknown, row: ManagerRow) => <Typography.Text strong>{row.total}</Typography.Text> },
+                  { title: t("status.no_plan_yet"), width: 105, align: "center" as const, render: (_: unknown, row: ManagerRow) => <Typography.Text type={row.counts.no_plan_yet ? "danger" : "secondary"}>{row.counts.no_plan_yet}</Typography.Text> },
+                  { title: t("status.not_started"), width: 105, align: "center" as const, render: (_: unknown, row: ManagerRow) => row.counts.not_started },
                   {
                     title: t("action"),
                     fixed: "end" as const,
@@ -1035,8 +1067,10 @@ export default function AdminDashboardWorkspace() {
             </Card>
 
             <Card
-              title={t("eligibilityExclusions")}
-              extra={<Tag color="warning">{(data?.exclusions || []).length}</Tag>}
+              title={<Typography.Text strong style={{ fontSize: 15 }}>{t("eligibilityExclusions")}</Typography.Text>}
+              extra={<Tag color="warning" style={{ borderRadius: 20 }}>{(data?.exclusions || []).length}</Tag>}
+              style={{ borderRadius: 12, borderColor: "#e2e8f0", overflow: "hidden" }}
+              styles={{ header: { minHeight: 54, paddingInline: 18, borderBottomColor: "#e8edf3" }, body: { padding: 0 } }}
             >
               {(data?.exclusions || []).length ? (
                 <Table<ExclusionRecord>
