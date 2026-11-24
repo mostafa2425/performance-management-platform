@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useMemo, useState } from "react";
@@ -13,7 +14,6 @@ import {
   Select,
   Space,
   Spin,
-  Table,
   Tag,
   Typography,
 } from "antd";
@@ -357,7 +357,7 @@ export default function ApiEmployeesWorkspace() {
         ) : list.isError ? (
           <Alert type="error" title={(list.error as Error).message} />
         ) : (
-          <Table
+          <DataTable
             rowKey="id"
             dataSource={rows}
             pagination={{ pageSize: 10, showSizeChanger: true, showTotal: (n) => `${n}` }}
