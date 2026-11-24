@@ -22,3 +22,18 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Do not create a form instance in a component while rendering its `<Form>` only conditionally (for example, only after an API query resolves, only in edit mode, or only when a modal opens). Keep the owning `<Form>` mounted with conditional fields/content, or move `Form.useForm()` into the child component that is mounted together with that `<Form>`.
 - When a form is used inside a modal, ensure the modal/form mounting strategy keeps the instance connected before calling `submit`, `validateFields`, `setFieldsValue`, or `resetFields`.
 - Before finishing form changes, inspect every `Form.useForm()` and confirm its matching `<Form form={form}>` is mounted on every render path where the instance exists. Check the browser console for the unconnected-instance warning; do not suppress it.
+
+## Ant Design Card deprecation prevention
+
+- For Ant Design `Card`, never use the deprecated `bodyStyle` prop. Use `styles={{ body: { ... } }}` for body styling.
+- Before finishing UI changes, search the entire `src` tree for deprecated Card props:
+  `rg -n -U '<Card\\b[^>]*\\bbodyStyle\\s*=|bodyStyle\\s*=' src`
+- Replace every deprecated `bodyStyle` usage with the appropriate semantic `styles` slot. Do not move body styles to the outer Card `style` prop, because that changes the element being styled.
+
+## Runtime warning and SVG error handling
+
+- Treat browser-console warnings as actionable defects. Check the complete warning/error text and stack trace, identify the source component, and fix the source rather than suppressing the warning or hiding console output.
+- For Ant Design deprecations, use the replacement API documented by the installed Ant Design version. Do not assume a prop replacement is valid on unrelated components.
+- If the console or user report contains only a fragment such as `svg`, do not guess at the cause. Request or inspect the complete error message and stack trace, then trace it to the exact component or asset before changing code.
+- Validate SVG usage in JSX and assets only when the full error points to SVG rendering or loading; do not make speculative global SVG changes.
+- Before completing a UI fix, run the relevant repository-wide searches above and inspect the browser console on the affected screen(s). Record any remaining unverified runtime behavior clearly.
