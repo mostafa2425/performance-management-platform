@@ -13,11 +13,6 @@ import { planStatusTag } from "./plans/plan-shared";\nimport { planStatusTag } f
 
 type StatusMeta = { en: string; ar: string; color: string };
 
-const PLAN_DISPLAY_STATUS: Record<string, StatusMeta> = {
-  not_started: { en: "Not started", ar: "لم تبدأ", color: "default" },
-  draft: { en: "Draft", ar: "مسودة", color: "blue" },
-};
-
 const EVALUATION_STATUS: Record<string, StatusMeta> = {
   not_started: { en: "Not started", ar: "لم يبدأ", color: "default" },
   draft: { en: "Draft", ar: "مسودة", color: "blue" },
