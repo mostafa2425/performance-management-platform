@@ -1,5 +1,6 @@
-import { DataTable } from "@/components/ui/data-table";
 "use client";
+
+import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
 import { Alert, Card, Col, Collapse, Empty, Input, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
