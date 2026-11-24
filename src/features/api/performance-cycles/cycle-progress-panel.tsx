@@ -53,7 +53,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
     const acc: Record<string, number> = {};
     for (const k of planStatusKeys) acc[k] = 0;
     for (const r of rows) {
-      const k = r.display_status || r.status;
+      const k = r.status?.key;
       if (k in acc) acc[k] += 1;
     }
     return acc;
