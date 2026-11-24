@@ -40,6 +40,7 @@ export default function ApiManagerEvaluationWorkspace() {
   const { message } = App.useApp();
   const qc = useQueryClient();
   const [planId, setPlanId] = useState<number>();
+  const [uploadingKpiId, setUploadingKpiId] = useState<number | null>(null);
   const [form] = Form.useForm();
 
   const plans = useQuery({
@@ -299,17 +300,20 @@ export default function ApiManagerEvaluationWorkspace() {
                                   showUploadList={false}
                                   disabled={!ev.editable}
                                   beforeUpload={async (file) => {
+                                    setUploadingKpiId(kpi.plan_kpi_id);
                                     try {
                                       await plansApi.uploadEvidence(planId, kpi.plan_kpi_id, file as File);
                                       message.success(ar ? "تم رفع الدليل" : "Evidence uploaded");
                                       await qc.invalidateQueries({ queryKey: ["plans", planId, "evaluation"] });
                                     } catch (error) {
                                       message.error((error as Error).message);
+                                    } finally {
+                                      setUploadingKpiId(null);
                                     }
                                     return Upload.LIST_IGNORE;
                                   }}
                                 >
-                                  <Button size="small" disabled={!ev.editable} icon={<UploadOutlined />}>
+                                  <Button size="small" loading={uploadingKpiId === kpi.plan_kpi_id} disabled={!ev.editable} icon={<UploadOutlined />}>
                                     {t("Upload evidence", "رفع دليل")}
                                   </Button>
                                 </Upload>
