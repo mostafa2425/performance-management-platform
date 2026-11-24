@@ -396,7 +396,7 @@ export default function ManagerDashboardWorkspace() {
                               {cycleProgress}% ({cycleStarted} {t("of", "من")} {cycleRows.length} {t("started", "بدأوا")})
                             </Typography.Text>
                           </div>
-                          <Progress percent={cycleProgress} showInfo={false} strokeColor="#14b8a6" trailColor="#eef2f7" size="small" />
+                          <Progress percent={cycleProgress} showInfo={false} strokeColor="#14b8a6" railColor="#eef2f7" size="small" />
                         </div>
                         <div className="manager-cycle-meta">
                           <span>{t("Deadline", "الموعد النهائي")}: <strong>{cycle.stages?.find((stage: any) => stage.stage === cycle.current_stage)?.deadline_date || "—"}</strong></span>
@@ -439,6 +439,7 @@ export default function ManagerDashboardWorkspace() {
                   onChange={setCycleId}
                   className="manager-filter-control"
                   placeholder={t("All cycles", "كل الدورات")}
+                  loading={cyclesQuery.isFetching}
                   options={cycles.map((cycle: any) => ({ value: cycle.id, label: nameOf(cycle.name, ar) }))}
                 />
               </Col>
