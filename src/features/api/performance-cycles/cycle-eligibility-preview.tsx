@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import type { ReactNode } from "react";
@@ -70,7 +71,7 @@ export function CycleEligibilityPreview({
   }
 
   return (
-    <Table
+    <DataTable
       rowKey={(row: any, i: number | undefined) => String(candidateEmployeeId(row) ?? i)}
       size="middle"
       loading={loading}
