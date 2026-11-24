@@ -1,6 +1,7 @@
 "use client";
 
 import { AppButton } from "@/components/ui-antd-primitives";
+import { Skeleton } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -133,7 +134,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const homeHref = homePathForUser(user, locale);
 
   if (!isReady || !isAuthenticated) {
-    return <div className="app-frame" style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>…</div>;
+    return <div className="app-frame" style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}><div style={{ width: "min(100%, 520px)" }}><Skeleton active paragraph={{ rows: 4 }} /></div></div>;
   }
 
   return (
