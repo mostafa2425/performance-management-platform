@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import { useState } from "react";
-import { Alert, App, Button, Card, Empty, Select, Space, Spin, Tag, Typography } from "antd";
+import { Alert, App, Button, Card, Empty, Select, Space, Skeleton, Tag, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { cyclesApi } from "@/lib/api/endpoints";
@@ -83,7 +83,7 @@ export function ApiManagerTeamWorkspace() {
           options={options}
         />
         {cycles.isLoading || q.isLoading ? (
-          <Spin />
+          <Skeleton active />
         ) : q.isError ? (
           <Alert type="error" title={(q.error as Error).message} />
         ) : !cycleId ? (
@@ -214,7 +214,7 @@ export function ApiManagerGroupWorkspace() {
           />
         </Card>
         {cycles.isLoading || group.isLoading || team.isLoading ? (
-          <Spin />
+          <Skeleton active />
         ) : group.isError ? (
           <Alert type="error" title={(group.error as Error).message} />
         ) : !cycleId ? (
