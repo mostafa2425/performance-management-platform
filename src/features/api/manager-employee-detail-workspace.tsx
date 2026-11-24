@@ -12,7 +12,7 @@ import {
   Row,
   Select,
   Space,
-  Spin,
+  Skeleton,
   Tabs,
   Tag,
   Typography,
@@ -165,7 +165,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
         </Card>
 
         {employee.isLoading ? (
-          <Spin />
+          <Skeleton active />
         ) : employee.isError ? (
           <Alert type="error" showIcon title={(employee.error as Error).message} />
         ) : !person ? (
@@ -242,7 +242,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                     children: !cycleId ? (
                       <Empty description={t("Select a cycle.", "اختر دورة.")} />
                     ) : planStatus.isLoading || (planId && plan.isLoading) ? (
-                      <Spin />
+                      <Skeleton active />
                     ) : !planId ? (
                       <Empty
                         description={t(
@@ -282,7 +282,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                         )}
                       />
                     ) : evaluation.isLoading ? (
-                      <Spin />
+                      <Skeleton active />
                     ) : evaluation.isError ? (
                       <Alert
                         type="info"
@@ -415,7 +415,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                     key: "previous",
                     label: t("Previous performance", "الأداء السابق"),
                     children: results.isLoading ? (
-                      <Spin />
+                      <Skeleton active />
                     ) : previousResults.length === 0 ? (
                       <Empty
                         description={t(
