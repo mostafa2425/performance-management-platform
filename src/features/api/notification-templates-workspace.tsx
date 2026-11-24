@@ -23,7 +23,7 @@ export function ApiNotificationTemplatesWorkspace(){
    <div className="template-layout">
     <Card className="template-index" title={ar?"القوالب":"Templates"}><List dataSource={templates} renderItem={item=><List.Item onClick={()=>{setSelected(item.code);form.resetFields();}} style={{cursor:"pointer",background:activeCode===item.code?"rgba(22,51,102,.06)":undefined,padding:12}}><List.Item.Meta title={<span>{item.code} · {displayName(item)}</span>} description={<>{item.recipient} · <Tag color={item.in_use?"green":"default"}>{item.in_use?(ar?"مفعّل":"In use"):(ar?"غير مستخدم":"Not in use")}</Tag></>}/></List.Item>}/></Card>
     <Card className="template-editor" title={current?`${current.code} · ${displayName(current)}`:activeCode}>
-     {detail.isLoading?<Spin/>:detail.isError?<Alert type="error" title={(detail.error as Error).message}/>:current&&<Form form={form} key={current.code} layout="vertical" initialValues={{subject:current.subject,body:current.body}} onFinish={values=>save.mutate(values)}>
+     {detail.isLoading?<Spin/>:detail.isError?<Alert type="error" title={(detail.error as Error).message}/>:<Form form={form} key={current?.code ?? "template-loading"} layout="vertical" initialValues={current ? {subject:current.subject,body:current.body} : undefined} onFinish={values=>save.mutate(values)}>{current && <>
       <Alert type="info" showIcon title={ar?"استخدم المتغيرات المعتمدة فقط كما تظهر في قائمة المتغيرات لكل لغة.":"Use only the approved placeholders listed for each language."}/>
       <Form.Item label={ar?"عنوان الرسالة (عربي)":"Arabic subject"} name={["subject","ar"]} rules={[{required:true}]}><Input maxLength={255}/></Form.Item>
       <Form.Item label={ar?"عنوان الرسالة (إنجليزي)":"English subject"} name={["subject","en"]} rules={[{required:true}]}><Input maxLength={255}/></Form.Item>
@@ -31,7 +31,7 @@ export function ApiNotificationTemplatesWorkspace(){
       <Form.Item label={ar?"محتوى الرسالة (إنجليزي)":"English body"} name={["body","en"]} rules={[{required:true}]}><Input.TextArea rows={6} maxLength={5000}/></Form.Item>
       <div style={{marginBottom:16}}><Typography.Text type="secondary">{ar?"المتغيرات المتاحة":"Allowed placeholders"}: {placeholderText.map(x=>`[${x}]`).join(", ")||"—"}</Typography.Text></div>
       <Button type="primary" htmlType="submit" loading={save.isPending}>{ar?"حفظ التغييرات":"Save changes"}</Button>
-     </Form>}
+     </> }</Form>}
     </Card>
    </div>}
  </div>;
