@@ -75,10 +75,10 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
 
   const remove = useMutation({
     mutationFn: () => cyclesApi.remove(cycleId),
-    onSuccess: async () => {
+    onSuccess: () => {
       message.success(t("toast.deleted"));
-      await qc.invalidateQueries({ queryKey: queryKeys.adminCycles });
-      router.push(`/${locale}/admin/performance-cycles`);
+      router.replace(`/${locale}/admin/performance-cycles`);
+      void qc.invalidateQueries({ queryKey: queryKeys.adminCycles });
     },
     onError: (error: Error) => message.error(error.message),
   });
