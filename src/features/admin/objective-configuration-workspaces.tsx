@@ -3,9 +3,9 @@
 import { AppButton, AppInput, AppTable } from "@/components/ui-antd-primitives";
 
 import { AppShell } from "@/components/layout/app-shell";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
-import { Check, Pencil, Plus, Search, SlidersHorizontal, Tag, Trash2, X } from "lucide-react";
+import { Check, Pencil, Plus, Search, SlidersHorizontal, Trash2, X } from "lucide-react";
 
 type Category={id:string;name:string;active:boolean;createdAt:string;updatedAt:string;historicalRefs:number};
 const seed:Category[]=[
@@ -17,7 +17,7 @@ const seed:Category[]=[
  {id:"CAT-006",name:"Cost Optimization",active:false,createdAt:"2025-11-02",updatedAt:"2026-04-20",historicalRefs:31}
 ];
 export function ObjectiveCategoryWorkspace(){
- const ar=useLocale()==="ar";const t=useTranslations("ObjectiveConfiguration");
+ const t=useTranslations("ObjectiveConfiguration");
  const [rows,setRows]=useState(seed),[query,setQuery]=useState(""),[editor,setEditor]=useState<{id:string|null;name:string}|null>(null),[confirm,setConfirm]=useState<string|null>(null),[notice,setNotice]=useState(""),[error,setError]=useState("");
  const filtered=useMemo(()=>rows.filter(x=>x.name.toLowerCase().includes(query.toLowerCase())),[rows,query]);
  const save=()=>{if(!editor)return;const name=editor.name.trim();if(!name){setError(t("text001"));return;}if(rows.some(x=>x.name.toLocaleLowerCase()===name.toLocaleLowerCase()&&x.id!==editor.id)){setError(t("text002"));return;}const now=new Date().toISOString().slice(0,10);if(editor.id){setRows(v=>v.map(x=>x.id===editor.id?{...x,name,updatedAt:now}:x));setNotice(t("text003"));}else{setRows(v=>[{id:"CAT-"+String(Date.now()).slice(-6),name,active:true,createdAt:now,updatedAt:now,historicalRefs:0},...v]);setNotice(t("text004"));}setEditor(null);setError("");};
@@ -37,7 +37,7 @@ export function ObjectiveCategoryWorkspace(){
 type Weights={objectives:number;competencies:number};
 const initial:Weights={objectives:80,competencies:20};
 export function AnnualPerformanceConfiguration(){
- const ar=useLocale()==="ar";const t=useTranslations("ObjectiveConfiguration");
+ const t=useTranslations("ObjectiveConfiguration");
  const [saved,setSaved]=useState<Weights>(initial),[draft,setDraft]=useState<Weights>(initial),[editing,setEditing]=useState(false),[audit,setAudit]=useState<{before:Weights;after:Weights;at:string}[]>([]),[notice,setNotice]=useState(""),[error,setError]=useState("");
  const total=draft.objectives+draft.competencies;
  const save=()=>{if(!Number.isFinite(draft.objectives)||!Number.isFinite(draft.competencies)||draft.objectives<0||draft.objectives>100||draft.competencies<0||draft.competencies>100){setError(t("text034"));return;}if(total!==100){setError(t("text035"));return;}const changed=draft.objectives!==saved.objectives||draft.competencies!==saved.competencies;if(changed)setAudit(v=>[{before:saved,after:draft,at:new Date().toLocaleString()},...v]);setSaved(draft);setEditing(false);setError("");setNotice(changed?t("text036"):t("text037"));};
