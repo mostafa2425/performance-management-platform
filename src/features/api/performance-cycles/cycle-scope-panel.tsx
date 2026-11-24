@@ -1,3 +1,4 @@
+import { DataTable } from "@/components/ui/data-table";
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -9,7 +10,6 @@ import {
   Form,
   Row,
   Space,
-  Table,
   Tag,
   Typography,
 } from "antd";
@@ -272,7 +272,7 @@ export function CycleScopePanel({
             </Row>
           )}
 
-          <Table<{ id: number; kind: "included" | "excluded" }>
+          <DataTable<{ id: number; kind: "included" | "excluded" }>
             rowKey={(row) => `${row.kind}-${row.id}`}
             size="middle"
             pagination={{ pageSize: 10 }}
