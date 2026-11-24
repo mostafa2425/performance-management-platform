@@ -165,7 +165,7 @@ export function PlanReadonlyTree({
               value={totalWeight}
               precision={2}
               suffix="%"
-              valueStyle={{ color: weightReady ? "#16a34a" : "#d97706" }}
+              styles={{ content: { color: weightReady ? "#16a34a" : "#d97706" } }}
             />
             <Progress percent={Math.min(totalWeight, 100)} showInfo={false} status={weightReady ? "success" : "active"} size="small" />
           </Card>
