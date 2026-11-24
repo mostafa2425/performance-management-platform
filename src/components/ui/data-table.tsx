@@ -23,6 +23,7 @@ export type DataTableProps<RecordType extends object = Record<string, unknown>> 
 export function DataTable<RecordType extends object = Record<string, unknown>>({
   className,
   ariaLabel,
+  size = "middle",
   ...props
 }: DataTableProps<RecordType>) {
   const classes = ["pmp-data-table", className].filter(Boolean).join(" ");
