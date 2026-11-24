@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/ui/data-table";
 
-import { Table, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 import { stageHint, stageLabel } from "./shared";
