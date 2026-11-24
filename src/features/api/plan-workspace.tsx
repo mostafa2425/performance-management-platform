@@ -41,7 +41,7 @@ function ActionButtons({
 }: {
   actions: string[];
   ar: boolean;
-  plan?: { display_status?: string; status?: string } | null;
+  plan?: { status?: { key?: string } | null } | null;
   onAction: (action: string) => void;
 }) {
   const items = workflowActions(actions);
