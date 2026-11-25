@@ -7,11 +7,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://performance-managem
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Perform. | Performance Management Platform",
-    template: "%s | Perform."
+    default: "Performance Management Platform | Master Works",
+    template: "%s | Performance Management Platform"
   },
-  description: "A unified workspace for performance cycles, objectives, reviews and employee development.",
-  applicationName: "Perform.",
+  description: "An enterprise performance management platform by Master Works, aligning people, objectives, reviews and organizational outcomes.",
+  applicationName: "Performance Management Platform",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
@@ -19,10 +19,10 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "Perform.",
-    title: "Perform. | Performance Management Platform",
-    description: "A unified workspace for performance cycles, objectives, reviews and employee development",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Perform. Performance Management Platform" }]
+    siteName: "Performance Management Platform",
+    title: "Performance Management Platform | Master Works",
+    description: "Align people, objectives and organizational outcomes with a unified performance management experience by Master Works.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Performance Management Platform by Master Works" }]
   },
   twitter: {
     card: "summary",
