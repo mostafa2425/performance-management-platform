@@ -53,3 +53,63 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Keep provisional/draft results visually distinct from finalized and published results. Use existing backend status and allowed-action data; never infer permissions from a visual status.
 
 - All application data tables must use `@/components/ui/data-table` (`DataTable`). Do not import Ant Design `Table` directly into feature/page components. Preserve existing Table props and business behavior. Legacy `AppTable` must delegate to `DataTable`; specialized layouts may use scoped classes but must retain shared visual tokens.
+
+## Ant Design API compatibility and deprecation gate
+
+This section is mandatory for every new UI implementation, refactor, bug fix, and code review in this repository.
+
+### Before writing or editing Ant Design code
+1. Read this `AGENTS.md` file and `UI_UX_DESIGN_GUIDELINES.md` first.
+2. Identify the installed Ant Design version from `package.json` / lockfile. This project uses Ant Design v6; do not copy examples written for older major versions without checking compatibility.
+3. Consult the documentation and TypeScript definitions shipped with the installed Ant Design package in `node_modules/antd` for the exact component and prop being changed. Prefer the installed package's API over memory, old snippets, blog posts, or examples from a different version.
+4. Search existing usage of the component before adding a new pattern. Reuse the current supported API.
+5. Never silence, filter, or suppress an Ant Design warning. Replace the deprecated API at its source.
+
+### Known deprecated APIs and supported replacements
+
+| Component / API | Do not use | Use instead |
+|---|---|---|
+| `Space` | `direction` | `orientation="vertical"` or `orientation="horizontal"` |
+| `Card` | `bodyStyle`, `headStyle` | Semantic `styles={{ body: ... }}` / `styles={{ header: ... }}` |
+| `Drawer` | `width`, `height` | `size` (use a supported preset or numeric size; use semantic styles for responsive constraints) |
+| `Timeline` items | `dot` | `icon` |
+| `Progress` | `trailColor` | `railColor` |
+| `Statistic` | `valueStyle`, `titleStyle` | Semantic `styles` slots, e.g. `styles={{ content: ... }}` and the documented title slot |
+| `Alert` | `message` | `title` for the alert heading; put supporting content in `description` |
+| `Timeline` items | legacy item `children` content shape | Use the current documented item content field (`content`) |
+| `Descriptions` | legacy item `label` / `children` patterns where flagged by installed typings | Use the current documented item shape and slots |
+| `Tabs` | deprecated legacy tab children | Use the `items` API |
+| `Dropdown` | deprecated legacy overlay API | Use `menu` |
+| `Menu` | deprecated legacy item children where flagged | Use the documented `items` data API |
+
+This table is a quick warning-prevention checklist, not a substitute for checking the installed version. If a deprecation warning names another component or prop, inspect that component's installed documentation/types and add the confirmed replacement to this table.
+
+### Required repository-wide checks before finishing UI work
+
+Run these searches (including multiline JSX) and resolve every deprecated usage in the changed scope. For a broad cleanup, resolve all matches across `src`.
+
+```bash
+# Space
+rg -n -U '<Space\\b[^>]*\\bdirection\\s*=' src
+
+# Card
+rg -n -U '<Card\\b[^>]*\\b(bodyStyle|headStyle)\\s*=' src
+rg -n '\\b(bodyStyle|headStyle)\\s*=' src
+
+# Drawer deprecated sizing
+rg -n -U '<Drawer\\b[^>]*\\b(width|height)\\s*=' src
+
+# Timeline deprecated dot
+rg -n -U '\\bdot\\s*:' src
+
+# Progress deprecated rail color
+rg -n -U '\\btrailColor\\s*=' src
+
+# Statistic deprecated styling
+rg -n -U '\\b(valueStyle|titleStyle)\\s*=' src
+
+# Alert deprecated heading prop
+rg -n -U '<Alert\\b[^>]*\\bmessage\\s*=' src
+```
+
+Also run lint and typecheck, then run the app and inspect the browser console on every affected screen. Fix warnings at their source. Do not report a search as clean unless it was actually run; document any remaining match and why it is a valid exception.
