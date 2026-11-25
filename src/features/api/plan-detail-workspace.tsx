@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { App, Alert, Button, Card, Col, Row, Space, Skeleton, Tag, Typography } from "antd";
-import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckCircleFilled, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
@@ -65,6 +65,8 @@ function WorkflowActions({ plan, ar, onAction }: { plan: any; ar: boolean; onAct
         <Button
           key={action}
           type={["submit", "approve", "employee_approve"].includes(action) ? "primary" : "default"}
+          className={["approve", "employee_approve"].includes(action) ? "pmp-approve-button" : undefined}
+          icon={["approve", "employee_approve"].includes(action) ? <CheckCircleFilled /> : undefined}
           danger={["return", "delete", "request_modification"].includes(action)}
           onClick={() => onAction(action)}
         >
