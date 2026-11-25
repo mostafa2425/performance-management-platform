@@ -56,7 +56,8 @@ function toApiObjectives(objectives: any[]) {
 }
 
 function WorkflowActions({ plan, ar, onAction }: { plan: any; ar: boolean; onAction: (action: string) => void }) {
-  const actions = workflowActions(plan?.allowed_actions || []);
+  const isDraft = String(plan?.status?.key ?? plan?.status ?? "").toLowerCase() === "draft";
+  const actions = workflowActions(plan?.allowed_actions || []).filter((action) => !(isDraft && ["submit", "submit_plan"].includes(action)));
   const t = (en: string, arabic: string) => ar ? arabic : en;
   if (!actions.length) return null;
   return (
@@ -187,6 +188,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const { message } = App.useApp();
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
+  const [addObjectiveRequest, setAddObjectiveRequest] = useState(0);
   const [adminEditMode, setAdminEditMode] = useState(false);
   const [pendingAction, setPendingAction] = useState("");
   const [actionDialog, setActionDialog] = useState(false);
@@ -213,6 +215,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const units = useQuery({ queryKey: ["meta", "kpi-units"], queryFn: metaApi.kpiUnits });
   const cycle = useMemo(() => (cycles.data || []).find((item: any) => item.id === plan?.cycle_id), [cycles.data, plan?.cycle_id]);
   const canEdit = Boolean(plan?.allowed_actions?.includes("edit_content"));
+  const isDraft = String(plan?.status?.key ?? plan?.status ?? "").toLowerCase() === "draft";
   const canEditContent = canEdit && (mode !== "admin" || adminEditMode);
 
   const refresh = async (id?: number) => {
@@ -336,7 +339,14 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             </div>
           </div>
           <div className="plan-detail-page-actions">
-            <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
+            <Space wrap>
+              {mode === "manager" && isDraft && canEdit ? (
+                <Button type="primary" icon={<EditOutlined />} onClick={() => { setEditing(true); setAddObjectiveRequest((value) => value + 1); }}>
+                  {t("Add objective", "إضافة هدف")}
+                </Button>
+              ) : null}
+              <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
+            </Space>
           </div>
         </div>
 
@@ -430,6 +440,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
                 units={(units.data || {}) as KpiUnitsMeta}
                 ar={ar}
                 loading={save.isPending}
+                addObjectiveRequest={addObjectiveRequest}
                 openComments={plan.open_comments}
                 onSave={(objectives) => save.mutate(objectives)}
               />
