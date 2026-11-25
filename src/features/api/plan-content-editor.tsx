@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Button, Card, Col, Collapse, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
+import { Alert, Button, Card, Col, Collapse, Form, Input, InputNumber, Modal, Popconfirm, Progress, Row, Select, Space, Tag, Typography } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
@@ -198,6 +198,7 @@ export function PlanContentEditor({
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const [form] = Form.useForm<{ objectives: ObjectiveDraft[] }>();
   const [objectiveModalOpen, setObjectiveModalOpen] = useState(false);
+  const [activeObjectiveKeys, setActiveObjectiveKeys] = useState<string[]>([]);
   const [objectiveForm] = Form.useForm();
   const addObjectiveRef = useRef<((value: ObjectiveDraft) => void) | null>(null);
   const measurementTypes = (units as KpiUnitsMeta).measurement_types || [];
@@ -225,6 +226,7 @@ export function PlanContentEditor({
 
   return (
     <Form
+      id="plan-content-editor-form"
       form={form}
       layout="vertical"
       initialValues={{ objectives: initialObjectives }}
@@ -232,17 +234,28 @@ export function PlanContentEditor({
     >
       <InlineComments openComments={openComments} target="plan" ar={ar} />
       <div className="plan-content-editor-toolbar">
-        <Alert
-          className="plan-content-editor-weight-alert"
-          type={weightReady ? "success" : "warning"}
-          showIcon
-          title={`${t("Total KPI weight", "إجمالي وزن المؤشرات")}: ${Math.round(weightTotal)}%`}
-          description={
-            weightReady
-              ? t("Ready for submission checks.", "جاهز لفحوصات الإرسال.")
-              : t("Must equal 100% before submit.", "يجب أن يساوي 100% قبل الإرسال.")
-          }
-        />
+        <div className="plan-content-editor-weight-progress">
+          <div className="plan-content-editor-weight-heading">
+            <Typography.Text strong>{t("Total KPI weight", "إجمالي وزن المؤشرات")}</Typography.Text>
+            <Typography.Text strong className={weightReady ? "is-complete" : weightTotal > 100 ? "is-overweight" : "is-incomplete"}>
+              {Math.round(weightTotal)}%
+            </Typography.Text>
+          </div>
+          <Progress
+            percent={Math.min(100, Math.max(0, weightTotal))}
+            showInfo={false}
+            strokeColor={weightReady ? "#16a34a" : weightTotal > 100 ? "#dc2626" : weightTotal >= 70 ? "#d97706" : "#3b82f6"}
+            trailColor="#e8edf4"
+            strokeWidth={9}
+          />
+          <Typography.Text type="secondary" className="plan-content-editor-weight-hint">
+            {weightReady
+              ? t("Weight distribution is complete.", "توزيع الأوزان مكتمل.")
+              : weightTotal > 100
+                ? t("Total weight exceeds 100%. Reduce the KPI weights.", "إجمالي الأوزان تجاوز 100%. قلل أوزان المؤشرات.")
+                : t("Adjust KPI weights until the total reaches 100%.", "اضبط أوزان المؤشرات حتى يصل الإجمالي إلى 100%.")}
+          </Typography.Text>
+        </div>
         <Space className="plan-content-editor-actions" wrap>
           <Button type="primary" ghost icon={<PlusOutlined />} onClick={openObjectiveModal}>
             {t("Add objective", "إضافة هدف")}
@@ -258,7 +271,8 @@ export function PlanContentEditor({
               {fields.length ? (
                 <Collapse
                   bordered={false}
-                  defaultActiveKey={fields.map((field) => String(field.key))}
+                  activeKey={activeObjectiveKeys}
+                  onChange={(keys) => setActiveObjectiveKeys(Array.isArray(keys) ? keys.map(String) : [String(keys)])}
                   items={fields.map((field) => {
                     const objectiveId = form.getFieldValue(["objectives", field.name, "id"]);
                     const objectiveCategoryId = form.getFieldValue(["objectives", field.name, "category_id"]);
@@ -372,14 +386,6 @@ export function PlanContentEditor({
           );
         }}
       </Form.List>
-      <div className="plan-content-editor-footer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "12px 14px", marginTop: 18, border: "1px solid #dbe5f1", borderRadius: 12, background: "#f8fafc", flexWrap: "wrap" }}>
-        <Typography.Text type="secondary">
-          {t("Save your changes before submitting the plan.", "احفظ التعديلات قبل إرسال الخطة للمراجعة.")}
-        </Typography.Text>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          {t("Save draft", "حفظ المسودة")}
-        </Button>
-      </div>
       <Modal
         open={objectiveModalOpen}
         title={t("Add objective", "إضافة هدف")}
@@ -395,6 +401,7 @@ export function PlanContentEditor({
           layout="vertical"
           onFinish={(values) => {
             addObjectiveRef.current?.(values);
+            setActiveObjectiveKeys([]);
             setObjectiveModalOpen(false);
             objectiveForm.resetFields();
           }}
