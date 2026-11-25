@@ -54,3 +54,28 @@
   .evaluation-approved-plans-heading { align-items: stretch; flex-direction: column; }
   .evaluation-approved-search { width: 100%; }
 }
+
+
+.manager-evaluation-list-workspace .ant-btn-primary {
+  min-height: 42px;
+  border-color: #163366;
+  border-radius: 9px;
+  background: #163366;
+  box-shadow: none;
+  font-weight: 650;
+}
+.manager-evaluation-list-workspace .ant-btn-primary:hover {
+  border-color: #10284f !important;
+  background: #10284f !important;
+}
+.manager-evaluation-list-workspace .ant-input-affix-wrapper {
+  min-height: 42px;
+  border-radius: 9px;
+}
+.manager-evaluation-list-workspace .evaluation-approved-plans-card > .ant-card-body { padding: 18px; }
+.manager-evaluation-list-workspace .evaluation-approved-plans-table .ant-table-tbody > tr:hover > td {
+  background: #f7f9fc;
+}
+@media (max-width: 767px) {
+  .manager-evaluation-list-workspace .evaluation-approved-plans-card > .ant-card-body { padding: 14px; }
+}
