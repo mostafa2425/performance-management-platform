@@ -188,7 +188,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     mode === "admin"
       ? t("Plan reviews", "مراجعة الخطط")
       : mode === "manager"
-        ? t("Team plans", "خطط الفريق")
+        ? t("Team objectives", "أهداف الفريق")
         : t("My plan", "خطتي");
   const subtitle =
     mode === "admin"
