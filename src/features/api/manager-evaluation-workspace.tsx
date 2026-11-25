@@ -8,6 +8,7 @@ import { ArrowRightOutlined, SearchOutlined, UserOutlined } from "@ant-design/ic
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 import { plansApi } from "@/lib/api/endpoints";
 import { planStatusTag } from "@/features/api/plans/plan-shared";
 import "./manager-evaluation-list-workspace.css";
@@ -22,10 +23,12 @@ export default function ApiManagerEvaluationWorkspace() {
   const ar = useLocale() === "ar";
   const locale = ar ? "ar" : "en";
   const [search, setSearch] = useState("");
+  const { cycleId } = usePerformanceCycle();
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const plans = useQuery({
-    queryKey: ["plans", "manager-evaluation-approved"],
-    queryFn: () => plansApi.list({ filter: { status: "approved" }, per_page: 100 }),
+    queryKey: ["plans", "manager-evaluation-approved", cycleId],
+    queryFn: () => plansApi.list({ filter: { status: "approved", ...(cycleId ? { cycle_id: cycleId } : {}) }, per_page: 100 }),
+    enabled: Boolean(cycleId),
   });
   const rows = (plans.data as any)?.data || [];
   const filteredRows = useMemo(() => {
