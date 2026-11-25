@@ -23,6 +23,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - When a form is used inside a modal, ensure the modal/form mounting strategy keeps the instance connected before calling `submit`, `validateFields`, `setFieldsValue`, or `resetFields`.
 - Before finishing form changes, inspect every `Form.useForm()` and confirm its matching `<Form form={form}>` is mounted on every render path where the instance exists. Check the browser console for the unconnected-instance warning; do not suppress it.
 
+## Ant Design Form initial value ownership
+
+- Do not set `Form.Item initialValue` for a field path that is already provided by the owning `<Form initialValues>`; this causes the warning that the field cannot overwrite the form-level value.
+- For nested/repeated fields, initialize the complete array/object shape in `Form initialValues` (or update it with `form.setFieldsValue`) and keep each `Form.Item` responsible only for binding/validation. Use `Form.Item initialValue` only when the same path is not initialized at the Form level and the installed Ant Design API supports that pattern.
+- When changing form initialization, preserve hidden identifiers and verify the submitted payload still includes them.
+
 ## Ant Design Card deprecation prevention
 
 - For Ant Design `Card`, never use the deprecated `bodyStyle` prop. Use `styles={{ body: { ... } }}` for body styling.
