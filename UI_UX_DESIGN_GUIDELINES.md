@@ -32,9 +32,13 @@ Use these as the baseline. Prefer shared CSS variables or Ant Design theme token
 | Subtle text | `#94a3b8` | IDs, quiet metadata |
 | Border | `#e2e8f0` | Card and table borders |
 | Subtle border | `#f1f5f9` | Table row separators |
-| Primary teal | `#0d9488` | Primary actions, active accents |
-| Teal dark | `#0f766e` | Text on pale teal surfaces |
-| Teal tint | `#f0fdfa` | Soft active backgrounds |
+| Brand primary | `#163366` | Primary actions, links, active navigation, key accents |
+| Brand primary hover | `#10284f` | Hover/pressed state for primary actions |
+| Brand tint | `#edf2f9` | Soft brand backgrounds, selected rows and icon surfaces |
+| Brand border | `#cbd8ea` | Outlines and subtle emphasis |
+| Secondary teal | `#0d9488` | Optional supporting accent only; never replace the brand primary |
+| Secondary teal dark | `#0f766e` | Text on pale teal surfaces when teal is used semantically |
+| Secondary teal tint | `#f0fdfa` | Soft supporting accents, not primary navigation/actions |
 | Amber | `#d97706` | Draft / attention state |
 | Amber tint | `#fffbeb` | Draft row and status backgrounds |
 | Navy sidebar | Existing shell navy | Keep current application navigation identity |
@@ -124,8 +128,8 @@ Where a row represents a person, use a consistent identity cell:
 
 ### Row actions
 
-- Primary action: solid teal background with white text.
-- Secondary action: white background, subtle teal border, teal text.
+- Primary action: solid brand navy (`#163366`) background with white text.
+- Secondary action: white background, subtle brand border, brand navy text.
 - Destructive actions: semantic red and explicit confirmation when required by existing behavior.
 - Keep action labels verb-based and concise.
 - Align action cells consistently (right in LTR, left in RTL).
@@ -149,7 +153,7 @@ Where a row represents a person, use a consistent identity cell:
 ## 7. Buttons and controls
 
 - Use Ant Design components and shared classes/tokens rather than one-off inline styles.
-- Keep buttons in the same visual family across pages: solid teal primary, outlined neutral/teal secondary, quiet text tertiary, semantic destructive.
+- Keep buttons in the same visual family across pages: solid brand-navy primary, outlined neutral/brand secondary, quiet text tertiary, semantic destructive.
 - Inputs, Selects, DatePickers, and other controls in the same form row must share a consistent height, border, radius, font size, and focus treatment.
 - Provide clear disabled/loading states.
 - Avoid emoji as functional icons; use the project's icon library consistently.
@@ -203,7 +207,34 @@ A migrated screen is complete only when:
 - No new TypeScript, lint, build, or browser-console errors are introduced.
 - The screen has been visually checked at desktop and mobile widths.
 
-## 13. BRD alignment and role-specific presentation guardrails
+## 13. Employee Dashboard reference patterns
+
+The Employee Dashboard at `src/features/api/employee-dashboard-view.tsx` and `employee-dashboard.css` is the current reference for polished, user-facing dashboard composition. Reuse its visual language across Manager and Admin screens without copying employee-only content or changing role permissions.
+
+### Reusable composition
+- **Welcome / context hero:** a restrained light surface with a soft brand-tinted gradient, compact cycle/context pill, clear title, one short explanatory sentence, and optional primary/secondary actions. Keep decorative marks optional and hide nonessential decoration on mobile.
+- **KPI cards:** white bordered cards with a small top accent, compact uppercase/muted label, strong value, and optional supporting metadata. Use responsive CSS Grid; do not force metrics into a single row.
+- **Content panels:** white surfaces with 1px neutral borders, 14–16px radius, subtle/no shadow, clear header divider, and consistent internal padding.
+- **Summary rows:** small neutral tiles for status, counts, cycle metadata, or progress; keep labels muted and values in brand navy.
+- **Action lists:** icon tile, clear action title, short supporting detail, and a visible next step. Distinguish pending actions from informational items.
+- **Empty states:** centered icon container, concise heading, one explanatory sentence, and a relevant action only when the backend allows one.
+- **Status treatments:** compact readable pills; use semantic colors (amber draft/attention, blue pending/review, red returned/blocked, green approved/completed, slate neutral). Brand navy is for identity and actions, not a substitute for workflow semantics.
+
+### Brand and component tokens
+- Brand primary is `#163366`; use it for primary buttons, important links, selected/active accents, icon foregrounds, and KPI highlights.
+- Use `#edf2f9` for soft brand surfaces and `#cbd8ea` for brand-tinted borders.
+- Use app canvas `#f8fafc`, white surfaces, slate text, and `#e2e8f0` borders as the neutral foundation.
+- Keep standard buttons and form controls at the established **42px** height where the shared component system supports it; no button box shadows.
+- Prefer 10–16px card radii, 14–22px desktop card padding, and 14–18px mobile padding.
+- Use CSS logical properties and preserve RTL/LTR mirroring. Decorative gradients must remain subtle and must not reduce text contrast.
+
+### Applying the reference by role
+- Employee: personal objectives, assigned KPIs, current workflow stage, permitted next action, and published results only.
+- Manager: team/cycle context, team progress, approved-plan selection, evaluation workspaces, year-group readiness, and workflow actions. Use the Employee Dashboard's cards, spacing, typography, and navy accents, but preserve manager-specific data density and group/matrix layouts.
+- Admin: configuration summaries, bilingual forms, template/category management, versioning, and assignment workflows. Use the same surfaces, form rhythm, buttons, and table treatment; retain admin-only actions and confirmation flows.
+- Never copy employee-facing visibility into Manager/Admin or expose internal evaluation details to Employees.
+
+## 14. BRD alignment and role-specific presentation guardrails
 
 The visual system must support the workflows defined in `Performance_managment_platform_V1.2.pdf`. Visual consistency must never weaken role permissions or reveal information earlier than the BRD allows.
 
@@ -241,7 +272,7 @@ The visual system must support the workflows defined in `Performance_managment_p
 - Provisional and draft annual results must never be visually presented as published/final results.
 - Notifications, templates, recipients, and triggers remain controlled by existing business rules; UI consistency does not authorize changing them.
 
-## 14. Shared DataTable component contract
+## 15. Shared DataTable component contract
 
 - Use `@/components/ui/data-table` (`DataTable`) as the standard entry point for every Ant Design data table in application screens.
 - Do not import `Table` directly from `antd` in feature/page components. Import `DataTable` and retain the existing Ant Design Table props, columns, row keys, renderers, pagination, sorting, filtering, selection, expandable rows, fixed columns, and summaries.
