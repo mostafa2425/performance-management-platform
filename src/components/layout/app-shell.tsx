@@ -80,7 +80,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { logout, user, activeRole, availableRoles, setActiveRole, isReady, isAuthenticated } = useAuthSession();
-  const { cycleId, options: cycleOptions, cycles, setCycleId } = usePerformanceCycle();
+  const { cycleId, activeCycleLabel, options: cycleOptions, cycles, setCycleId } = usePerformanceCycle();
   const locale = useLocale();
   const t = useTranslations("Shell");
   const isAr = locale === "ar";
@@ -273,7 +273,31 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
               </div>
             ) : null}
 
-            {cycleOptions.length > 0 ? (
+            {cycleOptions.length === 1 ? (
+              <div
+                className="topbar-context-pill"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  minWidth: 0,
+                  height: 40,
+                  paddingInline: 12,
+                  border: "1px solid #dbe5f1",
+                  borderRadius: 999,
+                  background: "#f5f8fc",
+                  color: "#163366",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  whiteSpace: "nowrap",
+                }}
+                aria-label={isAr ? "دورة الأداء الحالية" : "Current performance cycle"}
+                title={activeCycleLabel}
+              >
+                <CalendarDays size={15} color="#163366" aria-hidden />
+                <span>{activeCycleLabel || cycleOptions[0].label}</span>
+              </div>
+            ) : cycleOptions.length > 1 ? (
               <div
                 className="topbar-context-pill"
                 style={{
