@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, Button, Card, Col, Collapse, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
 import { commentsForTarget, type OpenComments } from "./plans/plan-shared";
@@ -209,7 +209,7 @@ export function PlanContentEditor({
   );
   const weightReady = Math.abs(weightTotal - 100) < 0.01;
 
-  const openObjectiveModal = () => {
+  const openObjectiveModal = useCallback(() => {
     objectiveForm.resetFields();
     objectiveForm.setFieldsValue({
       text: "",
@@ -217,11 +217,11 @@ export function PlanContentEditor({
       kpis: [{ name: "", measurement_type: "number_amount", unit: measurementTypes.find((item) => item.value === "number_amount")?.units?.[0]?.value || "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
     });
     setObjectiveModalOpen(true);
-  };
+  }, [measurementTypes, objectiveForm]);
 
   useEffect(() => {
     if (addObjectiveRequest > 0) openObjectiveModal();
-  }, [addObjectiveRequest]);
+  }, [addObjectiveRequest, openObjectiveModal]);
 
   return (
     <Form
@@ -439,9 +439,9 @@ export function PlanContentEditor({
                           <Select placeholder={t("Select direction", "اختر الاتجاه")} options={[{ value: "higher", label: t("Higher is better", "الأعلى أفضل") }, { value: "lower", label: t("Lower is better", "الأقل أفضل") }]} />
                         </Form.Item>
                       </Col>
-                      <Col xs={24} md={12}><Form.Item name={[field.name, "target"]} label={t("Target", "المستهدف")} rules={[{ required: true }]}><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
-                      <Col xs={24} md={12}><Form.Item name={[field.name, "baseline"]} label={t("Baseline", "خط الأساس")}><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
-                      <Col xs={24} md={12}><Form.Item name={[field.name, "weight_pct"]} label={t("Weight %", "الوزن %")} rules={[{ required: true }]}><InputNumber min={0} max={100} step={0.01} style={{ width: "100%" }} /></Form.Item></Col>
+                      <Col xs={24} md={12}><Form.Item name={[field.name, "target"]} label={t("Target", "المستهدف")} rules={[{ required: true }]}><InputNumber placeholder={t("Enter target", "أدخل المستهدف")} style={{ width: "100%" }} /></Form.Item></Col>
+                      <Col xs={24} md={12}><Form.Item name={[field.name, "baseline"]} label={t("Baseline", "خط الأساس")}><InputNumber placeholder={t("Enter baseline (optional)", "أدخل خط الأساس (اختياري)")} style={{ width: "100%" }} /></Form.Item></Col>
+                      <Col xs={24} md={12}><Form.Item name={[field.name, "weight_pct"]} label={t("Weight %", "الوزن %")} rules={[{ required: true }]}><InputNumber min={0} max={100} step={1} precision={0} placeholder={t("Enter whole number", "أدخل رقمًا صحيحًا")} style={{ width: "100%" }} /></Form.Item></Col>
                     </Row>
                   </Card>
                 ))}
