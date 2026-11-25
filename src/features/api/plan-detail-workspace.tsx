@@ -56,8 +56,7 @@ function toApiObjectives(objectives: any[]) {
 }
 
 function WorkflowActions({ plan, ar, onAction }: { plan: any; ar: boolean; onAction: (action: string) => void }) {
-  const isDraft = String(plan?.status?.key ?? plan?.status ?? "").toLowerCase() === "draft";
-  const actions = workflowActions(plan?.allowed_actions || []).filter((action) => !(isDraft && ["submit", "submit_plan"].includes(action)));
+  const actions = workflowActions(plan?.allowed_actions || []);
   const t = (en: string, arabic: string) => ar ? arabic : en;
   if (!actions.length) return null;
   return (
@@ -278,13 +277,9 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     [t("Job title", "المسمى الوظيفي"), employeeProfile?.job_title?.name || "—"],
     [t("Business unit", "قطاع الأعمال"), employeeProfile?.business_unit?.name || "—"],
     [t("Location", "الموقع"), employeeProfile?.location?.name || "—"],
-    [t("Line manager ID", "رقم المدير المباشر"), employeeProfile?.line_manager_id ?? "—"],
   ];
   const planInfo: Array<[string, React.ReactNode]> = [
     [t("Performance cycle", "دورة الأداء"), cycleLabel],
-    [t("Current stage", "المرحلة الحالية"), cycle?.current_stage || "—"],
-    [t("Plan version", "إصدار الخطة"), plan.version ?? "—"],
-    [t("Created by role", "دور منشئ الخطة"), plan.author_role || "—"],
     [t("Created at", "تاريخ الإنشاء"), formatInstant(plan.created_at, ar)],
     [t("Last updated", "آخر تحديث"), formatInstant(plan.updated_at, ar)],
   ];
