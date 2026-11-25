@@ -591,18 +591,31 @@ export default function AdminDashboardWorkspace() {
     { key: "finalized", label: "finalized", value: summary.finalized, color: "#237804", icon: <SafetyCertificateOutlined /> },
   ];
 
-  const exclusionsByCycle = useMemo(() => {
-    const counts = new Map<number, { cycle: DashboardCycle; count: number }>();
-    for (const row of data?.exclusions || []) {
-      const id = Number(row.cycle.id);
-      const current = counts.get(id);
-      if (current) current.count += 1;
-      else counts.set(id, { cycle: row.cycle, count: 1 });
+  const planStatusBreakdown = useMemo(() => {
+    let noPlanYet = 0;
+    let approvedAwaitingNextStage = 0;
+    for (const cycle of cycles) {
+      for (const member of cycle.members) {
+        const memberStatus = typeof member.status === "object"
+          ? member.status?.key || ""
+          : String(member.status || "");
+        if (!member.plan_id || memberStatus === "not_started") {
+          noPlanYet += 1;
+        } else if (
+          memberStatus === "approved" &&
+          cycle.current_stage !== "active_performance" &&
+          cycle.current_stage !== "manager_evaluation" &&
+          cycle.current_stage !== "admin_final_review"
+        ) {
+          approvedAwaitingNextStage += 1;
+        }
+      }
     }
-    return Array.from(counts.values()).sort((a, b) =>
-      getCycleName(a.cycle, locale).localeCompare(getCycleName(b.cycle, locale)),
-    );
-  }, [data?.exclusions, locale]);
+    return [
+      { key: "noPlanYet", label: "50 employees are included in an active cycle but do not have a plan yet.", count: noPlanYet, color: "#163366" },
+      { key: "approvedAwaitingNextStage", label: "1 employees have approved plans and are awaiting the next cycle stage", count: approvedAwaitingNextStage, color: "#0d9488" },
+    ];
+  }, [cycles]);
 
   const businessUnitOptions = useMemo(() => {
     const map = new Map<number, string>();
@@ -785,7 +798,39 @@ export default function AdminDashboardWorkspace() {
         <Row justify="end"><Col><Button icon={<ReloadOutlined />} onClick={() => dashboard.refetch()} loading={dashboard.isFetching}>{t("refresh")}</Button></Col></Row>
 
         {loading ? (
-          <Card><div style={{ minHeight: 180, display: "grid", placeItems: "center" }}><Skeleton active /></div></Card>
+          <Card><Space orientation="vertical" size={18} style={{ width: "100%" }}>
+            <section>
+              <Skeleton active title={false} paragraph={false} />
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 175px), 1fr))", gap: 12, marginTop: 12 }}>
+                {Array.from({ length: 10 }, (_, index) => (
+                  <Card key={index} size="small" style={{ minHeight: 88, borderRadius: 11 }}>
+                    <Skeleton active title={{ width: "55%" }} paragraph={{ rows: 1, width: "35%" }} />
+                  </Card>
+                ))}
+              </div>
+            </section>
+            <Card title={<Skeleton.Input active size="small" style={{ width: 180 }} />}>
+              <Skeleton active paragraph={{ rows: 3 }} />
+            </Card>
+            <Card title={<Skeleton.Input active size="small" style={{ width: 180 }} />}>
+              <Skeleton active paragraph={{ rows: 4 }} />
+            </Card>
+            <Row gutter={[16, 16]} align="stretch">
+              <Col xs={24} xl={16}>
+                <Card title={<Skeleton.Input active size="small" style={{ width: 220 }} />} style={{ height: "100%" }}>
+                  <Skeleton active paragraph={{ rows: 6 }} />
+                </Card>
+              </Col>
+              <Col xs={24} xl={8}>
+                <Card title={<Skeleton.Input active size="small" style={{ width: 160 }} />} style={{ height: "100%" }}>
+                  <div style={{ minHeight: 300, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 }}>
+                    <Skeleton.Avatar active size={190} shape="circle" />
+                    <Skeleton active title={false} paragraph={{ rows: 2, width: ["90%", "70%"] }} />
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </Space></Card>
         ) : error ? (
           <Alert
             type="error"
@@ -1046,46 +1091,44 @@ export default function AdminDashboardWorkspace() {
                   style={{ height: "100%", borderRadius: 12, borderColor: "#e2e8f0" }}
                   styles={{ body: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 260 } }}
                 >
-                  {exclusionsByCycle.length ? (() => {
-                    const total = exclusionsByCycle.reduce((sum, item) => sum + item.count, 0);
+                  {(() => {
+                    const total = planStatusBreakdown.reduce((sum, item) => sum + item.count, 0);
                     const circumference = 2 * Math.PI * 48;
                     let offset = 0;
-                    const palette = ["#163366", "#d97706", "#0d9488", "#7c3aed", "#64748b", "#db2777"];
                     return (
                       <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                        <svg viewBox="0 0 120 120" role="img" aria-label={t("eligibilityExclusions") + ": " + total} style={{ width: 190, maxWidth: "100%", overflow: "visible" }}>
+                        <svg viewBox="0 0 120 120" role="img" aria-label={t("employeeStatusSummary") + ": " + total} style={{ width: 190, maxWidth: "100%", overflow: "visible" }}>
                           <circle cx="60" cy="60" r="48" fill="none" stroke="#edf1f6" strokeWidth="18" />
-                          {exclusionsByCycle.map((item, index) => {
-                            const length = (item.count / total) * circumference;
+                          {planStatusBreakdown.map((item) => {
+                            const length = total > 0 ? (item.count / total) * circumference : 0;
                             const dashOffset = -offset;
                             offset += length;
-                            const cycleName = getCycleName(item.cycle, locale);
                             return (
-                              <circle key={item.cycle.id} cx="60" cy="60" r="48" fill="none"
-                                stroke={palette[index % palette.length]} strokeWidth="18"
+                              <circle key={item.key} cx="60" cy="60" r="48" fill="none"
+                                stroke={item.color} strokeWidth="18"
                                 strokeDasharray={`${length} ${circumference - length}`}
                                 strokeDashoffset={dashOffset} transform="rotate(-90 60 60)" strokeLinecap="butt">
-                                <title>{cycleName}: {item.count.toLocaleString(locale)} ({Math.round((item.count / total) * 100)}%)</title>
+                                <title>{item.label} {item.count.toLocaleString(locale)}</title>
                               </circle>
                             );
                           })}
                           <text x="60" y="57" textAnchor="middle" fontSize="17" fontWeight="700" fill="#0f172a">{total.toLocaleString(locale)}</text>
                           <text x="60" y="70" textAnchor="middle" fontSize="6.5" fill="#64748b">{t("totalEmployees")}</text>
                         </svg>
-                        <Space orientation="vertical" size={7} style={{ width: "100%" }}>
-                          {exclusionsByCycle.map((item, index) => (
-                            <Tooltip key={item.cycle.id} title={`${getCycleName(item.cycle, locale)} · ${item.count.toLocaleString(locale)} · ${Math.round((item.count / total) * 100)}%`}>
-                              <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "help" }}>
-                                <span style={{ width: 9, height: 9, flex: "0 0 9px", borderRadius: "50%", background: palette[index % palette.length] }} />
-                                <Typography.Text ellipsis style={{ flex: 1, minWidth: 0, fontSize: 12 }}>{getCycleName(item.cycle, locale)}</Typography.Text>
-                                <Typography.Text strong style={{ fontSize: 12 }}>{item.count.toLocaleString(locale)}</Typography.Text>
+                        <Space orientation="vertical" size={10} style={{ width: "100%" }}>
+                          {planStatusBreakdown.map((item) => (
+                            <Tooltip key={item.key} title={item.label}>
+                              <div style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "help" }}>
+                                <span style={{ width: 9, height: 9, flex: "0 0 9px", borderRadius: "50%", background: item.color, marginTop: 5 }} />
+                                <Typography.Text style={{ flex: 1, minWidth: 0, fontSize: 12, lineHeight: 1.45 }}>{item.label}</Typography.Text>
+                                <Typography.Text strong style={{ fontSize: 13 }}>{item.count.toLocaleString(locale)}</Typography.Text>
                               </div>
                             </Tooltip>
                           ))}
                         </Space>
                       </div>
                     );
-                  })() : <Empty description={t("noExclusions")} />}
+                  })()}
                 </Card>
               </Col>
             </Row>
