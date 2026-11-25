@@ -10868,3 +10868,32 @@ textarea.ant-input {
   .topbar-cycle-context .ant-tag { display: none; }
   .topbar-cycle-context .ant-select { width: 145px !important; max-width: 38vw !important; }
 }
+
+
+/* Workflow approval actions use a positive green state across all plan workspaces. */
+.pmp-approve-button.ant-btn,
+.pmp-approve-button.ant-btn-primary {
+  color: #fff;
+  background: #389e0d;
+  border-color: #389e0d;
+  box-shadow: none;
+}
+
+.pmp-approve-button.ant-btn:not(:disabled):not(.ant-btn-disabled):hover,
+.pmp-approve-button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #fff;
+  background: #237804;
+  border-color: #237804;
+}
+
+.pmp-approve-button.ant-btn:not(:disabled):not(.ant-btn-disabled):active,
+.pmp-approve-button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active {
+  color: #fff;
+  background: #135200;
+  border-color: #135200;
+}
+
+.pmp-approve-button.ant-btn:focus-visible {
+  outline: 2px solid rgba(56, 158, 13, 0.28);
+  outline-offset: 2px;
+}
