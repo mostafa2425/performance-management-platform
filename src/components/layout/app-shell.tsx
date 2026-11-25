@@ -1,13 +1,15 @@
 "use client";
 
 import { AppButton } from "@/components/ui-antd-primitives";
-import { Select, Skeleton, Tag } from "antd";
+import { Select, Skeleton } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Activity,
   ArrowLeft,
+  BriefcaseBusiness,
+  CalendarDays,
   ClipboardCheck,
   FileCheck2,
   LayoutDashboard,
@@ -78,7 +80,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { logout, user, activeRole, availableRoles, setActiveRole, isReady, isAuthenticated } = useAuthSession();
-  const { cycleId, activeCycleLabel, options: cycleOptions, cycles, setCycleId } = usePerformanceCycle();
+  const { cycleId, options: cycleOptions, cycles, setCycleId } = usePerformanceCycle();
   const locale = useLocale();
   const t = useTranslations("Shell");
   const isAr = locale === "ar";
@@ -237,27 +239,54 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
           </div>
           <div className="topbar-actions">
             {availableRoles.length > 1 ? (
-              <Select
-                aria-label={isAr ? "تغيير مساحة العمل" : "Switch workspace"}
-                value={activeRole || undefined}
-                options={availableRoles.map((value: ActiveAppRole) => ({
-                  value,
-                  label: value === "admin" ? (isAr ? "مساحة المسؤول" : "Admin workspace") : value === "manager" ? (isAr ? "مساحة المدير" : "Manager workspace") : (isAr ? "مساحة الموظف" : "Employee workspace"),
-                }))}
-                onChange={(value: ActiveAppRole) => {
-                  setActiveRole(value);
-                  router.replace(homePathForUser(user, locale, value));
-                  setMobileOpen(false);
+              <div
+                className="topbar-context-pill"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  minWidth: 0,
+                  height: 40,
+                  paddingInline: 10,
+                  border: "1px solid #dbe5f1",
+                  borderRadius: 999,
+                  background: "#f5f8fc",
                 }}
-                style={{ width: 176, maxWidth: "34vw" }}
-                size="middle"
-                popupMatchSelectWidth={false}
-              />
+              >
+                <Select
+                  aria-label={isAr ? "تغيير مساحة العمل" : "Switch workspace"}
+                  value={activeRole || undefined}
+                  options={availableRoles.map((value: ActiveAppRole) => ({
+                    value,
+                    label: value === "admin" ? (isAr ? "المسؤول" : "Admin") : value === "manager" ? (isAr ? "المدير" : "Manager") : (isAr ? "الموظف" : "Employee"),
+                  }))}
+                  onChange={(value: ActiveAppRole) => {
+                    setActiveRole(value);
+                    router.replace(homePathForUser(user, locale, value));
+                    setMobileOpen(false);
+                  }}
+                  prefix={<BriefcaseBusiness size={15} color="#163366" />}
+                  variant="borderless"
+                  style={{ width: 132, maxWidth: "30vw", fontWeight: 600 }}
+                  size="middle"
+                  popupMatchSelectWidth={false}
+                />
+              </div>
             ) : null}
 
             {cycleOptions.length > 0 ? (
-              <div className="topbar-cycle-context" style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-                {activeCycleLabel ? <Tag color="processing" style={{ marginInlineEnd: 0, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>{activeCycleLabel}</Tag> : null}
+              <div
+                className="topbar-context-pill"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  minWidth: 0,
+                  height: 40,
+                  paddingInline: 10,
+                  border: "1px solid #dbe5f1",
+                  borderRadius: 999,
+                  background: "#f5f8fc",
+                }}
+              >
                 <Select
                   size="middle"
                   aria-label={isAr ? "اختيار دورة الأداء" : "Select performance cycle"}
@@ -265,7 +294,9 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
                   options={cycleOptions}
                   loading={cycles.isFetching}
                   onChange={setCycleId}
-                  style={{ width: 190, maxWidth: "32vw" }}
+                  prefix={<CalendarDays size={15} color="#163366" />}
+                  variant="borderless"
+                  style={{ width: 164, maxWidth: "34vw", fontWeight: 600 }}
                   placeholder={isAr ? "اختر الدورة" : "Select cycle"}
                   showSearch
                   optionFilterProp="label"
