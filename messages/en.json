@@ -1173,6 +1173,10 @@
     "affectedMembers": "Affected members (optional)",
     "selectAffectedMembers": "Select affected members",
     "approveGroup": "Approve group",
-    "returnGroup": "Return group"
+    "returnGroup": "Return group",
+    "statusPendingAdmin": "Pending admin",
+    "statusApproved": "Approved",
+    "statusReturned": "Returned",
+    "statusPublished": "Published"
   }
 }
