@@ -331,7 +331,7 @@ export function ApiManagerGroupWorkspace() {
       title={t("Manager–Year Group", "مجموعة المدير والسنة")}
       subtitle={t("Review team ratings and submit the group when ready.", "راجع تقديرات الفريق وأرسل المجموعة عند الجاهزية.")}
     >
-      <Space orientation="vertical" size={16} style={{ width: "100%" }}>
+      <Space className="manager-year-group-workspace" orientation="vertical" size={16} style={{ width: "100%" }}>
         <Card>
           <Select
             allowClear
