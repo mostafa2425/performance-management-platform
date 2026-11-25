@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/ui/data-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Skeleton,
@@ -23,6 +23,7 @@ import { CheckCircleFilled, ClockCircleOutlined, RollbackOutlined } from "@ant-d
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminApi, cyclesApi } from "@/lib/api/endpoints";
 import { useLocale, useTranslations } from "next-intl";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 
 type ApprovalGroup = {
   group_id: number;
@@ -71,12 +72,11 @@ export default function ApiAdminFinalReviewWorkspace() {
   const translate = useTranslations("AdminApprovals");
   const { message } = App.useApp();
   const qc = useQueryClient();
-  const [cycleId, setCycleId] = useState<number>();
+  const { cycleId } = usePerformanceCycle();
   const [selected, setSelected] = useState<ApprovalGroup | null>(null);
   const [reason, setReason] = useState("");
   const [affected, setAffected] = useState<number[]>([]);
 
-  const cycles = useQuery({ queryKey: ["cycles"], queryFn: cyclesApi.mine });
   const groups = useQuery({
     queryKey: ["admin", "cycles", cycleId, "groups"],
     queryFn: () => adminApi.groups(cycleId!, { per_page: 100 }),
@@ -124,11 +124,13 @@ export default function ApiAdminFinalReviewWorkspace() {
   });
 
   const list = ((groups.data as any)?.data || []) as ApprovalGroup[];
-  const cycleOptions = (cycles.data || []).map((cycle: any) => ({
-    value: cycle.id,
-    label: `${typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name} · ${cycle.performance_year}`,
-  }));
   const members = detail.data?.members || [];
+
+  useEffect(() => {
+    setSelected(null);
+    setReason("");
+    setAffected([]);
+  }, [cycleId]);
   const pendingAdmin = selected?.status === "pending_admin";
   const columns: ColumnsType<ApprovalGroup> = [
     {
@@ -236,16 +238,7 @@ export default function ApiAdminFinalReviewWorkspace() {
         styles={{ body: { paddingTop: 16 } }}
       >
         <Space wrap style={{ width: "100%", marginBottom: 16 }} size={12}>
-          <Select
-            showSearch
-            optionFilterProp="label"
-            style={{ width: "100%", maxWidth: 460 }}
-            placeholder={translate("selectCycle")}
-            value={cycleId}
-            onChange={(value) => { setCycleId(value); setSelected(null); }}
-            options={cycleOptions}
-            loading={cycles.isFetching}
-          />
+          <Typography.Text type="secondary">{translate("selectCycleHint")}</Typography.Text>
           {cycleId ? (
             <Typography.Text type="secondary">
               {translate("groupsCount", { count: list.length })}
@@ -253,9 +246,7 @@ export default function ApiAdminFinalReviewWorkspace() {
           ) : null}
         </Space>
 
-        {cycles.isError ? (
-          <Alert type="error" showIcon title={(cycles.error as Error).message} />
-        ) : groups.isError ? (
+        {groups.isError ? (
           <Alert type="error" showIcon title={(groups.error as Error).message} />
         ) : !cycleId ? (
           <Empty description={translate("selectCycleHint")} />
