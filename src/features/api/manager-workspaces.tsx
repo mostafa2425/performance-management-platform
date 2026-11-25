@@ -228,7 +228,7 @@ export function ApiManagerTeamWorkspace() {
                     },
                   },
                   {
-                    title: t("Plan status", "حالة الخطة"),
+                    title: t("Performance status", "حالة الأداء"),
                     dataIndex: "status",
                     width: 210,
                     render: (value: { key?: string; label?: string }) => planStatusTag(value, ar),
