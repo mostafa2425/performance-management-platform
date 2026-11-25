@@ -311,7 +311,7 @@ export function ApiManagerGroupWorkspace() {
   const blockerLabel = (blocker: any) => {
     if (blocker.message || blocker.label) return blocker.message || blocker.label;
     const code = String(blocker.code || t("Action required", "مطلوب إجراء"));
-    return code.replace(/[_-]+/g, " ").replace(/\\b\\w/g, (letter) => letter.toUpperCase());
+    return code.replace(/[_-]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
   };
 
   return (
@@ -389,7 +389,7 @@ export function ApiManagerGroupWorkspace() {
                   {
                     title: t("Current", "الحالي"),
                     key: "current",
-                    align: "end",
+                    align: "right",
                     width: 110,
                     render: (_: any, record: any) => {
                       const count = Number(g.counts?.[String(record.level)] ?? 0);
@@ -485,7 +485,7 @@ export function ApiManagerGroupWorkspace() {
                   },
                   {
                     title: t("Overall score", "النتيجة"),
-                    align: "end",
+                    align: "right",
                     render: (_: any, record: any) => record.overall_bp == null ? "—" : `${(record.overall_bp / 100).toFixed(2)}%`,
                   },
                   { title: t("Rating", "التقدير"), dataIndex: "rating_level", align: "center" },
