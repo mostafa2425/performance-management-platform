@@ -3,12 +3,13 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { DataTable } from "@/components/ui/data-table";
-import { Alert, Avatar, Button, Card, Empty, Input, Skeleton, Space, Tag, Typography } from "antd";
+import { Alert, Avatar, Button, Card, Empty, Input, Skeleton, Space, Typography } from "antd";
 import { ArrowRightOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { plansApi } from "@/lib/api/endpoints";
+import { planStatusTag } from "@/features/api/plans/plan-shared";
 import "./manager-evaluation-list-workspace.css";
 
 function localized(value: any, ar: boolean) {
@@ -51,20 +52,6 @@ export default function ApiManagerEvaluationWorkspace() {
       )}
     >
       <div className="manager-evaluation-list-workspace">
-        <Card className="evaluation-list-intro" variant="outlined">
-          <div className="evaluation-list-intro-icon"><UserOutlined /></div>
-          <div className="evaluation-list-intro-copy">
-            <Typography.Text strong>{t("Approved plans", "الخطط المعتمدة")}</Typography.Text>
-            <Typography.Text type="secondary">
-              {t(
-                "Only employee-approved plans are listed. Evaluation editing is available when the Manager Evaluation stage is open.",
-                "تظهر هنا الخطط التي اعتمدها الموظفون. يتاح تعديل التقييم عند فتح مرحلة تقييم المدير.",
-              )}
-            </Typography.Text>
-          </div>
-          <Tag color="success">{rows.length} {t("plans", "خطط")}</Tag>
-        </Card>
-
         {plans.isError ? <Alert type="error" showIcon title={(plans.error as Error).message} action={<Button onClick={() => plans.refetch()}>{t("Retry", "إعادة المحاولة")}</Button>} /> : null}
 
         <Card className="evaluation-approved-plans-card" variant="outlined">
@@ -126,9 +113,12 @@ export default function ApiManagerEvaluationWorkspace() {
                   title: t("Plan status", "حالة الخطة"),
                   dataIndex: "status",
                   render: (value: any, record: any) => {
-                    const key = value?.key || record.status?.key || "approved";
-                    const label = value?.label || record.status?.label || t("Approved", "معتمدة");
-                    return <Tag color={key === "approved" ? "success" : "default"}>{label}</Tag>;
+                    const status = value && typeof value === "object"
+                      ? value
+                      : record.status && typeof record.status === "object"
+                        ? record.status
+                        : { key: "approved", label: t("Approved", "معتمدة") };
+                    return planStatusTag(status, ar);
                   },
                 },
                 {
