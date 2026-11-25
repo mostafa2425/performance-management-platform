@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { cyclesApi } from "@/lib/api/endpoints";
 import { useAuthSession } from "@/lib/auth/session";
@@ -27,7 +27,7 @@ type PerformanceCycleContextValue = {
   activeCycleLabel?: string;
   options: CycleOption[];
   setCycleId: (id: number) => void;
-  cycles: ReturnType<typeof useQuery<PerformanceCycle[]>>;
+  cycles: UseQueryResult<PerformanceCycle[]>;
   isReady: boolean;
 };
 
