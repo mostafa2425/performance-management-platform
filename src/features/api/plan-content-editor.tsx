@@ -247,9 +247,6 @@ export function PlanContentEditor({
           <Button type="primary" ghost icon={<PlusOutlined />} onClick={openObjectiveModal}>
             {t("Add objective", "إضافة هدف")}
           </Button>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            {t("Save draft", "حفظ المسودة")}
-          </Button>
         </Space>
       </div>
 
@@ -375,6 +372,14 @@ export function PlanContentEditor({
           );
         }}
       </Form.List>
+      <div className="plan-content-editor-footer">
+        <Typography.Text type="secondary">
+          {t("Save your changes before submitting the plan.", "احفظ التعديلات قبل إرسال الخطة للمراجعة.")}
+        </Typography.Text>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {t("Save draft", "حفظ المسودة")}
+        </Button>
+      </div>
       <Modal
         open={objectiveModalOpen}
         title={t("Add objective", "إضافة هدف")}
