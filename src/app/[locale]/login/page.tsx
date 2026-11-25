@@ -55,12 +55,17 @@ export default function LoginPage() {
     <main className="login-screen" dir={ar ? "rtl" : "ltr"}>
       <section className="login-brand-panel">
         <div className="login-brand">
-          <div className="brand-mark">P</div>
-          <div>
-            <strong>
-              Perform<span>.</span>
-            </strong>
-            <small>People & performance</small>
+          <div className="login-brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" width="27" height="27" fill="none">
+              <path d="M7 29V19h6v10M17 29V12h6v17M27 29V6h6v23" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="m7 14 8-5 7 1 10-6" stroke="#b9fff0" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="m27 4 5-1-1 5" stroke="#b9fff0" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <div className="login-brand-copy">
+            <strong>Performance</strong>
+            <small>Management Platform</small>
+            <small className="login-brand-byline">BY MASTER WORKS</small>
           </div>
         </div>
         <div className="login-brand-content">
@@ -69,7 +74,7 @@ export default function LoginPage() {
           <p>{translate("text003")}</p>
         </div>
         <div className="login-brand-footer">
-          <span>© 2026 Perform.</span>
+          <span>{ar ? "© 2026 ماستر وركس. جميع الحقوق محفوظة." : "© 2026 Master Works. All rights reserved."}</span>
           <span>{translate("text006")}</span>
         </div>
       </section>
