@@ -612,8 +612,8 @@ export default function AdminDashboardWorkspace() {
       }
     }
     return [
-      { key: "noPlanYet", label: "50 employees are included in an active cycle but do not have a plan yet.", count: noPlanYet, color: "#163366" },
-      { key: "approvedAwaitingNextStage", label: "1 employees have approved plans and are awaiting the next cycle stage", count: approvedAwaitingNextStage, color: "#0d9488" },
+      { key: "noPlanYet", label: t("noPlanInActiveCycle", { count: noPlanYet }), count: noPlanYet, color: "#163366" },
+      { key: "approvedAwaitingNextStage", label: t("approvedPlansAwaitingStage", { count: approvedAwaitingNextStage }), count: approvedAwaitingNextStage, color: "#0d9488" },
     ];
   }, [cycles]);
 
@@ -1097,7 +1097,7 @@ export default function AdminDashboardWorkspace() {
                     let offset = 0;
                     return (
                       <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                        <svg viewBox="0 0 120 120" role="img" aria-label={t("employeeStatusSummary") + ": " + total} style={{ width: 190, maxWidth: "100%", overflow: "visible" }}>
+                        <svg viewBox="0 0 120 120" role="img" aria-label={t("activeCyclePlanStatus") + ": " + total} style={{ width: 190, maxWidth: "100%", overflow: "visible" }}>
                           <circle cx="60" cy="60" r="48" fill="none" stroke="#edf1f6" strokeWidth="18" />
                           {planStatusBreakdown.map((item) => {
                             const length = total > 0 ? (item.count / total) * circumference : 0;
