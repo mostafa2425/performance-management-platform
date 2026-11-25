@@ -1,27 +1,278 @@
 "use client";
 
 import { DataTable } from "@/components/ui/data-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeftOutlined, EditOutlined, CalculatorOutlined } from "@ant-design/icons";
 import { DeleteOutlined, EyeOutlined, LinkOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Alert, App, Button, Card, Col, Empty, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Skeleton, Typography } from "antd";
+import { Alert, App, Button, Card, Col, Empty, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Skeleton, Tag, Tooltip, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import "./admin-configuration-workspaces.css";
 
-export function ApiObjectiveCategoriesWorkspace(){
- const ar=useLocale()==="ar";const {message}=App.useApp();const qc=useQueryClient();const [editing,setEditing]=useState<any>(null);const [form]=Form.useForm();
- const q=useQuery({queryKey:["admin","objective-categories"],queryFn:()=>adminApi.objectiveCategories({per_page:100})});
- const save=useMutation({mutationFn:(v:any)=>editing?adminApi.updateObjectiveCategory(editing.id,{name:{ar:v.name_ar,en:v.name_en}}):adminApi.createObjectiveCategory({name:{ar:v.name_ar,en:v.name_en}}),onSuccess:async()=>{message.success(ar?"تم حفظ التصنيف":"Category saved");setEditing(null);form.resetFields();await qc.invalidateQueries({queryKey:["admin","objective-categories"]});}});
- const remove=useMutation({mutationFn:(id:number)=>adminApi.deleteObjectiveCategory(id),onSuccess:async()=>{message.success(ar?"تم حذف التصنيف":"Category deleted");await qc.invalidateQueries({queryKey:["admin","objective-categories"]});}});
- const rows=(q.data as any)?.data||[];const t=(e:string,a:string)=>ar?a:e;
- return <AppShell role="admin" title={t("Objective categories","تصنيفات الأهداف")} subtitle={t("Manage active categories used by performance plans.","إدارة التصنيفات النشطة المستخدمة في خطط الأداء.")}><Card className="admin-objective-categories-card" title={t("Categories","التصنيفات")} extra={<Button type="primary" onClick={()=>{setEditing({});form.resetFields();}}>{t("Add category","إضافة تصنيف")}</Button>}>
-  {q.isLoading?<Skeleton active/>:q.isError?<Alert type="error" title={(q.error as Error).message}/>:<DataTable rowKey="id" dataSource={rows} columns={[{title:t("Arabic name","الاسم العربي"),render:(_:any,r:any)=>r.name?.ar},{title:t("English name","الاسم الإنجليزي"),render:(_:any,r:any)=>r.name?.en},{title:"ID",dataIndex:"id"},{title:"",render:(_:any,r:any)=><Space><Button onClick={()=>{setEditing(r);form.setFieldsValue({name_ar:r.name.ar,name_en:r.name.en});}}>{t("Edit","تعديل")}</Button><Popconfirm title={t("Delete this category?","حذف هذا التصنيف؟")} onConfirm={()=>remove.mutate(r.id)}><Button danger>{t("Delete","حذف")}</Button></Popconfirm></Space>}]} />}</Card>
-  <Modal className="admin-objective-categories-modal" open={Boolean(editing)} title={editing?.id?t("Edit category","تعديل تصنيف"):t("New category","تصنيف جديد")} onCancel={()=>setEditing(null)} onOk={()=>form.submit()} confirmLoading={save.isPending}><Form form={form} layout="vertical" onFinish={v=>save.mutate(v)}><Row gutter={[16,0]}><Col xs={24} md={12}><Form.Item name="name_ar" label={t("Arabic name","الاسم العربي")} rules={[{required:true}]}><Input dir="rtl"/></Form.Item></Col><Col xs={24} md={12}><Form.Item name="name_en" label={t("English name","الاسم الإنجليزي")} rules={[{required:true}]}><Input/></Form.Item></Col></Row></Form></Modal>
- </AppShell>;
+export function ApiObjectiveCategoriesWorkspace() {
+ const ar = useLocale() === "ar";
+ const { message } = App.useApp();
+ const qc = useQueryClient();
+ const [editing, setEditing] = useState<any>(null);
+ const [search, setSearch] = useState("");
+ const [form] = Form.useForm();
+ const t = (en: string, arabic: string) => ar ? arabic : en;
+ const q = useQuery({
+  queryKey: ["admin", "objective-categories"],
+  queryFn: () => adminApi.objectiveCategories({ per_page: 100 }),
+ });
+ const rows = ((q.data as any)?.data || []) as any[];
+ const filteredRows = useMemo(() => {
+  const term = search.trim().toLocaleLowerCase();
+  if (!term) return rows;
+  return rows.filter((row: any) => [
+   row.id,
+   row.name?.ar,
+   row.name?.en,
+  ].some((value) => String(value ?? "").toLocaleLowerCase().includes(term)));
+ }, [rows, search]);
+ const closeEditor = () => {
+  setEditing(null);
+  form.resetFields();
+ };
+ const save = useMutation({
+  mutationFn: (values: any) => {
+   const payload = { name: { ar: values.name_ar.trim(), en: values.name_en.trim() } };
+   return editing?.id
+    ? adminApi.updateObjectiveCategory(editing.id, payload)
+    : adminApi.createObjectiveCategory(payload);
+  },
+  onSuccess: async () => {
+   message.success(t("Category saved successfully", "تم حفظ التصنيف بنجاح"));
+   closeEditor();
+   await qc.invalidateQueries({ queryKey: ["admin", "objective-categories"] });
+  },
+  onError: (error: Error) => message.error(error.message || t("Unable to save category", "تعذر حفظ التصنيف")),
+ });
+ const remove = useMutation({
+  mutationFn: (id: number) => adminApi.deleteObjectiveCategory(id),
+  onSuccess: async () => {
+   message.success(t("Category deleted successfully", "تم حذف التصنيف بنجاح"));
+   await qc.invalidateQueries({ queryKey: ["admin", "objective-categories"] });
+  },
+  onError: (error: Error) => message.error(error.message || t("Unable to delete category", "تعذر حذف التصنيف")),
+ });
+ const openCreate = () => {
+  form.resetFields();
+  setEditing({});
+ };
+ const openEdit = (row: any) => {
+  form.setFieldsValue({ name_ar: row.name?.ar || "", name_en: row.name?.en || "" });
+  setEditing(row);
+ };
+ const columns = [
+  {
+   title: t("Category", "التصنيف"),
+   key: "category",
+   render: (_: any, row: any) => (
+    <Space direction="vertical" size={2} className="objective-category-name-cell">
+     <Typography.Text strong>{row.name?.[ar ? "ar" : "en"] || row.name?.en || row.name?.ar || "—"}</Typography.Text>
+     <Typography.Text type="secondary" className="objective-category-id">ID: {row.id}</Typography.Text>
+    </Space>
+   ),
+  },
+  {
+   title: t("Arabic name", "الاسم العربي"),
+   key: "arabic",
+   render: (_: any, row: any) => <Typography.Text dir="rtl">{row.name?.ar || "—"}</Typography.Text>,
+  },
+  {
+   title: t("English name", "الاسم الإنجليزي"),
+   key: "english",
+   render: (_: any, row: any) => <Typography.Text>{row.name?.en || "—"}</Typography.Text>,
+  },
+  {
+   title: t("Last updated", "آخر تحديث"),
+   dataIndex: "updated_at",
+   width: 150,
+   render: (value: string) => value
+    ? new Intl.DateTimeFormat(ar ? "ar-EG" : "en-GB", { dateStyle: "medium" }).format(new Date(value))
+    : "—",
+  },
+  {
+   title: t("Actions", "الإجراءات"),
+   key: "actions",
+   width: 112,
+   align: ar ? "left" as const : "right" as const,
+   render: (_: any, row: any) => (
+    <Space size={4} className="objective-category-actions">
+     <Tooltip title={t("Edit category", "تعديل التصنيف")}>
+      <Button
+       type="text"
+       size="small"
+       icon={<EditOutlined />}
+       aria-label={t("Edit category", "تعديل التصنيف")}
+       onClick={() => openEdit(row)}
+      />
+     </Tooltip>
+     <Popconfirm
+      title={t("Delete this category?", "هل تريد حذف هذا التصنيف؟")}
+      description={t("This may affect objectives that reference this category.", "قد يؤثر ذلك على الأهداف المرتبطة بهذا التصنيف.")}
+      okText={t("Delete", "حذف")}
+      cancelText={t("Cancel", "إلغاء")}
+      okButtonProps={{ danger: true, loading: remove.isPending }}
+      onConfirm={() => remove.mutate(row.id)}
+     >
+      <Tooltip title={t("Delete category", "حذف التصنيف")}>
+       <Button
+        type="text"
+        size="small"
+        danger
+        icon={<DeleteOutlined />}
+        aria-label={t("Delete category", "حذف التصنيف")}
+       />
+      </Tooltip>
+     </Popconfirm>
+    </Space>
+   ),
+  },
+ ];
+ return (
+  <AppShell
+   role="admin"
+   title={t("Objective categories", "تصنيفات الأهداف")}
+   subtitle={t("Create and maintain the bilingual categories used to organize employee objectives.", "إنشاء وإدارة التصنيفات ثنائية اللغة المستخدمة لتنظيم أهداف الموظفين.")}
+  >
+   <Space direction="vertical" size={16} className="admin-objective-categories-workspace">
+    <Row gutter={[12, 12]}>
+     <Col xs={24} sm={12} lg={8}>
+      <Card className="objective-category-summary-card">
+       <Typography.Text type="secondary">{t("Total categories", "إجمالي التصنيفات")}</Typography.Text>
+       <div className="objective-category-summary-value">
+        <Typography.Title level={3}>{q.isSuccess ? rows.length : "—"}</Typography.Title>
+        <Tag color="blue">{t("Available", "متاحة")}</Tag>
+       </div>
+      </Card>
+     </Col>
+     <Col xs={24} sm={12} lg={16}>
+      <Card className="objective-category-guidance-card">
+       <Typography.Text strong>{t("Keep categories clear and consistent", "حافظ على وضوح التصنيفات واتساقها")}</Typography.Text>
+       <Typography.Paragraph type="secondary">
+        {t("Use both Arabic and English names so categories remain understandable across localized workspaces.", "أدخل الاسم بالعربية والإنجليزية لضمان وضوح التصنيفات في جميع واجهات النظام.")}
+       </Typography.Paragraph>
+      </Card>
+     </Col>
+    </Row>
+    <Card
+     className="admin-objective-categories-card"
+     title={
+      <div className="objective-category-card-title">
+       <div>
+        <Typography.Title level={5}>{t("Category directory", "دليل التصنيفات")}</Typography.Title>
+        <Typography.Text type="secondary">{t("Manage the categories available when employees create objectives.", "إدارة التصنيفات المتاحة عند إنشاء أهداف الموظفين.")}</Typography.Text>
+       </div>
+       <Tag>{q.isSuccess ? filteredRows.length : "—"} {t("items", "عنصر")}</Tag>
+      </div>
+     }
+     extra={
+      <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
+       {t("Add category", "إضافة تصنيف")}
+      </Button>
+     }
+    >
+     <div className="objective-category-toolbar">
+      <Input
+       allowClear
+       prefix={<SearchOutlined />}
+       value={search}
+       onChange={(event) => setSearch(event.target.value)}
+       placeholder={t("Search Arabic name, English name or ID", "ابحث بالاسم العربي أو الإنجليزي أو الرقم")}
+      />
+      {search ? (
+       <Button type="text" onClick={() => setSearch("")}>{t("Clear search", "مسح البحث")}</Button>
+      ) : null}
+     </div>
+     {q.isError ? (
+      <Alert
+       type="error"
+       showIcon
+       title={t("Unable to load objective categories", "تعذر تحميل تصنيفات الأهداف")}
+       description={(q.error as Error).message}
+       action={<Button size="small" onClick={() => q.refetch()}>{t("Retry", "إعادة المحاولة")}</Button>}
+      />
+     ) : (
+      <DataTable
+       rowKey="id"
+       ariaLabel={t("Objective categories", "تصنيفات الأهداف")}
+       dataSource={filteredRows}
+       columns={columns as any}
+       loading={q.isFetching}
+       scroll={{ x: 760 }}
+       pagination={{ pageSize: 10, showSizeChanger: true, hideOnSinglePage: true }}
+       locale={{
+        emptyText: (
+         <Empty
+          description={search
+           ? t("No categories match your search.", "لا توجد تصنيفات تطابق البحث.")
+           : t("No objective categories yet. Add the first category to get started.", "لا توجد تصنيفات بعد. أضف أول تصنيف للبدء.")}
+         >
+          {!search && !q.isError ? <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>{t("Add category", "إضافة تصنيف")}</Button> : null}
+         </Empty>
+        ),
+       }}
+      />
+     )}
+    </Card>
+   </Space>
+   <Modal
+    className="admin-objective-categories-modal"
+    open={Boolean(editing)}
+    title={editing?.id ? t("Edit objective category", "تعديل تصنيف الهدف") : t("Create objective category", "إنشاء تصنيف هدف")}
+    okText={editing?.id ? t("Save changes", "حفظ التعديلات") : t("Create category", "إنشاء التصنيف")}
+    cancelText={t("Cancel", "إلغاء")}
+    onCancel={closeEditor}
+    onOk={() => form.submit()}
+    confirmLoading={save.isPending}
+    okButtonProps={{ disabled: save.isPending }}
+    destroyOnHidden
+   >
+    <Typography.Paragraph type="secondary">
+     {t("Provide a name in both languages. These names will be shown wherever objectives are categorized.", "أدخل اسم التصنيف باللغتين، وسيظهر الاسمان عند تصنيف الأهداف في النظام.")}
+    </Typography.Paragraph>
+    <Form
+     form={form}
+     layout="vertical"
+     requiredMark="optional"
+     onFinish={(values) => save.mutate(values)}
+    >
+     <Row gutter={[16, 0]}>
+      <Col xs={24} md={12}>
+       <Form.Item
+        name="name_ar"
+        label={t("Arabic name", "الاسم العربي")}
+        rules={[
+         { required: true, whitespace: true, message: t("Enter the Arabic category name.", "أدخل اسم التصنيف بالعربية.") },
+         { max: 120, message: t("Name must be 120 characters or fewer.", "يجب ألا يزيد الاسم عن 120 حرفًا.") },
+        ]}
+       >
+        <Input dir="rtl" maxLength={120} showCount placeholder={t("e.g. تطوير الأعمال", "مثال: تطوير الأعمال")} />
+       </Form.Item>
+      </Col>
+      <Col xs={24} md={12}>
+       <Form.Item
+        name="name_en"
+        label={t("English name", "الاسم الإنجليزي")}
+        rules={[
+         { required: true, whitespace: true, message: t("Enter the English category name.", "أدخل اسم التصنيف بالإنجليزية.") },
+         { max: 120, message: t("Name must be 120 characters or fewer.", "يجب ألا يزيد الاسم عن 120 حرفًا.") },
+        ]}
+       >
+        <Input maxLength={120} showCount placeholder="e.g. Business Development" />
+       </Form.Item>
+      </Col>
+     </Row>
+    </Form>
+   </Modal>
+  </AppShell>
+ );
 }
 
 function getPolicyPreviewRows(preview:any):any[] {
