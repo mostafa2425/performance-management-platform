@@ -20,7 +20,17 @@ export function PlanSnapshotsPanel({ planId, ar }: { planId: number; ar: boolean
     enabled: Boolean(planId),
   });
 
-  if (snapshots.isLoading) return <Skeleton active />;
+  if (snapshots.isLoading) {
+    return (
+      <Space orientation="vertical" size={10} style={{ width: "100%" }}>
+        {[0, 1].map((item) => (
+          <div key={item} style={{ padding: "14px 16px", border: "1px solid #edf1f5", borderRadius: 10 }}>
+            <Skeleton active title={{ width: "46%" }} paragraph={{ rows: 1, width: "28%" }} />
+          </div>
+        ))}
+      </Space>
+    );
+  }
   if (snapshots.isError) {
     return <Alert type="error" showIcon title={(snapshots.error as Error).message} />;
   }
