@@ -27,7 +27,7 @@ import { homePathForUser } from "@/lib/auth/home-path";
 
 type Props = {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   subtitle?: string;
   /** When set, shows a back arrow in the page heading. */
   backHref?: string;
@@ -110,7 +110,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   }, [isReady, isAuthenticated, locale, role, router, user]);
 
   useEffect(() => {
-    document.title = `${title} | Perform.`;
+    document.title = title ? `${title} | Perform.` : "Perform.";
   }, [title]);
 
   const toggleCollapsed = () => {
@@ -277,10 +277,12 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
                   <ArrowLeft size={20} strokeWidth={2.2} aria-hidden />
                 </Link>
               ) : null}
-              <div>
-                <h1>{title}</h1>
-                {subtitle && <p>{subtitle}</p>}
-              </div>
+              {(title || subtitle) ? (
+                <div>
+                  {title ? <h1>{title}</h1> : null}
+                  {subtitle && <p>{subtitle}</p>}
+                </div>
+              ) : null}
             </div>
           </div>
           {children}
