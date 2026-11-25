@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Alert, Button, Input, Modal, Select, Space } from "antd";
+import { Alert, Button, Input, Modal, Select, Space, Typography } from "antd";
+import { CheckCircleFilled } from "@ant-design/icons";
 import { resolveActionLabel } from "./plan-shared";
 
 type CommentDraft = {
@@ -87,10 +88,18 @@ function PlanActionModalContent({
     setItemBody("");
   };
 
+  const isApprove = action === "approve";
+  const modalTitle = isApprove
+    ? t("Approve performance plan?", "هل تريد اعتماد خطة الأداء؟")
+    : resolveActionLabel(action, ar, plan);
+
   return (
     <Modal
       open={open}
-      title={resolveActionLabel(action, ar, plan)}
+      title={modalTitle}
+      width={480}
+      okText={isApprove ? t("Confirm approval", "تأكيد الاعتماد") : resolveActionLabel(action, ar, plan)}
+      cancelText={t("Cancel", "إلغاء")}
       onCancel={onCancel}
       onOk={() => {
         if (action === "return") {
@@ -115,10 +124,37 @@ function PlanActionModalContent({
         disabled: commentRequired || (needsReturnComments && targetOptions.length === 0),
         danger: action === "return" || action === "delete",
       }}
-      okText={resolveActionLabel(action, ar, plan)}
       destroyOnHidden
     >
-      {needsReturnComments ? (
+      {isApprove ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 14,
+            padding: 16,
+            border: "1px solid #d9f0e2",
+            borderRadius: 10,
+            background: "#f6fffa",
+          }}
+        >
+          <CheckCircleFilled
+            style={{ color: "#16a34a", fontSize: 22, marginTop: 2 }}
+            aria-hidden="true"
+          />
+          <div style={{ minWidth: 0 }}>
+            <Typography.Text strong style={{ display: "block", color: "#14532d", marginBottom: 4 }}>
+              {t("You’re approving this performance plan", "أنت بصدد اعتماد خطة الأداء هذه")}
+            </Typography.Text>
+            <Typography.Text type="secondary">
+              {t(
+                "Your approval will be recorded in the workflow history and move the plan to its next stage. Please review the plan before confirming.",
+                "سيتم تسجيل اعتمادك في سجل سير العمل، وستنتقل الخطة إلى المرحلة التالية. يُرجى مراجعة الخطة قبل التأكيد.",
+              )}
+            </Typography.Text>
+          </div>
+        </div>
+      ) : needsReturnComments ? (
         <Space orientation="vertical" size={12} style={{ width: "100%" }}>
           <Alert
             type="info"
