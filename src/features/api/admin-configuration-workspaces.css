@@ -1,0 +1,69 @@
+.admin-objective-categories-card,
+.admin-competency-templates-workspace > .ant-card {
+  overflow: hidden;
+  border: 1px solid #dfe6ef;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px #16336608;
+}
+.admin-objective-categories-card > .ant-card-head,
+.admin-competency-templates-workspace > .ant-card > .ant-card-head {
+  min-height: 58px;
+  padding-inline: 20px;
+  border-bottom-color: #edf1f6;
+}
+.admin-objective-categories-card > .ant-card-head .ant-card-head-title,
+.admin-competency-templates-workspace > .ant-card > .ant-card-head .ant-card-head-title {
+  color: #163366;
+  font-size: 15px;
+  font-weight: 720;
+}
+.admin-objective-categories-card > .ant-card-body,
+.admin-competency-templates-workspace > .ant-card > .ant-card-body { padding: 18px 20px; }
+.admin-objective-categories-card .ant-table-thead > tr > th,
+.admin-competency-templates-workspace .ant-table-thead > tr > th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.admin-objective-categories-card .ant-table-tbody > tr > td,
+.admin-competency-templates-workspace .ant-table-tbody > tr > td {
+  color: #334155;
+  font-size: 12px;
+}
+.admin-objective-categories-card .ant-btn-primary,
+.admin-competency-templates-workspace .ant-btn-primary,
+.admin-competency-templates-workspace > .ant-card .ant-btn-primary {
+  min-height: 42px;
+  border-color: #163366;
+  border-radius: 9px;
+  background: #163366;
+  box-shadow: none;
+  font-weight: 650;
+}
+.admin-objective-categories-card .ant-btn-primary:hover,
+.admin-competency-templates-workspace .ant-btn-primary:hover {
+  border-color: #10284f !important;
+  background: #10284f !important;
+}
+.admin-objective-categories-card .ant-input,
+.admin-competency-templates-workspace .ant-input,
+.admin-competency-templates-workspace .ant-select-selector,
+.admin-objective-categories-modal .ant-input {
+  min-height: 42px;
+  border-radius: 8px;
+}
+.admin-competency-templates-workspace > .ant-card + .ant-card { margin-top: 2px; }
+.admin-competency-templates-workspace .ant-form-item-label > label,
+.admin-objective-categories-modal .ant-form-item-label > label {
+  color: #475569;
+  font-size: 12px;
+  font-weight: 650;
+}
+@media (max-width: 767px) {
+  .admin-objective-categories-card > .ant-card-head,
+  .admin-competency-templates-workspace > .ant-card > .ant-card-head { padding-inline: 15px; }
+  .admin-objective-categories-card > .ant-card-body,
+  .admin-competency-templates-workspace > .ant-card > .ant-card-body { padding: 14px; }
+}
