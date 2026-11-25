@@ -241,3 +241,29 @@
 @media (max-width: 640px) {
   .evaluation-detail-toolbar { align-items: flex-start; flex-direction: column; }
 }
+
+
+.manager-evaluation-workspace .ant-btn-primary {
+  min-height: 42px;
+  border-color: #163366;
+  border-radius: 9px;
+  background: #163366;
+  box-shadow: none;
+  font-weight: 650;
+}
+.manager-evaluation-workspace .ant-btn-primary:hover {
+  border-color: #10284f !important;
+  background: #10284f !important;
+}
+.manager-evaluation-workspace .ant-input,
+.manager-evaluation-workspace .ant-input-number,
+.manager-evaluation-workspace .ant-select-selector {
+  border-radius: 8px;
+}
+.manager-evaluation-workspace .ant-input-number,
+.manager-evaluation-workspace .ant-select-selector { min-height: 42px; }
+.manager-evaluation-workspace .evaluation-section-heading .ant-tag {
+  border: 1px solid #cbd8ea;
+  background: #edf2f9;
+  color: #163366;
+}
