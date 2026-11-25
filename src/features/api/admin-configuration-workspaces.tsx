@@ -2,6 +2,8 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeftOutlined, EditOutlined, CalculatorOutlined } from "@ant-design/icons";
 import { DeleteOutlined, EyeOutlined, LinkOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { Alert, App, Button, Card, Col, Empty, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Skeleton, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -22,27 +24,85 @@ export function ApiObjectiveCategoriesWorkspace(){
  </AppShell>;
 }
 
-export function ApiPerformancePolicyWorkspace(){
- const ar=useLocale()==="ar";const {message}=App.useApp();const qc=useQueryClient();const [form]=Form.useForm();const [preview,setPreview]=useState<any>(null);
- const q=useQuery({queryKey:["admin","policy"],queryFn:adminApi.policy});
- const save=useMutation({mutationFn:(v:any)=>adminApi.savePolicy(v),onSuccess:async()=>{message.success(ar?"تم نشر إعدادات السياسة":"Policy version published");await qc.invalidateQueries({queryKey:["admin","policy"]});}});
- const previewMutation=useMutation({mutationFn:(v:any)=>adminApi.previewPolicy(v),onSuccess:setPreview});
- const t=(e:string,a:string)=>ar?a:e;const policy=q.data as any;
- return <AppShell role="admin" title={t("Performance configuration","إعدادات الأداء")} subtitle={t("Configure score weights, rating thresholds and Bell Curve limits.","إعداد أوزان النتائج وحدود التقديرات والتوزيع.")}><Card title={t("Scoring policy","سياسة احتساب الأداء")}>
-  {q.isLoading?<><Form form={form} component={false}/><Skeleton active/></>:q.isError?<><Form form={form} component={false}/><Alert type="error" title={(q.error as Error).message}/></>:<Form form={form} key={policy?.version_no ?? "policy-loading"} layout="vertical" initialValues={policy ? {base_version:policy.version_no,objectives:policy.weights_bp.objectives/100,competencies:policy.weights_bp.competencies/100,levels:policy.levels.map((l:any)=>({...l,label_ar:l.label.ar,label_en:l.label.en,threshold:l.threshold_bp/100,bell_min:l.bell_min_bp/100,bell_max:l.bell_max_bp/100}))} : undefined} onFinish={v=>save.mutate({base_version:v.base_version,weights_bp:{objectives:Math.round(v.objectives*100),competencies:Math.round(v.competencies*100)},levels:v.levels.map((l:any)=>({level:l.level,label:{ar:l.label_ar,en:l.label_en},threshold_bp:Math.round(l.threshold*100),bell_min_bp:Math.round(l.bell_min*100),bell_max_bp:Math.round(l.bell_max*100)}))})}>{policy && <>
-   <Form.Item name="base_version" hidden><Input/></Form.Item>
-   <Row gutter={[16,0]}>
-    <Col xs={24} md={12}><Form.Item name="objectives" label={t("Objectives weight (%)","وزن الأهداف (%)")} rules={[{required:true}]}><InputNumber min={0} max={100} style={{width:"100%"}}/></Form.Item></Col>
-    <Col xs={24} md={12}><Form.Item name="competencies" label={t("Competencies weight (%)","وزن الكفاءات (%)")} rules={[{required:true}]}><InputNumber min={0} max={100} style={{width:"100%"}}/></Form.Item></Col>
-   </Row>
-   <Typography.Title level={5}>{t("Rating levels","مستويات التقدير")}</Typography.Title>
-   <Form.List name="levels">{fields=><>{fields.map((f,i)=><Card size="small" key={f.key} title={`${t("Level","المستوى")} ${i+1}`} style={{marginBottom:12}}><Form.Item name={[f.name,"level"]} hidden><InputNumber/></Form.Item><Row gutter={[16,0]}><Col xs={24} md={12}><Form.Item name={[f.name,"label_ar"]} label={t("Arabic label","المسمى العربي")} rules={[{required:true}]}><Input/></Form.Item></Col><Col xs={24} md={12}><Form.Item name={[f.name,"label_en"]} label={t("English label","المسمى الإنجليزي")} rules={[{required:true}]}><Input/></Form.Item></Col><Col xs={24} md={8}><Form.Item name={[f.name,"threshold"]} label={t("Score threshold (%)","حد النتيجة (%)")}><InputNumber min={0} max={100} style={{width:"100%"}}/></Form.Item></Col><Col xs={24} md={8}><Form.Item name={[f.name,"bell_min"]} label={t("Bell Curve min (%)","الحد الأدنى للتوزيع (%)")}><InputNumber min={0} max={100} style={{width:"100%"}}/></Form.Item></Col><Col xs={24} md={8}><Form.Item name={[f.name,"bell_max"]} label={t("Bell Curve max (%)","الحد الأعلى للتوزيع (%)")}><InputNumber min={0} max={100} style={{width:"100%"}}/></Form.Item></Col></Row></Card>)}</>}</Form.List>
-   <Space wrap><Button onClick={()=>form.validateFields().then(v=>previewMutation.mutate({sizes:[2,5,10,20],levels:v.levels.map((l:any)=>({level:l.level,bell_min_bp:Math.round(l.bell_min*100),bell_max_bp:Math.round(l.bell_max*100)}))}))} loading={previewMutation.isPending}>{t("Preview Bell Curve","معاينة التوزيع")}</Button><Button type="primary" htmlType="submit" loading={save.isPending}>{t("Publish new version","نشر إصدار جديد")}</Button></Space>
-  </> }</Form>}
-  {preview&&<Card size="small" title={t("Bell Curve preview","معاينة التوزيع")} style={{marginTop:16}}><pre style={{whiteSpace:"pre-wrap"}}>{JSON.stringify(preview,null,2)}</pre></Card>}
- </Card></AppShell>;
+function getPolicyPreviewRows(preview:any):any[] {
+ if(Array.isArray(preview)) return preview;
+ for(const key of ["rows","data","results","allocations"]) if(Array.isArray(preview?.[key])) return preview[key];
+ if(preview && typeof preview==="object") {
+  const groups=Object.entries(preview).filter((entry)=>Array.isArray(entry[1]));
+  if(groups.length) return groups.flatMap(([scenario,items])=>(items as any[]).map(item=>({scenario,...item})));
+ }
+ return [];
 }
 
+export function ApiPerformancePolicyWorkspace(){
+ const ar=useLocale()==="ar";const router=useRouter();const [preview,setPreview]=useState<any>(null);
+ const q=useQuery({queryKey:["admin","policy"],queryFn:adminApi.policy});
+ const previewMutation=useMutation({mutationFn:(policy:any)=>adminApi.previewPolicy({sizes:[2,5,10,20],levels:(policy.levels||[]).map((level:any)=>({level:level.level,bell_min_bp:level.bell_min_bp,bell_max_bp:level.bell_max_bp}))}),onSuccess:setPreview});
+ const t=(en:string,arabic:string)=>ar?arabic:en;const policy=q.data as any;const levels=policy?.levels||[];const previewRows=getPolicyPreviewRows(preview);
+ const previewColumns=previewRows.length?Object.keys(previewRows[0]).map(key=>({title:key.replaceAll("_"," ").replace(/\b\w/g,(letter:string)=>letter.toUpperCase()),dataIndex:key,render:(value:any)=>value!==null&&typeof value==="object"?JSON.stringify(value):value??"—"})):[];
+ return <AppShell role="admin" title={t("Performance configuration","إعدادات الأداء")} subtitle={t("Review the current scoring policy and Bell Curve distribution before making changes.","راجع سياسة احتساب الأداء والتوزيع قبل إجراء أي تغييرات.")}>
+  <Space direction="vertical" size={16} style={{width:"100%"}}>
+   {q.isLoading?<Card><Skeleton active/></Card>:q.isError?<Alert type="error" showIcon title={t("Unable to load scoring policy","تعذر تحميل سياسة احتساب الأداء")} description={(q.error as Error).message}/>:<>
+    <Row gutter={[12,12]}>
+     <Col xs={24} sm={8}><Card className="policy-overview-card"><Typography.Text type="secondary">{t("Policy version","إصدار السياسة")}</Typography.Text><Typography.Title level={3}>{"v"+(policy?.version_no??"—")}</Typography.Title></Card></Col>
+     <Col xs={24} sm={8}><Card className="policy-overview-card"><Typography.Text type="secondary">{t("Objectives weight","وزن الأهداف")}</Typography.Text><Typography.Title level={3}>{policy?.weights_bp?.objectives!=null?(policy.weights_bp.objectives/100)+"%":"—"}</Typography.Title></Card></Col>
+     <Col xs={24} sm={8}><Card className="policy-overview-card"><Typography.Text type="secondary">{t("Competencies weight","وزن الكفاءات")}</Typography.Text><Typography.Title level={3}>{policy?.weights_bp?.competencies!=null?(policy.weights_bp.competencies/100)+"%":"—"}</Typography.Title></Card></Col>
+    </Row>
+    <Card className="policy-levels-card" title={t("Rating levels & Bell Curve","مستويات التقدير والتوزيع")} extra={<Space wrap>
+     <Button icon={<CalculatorOutlined/>} loading={previewMutation.isPending} onClick={()=>previewMutation.mutate(policy)}>{t("Preview Bell Curve","معاينة التوزيع")}</Button>
+     <Button type="primary" icon={<EditOutlined/>} onClick={()=>router.push("/admin/performance-configuration/edit")}>{t("Edit scoring policy","تعديل سياسة الاحتساب")}</Button>
+    </Space>}>
+     <Typography.Paragraph type="secondary">{t("Review score thresholds and the allowed minimum and maximum distribution for each rating level.","راجع حدود الدرجات ونسب التوزيع الدنيا والعليا المسموح بها لكل مستوى تقدير.")}</Typography.Paragraph>
+     <DataTable rowKey={(row:any)=>row.level} dataSource={levels} pagination={false} columns={[
+      {title:t("Level","المستوى"),dataIndex:"level",width:90,render:(value:any)=><Typography.Text strong>{value??"—"}</Typography.Text>},
+      {title:t("Rating","التقدير"),render:(_:any,row:any)=>row.label?.[ar?"ar":"en"]||row.label?.en||row.label?.ar||"—"},
+      {title:t("Score threshold","حد النتيجة"),render:(_:any,row:any)=>row.threshold_bp!=null?(row.threshold_bp/100)+"%":"—"},
+      {title:t("Bell Curve minimum","الحد الأدنى للتوزيع"),render:(_:any,row:any)=>row.bell_min_bp!=null?(row.bell_min_bp/100)+"%":"—"},
+      {title:t("Bell Curve maximum","الحد الأعلى للتوزيع"),render:(_:any,row:any)=>row.bell_max_bp!=null?(row.bell_max_bp/100)+"%":"—"}
+     ]}/>
+    </Card>
+    {preview&&<Card className="policy-preview-card" title={t("Bell Curve preview results","نتائج معاينة التوزيع")} extra={<Button type="text" onClick={()=>setPreview(null)}>{t("Clear preview","مسح المعاينة")}</Button>}>
+     {previewRows.length?<DataTable rowKey={(_:any,index?:number)=>String(index)} dataSource={previewRows} pagination={false} columns={previewColumns}/>:<Alert type="info" showIcon title={t("Preview generated","تم إنشاء المعاينة")} description={t("The preview service returned no tabular rows. Review the configured distribution ranges above.","أعادت خدمة المعاينة نتيجة دون صفوف جدولية. راجع نطاقات التوزيع المحددة أعلاه.")}/>}
+    </Card>}
+   </>}
+  </Space>
+ </AppShell>;
+}
+
+export function ApiPerformancePolicyEditorWorkspace(){
+ const ar=useLocale()==="ar";const router=useRouter();const {message}=App.useApp();const qc=useQueryClient();const [form]=Form.useForm();
+ const q=useQuery({queryKey:["admin","policy"],queryFn:adminApi.policy});
+ const save=useMutation({mutationFn:(v:any)=>adminApi.savePolicy({base_version:v.base_version,weights_bp:{objectives:Math.round(v.objectives*100),competencies:Math.round(v.competencies*100)},levels:v.levels.map((level:any)=>({level:level.level,label:{ar:level.label_ar,en:level.label_en},threshold_bp:Math.round(level.threshold*100),bell_min_bp:Math.round(level.bell_min*100),bell_max_bp:Math.round(level.bell_max*100)}))}),onSuccess:async()=>{message.success(ar?"تم نشر إصدار جديد من السياسة":"New policy version published");await qc.invalidateQueries({queryKey:["admin","policy"]});router.push("/admin/performance-configuration");}});
+ const t=(en:string,arabic:string)=>ar?arabic:en;const policy=q.data as any;
+ return <AppShell role="admin" title={t("Edit scoring policy","تعديل سياسة احتساب الأداء")} subtitle={t("Update score weights, rating thresholds and Bell Curve limits.","حدّث أوزان النتائج وحدود التقديرات ونسب التوزيع.")}>
+  <Space direction="vertical" size={16} style={{width:"100%"}}>
+   <Button type="text" icon={<ArrowLeftOutlined/>} onClick={()=>router.push("/admin/performance-configuration")}>{t("Back to configuration","العودة إلى الإعدادات")}</Button>
+   <Card className="policy-editor-card" title={t("Scoring policy settings","إعدادات سياسة احتساب الأداء")}>
+    {q.isLoading?<Skeleton active/>:q.isError?<Alert type="error" showIcon title={t("Unable to load scoring policy","تعذر تحميل سياسة احتساب الأداء")} description={(q.error as Error).message}/>:<Form form={form} key={policy?.version_no??"policy"} layout="vertical" initialValues={{base_version:policy?.version_no,objectives:policy?.weights_bp?.objectives/100,competencies:policy?.weights_bp?.competencies/100,levels:(policy?.levels||[]).map((level:any)=>({...level,label_ar:level.label?.ar,label_en:level.label?.en,threshold:level.threshold_bp/100,bell_min:level.bell_min_bp/100,bell_max:level.bell_max_bp/100}))}} onFinish={values=>save.mutate(values)}>
+     <Form.Item name="base_version" hidden><Input/></Form.Item>
+     <Typography.Title level={5}>{t("Score weights","أوزان النتائج")}</Typography.Title>
+     <Row gutter={[16,0]}>
+      <Col xs={24} md={12}><Form.Item name="objectives" label={t("Objectives weight (%)","وزن الأهداف (%)")} rules={[{required:true}]}><InputNumber min={0} max={100} precision={2} style={{width:"100%"}} placeholder={t("Enter objectives weight","أدخل وزن الأهداف")}/></Form.Item></Col>
+      <Col xs={24} md={12}><Form.Item name="competencies" label={t("Competencies weight (%)","وزن الكفاءات (%)")} rules={[{required:true}]}><InputNumber min={0} max={100} precision={2} style={{width:"100%"}} placeholder={t("Enter competencies weight","أدخل وزن الكفاءات")}/></Form.Item></Col>
+     </Row>
+     <Alert type="info" showIcon title={t("Weights must total 100%","يجب أن يساوي إجمالي الأوزان 100%")} description={t("Objectives and competencies weights are used to calculate the final performance score.","تُستخدم أوزان الأهداف والكفاءات في حساب نتيجة الأداء النهائية.")}/>
+     <Typography.Title level={5} style={{marginTop:24}}>{t("Rating levels","مستويات التقدير")}</Typography.Title>
+     <Form.List name="levels">{fields=><Space direction="vertical" size={12} style={{width:"100%"}}>{fields.map((field,index)=><Card size="small" key={field.key} className="policy-level-editor-card" title={t("Rating level","مستوى التقدير")+" "+(index+1)}>
+      <Form.Item name={[field.name,"level"]} hidden><InputNumber/></Form.Item>
+      <Row gutter={[16,0]}>
+       <Col xs={24} md={12}><Form.Item name={[field.name,"label_en"]} label={t("Rating label (English)","مسمى التقدير بالإنجليزية")} rules={[{required:true}]}><Input placeholder={t("e.g. Exceeds expectations","مثال: Exceeds expectations")}/></Form.Item></Col>
+       <Col xs={24} md={12}><Form.Item name={[field.name,"label_ar"]} label={t("Rating label (Arabic)","مسمى التقدير بالعربية")} rules={[{required:true}]}><Input dir="rtl" placeholder={t("مثال: يفوق التوقعات","مثال: يفوق التوقعات")}/></Form.Item></Col>
+       <Col xs={24} md={8}><Form.Item name={[field.name,"threshold"]} label={t("Score threshold (%)","حد النتيجة (%)")} rules={[{required:true}]}><InputNumber min={0} max={100} precision={2} style={{width:"100%"}} placeholder="0–100"/></Form.Item></Col>
+       <Col xs={24} md={8}><Form.Item name={[field.name,"bell_min"]} label={t("Bell Curve minimum (%)","الحد الأدنى للتوزيع (%)")} rules={[{required:true}]}><InputNumber min={0} max={100} precision={2} style={{width:"100%"}} placeholder="0–100"/></Form.Item></Col>
+       <Col xs={24} md={8}><Form.Item name={[field.name,"bell_max"]} label={t("Bell Curve maximum (%)","الحد الأعلى للتوزيع (%)")} rules={[{required:true}]}><InputNumber min={0} max={100} precision={2} style={{width:"100%"}} placeholder="0–100"/></Form.Item></Col>
+      </Row>
+     </Card>)}</Space>}</Form.List>
+     <div className="policy-editor-footer"><Button onClick={()=>router.push("/admin/performance-configuration")}>{t("Cancel","إلغاء")}</Button><Button type="primary" htmlType="submit" loading={save.isPending}>{t("Publish new version","نشر إصدار جديد")}</Button></div>
+    </Form>}
+   </Card>
+  </Space>
+ </AppShell>;
+}
 export function ApiCompetencyTemplateWorkspace(){
  const ar=useLocale()==="ar";
  const {message}=App.useApp();
