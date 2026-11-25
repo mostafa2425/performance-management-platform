@@ -1,6 +1,7 @@
 "use client";
 
 import { Tag } from "antd";
+import { CheckCircleFilled, ClockCircleOutlined, EditOutlined, FileTextOutlined, RollbackOutlined, UserOutlined } from "@ant-design/icons";
 
 export type PlanMode = "manager" | "employee" | "admin";
 
@@ -26,9 +27,9 @@ export const PLAN_STATUS_META: Record<
   not_started: { en: "Not started", ar: "لم تبدأ", color: "default" },
   draft: { en: "Draft", ar: "مسودة", color: "blue" },
   pending_admin: { en: "Pending Admin approval", ar: "بانتظار موافقة المسؤول", color: "gold" },
-  returned: { en: "Returned", ar: "مُعادة", color: "orange" },
+  returned: { en: "Returned", ar: "مُعادة", color: "error" },
   pending_employee: { en: "Pending employee review", ar: "بانتظار مراجعة الموظف", color: "purple" },
-  approved: { en: "Goals approved", ar: "الأهداف معتمدة", color: "green" },
+  approved: { en: "Goals approved", ar: "الأهداف معتمدة", color: "success" },
   complete: { en: "Evaluation complete", ar: "اكتمل التقييم", color: "success" },
 };
 
@@ -98,11 +99,22 @@ export function returnSourceLabel(source: string | null | undefined, ar: boolean
 }
 
 export function planStatusTag(value?: { key?: string; label?: string } | null, ar?: boolean) {
-  if (!value?.key) return <Tag style={{ marginInlineEnd: 0 }}>—</Tag>;
+  if (!value?.key) return <Tag className="pmp-status-tag" style={{ marginInlineEnd: 0 }}>—</Tag>;
   const meta = PLAN_STATUS_META[value.key];
-  const label = value.label || (meta ? (ar ? meta.ar : meta.en) : value.key.replaceAll("_", " "));
+  const label = (ar ? meta?.ar : value.label || meta?.en) || value.key.replaceAll("_", " ");
+  const icon = value.key === "approved" || value.key === "complete"
+    ? <CheckCircleFilled />
+    : value.key === "returned"
+      ? <RollbackOutlined />
+      : value.key.startsWith("pending_")
+        ? <ClockCircleOutlined />
+        : value.key === "draft"
+          ? <EditOutlined />
+          : value.key === "not_started"
+            ? <FileTextOutlined />
+            : <UserOutlined />;
   return (
-    <Tag color={meta?.color} style={{ marginInlineEnd: 0 }}>
+    <Tag icon={icon} color={meta?.color} className={`pmp-status-tag pmp-status-tag--${value.key}`} style={{ marginInlineEnd: 0 }}>
       {label}
     </Tag>
   );
