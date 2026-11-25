@@ -19,6 +19,7 @@ import {
   Typography,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { CheckCircleFilled } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminApi, cyclesApi } from "@/lib/api/endpoints";
 import { useLocale, useTranslations } from "next-intl";
@@ -207,7 +208,7 @@ export default function ApiAdminFinalReviewWorkspace() {
                   cancelText={translate("cancel")}
                   onConfirm={() => approve.mutate(row)}
                 >
-                  <Button size="small" type="primary" loading={approve.isPending}>
+                  <Button size="small" type="primary" className="pmp-approve-button" icon={<CheckCircleFilled />} loading={approve.isPending}>
                     {translate("approve")}
                   </Button>
                 </Popconfirm>
@@ -343,7 +344,7 @@ export default function ApiAdminFinalReviewWorkspace() {
                         okText={translate("approve")}
                         cancelText={translate("cancel")}
                       >
-                        <Button type="primary" loading={approve.isPending}>
+                        <Button type="primary" className="pmp-approve-button" icon={<CheckCircleFilled />} loading={approve.isPending}>
                           {translate("approveGroup")}
                         </Button>
                       </Popconfirm>
