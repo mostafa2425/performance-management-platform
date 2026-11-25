@@ -24,10 +24,16 @@ export function DataTable<RecordType extends object = Record<string, unknown>>({
   className,
   ariaLabel,
   size = "middle",
+  rowKey,
   ...props
 }: DataTableProps<RecordType>) {
   const classes = ["pmp-data-table", className].filter(Boolean).join(" ");
   const isLoading = Boolean(props.loading);
+  // Ant Design deprecated the optional index argument for functional rowKey.
+  // Wrap callbacks with a single-argument function so callers cannot depend on it.
+  const safeRowKey = typeof rowKey === "function"
+    ? (record: RecordType) => rowKey(record)
+    : rowKey;
   const pagination = props.pagination === false ? false : {
     hideOnSinglePage: true,
     ...(typeof props.pagination === "object" ? props.pagination : {}),
@@ -35,7 +41,7 @@ export function DataTable<RecordType extends object = Record<string, unknown>>({
 
   return (
     <div className="pmp-data-table-region" role={ariaLabel ? "region" : undefined} aria-label={ariaLabel} aria-busy={isLoading}>
-      <Table<RecordType> size={size} {...props} pagination={pagination} className={classes} />
+      <Table<RecordType> size={size} {...props} rowKey={safeRowKey} pagination={pagination} className={classes} />
     </div>
   );
 }
