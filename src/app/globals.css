@@ -10859,3 +10859,12 @@ textarea.ant-input {
 .ant-tag.ant-tag-success.ant-tag-filled {
   background-color: transparent !important;
 }
+
+
+/* Shared performance-cycle control in the application header. */
+.topbar-cycle-context { flex: 0 1 auto; }
+.topbar-cycle-context .ant-select { min-width: 130px; }
+@media (max-width: 768px) {
+  .topbar-cycle-context .ant-tag { display: none; }
+  .topbar-cycle-context .ant-select { width: 145px !important; max-width: 38vw !important; }
+}
