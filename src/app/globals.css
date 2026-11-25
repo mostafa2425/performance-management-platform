@@ -10725,6 +10725,8 @@ textarea.ant-input {
 }
 .pmp-data-table .ant-table-thead > tr > th {
   color: var(--app-primary);
+  font-size: 13px;
+  font-weight: 700;
 }
 @media (max-width: 767px) {
   .pmp-data-table-region {
