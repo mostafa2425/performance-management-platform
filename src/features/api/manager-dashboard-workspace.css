@@ -218,7 +218,8 @@
   color: #334155;
   font-size: 11px;
 }
-.manager-team-table .ant-table-container table { table-layout: auto; }\n.manager-team-table .ant-table-tbody > tr.manager-team-row-draft > td { background: #fffbeb55; }
+.manager-team-table .ant-table-container table { table-layout: auto; }
+.manager-team-table .ant-table-tbody > tr.manager-team-row-draft > td { background: #fffbeb55; }
 .manager-team-table .ant-table-tbody > tr.manager-team-row-draft:hover > td { background: #fffbebaa !important; }
 .manager-employee-cell { display: flex; align-items: center; gap: 10px; min-width: 155px; }
 .manager-employee-avatar.ant-avatar {
@@ -312,4 +313,31 @@
   .manager-team-table .ant-table-tbody > tr > td { padding-inline: 12px !important; }
   .manager-team-table .ant-pagination { display: flex; flex-wrap: wrap; gap: 5px; }
   .manager-team-table .ant-pagination .ant-pagination-total-text { width: 100%; }
+}
+
+
+/* Brand alignment with the Employee Dashboard reference */
+.manager-dashboard .manager-active-cycle-pill {
+  border-color: #cbd8ea;
+  background: #edf2f9;
+  color: #163366;
+}
+.manager-dashboard .manager-cycle-link,
+.manager-dashboard .manager-clear-filters.ant-btn { color: #163366 !important; }
+.manager-dashboard .manager-team-row-draft > td { background: #fffbeb55; }
+.manager-dashboard .manager-team-row-draft:hover > td { background: #fffbebaa !important; }
+.manager-dashboard .ant-btn-primary,
+.manager-dashboard .manager-table-action-primary.ant-btn {
+  border-color: #163366 !important;
+  background: #163366 !important;
+  box-shadow: none !important;
+}
+.manager-dashboard .ant-btn-primary:hover,
+.manager-dashboard .manager-table-action-primary.ant-btn:hover {
+  border-color: #10284f !important;
+  background: #10284f !important;
+}
+.manager-dashboard .manager-filter-control.ant-select .ant-select-selector,
+.manager-dashboard .manager-filter-control.ant-input-affix-wrapper {
+  min-height: 42px !important;
 }
