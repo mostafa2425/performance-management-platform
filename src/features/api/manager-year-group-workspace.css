@@ -4,32 +4,32 @@
   min-width: 0;
   gap: 16px;
 }
-.manager-year-group-workspace > .ant-card {
+.manager-year-group-workspace > .ant-space-item > .ant-card {
   min-width: 0;
   overflow: hidden;
   border: 1px solid #dfe6ef;
   border-radius: 14px;
   box-shadow: 0 1px 3px #16336608;
 }
-.manager-year-group-workspace > .ant-card > .ant-card-head {
+.manager-year-group-workspace > .ant-space-item > .ant-card > .ant-card-head {
   min-height: 58px;
   padding-inline: 20px;
   border-bottom-color: #edf1f6;
 }
-.manager-year-group-workspace > .ant-card > .ant-card-head .ant-card-head-title {
+.manager-year-group-workspace > .ant-space-item > .ant-card > .ant-card-head .ant-card-head-title {
   color: #163366;
   font-size: 15px;
   font-weight: 720;
 }
-.manager-year-group-workspace > .ant-card > .ant-card-body { padding: 18px 20px; }
-.manager-year-group-workspace > .ant-card:first-child .ant-card-body {
+.manager-year-group-workspace > .ant-space-item > .ant-card > .ant-card-body { padding: 18px 20px; }
+.manager-year-group-workspace > .ant-space-item:first-child > .ant-card .ant-card-body {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
   background: linear-gradient(110deg, #fff, #f7f9fc);
 }
-.manager-year-group-workspace > .ant-card:first-child .ant-select { width: min(100%, 380px) !important; }
+.manager-year-group-workspace > .ant-space-item:first-child > .ant-card .ant-select { width: min(100%, 380px) !important; }
 .manager-year-group-workspace .ant-space { gap: 12px; }
 .manager-year-group-workspace .ant-tag { border-radius: 999px; font-weight: 650; }
 .manager-year-group-workspace .ant-alert { border-radius: 10px; }
@@ -58,11 +58,11 @@
 }
 @media (max-width: 767px) {
   .manager-year-group-workspace { gap: 12px; }
-  .manager-year-group-workspace > .ant-card > .ant-card-head { padding-inline: 15px; }
-  .manager-year-group-workspace > .ant-card > .ant-card-body { padding: 14px; }
-  .manager-year-group-workspace > .ant-card:first-child .ant-card-body {
+  .manager-year-group-workspace > .ant-space-item > .ant-card > .ant-card-head { padding-inline: 15px; }
+  .manager-year-group-workspace > .ant-space-item > .ant-card > .ant-card-body { padding: 14px; }
+  .manager-year-group-workspace > .ant-space-item:first-child > .ant-card .ant-card-body {
     align-items: stretch;
     flex-direction: column;
   }
-  .manager-year-group-workspace > .ant-card:first-child .ant-select { width: 100% !important; }
+  .manager-year-group-workspace > .ant-space-item:first-child > .ant-card .ant-select { width: 100% !important; }
 }
