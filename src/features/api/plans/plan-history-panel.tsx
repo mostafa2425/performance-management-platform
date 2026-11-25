@@ -66,7 +66,20 @@ export function PlanHistoryPanel({
   });
 
   if (!planId) return null;
-  if (history.isLoading) return <Skeleton active />;
+  if (history.isLoading) {
+    return (
+      <Space orientation="vertical" size={20} style={{ width: "100%" }}>
+        {[0, 1, 2, 3].map((item) => (
+          <Space key={item} align="start" size={12} style={{ width: "100%" }}>
+            <Skeleton.Avatar active size={30} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <Skeleton active title={{ width: "54%" }} paragraph={{ rows: 2, width: ["34%", "76%"] }} />
+            </div>
+          </Space>
+        ))}
+      </Space>
+    );
+  }
   if (history.isError) {
     return <Alert type="error" showIcon title={(history.error as Error).message} />;
   }
