@@ -208,14 +208,30 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   return (
     <AppShell
       role={mode}
-      title={pageTitle}
-      subtitle={t("Review employee information, objectives, KPIs and workflow.", "راجع بيانات الموظف والأهداف ومؤشرات الأداء وسير العمل.")}
     >
       <div className="plan-detail-workspace" style={{ width: "100%", maxWidth: mode === "employee" ? 1040 : "100%", marginInline: "auto" }}>
       <Space orientation="vertical" size={16} style={{ width: "100%" }}>
-        <Button icon={<ArrowLeftOutlined />} onClick={() => router.push(listPath)} type="text">
-          {t("Back to objectives", "العودة إلى الأهداف")}
-        </Button>
+        <div className="plan-detail-page-toolbar">
+          <div className="plan-detail-page-heading">
+            <Button
+              type="text"
+              className="plan-detail-back-button"
+              icon={<ArrowLeftOutlined />}
+              aria-label={t("Back to objectives", "العودة إلى الأهداف")}
+              title={t("Back to objectives", "العودة إلى الأهداف")}
+              onClick={() => router.push(listPath)}
+            />
+            <div>
+              <Typography.Title level={3} style={{ margin: 0 }}>{pageTitle}</Typography.Title>
+              <Typography.Text type="secondary">
+                {t("Review employee information, objectives, KPIs and workflow.", "راجع بيانات الموظف والأهداف ومؤشرات الأداء وسير العمل.")}
+              </Typography.Text>
+            </div>
+          </div>
+          <div className="plan-detail-page-actions">
+            <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
+          </div>
+        </div>
 
         <Card
           className="plan-detail-hero-card"
@@ -322,17 +338,6 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
         </Card>
 
         <div className={historyVisible ? "plan-detail-workflow-grid" : undefined}>
-          <Card className="plan-detail-section plan-detail-workflow" title={t("Workflow actions", "إجراءات سير العمل")}>
-            <Space orientation="vertical" size={12} style={{ width: "100%" }}>
-              {plan.allowed_actions?.length ? (
-                <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
-              ) : <Typography.Text type="secondary">{t("No actions are available at this stage.", "لا توجد إجراءات متاحة في هذه المرحلة.")}</Typography.Text>}
-              <Typography.Text type="secondary">
-                {t("Actions are controlled by your role, plan state and cycle deadlines.", "تتحدد الإجراءات وفقاً لصلاحيتك وحالة الخطة ومواعيد الدورة.")}
-              </Typography.Text>
-            </Space>
-          </Card>
-
           {historyVisible ? (
             <Card className="plan-detail-section plan-detail-history" title={t("Workflow history", "سجل سير العمل")}>
               <PlanHistoryPanel planId={plan.id} ar={ar} />
