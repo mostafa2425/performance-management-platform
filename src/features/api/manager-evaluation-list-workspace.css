@@ -79,3 +79,37 @@
 @media (max-width: 767px) {
   .manager-evaluation-list-workspace .evaluation-approved-plans-card > .ant-card-body { padding: 14px; }
 }
+
+
+/* Keep the evaluation workspace and its table constrained to the app content width. */
+.manager-evaluation-list-workspace,
+.manager-evaluation-list-workspace .evaluation-approved-plans-card,
+.manager-evaluation-list-workspace .evaluation-approved-plans-card > .ant-card-body,
+.manager-evaluation-list-workspace .evaluation-approved-plans-table,
+.manager-evaluation-list-workspace .evaluation-approved-plans-table .pmp-data-table-region,
+.manager-evaluation-list-workspace .evaluation-approved-plans-table .ant-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.manager-evaluation-list-workspace {
+  overflow: hidden;
+}
+.manager-evaluation-list-workspace .evaluation-approved-plans-card {
+  min-width: 0;
+}
+.manager-evaluation-list-workspace .evaluation-approved-plans-heading > div {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.manager-evaluation-list-workspace .evaluation-approved-search {
+  flex: 0 1 320px;
+  min-width: 180px;
+}
+.manager-evaluation-list-workspace .evaluation-approved-plans-table .ant-table-container,
+.manager-evaluation-list-workspace .evaluation-approved-plans-table .ant-table-content {
+  max-width: 100%;
+}
+.manager-evaluation-list-workspace .evaluation-approved-plans-table .ant-table-content {
+  overflow-x: auto !important;
+}
