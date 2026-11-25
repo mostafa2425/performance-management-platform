@@ -3,9 +3,9 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Perform. | Performance Management Platform",
-    short_name: "Perform.",
-    description: "A unified workspace for performance cycles, objectives, reviews and employee development.",
+    name: "Performance Management Platform | Master Works",
+    short_name: "Performance",
+    description: "An enterprise workspace by Master Works for performance cycles, objectives, evaluations and employee development.",
     start_url: "/en/login",
     scope: "/",
     display: "standalone",
