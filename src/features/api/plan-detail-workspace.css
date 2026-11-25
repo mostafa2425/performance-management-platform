@@ -309,3 +309,68 @@
   .plan-detail-workspace .plan-workflow-event { padding: 11px; }
   .plan-detail-workspace .plan-workflow-event-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
 }
+
+
+/* Workflow history — alternate timeline, without event cards */
+.plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-tail {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+.plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-head-custom {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+.plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-content {
+  width: calc(50% - 30px);
+  margin-inline-start: 0;
+  padding: 0 2px 0 0;
+  text-align: start;
+}
+.plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-left .ant-timeline-item-content {
+  inset-inline-start: 0;
+}
+.plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-right .ant-timeline-item-content {
+  inset-inline-start: calc(50% + 30px);
+}
+.plan-detail-workspace .plan-workflow-event {
+  padding: 2px 0 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transition: none;
+}
+.plan-detail-workspace .plan-workflow-event:hover {
+  border: 0;
+  background: transparent;
+}
+.plan-detail-workspace .plan-workflow-event-heading {
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+.plan-detail-workspace .plan-workflow-event-title { gap: 7px; }
+.plan-detail-workspace .plan-workflow-event-date { white-space: normal; }
+.plan-detail-workspace .plan-workflow-event-transition { margin-top: 7px; }
+.plan-detail-workspace .plan-workflow-event-comment { max-width: 100%; }
+
+@media (max-width: 767px) {
+  .plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-content {
+    width: calc(50% - 24px);
+    margin-inline-start: 0;
+    padding: 0;
+  }
+  .plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-right .ant-timeline-item-content {
+    inset-inline-start: calc(50% + 24px);
+  }
+  .plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-left .ant-timeline-item-content {
+    inset-inline-start: 0;
+  }
+  .plan-detail-workspace .plan-workflow-event { padding: 2px 0 4px; }
+  .plan-detail-workspace .plan-workflow-event-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
