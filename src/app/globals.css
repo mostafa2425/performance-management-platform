@@ -10719,12 +10719,15 @@ textarea.ant-input {
 }
 .pmp-data-table .ant-pagination .ant-pagination-item-active {
   border-color: var(--ant-color-primary);
+  background: var(--ant-color-primary);
 }
-.pmp-data-table .ant-pagination .ant-pagination-item-active a,
+.pmp-data-table .ant-pagination .ant-pagination-item-active a {
+  color: #fff;
+}
 .pmp-data-table .ant-pagination .ant-pagination-item:hover a,
 .pmp-data-table .ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
 .pmp-data-table .ant-pagination .ant-pagination-next:hover .ant-pagination-item-link {
-  color: var(--app-primary);
+  color: var(--ant-color-primary);
 }
 .pmp-data-table .ant-pagination .ant-pagination-item:hover,
 .pmp-data-table .ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
