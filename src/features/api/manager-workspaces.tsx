@@ -257,8 +257,13 @@ export function ApiManagerTeamWorkspace() {
         )}
       </div>
       <style>{`
-        .manager-team-workspace { display: grid; gap: 14px; min-width: 0; }
+        .manager-team-workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; width: 100%; max-width: 100%; min-width: 0; overflow: hidden; }
+        .manager-team-workspace > *, .manager-team-cycle-card, .manager-team-list-card { width: 100%; max-width: 100%; min-width: 0; }
         .manager-team-cycle-card, .manager-team-list-card { border-color: #e2e8f0; border-radius: 12px; }
+        .manager-team-cycle-card .ant-card-body, .manager-team-list-card .ant-card-body { min-width: 0; max-width: 100%; }
+        .manager-team-list-card .pmp-data-table-region, .manager-team-list-card .ant-table-wrapper { width: 100%; max-width: 100%; min-width: 0; }
+        .manager-team-list-card .ant-table-container { max-width: 100%; }
+        .manager-team-list-card .ant-table-content { overflow-x: auto !important; }
         .manager-team-toolbar, .manager-team-list-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
         .manager-team-toolbar .ant-typography, .manager-team-list-heading .ant-typography { margin: 0; }
         .manager-team-toolbar .ant-typography-secondary, .manager-team-list-heading .ant-typography-secondary { font-size: 12px; }
@@ -271,7 +276,10 @@ export function ApiManagerTeamWorkspace() {
         .manager-team-stat-attention { border-color: #fecaca; }
         .manager-team-list-heading { padding-bottom: 12px; }
         .manager-team-list-heading h5.ant-typography { margin-bottom: 3px; }
-        .manager-team-list-filters { margin-bottom: 12px; }
+        .manager-team-list-filters { width: 100%; max-width: 100%; min-width: 0; margin-bottom: 12px; }
+        .manager-team-list-filters .ant-col { min-width: 0; }
+        .manager-team-list-filters .ant-input, .manager-team-list-filters .ant-select { width: 100%; max-width: 100%; }
+        .manager-team-list-heading > * { min-width: 0; }
         .manager-team-status-filter { width: 100%; }
         .manager-team-member-code { font-size: 11px; }
         .manager-team-member-row { cursor: pointer; transition: background-color .15s ease; }
