@@ -1,5 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#163366"/>
-  <path d="M112 344V168h64l80 104 80-104h64v176h-64V264l-80 96-80-96v80z" fill="#fff"/>
-  <circle cx="400" cy="112" r="28" fill="#2b5b7b"/>
+  <defs>
+    <linearGradient id="bg" x1="64" y1="40" x2="448" y2="472" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#21477F"/>
+      <stop offset="1" stop-color="#10264B"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="112" y1="96" x2="394" y2="370" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#65D7C1"/>
+      <stop offset="1" stop-color="#22A99C"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <path d="M112 364V252h58v112M227 364V174h58v190M342 364V112h58v252" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m112 190 86-58 79 14 121-72" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m354 74 44-4-4 44" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
