@@ -76,12 +76,16 @@ export function PerformanceCycleProvider({ children }: { children: React.ReactNo
   }, []);
 
   useEffect(() => {
-    if (!storageReady || !cycles.data?.length) return;
+    if (!storageReady || !cycles.isSuccess) return;
+    if (!cycles.data?.length) {
+      setCycleIdState(undefined);
+      return;
+    }
     const savedCycleExists = cycleId != null && cycles.data.some((cycle) => cycle.id === cycleId);
     if (savedCycleExists) return;
     const preferredCycle = cycles.data.find(isActiveCycle) || cycles.data[0];
     if (preferredCycle) setCycleIdState(preferredCycle.id);
-  }, [cycles.data, cycleId, storageReady]);
+  }, [cycles.data, cycles.isSuccess, cycleId, storageReady]);
 
   useEffect(() => {
     if (!storageReady) return;
