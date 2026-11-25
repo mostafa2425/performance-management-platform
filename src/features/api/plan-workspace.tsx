@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/ui/data-table";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import {
@@ -24,6 +24,7 @@ import { CheckCircleFilled, MoreOutlined } from "@ant-design/icons";
 import { cyclesApi, plansApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
 import { AppShell } from "@/components/layout/app-shell";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 import { ApiRequestError } from "@/lib/api/client";
 import type { Plan } from "@/lib/api/types";
 import { PlanActionModal } from "./plans/plan-action-modal";
@@ -72,16 +73,12 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const ar = locale === "ar";
   const { message } = App.useApp();
   const qc = useQueryClient();
-  const [cycleId, setCycleId] = useState<number>();
+  const { cycleId } = usePerformanceCycle();
   const [statusFilter, setStatusFilter] = useState<string>();
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [pendingAction, setPendingAction] = useState("");
   const [dialog, setDialog] = useState(false);
 
-  const cycles = useQuery({
-    queryKey: queryKeys.cycles,
-    queryFn: cyclesApi.mine,
-  });
   const listParams = useMemo(() => {
     const filter: Record<string, unknown> = {};
     if (cycleId) filter.cycle_id = cycleId;
@@ -92,6 +89,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const plans = useQuery({
     queryKey: [...queryKeys.plans, mode, listParams],
     queryFn: () => plansApi.list(listParams),
+    enabled: Boolean(cycleId),
   });
   const status = useQuery({
     queryKey: ["cycles", cycleId, "plan-status"],
@@ -170,10 +168,6 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
 
 
   const t = (en: string, arabic: string) => (ar ? arabic : en);
-  const cycleOptions = (cycles.data || []).map((c: any) => ({
-    value: c.id,
-    label: `${typeof c.name === "object" ? (ar ? c.name.ar : c.name.en) : c.name} · ${c.performance_year}`,
-  }));
   const rows = ((plans.data as any)?.data || []) as Plan[];
   const members = (status.data as any)?.data || [];
   const openAction = (plan: any, action: string) => {
@@ -199,17 +193,17 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const subtitle =
     mode === "admin"
       ? t(
-          "UC-013 · Review, edit, approve, or return submitted plans.",
-          "UC-013 · راجع وعدّل واعتمد أو أعد الخطط المُرسلة.",
+          "Review submitted performance plans, approve them, or return them with feedback.",
+          "راجع خطط الأداء المقدمة واعتمدها أو أعدها مع الملاحظات.",
         )
       : mode === "manager"
         ? t(
-            "UC-011 / UC-015 · Prepare objectives & KPIs and update returned plans.",
-            "UC-011 / UC-015 · إعداد الأهداف والمؤشرات وتحديث الخطط المعادة.",
+            "Create, review, and manage your team’s performance objectives throughout the active cycle.",
+            "أنشئ أهداف فريقك وراجعها وأدرها طوال دورة الأداء الحالية.",
           )
         : t(
-            "UC-014 · Review your plan and approve or request changes.",
-            "UC-014 · راجع خطتك واعتمدها أو اطلب تعديلاً.",
+            "Review your performance plan, confirm your objectives, or request changes.",
+            "راجع خطة أدائك وأكد أهدافك أو اطلب إجراء تعديلات.",
           );
 
   return (
@@ -223,19 +217,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%" }}>
         <Card>
           <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
-            {mode !== "employee" && (
-              <Col xs={24} md={8}>
-                <Select
-                  allowClear
-                  style={{ width: "100%" }}
-                  placeholder={t("Select cycle", "اختر الدورة")}
-                  options={cycleOptions}
-                  loading={cycles.isFetching}
-                  value={cycleId}
-                  onChange={setCycleId}
-                />
-              </Col>
-            )}
+
             {mode === "admin" && (
               <>
                 <Col xs={12} md={6}>
@@ -262,7 +244,6 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
           {(mode === "manager" || mode === "admin") && cycleId && (
             <Card
               size="small"
-              title={t("Start a plan (UC-011)", "بدء خطة (UC-011)")}
               style={{ marginBottom: 16 }}
             >
               <Alert
@@ -304,7 +285,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
             <DataTable
               rowKey="id"
               size="middle"
-              loading={plans.isFetching}
+              loading={{ spinning: plans.isFetching, delay: 150 }}
               locale={{ emptyText: <Empty description={t("No plans yet.", "لا توجد خطط بعد.")} /> }}
               dataSource={rows}
               pagination={{
