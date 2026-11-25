@@ -91,8 +91,8 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
     }
   });
   const resolvedRole = activeRole || (user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee");
-  const displayName = user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`);
-  const displayEmail = user?.email || t(`profile.${activeRole}.role`);
+  const displayName = user?.employee?.full_name || user?.name || t(`profile.${resolvedRole}.name`);
+  const displayEmail = user?.email || t(`profile.${resolvedRole}.role`);
 
   useEffect(() => {
     if (!isReady) return;
@@ -104,7 +104,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
       role === "admin" || role === "manager" || role === "employee" || role === undefined;
     const allowed = role === undefined || (role === activeRole && ((role === "admin" && user?.roles.admin) || (role === "manager" && user?.roles.manager) || (role === "employee" && user?.roles.employee)));
     if (!apiRole || !allowed) router.replace(homePathForUser(user, locale, activeRole));
-  }, [isReady, isAuthenticated, locale, role, router, user]);
+  }, [isReady, isAuthenticated, locale, role, router, user, activeRole]);
 
   useEffect(() => {
     document.title = title ? `${title} | Perform.` : "Perform.";
