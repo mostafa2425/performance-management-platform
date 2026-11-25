@@ -340,7 +340,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
                   {t("Add objective", "إضافة هدف")}
                 </Button>
               ) : null}
-              <WorkflowActions plan={plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
+              <WorkflowActions plan={editing ? { ...plan, allowed_actions: (plan.allowed_actions || []).filter((action: string) => !["submit", "submit_plan"].includes(action)) } : plan} ar={ar} onAction={(action) => { setPendingAction(action); setActionDialog(true); }} />
             </Space>
           </div>
         </div>
