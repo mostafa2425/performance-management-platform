@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { DataTable } from "@/components/ui/data-table";
-import { Alert, App, Avatar, Button, Card, Empty, Input, Skeleton, Space, Tag, Typography } from "antd";
+import { Alert, Avatar, Button, Card, Empty, Input, Skeleton, Space, Tag, Typography } from "antd";
 import { ArrowRightOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
@@ -20,7 +20,6 @@ function localized(value: any, ar: boolean) {
 export default function ApiManagerEvaluationWorkspace() {
   const ar = useLocale() === "ar";
   const locale = ar ? "ar" : "en";
-  const { message } = App.useApp();
   const [search, setSearch] = useState("");
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const plans = useQuery({
