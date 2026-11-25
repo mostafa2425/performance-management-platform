@@ -4,6 +4,7 @@ import {Alert,Card,Col,Empty,Row,Skeleton,Tag,Typography} from "antd";
 import {useQuery} from "@tanstack/react-query";
 import {useLocale} from "next-intl";
 import {AppShell} from "@/components/layout/app-shell";
+import {usePerformanceCycle} from "@/features/performance-cycles/performance-cycle-provider";
 import {useAuthSession} from "@/lib/auth/session";
 import {cyclesApi,plansApi,resultsApi} from "@/lib/api/endpoints";
 const rowsOf=(v:any)=>Array.isArray(v)?v:Array.isArray(v?.data)?v.data:[];
@@ -12,10 +13,11 @@ const percent=(v:any)=>typeof v==="number"?(v/100).toFixed(2)+"%":"—";
 export default function EmployeeDashboardWorkspace(){
  const ar=useLocale()==="ar",locale=ar?"ar":"en",t=(en:string,a:string)=>ar?a:en;
  const {isReady,isAuthenticated}=useAuthSession();
+ const {cycleId}=usePerformanceCycle();
  const cq=useQuery({queryKey:["employee-home-cycles"],queryFn:cyclesApi.mine,enabled:isAuthenticated});
- const pq=useQuery({queryKey:["employee-home-plans"],queryFn:()=>plansApi.list({per_page:100}),enabled:isAuthenticated});
- const rq=useQuery({queryKey:["employee-home-results"],queryFn:()=>resultsApi.mine(),enabled:isAuthenticated});
- const cycles=rowsOf(cq.data).filter((c:any)=>c.my_roles?.member),plans=rowsOf(pq.data),results=rowsOf(rq.data).filter((r:any)=>r.published===true),plan=plans[0];
+ const pq=useQuery({queryKey:["employee-home-plans",cycleId],queryFn:()=>plansApi.list({filter:cycleId?{cycle_id:cycleId}:{},per_page:100}),enabled:isAuthenticated&&Boolean(cycleId)});
+ const rq=useQuery({queryKey:["employee-home-results",cycleId],queryFn:()=>resultsApi.mine(cycleId),enabled:isAuthenticated&&Boolean(cycleId)});
+ const cycles=rowsOf(cq.data).filter((c:any)=>c.my_roles?.member&&c.id===cycleId),plans=rowsOf(pq.data),results=rowsOf(rq.data).filter((r:any)=>r.published===true),plan=plans[0];
  const busy=!isReady||cq.isLoading||pq.isLoading||rq.isLoading,error=cq.error||pq.error||rq.error;
  return <AppShell title={t("My performance","أدائي")} subtitle={t("Your current plan and published annual results.","خطتك الحالية ونتائجك السنوية المنشورة.")}>
  {busy?<Skeleton active/>:error?<Alert type="error" showIcon title={(error as Error).message}/>:<>
