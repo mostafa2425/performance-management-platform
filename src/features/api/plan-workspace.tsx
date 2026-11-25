@@ -20,7 +20,7 @@ import {
   Typography,
 } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { MoreOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, MoreOutlined } from "@ant-design/icons";
 import { cyclesApi, plansApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
 import { AppShell } from "@/components/layout/app-shell";
@@ -53,13 +53,9 @@ function ActionButtons({
         <Button
           key={action}
           size="small"
-          type={
-            action === "approve" ||
-            action === "submit" ||
-            action === "employee_approve"
-              ? "primary"
-              : "default"
-          }
+          type={["approve", "submit", "employee_approve"].includes(action) ? "primary" : "default"}
+          className={["approve", "employee_approve"].includes(action) ? "pmp-approve-button" : undefined}
+          icon={["approve", "employee_approve"].includes(action) ? <CheckCircleFilled /> : undefined}
           danger={action === "return" || action === "delete"}
           onClick={() => onAction(action)}
         >
