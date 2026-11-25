@@ -277,3 +277,57 @@
     width: 100%;
   }
 }
+
+
+/* Objective categories: compact directory and clear bilingual editing flow */
+.admin-objective-categories-workspace { width: 100%; }
+.objective-category-summary-card,
+.objective-category-guidance-card {
+  height: 100%;
+  border: 1px solid #dfe6ef;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px #16336608;
+}
+.objective-category-summary-card .ant-card-body,
+.objective-category-guidance-card .ant-card-body { padding: 16px 18px; }
+.objective-category-summary-value {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+.objective-category-summary-value .ant-typography { margin: 0; color: #163366; font-size: 28px; font-weight: 750; }
+.objective-category-guidance-card .ant-typography { display: block; }
+.objective-category-guidance-card .ant-typography-paragraph { margin: 6px 0 0; font-size: 12px; }
+.objective-category-card-title { display: flex; align-items: center; gap: 12px; }
+.objective-category-card-title > div { display: grid; gap: 3px; }
+.objective-category-card-title .ant-typography { margin: 0; }
+.objective-category-card-title .ant-typography-secondary { font-size: 12px; font-weight: 400; }
+.objective-category-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.objective-category-toolbar .ant-input-affix-wrapper { width: min(100%, 440px); min-height: 42px; border-radius: 9px; }
+.objective-category-name-cell { min-width: 150px; }
+.objective-category-id { font-size: 11px; }
+.objective-category-actions .ant-btn {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.admin-objective-categories-modal .ant-modal-body { padding-top: 10px; }
+.admin-objective-categories-modal .ant-form-item-label > label { color: #475569; font-size: 12px; font-weight: 650; }
+.admin-objective-categories-modal .ant-input { min-height: 42px; border-radius: 8px; }
+.admin-objective-categories-modal .ant-btn { min-height: 40px; border-radius: 8px; box-shadow: none; }
+@media (max-width: 767px) {
+  .objective-category-card-title { align-items: flex-start; }
+  .objective-category-toolbar { align-items: stretch; flex-direction: column; }
+  .objective-category-toolbar .ant-input-affix-wrapper { width: 100%; }
+  .admin-objective-categories-card > .ant-card-head { align-items: flex-start; }
+  .admin-objective-categories-card > .ant-card-head .ant-card-extra { margin-inline-start: 8px; }
+}
