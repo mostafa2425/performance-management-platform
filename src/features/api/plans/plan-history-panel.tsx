@@ -108,13 +108,6 @@ export function PlanHistoryPanel({
                 <Avatar size={22} icon={<UserOutlined />} />
                 <Typography.Text type="secondary">{actor}</Typography.Text>
               </Space>
-              {(event.from || event.to) ? (
-                <div className="plan-workflow-event-transition">
-                  <span>{formatHistoryValue(event.from || "—")}</span>
-                  <span className="plan-workflow-event-arrow">→</span>
-                  <strong>{formatHistoryValue(event.to || "—")}</strong>
-                </div>
-              ) : null}
               {event.return_source ? (
                 <div className="plan-workflow-event-note">{returnSourceLabel(event.return_source, ar)}</div>
               ) : null}
