@@ -1033,6 +1033,7 @@ export default function AdminDashboardWorkspace() {
         open={selectedManagerId != null}
         onClose={() => setSelectedManagerId(null)}
         size={900}
+        styles={{ wrapper: { maxWidth: "100vw" } }}
         title={
           selectedManager?.manager?.full_name
             ? t("managerEmployeesTitle", { name: selectedManager.manager.full_name })
