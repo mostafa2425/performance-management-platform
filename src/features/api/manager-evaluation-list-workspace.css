@@ -21,7 +21,7 @@
   flex: 0 0 42px;
   place-items: center;
   border-radius: 11px;
-  background: #eff6ff;
+  background: #edf2f9;
   color: var(--ant-color-primary);
   font-size: 18px;
 }
@@ -31,7 +31,7 @@
   min-width: 0;
   gap: 3px;
 }
-.evaluation-list-intro-copy > .ant-typography:first-child { color: #17243b; }
+.evaluation-list-intro-copy > .ant-typography:first-child { color: #163366; }
 .evaluation-list-intro-copy > .ant-typography-secondary { font-size: 12px; line-height: 1.6; }
 .evaluation-list-intro .ant-tag { margin: 0; }
 .evaluation-approved-plans-heading {
@@ -42,7 +42,7 @@
   margin-bottom: 14px;
 }
 .evaluation-approved-plans-heading .ant-typography { margin: 0; }
-.evaluation-approved-plans-heading h5.ant-typography { color: #17243b; }
+.evaluation-approved-plans-heading h5.ant-typography { color: #163366; }
 .evaluation-approved-plans-heading .ant-typography-secondary { font-size: 12px; }
 .evaluation-approved-search { width: min(100%, 320px); }
 .evaluation-employee-code { font-size: 11px; }
