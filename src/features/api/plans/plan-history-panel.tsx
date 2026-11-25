@@ -30,15 +30,23 @@ function formatHistoryValue(value: unknown): string {
 }
 
 function historyMeta(action: string) {
-  const key = action.toLowerCase();
-  if (key.includes("approved")) return { icon: <CheckCircleFilled />, tone: "success" };
-  if (key.includes("returned") || key.includes("reopen")) return { icon: <RollbackOutlined />, tone: "warning" };
-  if (key.includes("submitted")) return { icon: <SendOutlined />, tone: "processing" };
-  if (key.includes("created")) return { icon: <FileAddOutlined />, tone: "info" };
-  if (key.includes("saved") || key.includes("content")) return { icon: <EditOutlined />, tone: "default" };
-  if (key.includes("comment") || key.includes("modification")) return { icon: <MessageOutlined />, tone: "warning" };
-  if (key.includes("complete")) return { icon: <FileDoneOutlined />, tone: "success" };
-  return { icon: <ClockCircleOutlined />, tone: "default" };
+  // Use the API action key, not the status label, to select the timeline icon.
+  const actionMeta: Record<string, any> = {
+    plan_created: { icon: <FileAddOutlined />, tone: "info" },
+    plan_content_saved: { icon: <EditOutlined />, tone: "default" },
+    plan_submitted: { icon: <SendOutlined />, tone: "processing" },
+    plan_approved_by_admin: { icon: <CheckCircleFilled />, tone: "success" },
+    plan_approved_by_employee: { icon: <FileDoneOutlined />, tone: "success" },
+    plan_returned: { icon: <RollbackOutlined />, tone: "warning" },
+    plan_modification_requested: { icon: <MessageOutlined />, tone: "warning" },
+    plan_attention_comment: { icon: <MessageOutlined />, tone: "warning" },
+    plan_reopened: { icon: <EditOutlined />, tone: "processing" },
+    evaluation_saved: { icon: <EditOutlined />, tone: "default" },
+    evaluation_submitted: { icon: <SendOutlined />, tone: "processing" },
+    evaluation_completed: { icon: <FileDoneOutlined />, tone: "success" },
+  };
+
+  return actionMeta[action] || { icon: <ClockCircleOutlined />, tone: "default" };
 }
 
 export function PlanHistoryPanel({
