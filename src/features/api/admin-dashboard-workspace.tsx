@@ -41,6 +41,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useAuthSession } from "@/lib/auth/session";
 import { AppShell } from "@/components/layout/app-shell";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 import { adminApi, cyclesApi, employeesApi, resultsApi } from "@/lib/api/endpoints";
 import type { ApiEmployee } from "@/lib/api/types";
 
@@ -513,8 +514,8 @@ export default function AdminDashboardWorkspace() {
   const t = useTranslations("AdminDashboard");
   const { user, isReady, isAuthenticated } = useAuthSession();
   const router = useRouter();
+  const { cycleId, setCycleId, options: cycleOptions } = usePerformanceCycle();
   const [search, setSearch] = useState("");
-  const [cycleId, setCycleId] = useState<number | undefined>();
   const [businessUnitId, setBusinessUnitId] = useState<number | undefined>();
   const [departmentId, setDepartmentId] = useState<number | undefined>();
   const [status, setStatus] = useState<StatusKey | undefined>();
@@ -713,10 +714,6 @@ export default function AdminDashboardWorkspace() {
   const selectedManager = managerRows.find((row) => row.managerId === selectedManagerId);
   const selectedManagerEmployees = selectedManager?.employees || [];
 
-  const cycleOptions = cycles.map((cycle) => ({
-    value: Number(cycle.id),
-    label: getCycleName(cycle, locale) + " · " + cycle.performance_year,
-  }));
 
   const statusOptions = STATUS_KEYS.map((key) => ({
     value: key,
@@ -972,7 +969,6 @@ export default function AdminDashboardWorkspace() {
                 </Col>
                 <Col xs={24} sm={8} md={4}>
                   <Select
-                    allowClear
                     showSearch
                     optionFilterProp="label"
                     style={{ width: "100%" }}
