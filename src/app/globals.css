@@ -10816,25 +10816,4 @@ textarea.ant-input {
   background: #f5f3ff;
   color: #6d28d9;
 }
-.pmp-approve-button.ant-btn-primary {
-  border-color: #15803d !important;
-  background: #15803d !important;
-  color: #fff !important;
-  box-shadow: none !important;
-}
-.pmp-approve-button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-  border-color: #166534 !important;
-  background: #166534 !important;
-  color: #fff !important;
-}
-.pmp-approve-button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active {
-  border-color: #14532d !important;
-  background: #14532d !important;
-  color: #fff !important;
-}
-.pmp-approve-button.ant-btn-primary:disabled,
-.pmp-approve-button.ant-btn-primary.ant-btn-disabled {
-  border-color: #86c99b !important;
-  background: #86c99b !important;
-  color: #fff !important;
-}
+/* Approval actions inherit the single primary button color. */
