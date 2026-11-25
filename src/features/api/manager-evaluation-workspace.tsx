@@ -252,7 +252,7 @@ export default function ApiManagerEvaluationWorkspace() {
                               <span><small>{t("Weight", "الوزن")}</small><strong>{(kpi.weight_bp / 100).toFixed(2)}%</strong></span>
                             </div>
                           </div>
-                          <Form.Item name={["kpis", index, "plan_kpi_id"]} hidden initialValue={kpi.plan_kpi_id}>
+                          <Form.Item name={["kpis", index, "plan_kpi_id"]} hidden>
                             <Input />
                           </Form.Item>
                           <Row gutter={[16, 0]}>
@@ -342,7 +342,7 @@ export default function ApiManagerEvaluationWorkspace() {
                     {(ev.competencies || []).map((competency: any, index: number) => (
                       <Col xs={24} md={12} key={competency.id}>
                         <Card size="small" className="evaluation-competency-card">
-                          <Form.Item name={["competencies", index, "competency_id"]} hidden initialValue={competency.id}>
+                          <Form.Item name={["competencies", index, "competency_id"]} hidden>
                             <Input />
                           </Form.Item>
                           <Form.Item
