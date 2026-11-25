@@ -372,7 +372,7 @@ export function PlanContentEditor({
           );
         }}
       </Form.List>
-      <div className="plan-content-editor-footer">
+      <div className="plan-content-editor-footer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "12px 14px", marginTop: 18, border: "1px solid #dbe5f1", borderRadius: 12, background: "#f8fafc", flexWrap: "wrap" }}>
         <Typography.Text type="secondary">
           {t("Save your changes before submitting the plan.", "احفظ التعديلات قبل إرسال الخطة للمراجعة.")}
         </Typography.Text>
