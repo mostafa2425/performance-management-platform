@@ -10757,3 +10757,77 @@ textarea.ant-input {
   }
 }
 
+
+
+/* Shared semantic status tags and approval actions */
+.ant-tag.pmp-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 25px;
+  margin-inline-end: 0;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.ant-tag.pmp-status-tag .anticon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+}
+.ant-tag.pmp-status-tag.ant-tag-success,
+.ant-tag.pmp-status-tag.ant-tag-green {
+  border-color: #b7ebc6;
+  background: #f0fdf4;
+  color: #15803d;
+}
+.ant-tag.pmp-status-tag.ant-tag-error,
+.ant-tag.pmp-status-tag.ant-tag-red,
+.ant-tag.pmp-status-tag.ant-tag-volcano {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.ant-tag.pmp-status-tag.ant-tag-processing,
+.ant-tag.pmp-status-tag.ant-tag-blue {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+.ant-tag.pmp-status-tag.ant-tag-warning,
+.ant-tag.pmp-status-tag.ant-tag-gold,
+.ant-tag.pmp-status-tag.ant-tag-orange {
+  border-color: #fed7aa;
+  background: #fff7ed;
+  color: #c2410c;
+}
+.ant-tag.pmp-status-tag.ant-tag-purple {
+  border-color: #ddd6fe;
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+.pmp-approve-button.ant-btn-primary {
+  border-color: #15803d !important;
+  background: #15803d !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+.pmp-approve-button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  border-color: #166534 !important;
+  background: #166534 !important;
+  color: #fff !important;
+}
+.pmp-approve-button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active {
+  border-color: #14532d !important;
+  background: #14532d !important;
+  color: #fff !important;
+}
+.pmp-approve-button.ant-btn-primary:disabled,
+.pmp-approve-button.ant-btn-primary.ant-btn-disabled {
+  border-color: #86c99b !important;
+  background: #86c99b !important;
+  color: #fff !important;
+}
