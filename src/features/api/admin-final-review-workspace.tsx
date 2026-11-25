@@ -19,7 +19,7 @@ import {
   Typography,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { CheckCircleFilled } from "@ant-design/icons";
+import { CheckCircleFilled, ClockCircleOutlined, RollbackOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminApi, cyclesApi } from "@/lib/api/endpoints";
 import { useLocale, useTranslations } from "next-intl";
@@ -53,10 +53,16 @@ function statusLabel(status: string, labels: Record<string, string>) {
 
 function statusColor(status: string) {
   if (status === "pending_admin") return "processing";
-  if (status === "approved") return "success";
+  if (status === "approved" || status === "published") return "success";
   if (status === "returned") return "error";
-  if (status === "published") return "success";
   return "default";
+}
+
+function statusIcon(status: string) {
+  if (status === "approved" || status === "published") return <CheckCircleFilled />;
+  if (status === "returned") return <RollbackOutlined />;
+  if (status === "pending_admin") return <ClockCircleOutlined />;
+  return undefined;
 }
 
 export default function ApiAdminFinalReviewWorkspace() {
@@ -155,7 +161,7 @@ export default function ApiAdminFinalReviewWorkspace() {
       dataIndex: "status",
       width: 155,
       render: (value: string) => (
-        <Tag color={statusColor(value)}>{statusLabel(value, { pending_admin: translate("statusPendingAdmin"), approved: translate("statusApproved"), returned: translate("statusReturned"), published: translate("statusPublished") })}</Tag>
+        <Tag className="pmp-status-tag" icon={statusIcon(value)} color={statusColor(value)}>{statusLabel(value, { pending_admin: translate("statusPendingAdmin"), approved: translate("statusApproved"), returned: translate("statusReturned"), published: translate("statusPublished") })}</Tag>
       ),
     },
     {
@@ -279,7 +285,7 @@ export default function ApiAdminFinalReviewWorkspace() {
           <Space orientation="vertical" style={{ width: "100%" }} size={16}>
             <Space wrap>
               <Tag color="blue">#{selected.group_id}</Tag>
-              <Tag color={statusColor(selected.status)}>{statusLabel(selected.status, { pending_admin: translate("statusPendingAdmin"), approved: translate("statusApproved"), returned: translate("statusReturned"), published: translate("statusPublished") })}</Tag>
+              <Tag className="pmp-status-tag" icon={statusIcon(selected.status)} color={statusColor(selected.status)}>{statusLabel(selected.status, { pending_admin: translate("statusPendingAdmin"), approved: translate("statusApproved"), returned: translate("statusReturned"), published: translate("statusPublished") })}</Tag>
               <Typography.Text type="secondary">
                 {selected.manager?.name || "—"} · {selected.manager?.code || "—"}
               </Typography.Text>
