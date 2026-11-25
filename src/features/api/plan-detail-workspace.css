@@ -374,3 +374,41 @@
     gap: 4px;
   }
 }
+
+
+/* Workflow history — improve readability on the alternate timeline */
+.plan-detail-workspace .plan-workflow-event-title .ant-typography {
+  font-size: 15px;
+  line-height: 1.5;
+}
+.plan-detail-workspace .plan-workflow-event-title .ant-tag {
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 2px 8px;
+}
+.plan-detail-workspace .plan-workflow-event-date {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.plan-detail-workspace .plan-workflow-event-actor .ant-typography {
+  font-size: 13px;
+}
+.plan-detail-workspace .plan-workflow-event-actor .ant-avatar {
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+}
+.plan-detail-workspace .plan-workflow-event-note {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.plan-detail-workspace .plan-workflow-event-comment {
+  font-size: 13px;
+  line-height: 1.7;
+}
+@media (max-width: 767px) {
+  .plan-detail-workspace .plan-workflow-event-title .ant-typography { font-size: 14px; }
+  .plan-detail-workspace .plan-workflow-event-date { font-size: 11px; }
+  .plan-detail-workspace .plan-workflow-event-actor .ant-typography { font-size: 12px; }
+  .plan-detail-workspace .plan-workflow-event-comment { font-size: 12px; }
+}
