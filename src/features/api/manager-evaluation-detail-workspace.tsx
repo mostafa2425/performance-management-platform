@@ -43,7 +43,6 @@ export default function ApiManagerEvaluationWorkspace() {
   const router = useRouter();
   const planId = Number(params.planId);
   const [uploadingKpiId, setUploadingKpiId] = useState<number | null>(null);
-  const [form] = Form.useForm();
 
   const planInfoQuery = useQuery({
     queryKey: ["plans", planId, "manager-evaluation-detail"],
@@ -58,7 +57,7 @@ export default function ApiManagerEvaluationWorkspace() {
   const save = useMutation({
     mutationFn: (body: any) => plansApi.saveEvaluation(planId!, body),
     onSuccess: async () => {
-      message.success(ar ? "تم حفظ التقييم" : "Evaluation saved");
+      message.success(ar ? "تم حفظ مسودة التقييم" : "Evaluation draft saved");
       await qc.invalidateQueries({ queryKey: ["plans", planId, "evaluation"] });
     },
   });
@@ -159,20 +158,30 @@ export default function ApiManagerEvaluationWorkspace() {
                   title={t("This member is not evaluable.", "لا يمكن تقييم هذا الموظف حالياً.")}
                 />
               ) : null}
-              {!ev.editable ? (
+              {ev.evaluable && !ev.editable ? (
                 <Alert
                   className="evaluation-notice"
                   type="info"
                   showIcon
                   title={t(
-                    "Evaluation is read-only in the current workflow state.",
-                    "التقييم للقراءة فقط في حالة سير العمل الحالية.",
+                    "This employee is eligible for evaluation, but editing is not open yet. The Save Draft action will become available when the Manager Evaluation stage is active or the group has been returned by Admin.",
+                    "هذا الموظف مؤهل للتقييم، لكن التعديل غير متاح في المرحلة الحالية. سيتاح حفظ المسودة عند فتح مرحلة تقييم المدير أو بعد إرجاع المجموعة من المسؤول.",
+                  )}
+                />
+              ) : null}
+              {ev.requires_evidence ? (
+                <Alert
+                  className="evaluation-notice"
+                  type="warning"
+                  showIcon
+                  title={t(
+                    "Supporting evidence is required before the Manager–Year Group can be submitted.",
+                    "يلزم إرفاق أدلة داعمة قبل إرسال مجموعة المدير والسنة للمراجعة.",
                   )}
                 />
               ) : null}
 
               <Form
-                form={form}
                 key={`${planId}-${ev.version}`}
                 layout="vertical"
                 initialValues={initial()}
@@ -219,6 +228,7 @@ export default function ApiManagerEvaluationWorkspace() {
                               <Form.Item
                                 name={["kpis", index, "actual"]}
                                 label={t("Actual value", "القيمة الفعلية")}
+                                rules={[{ required: true, message: t("Enter the actual KPI value.", "أدخل القيمة الفعلية لمؤشر الأداء.") }]}
                               >
                                 <InputNumber
                                   className="evaluation-full-control"
@@ -342,8 +352,8 @@ export default function ApiManagerEvaluationWorkspace() {
                 <div className="evaluation-form-actions">
                   <Typography.Text type="secondary">
                     {ev.editable
-                      ? t("Your changes are saved when you submit this evaluation.", "سيتم حفظ التغييرات عند إرسال التقييم.")
-                      : t("This evaluation cannot be edited at this stage.", "لا يمكن تعديل هذا التقييم في هذه المرحلة.")}
+                      ? t("Save this evaluation as a draft. It remains editable until the Manager–Year Group is submitted.", "احفظ التقييم كمسودة. سيظل قابلاً للتعديل حتى إرسال مجموعة المدير والسنة.")
+                      : t("Read-only until the Manager Evaluation stage opens or Admin returns the submitted group.", "للقراءة فقط حتى فتح مرحلة تقييم المدير أو إرجاع المجموعة من المسؤول.")}
                   </Typography.Text>
                   <Button
                     type="primary"
@@ -352,7 +362,7 @@ export default function ApiManagerEvaluationWorkspace() {
                     loading={save.isPending}
                     disabled={!ev.editable || !ev.evaluable}
                   >
-                    {t("Save evaluation", "حفظ التقييم")}
+                    {t("Save draft", "حفظ المسودة")}
                   </Button>
                 </div>
               </Form>
