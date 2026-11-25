@@ -367,6 +367,17 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                   width: 76,
                   align: "center" as const,
                   render: (_: unknown, r: Plan) => {
+                    if (mode !== "admin") {
+                      return (
+                        <ActionButtons
+                          actions={r.allowed_actions || []}
+                          ar={ar}
+                          plan={r}
+                          onAction={(action) => openAction(r, action)}
+                        />
+                      );
+                    }
+
                     // Prefer backend permissions. The current list response exposes
                     // status but not allowed_actions; pending_admin is reviewable by Admin.
                     const actions = Array.isArray(r.allowed_actions)
@@ -401,7 +412,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                         </Dropdown>
                       </div>
                     );
-                  },
+                  },,
                 },
               ]}
             />
