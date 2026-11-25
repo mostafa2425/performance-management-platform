@@ -46,6 +46,14 @@ function formatDate(value: string | null | undefined, locale: string) {
   }).format(date);
 }
 
+function statusLabel(status: string, translate: (key: string) => string) {
+  if (status === "pending_admin") return translate("statusPendingAdmin");
+  if (status === "approved") return translate("statusApproved");
+  if (status === "returned") return translate("statusReturned");
+  if (status === "published") return translate("statusPublished");
+  return status.replaceAll("_", " ");
+}
+
 function statusColor(status: string) {
   if (status === "pending_admin") return "processing";
   if (status === "approved") return "success";
@@ -150,7 +158,7 @@ export default function ApiAdminFinalReviewWorkspace() {
       dataIndex: "status",
       width: 155,
       render: (value: string) => (
-        <Tag color={statusColor(value)}>{value.replaceAll("_", " ")}</Tag>
+        <Tag color={statusColor(value)}>{statusLabel(value, translate)}</Tag>
       ),
     },
     {
@@ -274,7 +282,7 @@ export default function ApiAdminFinalReviewWorkspace() {
           <Space orientation="vertical" style={{ width: "100%" }} size={16}>
             <Space wrap>
               <Tag color="blue">#{selected.group_id}</Tag>
-              <Tag color={statusColor(selected.status)}>{selected.status.replaceAll("_", " ")}</Tag>
+              <Tag color={statusColor(selected.status)}>{statusLabel(selected.status, translate)}</Tag>
               <Typography.Text type="secondary">
                 {selected.manager?.name || "—"} · {selected.manager?.code || "—"}
               </Typography.Text>
