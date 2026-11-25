@@ -67,28 +67,28 @@
 .evaluation-loading .ant-card-body { display: grid; min-height: 180px; place-items: center; }
 .manager-evaluation-workspace .evaluation-employee-card { overflow: hidden; }
 .manager-evaluation-workspace .evaluation-employee-card > .ant-card-head {
-  background: linear-gradient(110deg, #10243b 0%, #153b4a 100%);
-  border-bottom-color: rgba(255,255,255,.1);
+  background: transparent;
+  border-bottom: 0;
 }
 .manager-evaluation-workspace .evaluation-employee-card > .ant-card-head .ant-card-head-title,
 .manager-evaluation-workspace .evaluation-employee-card > .ant-card-head .ant-card-extra,
 .manager-evaluation-workspace .evaluation-employee-card > .ant-card-head .ant-typography {
-  color: #fff;
+  color: #17243b;
 }
 .evaluation-employee-avatar {
   display: grid;
   width: 36px;
   height: 36px;
   place-items: center;
-  border: 1px solid rgba(45,212,191,.35);
+  border: 1px solid #dbeafe;
   border-radius: 10px;
-  background: rgba(20,184,166,.15);
-  color: #5eead4;
+  background: #eff6ff;
+  color: var(--ant-color-primary);
 }
 .evaluation-employee-subtitle {
   display: block;
   margin-top: 3px;
-  color: #b7c5d5 !important;
+  color: #64748b !important;
   font-size: 11px;
   font-weight: 400;
 }
@@ -219,4 +219,25 @@
   .evaluation-form-actions { align-items: stretch; flex-direction: column; }
   .evaluation-form-actions .ant-btn { width: 100%; }
   .evaluation-evidence { align-items: flex-start; flex-direction: column; }
+}
+
+.evaluation-detail-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.evaluation-detail-toolbar .ant-btn { color: var(--ant-color-primary); font-weight: 650; }
+.evaluation-detail-toolbar > .ant-typography { font-size: 12px; }
+.manager-evaluation-workspace .evaluation-employee-card > .ant-card-head .ant-tag {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.evaluation-kpi-meta strong { color: var(--ant-color-primary); }
+.evaluation-section-heading h5.ant-typography { color: #163366; }
+.evaluation-summary-tile .ant-statistic-content { color: #163366; }
+.evaluation-result { border-color: #bbf7d0; background: #f0fdf4; }
+@media (max-width: 640px) {
+  .evaluation-detail-toolbar { align-items: flex-start; flex-direction: column; }
 }
