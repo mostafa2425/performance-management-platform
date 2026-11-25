@@ -42,19 +42,22 @@ button {
   outline: 2px solid #42bda4;
   outline-offset: 2px;
 }
-.ant-btn-primary {
-  background-color: var(--ant-color-primary) !important;
-  border-color: var(--ant-color-primary) !important;
-  color: #fff !important;
-  box-shadow: none;
-}
-.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-  background-color: var(--ant-color-primary-hover, var(--ant-color-primary)) !important;
-  border-color: var(--ant-color-primary-hover, var(--ant-color-primary)) !important;
-}
+.ant-btn-primary,
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover,
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):focus,
 .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active {
-  background-color: var(--ant-color-primary-active, var(--ant-color-primary)) !important;
-  border-color: var(--ant-color-primary-active, var(--ant-color-primary)) !important;
+  background: #163366 !important;
+  border-color: #163366 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+}
+.ant-btn-primary:disabled,
+.ant-btn-primary.ant-btn-disabled {
+  background: #163366 !important;
+  border-color: #163366 !important;
+  color: #fff !important;
+  opacity: 0.55;
 }
 
 /* Application shell */
@@ -10009,7 +10012,7 @@ body {
   min-height: auto;
 }
 .ant-btn {
-  font-weight: 600;
+  font-weight: 500;
 }
 .ant-table-wrapper {
   max-width: 100%;
@@ -10181,7 +10184,7 @@ textarea.ant-input {
   height: 42px !important;
   padding-inline: 15px;
   box-shadow: none !important;
-  font-weight: 600;
+  font-weight: 500;
 }
 .ant-btn:hover,
 .ant-btn:focus,
