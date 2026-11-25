@@ -238,7 +238,6 @@ export default function ApiAdminFinalReviewWorkspace() {
         styles={{ body: { paddingTop: 16 } }}
       >
         <Space wrap style={{ width: "100%", marginBottom: 16 }} size={12}>
-          <Typography.Text type="secondary">{translate("selectCycleHint")}</Typography.Text>
           {cycleId ? (
             <Typography.Text type="secondary">
               {translate("groupsCount", { count: list.length })}
