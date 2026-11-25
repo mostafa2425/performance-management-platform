@@ -10817,3 +10817,40 @@ textarea.ant-input {
   color: #6d28d9;
 }
 /* Approval actions inherit the single primary button color. */
+
+
+/* Performance cycle scope — keep all four multi-select controls aligned at 42px. */
+.cycle-scope-multi-select.ant-select-multiple {
+  width: 100%;
+}
+.cycle-scope-multi-select.ant-select-multiple .ant-select-selector {
+  min-height: 42px !important;
+  height: 42px;
+  align-items: center;
+  padding-block: 3px !important;
+  border-radius: 8px !important;
+}
+.cycle-scope-multi-select.ant-select-multiple .ant-select-selection-wrap {
+  min-height: 34px;
+  align-items: center;
+}
+.cycle-scope-multi-select.ant-select-multiple .ant-select-selection-overflow {
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: hidden;
+}
+.cycle-scope-multi-select.ant-select-multiple .ant-select-selection-overflow-item {
+  flex: 0 0 auto;
+}
+.cycle-scope-multi-select.ant-select-multiple .ant-select-selection-placeholder {
+  inset-inline-start: 11px;
+  inset-inline-end: 28px;
+  line-height: 32px;
+}
+.cycle-scope-multi-select.ant-select-multiple .ant-select-selection-search {
+  margin-inline-start: 2px;
+}
+.cycle-scope-multi-select.ant-select-multiple.ant-select-focused .ant-select-selector,
+.cycle-scope-multi-select.ant-select-multiple:hover .ant-select-selector {
+  border-color: var(--ant-color-primary) !important;
+}
