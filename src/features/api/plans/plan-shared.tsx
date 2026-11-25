@@ -23,12 +23,13 @@ export const PLAN_STATUS_META: Record<
   string,
   { en: string; ar: string; color?: string }
 > = {
-  not_started: { en: "Not started", ar: "لم تبدأ" },
+  not_started: { en: "Not started", ar: "لم تبدأ", color: "default" },
   draft: { en: "Draft", ar: "مسودة", color: "blue" },
   pending_admin: { en: "Pending Admin approval", ar: "بانتظار موافقة المسؤول", color: "gold" },
   returned: { en: "Returned", ar: "مُعادة", color: "orange" },
   pending_employee: { en: "Pending employee review", ar: "بانتظار مراجعة الموظف", color: "purple" },
   approved: { en: "Goals approved", ar: "الأهداف معتمدة", color: "green" },
+  complete: { en: "Evaluation complete", ar: "اكتمل التقييم", color: "success" },
 };
 
 const ACTION_LABELS: Record<string, [string, string]> = {
