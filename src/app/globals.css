@@ -96,8 +96,7 @@ button {
   border-radius: 12px;
   background: linear-gradient(145deg, #48c6a7, #168b82);
   color: white;
-  font-size: 26px;
-  font-weight: 800;
+  color: #ffffff;
   box-shadow: 0 7px 18px #0b151f44;
 }
 .brand-lockup strong,
@@ -117,8 +116,15 @@ button {
   display: block;
   margin-top: 3px;
   color: #9babc2;
-  font-size: 14px;
-  letter-spacing: 0.35px;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+.brand-lockup .brand-byline {
+  margin-top: 5px;
+  color: #59cdb4;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 1.15px;
 }
 .workspace-label {
   padding: 0 12px 11px;
