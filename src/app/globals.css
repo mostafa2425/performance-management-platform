@@ -8,7 +8,7 @@
   --app-muted: #718096;
   --app-border: #e8edf4;
   --app-primary: #163366;
-  --app-accent: #20a58a;
+  --app-accent: var(--ant-color-primary);
   --sidebar: #163366;
 }
 * {
@@ -43,7 +43,18 @@ button {
   outline-offset: 2px;
 }
 .ant-btn-primary {
+  background-color: var(--ant-color-primary) !important;
+  border-color: var(--ant-color-primary) !important;
+  color: #fff !important;
   box-shadow: none;
+}
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  background-color: var(--ant-color-primary-hover, var(--ant-color-primary)) !important;
+  border-color: var(--ant-color-primary-hover, var(--ant-color-primary)) !important;
+}
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active {
+  background-color: var(--ant-color-primary-active, var(--ant-color-primary)) !important;
+  border-color: var(--ant-color-primary-active, var(--ant-color-primary)) !important;
 }
 
 /* Application shell */
@@ -4504,7 +4515,7 @@ body {
   text-decoration: none;
 }
 .breadcrumb-home:hover {
-  color: var(--app-primary);
+  color: var(--ant-color-primary);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -10589,7 +10600,7 @@ textarea.ant-input {
   --pmp-table-row-border: #f1f5f9;
   --pmp-table-text: #475569;
   --pmp-table-muted: #64748b;
-  --pmp-table-accent: #0d9488;
+  --pmp-table-accent: var(--ant-color-primary);
 }
 
 .ant-table-wrapper:not(.manager-team-table) {
@@ -10707,7 +10718,7 @@ textarea.ant-input {
   padding: 22px 14px !important;
 }
 .pmp-data-table .ant-pagination .ant-pagination-item-active {
-  border-color: var(--app-primary);
+  border-color: var(--ant-color-primary);
 }
 .pmp-data-table .ant-pagination .ant-pagination-item-active a,
 .pmp-data-table .ant-pagination .ant-pagination-item:hover a,
