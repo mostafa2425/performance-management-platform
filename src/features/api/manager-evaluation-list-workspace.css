@@ -1,0 +1,56 @@
+.manager-evaluation-list-workspace {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.manager-evaluation-list-workspace .ant-card {
+  border-color: #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .04);
+}
+.evaluation-list-intro .ant-card-body {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px 18px;
+}
+.evaluation-list-intro-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  border-radius: 11px;
+  background: #eff6ff;
+  color: var(--ant-color-primary);
+  font-size: 18px;
+}
+.evaluation-list-intro-copy {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 3px;
+}
+.evaluation-list-intro-copy > .ant-typography:first-child { color: #17243b; }
+.evaluation-list-intro-copy > .ant-typography-secondary { font-size: 12px; line-height: 1.6; }
+.evaluation-list-intro .ant-tag { margin: 0; }
+.evaluation-approved-plans-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.evaluation-approved-plans-heading .ant-typography { margin: 0; }
+.evaluation-approved-plans-heading h5.ant-typography { color: #17243b; }
+.evaluation-approved-plans-heading .ant-typography-secondary { font-size: 12px; }
+.evaluation-approved-search { width: min(100%, 320px); }
+.evaluation-employee-code { font-size: 11px; }
+.evaluation-approved-plans-table .ant-table-thead > tr > th { white-space: nowrap; }
+.evaluation-approved-plans-table .ant-tag { margin: 0; font-weight: 650; }
+@media (max-width: 767px) {
+  .evaluation-list-intro .ant-card-body { align-items: flex-start; flex-wrap: wrap; }
+  .evaluation-list-intro .ant-tag { margin-inline-start: 55px; }
+  .evaluation-approved-plans-heading { align-items: stretch; flex-direction: column; }
+  .evaluation-approved-search { width: 100%; }
+}
