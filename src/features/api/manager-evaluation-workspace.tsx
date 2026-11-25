@@ -23,7 +23,7 @@ export default function ApiManagerEvaluationWorkspace() {
   const ar = useLocale() === "ar";
   const locale = ar ? "ar" : "en";
   const [search, setSearch] = useState("");
-  const { cycleId } = usePerformanceCycle();
+  const { cycleId, activeCycleLabel } = usePerformanceCycle();
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const plans = useQuery({
     queryKey: ["plans", "manager-evaluation-approved", cycleId],
@@ -102,11 +102,8 @@ export default function ApiManagerEvaluationWorkspace() {
                 {
                   title: t("Performance cycle", "دورة الأداء"),
                   key: "cycle",
-                  render: (_: any, record: any) => (
-                    <Space orientation="vertical" size={0}>
-                      <Typography.Text>{localized(record.cycle?.name, ar) !== "—" ? localized(record.cycle?.name, ar) : t("Cycle", "الدورة") + ` #${record.cycle_id}`}</Typography.Text>
-                      <Typography.Text type="secondary" className="evaluation-employee-code">{record.cycle?.performance_year ?? "—"}</Typography.Text>
-                    </Space>
+                  render: () => (
+                    <Typography.Text strong>{activeCycleLabel || "—"}</Typography.Text>
                   ),
                 },
                 {
