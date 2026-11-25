@@ -1,7 +1,7 @@
 "use client";
 
 import { AppButton } from "@/components/ui-antd-primitives";
-import { Skeleton } from "antd";
+import { Select, Skeleton, Tag } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -24,6 +24,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAuthSession } from "@/lib/auth/session";
 import { homePathForUser } from "@/lib/auth/home-path";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 
 type Props = {
   children: React.ReactNode;
@@ -77,6 +78,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { logout, user, isReady, isAuthenticated } = useAuthSession();
+  const { cycleId, activeCycleLabel, options: cycleOptions, cycles, setCycleId } = usePerformanceCycle();
   const locale = useLocale();
   const t = useTranslations("Shell");
   const isAr = locale === "ar";
@@ -239,6 +241,23 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
             </nav> */}
           </div>
           <div className="topbar-actions">
+            {cycleOptions.length > 0 ? (
+              <div className="topbar-cycle-context" style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                {activeCycleLabel ? <Tag color="processing" style={{ marginInlineEnd: 0, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>{activeCycleLabel}</Tag> : null}
+                <Select
+                  size="middle"
+                  aria-label={isAr ? "اختيار دورة الأداء" : "Select performance cycle"}
+                  value={cycleId}
+                  options={cycleOptions}
+                  loading={cycles.isFetching}
+                  onChange={setCycleId}
+                  style={{ width: 190, maxWidth: "32vw" }}
+                  placeholder={isAr ? "اختر الدورة" : "Select cycle"}
+                  showSearch
+                  optionFilterProp="label"
+                />
+              </div>
+            ) : null}
             <div className="topbar-user">
               <div className="avatar avatar-small">{initials(displayName)}</div>
               <div>
