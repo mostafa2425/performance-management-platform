@@ -64,6 +64,7 @@ export function OptionsMultiSelect({
 
   return (
     <Select
+      className="cycle-scope-multi-select"
       mode="multiple"
       value={value}
       onChange={onChange}
