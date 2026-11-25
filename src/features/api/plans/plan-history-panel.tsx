@@ -102,7 +102,7 @@ export function PlanHistoryPanel({
               {meta.icon}
             </span>
           ),
-          children: (
+          content: (
             <article className="plan-workflow-event" key={event.id || `${event.action}-${index}`}>
               <div className="plan-workflow-event-heading">
                 <div className="plan-workflow-event-title">
