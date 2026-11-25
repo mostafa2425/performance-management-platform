@@ -1,0 +1,74 @@
+.employee-dashboard{display:grid;gap:18px;color:#17243b}
+.employee-welcome{position:relative;display:flex;align-items:center;justify-content:space-between;min-height:220px;overflow:hidden;padding:30px 34px;border:1px solid #dce5f0;border-radius:18px;background:linear-gradient(110deg,#fff 0%,#fff 68%,#edf3fb 100%);box-shadow:0 2px 5px #16336608}
+.employee-welcome-glow{position:absolute;inset-block:0;inset-inline-end:0;width:35%;background:linear-gradient(100deg,transparent,#e8eff9);pointer-events:none}
+.employee-welcome-content{position:relative;z-index:1;max-width:690px}
+.employee-cycle-pill.ant-tag{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px;padding:5px 11px;border:1px solid #cbd8ea;border-radius:30px;background:#f2f6fc;color:#163366;font-size:12px;font-weight:650}
+.employee-live-dot{width:7px;height:7px;border-radius:50%;background:#163366;box-shadow:0 0 0 3px #16336618}
+.employee-welcome h2.ant-typography{margin:0 0 7px;color:#111c30;font-size:28px;font-weight:760;letter-spacing:-.6px}
+.employee-welcome .ant-typography-paragraph{max-width:620px;margin:0;color:#596b84;font-size:15px;line-height:1.75}
+.employee-welcome-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px}
+.employee-welcome-actions .ant-btn{height:42px;padding-inline:18px;border-radius:10px;box-shadow:none;font-size:14px}
+.employee-welcome-actions a:first-child .ant-btn{display:inline-flex;align-items:center;gap:9px}
+.employee-secondary-link{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:10px;background:#eef2f8;color:#263b5c;font-size:14px;font-weight:600}
+.employee-secondary-link:hover{background:#e3eaf4;color:#163366}
+.employee-welcome-mark{position:relative;z-index:1;display:grid;place-items:center;width:142px;height:142px;margin-inline-end:6%;border:1px solid #d9e3f1;border-radius:28px;background:#f4f7fc;color:#163366}
+.employee-welcome-mark-inner{display:grid;place-items:center;width:94px;height:94px;border-radius:23px;background:#e8eef7}
+.employee-metrics,.employee-dashboard-lower{margin:0!important}
+.employee-metric-card.ant-card{position:relative;height:100%;overflow:hidden;border:1px solid #dfe6ef;border-radius:15px;box-shadow:0 1px 3px #16336608}
+.employee-metric-card.ant-card:before{position:absolute;inset:0 0 auto;height:3px;background:#dfe6ef;content:""}
+.employee-metric-primary.ant-card:before{background:#163366}
+.employee-metric-card .ant-card-body{padding:20px 22px}
+.employee-metric-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:24px;color:#5c6e88;font-size:12px;font-weight:700;letter-spacing:.55px;text-transform:uppercase}
+.employee-metric-top .ant-tag{margin:0;border:0;background:#f0f3f8;color:#425574;font-size:11px}
+.employee-metric-primary .employee-metric-top .ant-tag{background:#edf2f9;color:#163366}
+.employee-metric-value{margin-top:8px;color:#111c30;font-size:34px;font-weight:780;line-height:1.15}
+.employee-metric-foot{margin-top:4px;color:#8998ad;font-size:12px}
+.employee-panel.ant-card{height:100%;overflow:hidden;border:1px solid #dfe6ef;border-radius:16px;box-shadow:0 1px 3px #16336608}
+.employee-panel>.ant-card-head{min-height:62px;padding-inline:22px;border-bottom:1px solid #edf1f6}
+.employee-panel>.ant-card-head .ant-card-head-title{padding-block:18px}
+.employee-panel>.ant-card-body{padding:20px 22px}
+.employee-panel-title{display:inline-flex;align-items:center;gap:10px;color:#111c30;font-size:16px;font-weight:720}
+.employee-panel-title .ant-tag{margin:0;border:0;border-radius:20px;background:#f0f3f8;color:#53657e;font-size:11px}
+.employee-panel .ant-card-extra{font-size:12px;font-weight:650}
+.employee-panel .ant-card-extra a{color:#163366}
+.employee-cycle-card{padding:18px;border:1px solid #dfe6ef;border-radius:13px;background:linear-gradient(180deg,#fff,#fbfcfe);transition:border-color .18s ease,box-shadow .18s ease}
+.employee-cycle-card+.employee-cycle-card{margin-top:12px}
+.employee-cycle-card:hover{border-color:#b7c7dd;box-shadow:0 4px 14px #1633660b}
+.employee-cycle-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.employee-cycle-heading h5.ant-typography{margin:0 0 3px;color:#15223a;font-size:16px;font-weight:720}
+.employee-cycle-heading .ant-typography-secondary{font-size:12px}
+.employee-cycle-heading .ant-tag{margin:0;border-color:#cbd8ea;background:#f0f4fa;color:#163366;font-size:11px}
+.employee-cycle-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px;margin-top:15px;padding:12px 0;border-block:1px solid #edf1f6;color:#53657e;font-size:12px}
+.employee-cycle-meta span{display:inline-flex;align-items:center;gap:6px}
+.employee-cycle-meta svg{color:#8798b0}
+.employee-cycle-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:12px;color:#65758c;font-size:12px}
+.employee-cycle-footer>span{display:inline-flex;align-items:center;gap:8px}
+.employee-cycle-footer i{width:7px;height:7px;border-radius:50%;background:#163366}
+.employee-cycle-footer strong{color:#263b5c;font-weight:650}
+.employee-cycle-footer a,.employee-plan-summary>a{display:inline-flex;align-items:center;gap:5px;color:#163366;font-size:12px;font-weight:700}
+.employee-plan-summary{display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px;border:1px solid #e3e9f1;border-radius:12px;background:#f8fafd}
+.employee-plan-icon{display:grid;place-items:center;width:38px;height:38px;flex:0 0 auto;border-radius:10px;background:#eaf0f8;color:#163366}
+.employee-plan-copy{display:grid;gap:3px;min-width:0;flex:1}
+.employee-plan-copy strong{color:#26364f;font-size:13px}
+.employee-plan-copy span{color:#7d8ca2;font-size:11px}
+.employee-plan-summary>a{white-space:nowrap}
+.employee-status-indicator{display:block;width:8px;height:8px;border-radius:50%;background:#a7b2c1;box-shadow:0 0 0 4px #f1f3f6}
+.employee-status-indicator.has-actions{background:#d97706;box-shadow:0 0 0 4px #fff7ed}
+.employee-empty-state{display:flex;min-height:260px;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center}
+.employee-empty-icon{position:relative;display:grid;place-items:center;width:82px;height:82px;margin-bottom:20px;border:1px solid #e0e7f0;border-radius:20px;background:#f5f8fc;color:#163366}
+.employee-empty-icon span{position:absolute;top:-9px;inset-inline-end:-13px;padding:3px 9px;border:1px solid #cbd8ea;border-radius:20px;background:#f1f5fa;color:#163366;font-size:10px;font-weight:700}
+.employee-empty-state h5.ant-typography{margin:0 0 5px;color:#1d2b43;font-size:14px}
+.employee-empty-state .ant-typography-paragraph{max-width:300px;margin:0;color:#718198;font-size:12px;line-height:1.7}
+.employee-panel-footer{display:flex;align-items:center;justify-content:center;gap:22px;margin:0 -22px -20px;padding:15px 12px;border-top:1px solid #edf1f6;background:#f9fbfd}
+.employee-panel-footer>a{display:inline-flex;align-items:center;gap:6px;color:#163366;font-size:12px;font-weight:700}
+.employee-panel-footer>span{width:1px;height:16px;background:#d6deea}
+.employee-action-list{display:grid;gap:2px;min-height:240px}
+.employee-action-item{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #edf1f6;color:#53657e}
+.employee-action-item:last-child{border-bottom:0}
+.employee-action-icon{display:grid;place-items:center;width:38px;height:38px;flex:0 0 auto;border-radius:10px;background:#edf2f9;color:#163366}
+.employee-action-copy{display:grid;gap:4px;min-width:0;flex:1}
+.employee-action-copy strong{overflow:hidden;color:#26364f;font-size:13px;text-overflow:ellipsis;white-space:nowrap}
+.employee-action-copy small{color:#8290a4;font-size:11px}
+.employee-info-note{display:flex;align-items:flex-start;gap:10px;padding:13px 15px;border:1px solid #e1e8f1;border-radius:12px;background:#f8fafd;color:#61738c;font-size:12px;line-height:1.65}
+.employee-info-note svg{flex:0 0 auto;margin-top:1px;color:#163366}
+@media(max-width:767px){.employee-dashboard{gap:13px}.employee-welcome{min-height:0;padding:22px 18px}.employee-welcome-mark{display:none}.employee-welcome h2.ant-typography{font-size:23px}.employee-welcome .ant-typography-paragraph{font-size:13px}.employee-welcome-actions{gap:8px}.employee-welcome-actions .ant-btn,.employee-secondary-link{min-height:42px;font-size:12px}.employee-metrics{row-gap:10px!important}.employee-metric-card .ant-card-body{padding:15px}.employee-metric-top{align-items:flex-start;flex-direction:column;gap:6px;font-size:10px}.employee-metric-value{font-size:28px}.employee-panel>.ant-card-head{padding-inline:15px}.employee-panel>.ant-card-body{padding:15px}.employee-cycle-card{padding:14px}.employee-cycle-heading{flex-direction:column}.employee-cycle-footer{align-items:flex-start;flex-direction:column}.employee-plan-summary{flex-wrap:wrap}.employee-plan-summary>a{margin-inline-start:auto}.employee-panel-footer{margin:0 -15px -15px}.employee-empty-state{min-height:220px}}
