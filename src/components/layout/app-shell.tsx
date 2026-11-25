@@ -37,7 +37,7 @@ type Props = {
 };
 
 const employeeNavItems = [
-  { key: "dashboard", href: "/employee", icon: LayoutDashboard },
+  { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
   { key: "objectives", href: "/employee/objectives", icon: Target },
   { key: "performance", href: "/employee/performance", icon: Activity },
 ];
