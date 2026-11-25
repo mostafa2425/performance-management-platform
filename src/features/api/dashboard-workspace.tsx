@@ -20,7 +20,7 @@ function bilingual(value: any, ar: boolean) {
 export default function DashboardPage() {
   const ar = useLocale() === "ar";
   const locale = ar ? "ar" : "en";
-  const { user, isReady, isAuthenticated } = useAuthSession();
+  const { user, activeRole, isReady, isAuthenticated } = useAuthSession();
   const { cycleId, activeCycle } = usePerformanceCycle();
   const t = (en: string, a: string) => (ar ? a : en);
 
@@ -43,7 +43,7 @@ export default function DashboardPage() {
   const resultRows = results.data || [];
   const active = cycleRows.filter((c: any) => (c.status?.key || c.status) === "active");
   const actionable = planRows.filter((p: any) => (p.allowed_actions || []).some((a: string) => a !== "edit_content"));
-  const role = user?.roles?.admin ? "admin" : user?.roles?.manager ? "manager" : "employee";
+  const role = activeRole || (user?.roles?.admin ? "admin" : user?.roles?.manager ? "manager" : "employee");
 
   const primaryHref =
     role === "admin"
