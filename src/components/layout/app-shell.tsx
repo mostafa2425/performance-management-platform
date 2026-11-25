@@ -22,7 +22,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuthSession } from "@/lib/auth/session";
+import { useAuthSession, type ActiveAppRole } from "@/lib/auth/session";
 import { homePathForUser } from "@/lib/auth/home-path";
 import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 
@@ -77,7 +77,7 @@ function initials(name?: string | null, fallback = "EM") {
 export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout, user, isReady, isAuthenticated } = useAuthSession();
+  const { logout, user, activeRole, availableRoles, setActiveRole, isReady, isAuthenticated } = useAuthSession();
   const { cycleId, activeCycleLabel, options: cycleOptions, cycles, setCycleId } = usePerformanceCycle();
   const locale = useLocale();
   const t = useTranslations("Shell");
@@ -90,8 +90,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
       return false;
     }
   });
-  const resolvedRole = user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee";
-  const activeRole = resolvedRole;
+  const resolvedRole = activeRole || (user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee");
   const displayName = user?.employee?.full_name || user?.name || t(`profile.${activeRole}.name`);
   const displayEmail = user?.email || t(`profile.${activeRole}.role`);
 
@@ -103,12 +102,8 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
     }
     const apiRole =
       role === "admin" || role === "manager" || role === "employee" || role === undefined;
-    const allowed =
-      role === undefined ||
-      (role === "admin" && user?.roles.admin) ||
-      (role === "manager" && user?.roles.manager) ||
-      (role === "employee" && user?.roles.employee);
-    if (!apiRole || !allowed) router.replace(homePathForUser(user, locale));
+    const allowed = role === undefined || (role === activeRole && ((role === "admin" && user?.roles.admin) || (role === "manager" && user?.roles.manager) || (role === "employee" && user?.roles.employee)));
+    if (!apiRole || !allowed) router.replace(homePathForUser(user, locale, activeRole));
   }, [isReady, isAuthenticated, locale, role, router, user]);
 
   useEffect(() => {
@@ -133,7 +128,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const active =
     navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ??
     "dashboard";
-  const homeHref = homePathForUser(user, locale);
+  const homeHref = homePathForUser(user, locale, activeRole);
 
   if (!isReady || !isAuthenticated) {
     return <div className="app-frame" style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}><div style={{ width: "min(100%, 520px)" }}><Skeleton active paragraph={{ rows: 4 }} /></div></div>;
@@ -241,6 +236,25 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
             </nav> */}
           </div>
           <div className="topbar-actions">
+            {availableRoles.length > 1 ? (
+              <Select
+                aria-label={isAr ? "تغيير مساحة العمل" : "Switch workspace"}
+                value={activeRole || undefined}
+                options={availableRoles.map((value: ActiveAppRole) => ({
+                  value,
+                  label: value === "admin" ? (isAr ? "مساحة المسؤول" : "Admin workspace") : value === "manager" ? (isAr ? "مساحة المدير" : "Manager workspace") : (isAr ? "مساحة الموظف" : "Employee workspace"),
+                }))}
+                onChange={(value: ActiveAppRole) => {
+                  setActiveRole(value);
+                  router.replace(homePathForUser(user, locale, value));
+                  setMobileOpen(false);
+                }}
+                style={{ width: 176, maxWidth: "34vw" }}
+                size="middle"
+                popupMatchSelectWidth={false}
+              />
+            ) : null}
+
             {cycleOptions.length > 0 ? (
               <div className="topbar-cycle-context" style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
                 {activeCycleLabel ? <Tag color="processing" style={{ marginInlineEnd: 0, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>{activeCycleLabel}</Tag> : null}
