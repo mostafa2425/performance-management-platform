@@ -410,11 +410,18 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
                   {t("Edit submitted plan", "تعديل الخطة المرسلة")}
                 </Button>
               ) : (
-                <Space>
+                <Space wrap>
                   {editing ? (
-                    <Button onClick={() => { setEditing(false); setAdminEditMode(false); }}>
-                      {t("Cancel editing", "إلغاء التعديل")}
-                    </Button>
+                    <>
+                      <Button onClick={() => { setEditing(false); setAdminEditMode(false); }}>
+                        {t("Cancel editing", "إلغاء التعديل")}
+                      </Button>
+                      {categories.isSuccess && units.isSuccess ? (
+                        <Button type="primary" htmlType="submit" form="plan-content-editor-form" loading={save.isPending}>
+                          {t("Save draft", "حفظ المسودة")}
+                        </Button>
+                      ) : null}
+                    </>
                   ) : (
                     <Button type="primary" icon={<EditOutlined />} onClick={() => setEditing(true)}>
                       {t("Edit objectives", "تعديل الأهداف")}
