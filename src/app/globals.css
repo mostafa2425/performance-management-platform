@@ -10760,6 +10760,10 @@ textarea.ant-input {
 
 
 /* Shared semantic status tags and approval actions */
+.ant-tag {
+  border-radius: 999px;
+  font-weight: 600;
+}
 .ant-tag.pmp-status-tag {
   display: inline-flex;
   align-items: center;
