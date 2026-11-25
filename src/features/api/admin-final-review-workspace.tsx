@@ -21,7 +21,7 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import { CheckCircleFilled, ClockCircleOutlined, RollbackOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { adminApi, cyclesApi } from "@/lib/api/endpoints";
+import { adminApi } from "@/lib/api/endpoints";
 import { useLocale, useTranslations } from "next-intl";
 import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 
