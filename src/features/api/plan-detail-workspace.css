@@ -282,7 +282,7 @@
 .plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-tail { inset-inline-start: 13px; border-inline-start: 2px solid #e7edf5; }
 .plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-head-custom { inset-inline-start: 0; width: 28px; height: 28px; margin-top: 0; padding: 0; background: transparent; transform: none; }
 .plan-detail-workspace .plan-workflow-timeline .ant-timeline-item-content { inset-inline-start: 0; width: calc(100% - 42px); min-height: 28px; margin-inline-start: 42px; text-align: start; }
-.plan-detail-workspace .plan-workflow-timeline-dot { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid #dbe5f1; border-radius: 50%; background: #f1f5f9; color: #64748b; font-size: 13px; }
+.plan-detail-workspace .plan-workflow-timeline-dot { display: grid; width: 30px; min-width: 30px; height: 30px; min-height: 30px; place-items: center; border: 1px solid #dbe5f1; border-radius: 50%; background: #f1f5f9; color: #64748b; font-size: 14px; }
 .plan-detail-workspace .plan-workflow-timeline-dot--success { border-color: #bbf7d0; background: #ecfdf3; color: #15803d; }
 .plan-detail-workspace .plan-workflow-timeline-dot--warning { border-color: #fed7aa; background: #fff7ed; color: #c2410c; }
 .plan-detail-workspace .plan-workflow-timeline-dot--processing { border-color: #bfdbfe; background: #eff6ff; color: #1d4ed8; }
