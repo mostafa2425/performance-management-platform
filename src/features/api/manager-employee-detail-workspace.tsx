@@ -1,16 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Alert,
   App,
   Button,
   Card,
-  Col,
   Descriptions,
   Empty,
-  Row,
-  Select,
   Space,
   Skeleton,
   Tabs,
@@ -22,6 +19,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import { useLocale } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/layout/app-shell";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 import {
   cyclesApi,
   employeesApi,
@@ -42,33 +40,12 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
   const ar = locale === "ar";
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const { message } = App.useApp();
-  const [cycleId, setCycleId] = useState<number>();
+  const { cycleId, activeCycle: selectedCycle, isReady: cycleReady } = usePerformanceCycle();
 
   const employee = useQuery({
     queryKey: ["employees", "detail", employeeId],
     queryFn: () => employeesApi.get(employeeId),
   });
-  const cycles = useQuery({
-    queryKey: ["cycles"],
-    queryFn: cyclesApi.mine,
-  });
-  const cycleOptions = useMemo(
-    () =>
-      (cycles.data || [])
-        .filter((c: any) => c.my_roles?.manager)
-        .map((c: any) => ({
-          value: c.id as number,
-          label: `${bilingual(c.name, ar)} · ${c.performance_year}`,
-        })),
-    [cycles.data, ar],
-  );
-  const firstCycleId = cycleOptions[0]?.value;
-
-  useEffect(() => {
-    if (firstCycleId == null) return;
-    setCycleId((prev) => (prev == null ? firstCycleId : prev));
-  }, [firstCycleId]);
-
   const planStatus = useQuery({
     queryKey: ["cycles", cycleId, "plan-status", employeeId],
     queryFn: () => cyclesApi.planStatus(cycleId!, { per_page: 100 }),
@@ -111,7 +88,6 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
   }, [results.data, employeeId, cycleId]);
 
   const person = employee.data as any;
-  const selectedCycle = (cycles.data || []).find((c: any) => c.id === cycleId);
   const evalData = evaluation.data as any;
   const evalAvailable =
     evaluation.isSuccess && evalData && !evaluation.isError;
@@ -121,50 +97,33 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
       role="manager"
       title={t("Employee performance details", "تفاصيل أداء الموظف")}
       subtitle={t(
-        "UC-010 · Review objectives, evaluation, history and previous results for a direct report.",
-        "UC-010 · راجع الأهداف والتقييم والسجل والنتائج السابقة لموظف مباشر.",
+        "Review objectives, evaluation, history, and previous results for this team member.",
+        "راجع الأهداف والتقييم والسجل والنتائج السابقة لهذا الموظف.",
       )}
       backHref="/manager/team"
     >
       <Space className="manager-employee-detail" orientation="vertical" size={16} style={{ width: "100%" }}>
         <Card>
-          <Row gutter={[12, 12]} align="middle">
-            <Col xs={24} md={10}>
-              {cycles.isLoading ? (
-                <Skeleton.Input active block />
-              ) : (
-                <Select
-                  style={{ width: "100%" }}
-                  placeholder={t("Select cycle", "اختر الدورة")}
-                  options={cycleOptions}
-                  value={cycleId}
-                  onChange={setCycleId}
-                />
-              )}
-            </Col>
-            <Col xs={24} md={14}>
-              <Space wrap>
-                {planId ? (
-                  <Link href={`/${locale}/manager/objectives`}>
-                    <Button type="primary">
-                      {t("Open team plans", "فتح خطط الفريق")}
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link href={`/${locale}/manager/objectives`}>
-                    <Button type="primary">
-                      {t("Prepare objectives & KPIs", "إعداد الأهداف والمؤشرات")}
-                    </Button>
-                  </Link>
-                )}
-                {member?.status?.key === "approved" ? (
-                  <Link href={`/${locale}/manager/evaluation`}>
-                    <Button>{t("Go to evaluation", "الانتقال للتقييم")}</Button>
-                  </Link>
-                ) : null}
-              </Space>
-            </Col>
-          </Row>
+          <Space wrap>
+            {planId ? (
+              <Link href={`/${locale}/manager/objectives`}>
+                <Button type="primary">
+                  {t("Open team objectives", "فتح أهداف الفريق")}
+                </Button>
+              </Link>
+            ) : (
+              <Link href={`/${locale}/manager/objectives`}>
+                <Button type="primary">
+                  {t("Prepare objectives & KPIs", "إعداد الأهداف والمؤشرات")}
+                </Button>
+              </Link>
+            )}
+            {member?.status?.key === "approved" ? (
+              <Link href={`/${locale}/manager/evaluation`}>
+                <Button>{t("Go to evaluation", "الانتقال للتقييم")}</Button>
+              </Link>
+            ) : null}
+          </Space>
         </Card>
 
         {employee.isLoading ? (
@@ -242,7 +201,7 @@ export function ManagerEmployeeDetailWorkspace({ employeeId }: Props) {
                   {
                     key: "plan",
                     label: t("Objectives & KPIs", "الأهداف والمؤشرات"),
-                    children: !cycleId ? (
+                    children: !cycleReady || !cycleId ? (
                       <Empty description={t("Select a cycle.", "اختر دورة.")} />
                     ) : planStatus.isLoading || (planId && plan.isLoading) ? (
                       <Skeleton active />
