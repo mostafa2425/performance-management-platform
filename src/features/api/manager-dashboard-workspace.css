@@ -16,10 +16,10 @@
   gap: 8px;
   min-height: 34px;
   padding: 6px 12px;
-  border: 1px solid #b9eee2;
+  border: 1px solid #cbd8ea;
   border-radius: 8px;
-  background: #f0fdfa;
-  color: #0f766e;
+  background: #edf2f9;
+  color: #163366;
   font-size: 12px;
   font-weight: 650;
 }
@@ -29,7 +29,7 @@
   height: 7px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #10b981;
+  background: #16a34a;
 }
 .manager-refresh-button.ant-btn {
   height: 34px !important;
@@ -102,7 +102,7 @@
   font-weight: 650;
   white-space: nowrap;
 }
-.manager-metric-percent-teal { background: #f0fdfa; color: #0f766e; }
+.manager-metric-percent-teal { background: #edf2f9; color: #163366; }
 .manager-metric-percent-amber { background: #fffbeb; color: #b45309; }
 .manager-section-heading {
   display: flex;
@@ -123,7 +123,7 @@
 }
 .manager-cycle-card.ant-card:hover,
 .manager-cycle-card-selected.ant-card {
-  border-color: #99d9cc;
+  border-color: #b7c7dd;
 }
 .manager-cycle-card .ant-card-body { padding: 15px 17px !important; }
 .manager-cycle-card-top,
@@ -140,7 +140,7 @@
 .manager-cycle-card-top .ant-typography-secondary { display: inline-block; margin-top: 4px; font-size: 11px; }
 .manager-cycle-link {
   flex: 0 0 auto;
-  color: #0f766e;
+  color: #163366;
   font-size: 11px;
   font-weight: 700;
 }
@@ -195,7 +195,7 @@
   height: auto !important;
   min-height: 28px !important;
   padding: 2px 5px !important;
-  color: #0f766e !important;
+  color: #163366 !important;
   font-size: 11px !important;
   font-weight: 700;
 }
@@ -276,18 +276,18 @@
   height: 29px !important;
   min-height: 29px !important;
   padding: 0 10px !important;
-  border: 1px solid #99d8ce !important;
+  border: 1px solid #cbd8ea !important;
   border-radius: 7px !important;
   background: #fff !important;
-  color: #0f766e !important;
+  color: #163366 !important;
   font-size: 10px !important;
   font-weight: 700;
   box-shadow: none !important;
 }
 .manager-table-action.ant-btn:hover {
   border-color: var(--ant-color-primary) !important;
-  background: #f0fdfa !important;
-  color: #0f766e !important;
+  background: #edf2f9 !important;
+  color: #163366 !important;
 }
 .manager-table-action-primary.ant-btn,
 .manager-table-action-primary.ant-btn:hover {
