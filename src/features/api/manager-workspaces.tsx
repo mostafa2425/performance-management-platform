@@ -10,6 +10,7 @@ import { cyclesApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { planStatusTag } from "./plans/plan-shared";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 import "./manager-year-group-workspace.css";
 
 type StatusMeta = { en: string; ar: string; color: string };
@@ -37,18 +38,7 @@ function StatusTag({ value, ar, map }: { value?: string | null; ar: boolean; map
 }
 
 function useManagerCycle() {
-  const cycles = useQuery({ queryKey: ["cycles"], queryFn: cyclesApi.mine });
-  const [selectedCycleId, setSelectedCycleId] = useState<number | null | undefined>(undefined);
-  const options = (cycles.data || [])
-    .filter((cycle: { my_roles?: { manager?: boolean; member?: boolean }; id: number; name?: { en?: string } | string; performance_year?: number }) => cycle.my_roles?.manager || cycle.my_roles?.member)
-    .map((cycle: { id: number; name?: { en?: string } | string; performance_year?: number }) => ({
-      value: cycle.id,
-      label: `${typeof cycle.name === "object" ? cycle.name?.en ?? "" : cycle.name ?? ""} · ${cycle.performance_year ?? ""}`,
-    }));
-  const firstOptionId = options[0]?.value;
-  const cycleId = selectedCycleId === undefined ? firstOptionId : selectedCycleId ?? undefined;
-  const setCycleId = (value: number | undefined) => setSelectedCycleId(value ?? null);
-
+  const { cycleId, setCycleId, options, cycles } = usePerformanceCycle();
   return { cycleId, setCycleId, options, cycles };
 }
 
@@ -56,7 +46,7 @@ export function ApiManagerTeamWorkspace() {
   const ar = useLocale() === "ar";
   const locale = useLocale();
   const router = useRouter();
-  const { cycleId, setCycleId, options, cycles } = useManagerCycle();
+  const { cycleId, cycles } = useManagerCycle();
   const t = (e: string, a: string) => (ar ? a : e);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>();
@@ -95,31 +85,11 @@ export function ApiManagerTeamWorkspace() {
       role="manager"
       title={t("My team", "فريقي")}
       subtitle={t(
-        "UC-010 · Open a direct report to view performance details for the selected cycle.",
-        "UC-010 · افتح موظفاً مباشراً لعرض تفاصيل الأداء للدورة المحددة.",
+        "View your team members, monitor performance progress, and open individual employee profiles.",
+        "استعرض أعضاء فريقك وتابع تقدم الأداء واطّلع على تفاصيل كل موظف.",
       )}
     >
       <div className="manager-team-workspace">
-        <Card className="manager-team-cycle-card" variant="outlined">
-          <div className="manager-team-toolbar">
-            <div>
-              <Typography.Title level={5}>{t("Performance cycle", "دورة الأداء")}</Typography.Title>
-              <Typography.Text type="secondary">{t("Choose a cycle to review your direct reports.", "اختر دورة لمراجعة الموظفين التابعين لك.")}</Typography.Text>
-            </div>
-            <Select
-              allowClear
-              showSearch
-              optionFilterProp="label"
-              style={{ width: 380, maxWidth: "100%" }}
-              placeholder={t("Select cycle", "اختر الدورة")}
-              value={cycleId}
-              onChange={setCycleId}
-              options={options}
-              loading={cycles.isFetching}
-            />
-          </div>
-        </Card>
-
         {q.isError ? (
           <Alert type="error" showIcon title={(q.error as Error).message} />
         ) : !cycleId ? (
@@ -301,7 +271,7 @@ export function ApiManagerGroupWorkspace() {
   const ar = useLocale() === "ar";
   const { message } = App.useApp();
   const qc = useQueryClient();
-  const { cycleId, setCycleId, options, cycles } = useManagerCycle();
+  const { cycleId } = useManagerCycle();
   const t = (e: string, a: string) => (ar ? a : e);
   const group = useQuery({
     queryKey: ["cycles", cycleId, "group"],
@@ -333,17 +303,6 @@ export function ApiManagerGroupWorkspace() {
       subtitle={t("Review team ratings and submit the group when ready.", "راجع تقديرات الفريق وأرسل المجموعة عند الجاهزية.")}
     >
       <Space className="manager-year-group-workspace" orientation="vertical" size={16} style={{ width: "100%" }}>
-        <Card>
-          <Select
-            allowClear
-            style={{ width: 360, maxWidth: "100%" }}
-            placeholder={t("Select cycle", "اختر الدورة")}
-            value={cycleId}
-            onChange={setCycleId}
-            options={options}
-            loading={cycles.isFetching}
-          />
-        </Card>
         {!cycleId ? (
           <Empty description={t("Select a cycle.", "اختر دورة.")} />
         ) : group.isError ? (
