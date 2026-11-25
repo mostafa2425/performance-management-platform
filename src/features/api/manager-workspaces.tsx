@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
-import { Alert, App, Avatar, Button, Card, Col, Empty, Input, Row, Select, Space, Skeleton, Tag, Typography } from "antd";
+import { Alert, App, Avatar, Button, Card, Col, Empty, Input, Popconfirm, Row, Select, Space, Skeleton, Tag, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { cyclesApi } from "@/lib/api/endpoints";
@@ -31,9 +31,10 @@ const GROUP_STATUS: Record<string, StatusMeta> = {
   no_manager: { en: "No manager", ar: "بدون مدير", color: "default" },
 };
 
-function StatusTag({ value, ar, map }: { value?: string | null; ar: boolean; map: Record<string, StatusMeta> }) {
-  if (!value) return <Tag>—</Tag>;
-  const meta = map[value] ?? { en: value, ar: value, color: "default" };
+function StatusTag({ value, ar, map }: { value?: string | { key?: string; label?: string } | null; ar: boolean; map: Record<string, StatusMeta> }) {
+  const key = typeof value === "string" ? value : value?.key;
+  if (!key) return <Tag>—</Tag>;
+  const meta = map[key] ?? { en: typeof value === "object" ? value?.label || key : key, ar: typeof value === "object" ? value?.label || key : key, color: "default" };
   return <Tag color={meta.color}>{ar ? meta.ar : meta.en}</Tag>;
 }
 
@@ -292,109 +293,208 @@ export function ApiManagerGroupWorkspace() {
         qc.invalidateQueries({ queryKey: ["cycles", cycleId, "team-evaluations"] }),
       ]);
     },
+    onError: (error) => message.error((error as Error).message || t("Unable to submit the group.", "تعذر إرسال المجموعة.")),
   });
   const g = group.data as any;
   const rows = (team.data as any)?.data || [];
+  const blockers = Array.isArray(g?.blockers) ? g.blockers : [];
+  const allowed = Array.isArray(g?.allowed) ? g.allowed : [];
+  const memberCount = Number(g?.n ?? rows.length ?? 0);
+  const submitted = Number(g?.latest_submission_no ?? 0);
+  const blockerMemberNames = (ids: unknown[]) => ids.map((id) => {
+    const member = rows.find((row: any) =>
+      String(row.cycle_member_id) === String(id) ||
+      String(row.employee?.id) === String(id)
+    );
+    return member?.employee?.name || member?.employee?.full_name || t(`Member #${id}`, `عضو #${id}`);
+  });
+  const blockerLabel = (blocker: any) => {
+    if (blocker.message || blocker.label) return blocker.message || blocker.label;
+    const code = String(blocker.code || t("Action required", "مطلوب إجراء"));
+    return code.replace(/[_-]+/g, " ").replace(/\\b\\w/g, (letter) => letter.toUpperCase());
+  };
 
   return (
     <AppShell
       role="manager"
-      title={t("Manager–Year Group", "مجموعة المدير والسنة")}
-      subtitle={t("Review team ratings and submit the group when ready.", "راجع تقديرات الفريق وأرسل المجموعة عند الجاهزية.")}
+      title={t("Year group", "مجموعة السنة")}
+      subtitle={t("Review rating distribution and submit your team when it is ready.", "راجع توزيع التقديرات وأرسل المجموعة عند اكتمالها.")}
     >
-      <Space className="manager-year-group-workspace" orientation="vertical" size={16} style={{ width: "100%" }}>
+      <div className="manager-year-group-workspace">
         {!cycleId ? (
-          <Empty description={t("Select a cycle.", "اختر دورة.")} />
+          <Card><Empty description={t("Select a cycle to view group readiness.", "اختر دورة لعرض جاهزية المجموعة.")} /></Card>
         ) : group.isError ? (
-          <Alert type="error" title={(group.error as Error).message} />
-        ) : (
+          <Alert type="error" showIcon title={t("Could not load group readiness", "تعذر تحميل جاهزية المجموعة")} description={(group.error as Error).message} />
+        ) : group.isLoading ? (
+          <Card className="year-group-readiness-card">
+            <Skeleton active paragraph={{ rows: 4 }} />
+          </Card>
+        ) : g ? (
           <>
-            {group.isFetching ? (
-              <Card title={t("Group readiness", "جاهزية المجموعة")}>
-                <Skeleton active paragraph={{ rows: 3 }} />
-              </Card>
-            ) : g ? (
-              <Card
-                title={t("Group readiness", "جاهزية المجموعة")}
-                extra={<StatusTag value={g.status} ar={ar} map={GROUP_STATUS} />}
-              >
-                <Space wrap>
-                  <Typography.Text>
-                    {t("Members", "الأعضاء")}: {g.n}
-                  </Typography.Text>
-                  <Typography.Text>
-                    {t("Group version", "إصدار المجموعة")}: {g.version ?? "—"}
-                  </Typography.Text>
-                  <Typography.Text>
-                    {t("Latest submission", "آخر إرسال")}: {g.latest_submission_no ?? "—"}
-                  </Typography.Text>
-                </Space>
-                <DataTable
-                  rowKey="level"
-                  pagination={false}
-                  dataSource={g.allowed || []}
-                  columns={[
-                    { title: t("Rating level", "مستوى التقدير"), dataIndex: "level" },
-                    { title: t("Minimum", "الحد الأدنى"), dataIndex: "min" },
-                    { title: t("Maximum", "الحد الأعلى"), dataIndex: "max" },
-                    {
-                      title: t("Current count", "العدد الحالي"),
-                      render: (_: any, r: any) => g.counts?.[String(r.level)] ?? 0,
+            <Card
+              className="year-group-readiness-card"
+              title={
+                <div className="year-group-card-title">
+                  <Typography.Title level={5}>{t("Group readiness", "جاهزية المجموعة")}</Typography.Title>
+                  <Typography.Text type="secondary">{t("One view of the group's submission status and rating limits.", "ملخص حالة الإرسال وحدود توزيع التقديرات.")}</Typography.Text>
+                </div>
+              }
+              extra={<StatusTag value={g.status} ar={ar} map={GROUP_STATUS} />}
+            >
+              <div className="year-group-summary">
+                <div className="year-group-summary-item">
+                  <span>{t("Team members", "أعضاء الفريق")}</span>
+                  <strong>{memberCount}</strong>
+                </div>
+                <div className="year-group-summary-item">
+                  <span>{t("Group version", "إصدار المجموعة")}</span>
+                  <strong>{g.version ?? "—"}</strong>
+                </div>
+                <div className="year-group-summary-item">
+                  <span>{t("Submission", "رقم الإرسال")}</span>
+                  <strong>{submitted || "—"}</strong>
+                </div>
+                <div className="year-group-summary-item year-group-summary-state">
+                  <span>{t("Readiness", "الجاهزية")}</span>
+                  <strong className={g.can_submit ? "is-ready" : "is-blocked"}>
+                    {g.can_submit ? t("Ready to submit", "جاهزة للإرسال") : t("Action required", "تحتاج إلى إجراء")}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="year-group-section-heading">
+                <Typography.Text strong>{t("Rating distribution", "توزيع التقديرات")}</Typography.Text>
+                <Typography.Text type="secondary">{t("Current count compared with the allowed range.", "العدد الحالي مقارنة بالنطاق المسموح.")}</Typography.Text>
+              </div>
+              <DataTable
+                className="year-group-rating-table"
+                rowKey="level"
+                pagination={false}
+                dataSource={allowed}
+                loading={group.isFetching}
+                scroll={{ x: 480 }}
+                locale={{ emptyText: t("No rating limits are configured.", "لم يتم إعداد حدود للتقديرات.") }}
+                columns={[
+                  {
+                    title: t("Rating", "التقدير"),
+                    dataIndex: "level",
+                    width: 120,
+                    render: (value: string | number) => <Typography.Text strong>{value}</Typography.Text>,
+                  },
+                  {
+                    title: t("Allowed range", "النطاق المسموح"),
+                    key: "range",
+                    render: (_: any, record: any) => <span className="year-group-range">{record.min ?? "—"} – {record.max ?? "—"}</span>,
+                  },
+                  {
+                    title: t("Current", "الحالي"),
+                    key: "current",
+                    align: "end",
+                    width: 110,
+                    render: (_: any, record: any) => {
+                      const count = Number(g.counts?.[String(record.level)] ?? 0);
+                      return <Typography.Text strong>{count}</Typography.Text>;
                     },
-                  ]}
-                />
-                {g.blockers?.length > 0 && (
-                  <Alert
-                    type="warning"
-                    showIcon
-                    title={t("Submission blockers", "عوائق الإرسال")}
-                    description={
-                      <ul>
-                        {g.blockers.map((b: any, i: number) => (
-                          <li key={i}>
-                            {b.code} {b.member_ids?.length ? `(${b.member_ids.join(", ")})` : ""}
+                  },
+                ]}
+              />
+
+              {blockers.length > 0 ? (
+                <Alert
+                  className="year-group-blockers"
+                  type="warning"
+                  showIcon
+                  title={t("Resolve these items before submitting", "عالج النقاط التالية قبل الإرسال")}
+                  description={
+                    <ul className="year-group-blocker-list">
+                      {blockers.map((blocker: any, index: number) => {
+                        const names = blockerMemberNames(Array.isArray(blocker.member_ids) ? blocker.member_ids : []);
+                        return (
+                          <li key={blocker.code || index}>
+                            <span>{blockerLabel(blocker)}</span>
+                            {names.length > 0 && <Typography.Text type="secondary">{names.join(ar ? "، " : ", ")}</Typography.Text>}
                           </li>
-                        ))}
-                      </ul>
-                    }
-                  />
-                )}
-                <Button type="primary" disabled={!g.can_submit} loading={submit.isPending} onClick={() => submit.mutate()}>
-                  {t("Submit complete group", "إرسال المجموعة كاملة")}
-                </Button>
-              </Card>
-            ) : null}
-            <Card title={t("Team evaluation status", "حالة تقييم الفريق")}>
+                        );
+                      })}
+                    </ul>
+                  }
+                />
+              ) : (
+                <Alert
+                  className="year-group-ready-alert"
+                  type="success"
+                  showIcon
+                  title={t("All checks passed", "تم اجتياز جميع الفحوصات")}
+                  description={t("The group can be submitted for review.", "المجموعة جاهزة للإرسال للمراجعة.")}
+                />
+              )}
+
+              <div className="year-group-submit-footer">
+                <div className="year-group-submit-copy">
+                  <Typography.Text strong>{g.can_submit ? t("Ready for submission", "جاهزة للإرسال") : t("Submission is unavailable", "الإرسال غير متاح حالياً")}</Typography.Text>
+                  <Typography.Text type="secondary">
+                    {g.can_submit
+                      ? t("Submit the group to send it to the next review step.", "أرسل المجموعة للانتقال إلى خطوة المراجعة التالية.")
+                      : t("Complete the required actions above to enable submission.", "أكمل الإجراءات المطلوبة بالأعلى لتفعيل الإرسال.")}
+                  </Typography.Text>
+                </div>
+                <Popconfirm
+                  title={t("Submit this group?", "إرسال هذه المجموعة؟")}
+                  description={t("The group will be sent to the next review step.", "سيتم إرسال المجموعة إلى خطوة المراجعة التالية.")}
+                  okText={t("Confirm submit", "تأكيد الإرسال")}
+                  cancelText={t("Cancel", "إلغاء")}
+                  onConfirm={() => submit.mutate()}
+                  disabled={!g.can_submit || submit.isPending}
+                >
+                  <Button
+                    type="primary"
+                    size="large"
+                    className="year-group-submit-button"
+                    disabled={!g.can_submit}
+                    loading={submit.isPending}
+                  >
+                    {t("Submit group", "إرسال المجموعة")}
+                  </Button>
+                </Popconfirm>
+              </div>
+            </Card>
+
+            <Card
+              className="year-group-team-card"
+              title={t("Team evaluations", "تقييمات الفريق")}
+              extra={<Typography.Text type="secondary">{rows.length} {t("members", "أعضاء")}</Typography.Text>}
+            >
               <DataTable
                 rowKey="cycle_member_id"
                 dataSource={rows}
                 loading={team.isFetching}
+                scroll={{ x: 650 }}
+                pagination={{ pageSize: 10, hideOnSinglePage: true }}
+                locale={{ emptyText: t("No team evaluations found.", "لا توجد تقييمات للفريق.") }}
                 columns={[
                   {
                     title: t("Employee", "الموظف"),
-                    render: (_: any, r: any) => r.employee?.name || r.employee?.full_name,
+                    render: (_: any, record: any) => (
+                      <Typography.Text strong>{record.employee?.name || record.employee?.full_name || "—"}</Typography.Text>
+                    ),
                   },
                   {
                     title: t("Evaluation status", "حالة التقييم"),
                     dataIndex: "status",
-                    render: (v: string) => <StatusTag value={v} ar={ar} map={EVALUATION_STATUS} />,
+                    render: (value: any) => <StatusTag value={value} ar={ar} map={EVALUATION_STATUS} />,
                   },
                   {
-                    title: t("Overall score", "النتيجة الإجمالية"),
-                    render: (_: any, r: any) => (r.overall_bp == null ? "—" : `${(r.overall_bp / 100).toFixed(2)}%`),
+                    title: t("Overall score", "النتيجة"),
+                    align: "end",
+                    render: (_: any, record: any) => record.overall_bp == null ? "—" : `${(record.overall_bp / 100).toFixed(2)}%`,
                   },
-                  { title: t("Rating", "التقدير"), dataIndex: "rating_level" },
-                  {
-                    title: t("Evidence required", "يتطلب دليل"),
-                    dataIndex: "requires_evidence",
-                    render: (v: boolean) => (v ? t("Yes", "نعم") : "—"),
-                  },
+                  { title: t("Rating", "التقدير"), dataIndex: "rating_level", align: "center" },
                 ]}
               />
             </Card>
           </>
-        )}
-      </Space>
+        ) : null}
+      </div>
     </AppShell>
   );
 }
