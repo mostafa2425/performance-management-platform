@@ -47,7 +47,7 @@ export function CycleTimeline({
         const hint = stageHint(t, s.stage);
         return {
           color: statusDotColor[status],
-          dot: statusIcon[status],
+          icon: statusIcon[status],
           content: (
             <Space orientation="vertical" size={2} style={{ maxWidth: 280 }}>
               <Space wrap size={[6, 4]}>
