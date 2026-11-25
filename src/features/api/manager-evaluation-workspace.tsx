@@ -1,405 +1,159 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Alert,
-  App,
-  Button,
-  Card,
-  Col,
-  Empty,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-  Skeleton,
-  Space,
-  Statistic,
-  Tag,
-  Typography,
-  Upload,
-} from "antd";
-import {
-  CheckCircleOutlined,
-  FileTextOutlined,
-  SaveOutlined,
-  UploadOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { DataTable } from "@/components/ui/data-table";
+import { Alert, App, Avatar, Button, Card, Empty, Input, Skeleton, Space, Tag, Typography } from "antd";
+import { ArrowRightOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { plansApi } from "@/lib/api/endpoints";
-import { queryKeys } from "@/lib/api/query-hooks";
-import "./manager-evaluation-workspace.css";
+import "./manager-evaluation-list-workspace.css";
+
+function localized(value: any, ar: boolean) {
+  if (value == null) return "—";
+  if (typeof value === "object") return (ar ? value.ar || value.en : value.en || value.ar) || "—";
+  return String(value);
+}
 
 export default function ApiManagerEvaluationWorkspace() {
   const ar = useLocale() === "ar";
   const locale = ar ? "ar" : "en";
   const { message } = App.useApp();
-  const qc = useQueryClient();
-  const [planId, setPlanId] = useState<number>();
-  const [uploadingKpiId, setUploadingKpiId] = useState<number | null>(null);
-  const [form] = Form.useForm();
-
+  const [search, setSearch] = useState("");
+  const t = (en: string, arabic: string) => (ar ? arabic : en);
   const plans = useQuery({
-    queryKey: [...queryKeys.plans, "manager-evaluation"],
+    queryKey: ["plans", "manager-evaluation-approved"],
     queryFn: () => plansApi.list({ filter: { status: "approved" }, per_page: 100 }),
   });
-  const evaluation = useQuery({
-    queryKey: ["plans", planId, "evaluation"],
-    queryFn: () => plansApi.evaluation(planId!),
-    enabled: Boolean(planId),
-  });
-  const save = useMutation({
-    mutationFn: (body: any) => plansApi.saveEvaluation(planId!, body),
-    onSuccess: async () => {
-      message.success(ar ? "تم حفظ التقييم" : "Evaluation saved");
-      await qc.invalidateQueries({ queryKey: ["plans", planId, "evaluation"] });
-    },
-  });
-
-  const t = (en: string, arabic: string) => (ar ? arabic : en);
   const rows = (plans.data as any)?.data || [];
-  const ev = evaluation.data as any;
-  const selectedPlan = rows.find((plan: any) => plan.id === planId);
-  const employeeName =
-    selectedPlan?.employee?.name || selectedPlan?.employee?.full_name || t("Selected employee", "الموظف المحدد");
-  const initial = () => ({
-    kpis: ev?.kpis?.map((kpi: any) => ({
-      plan_kpi_id: kpi.plan_kpi_id,
-      actual: kpi.actual === null ? null : Number(kpi.actual),
-      comment: kpi.comment || "",
-    })),
-    competencies: ev?.competencies?.map((competency: any) => ({
-      competency_id: competency.id,
-      rating: competency.rating,
-    })),
-  });
+  const filteredRows = useMemo(() => {
+    const term = search.trim().toLocaleLowerCase();
+    if (!term) return rows;
+    return rows.filter((plan: any) => [
+      plan.employee?.name,
+      plan.employee?.full_name,
+      plan.employee?.code,
+      plan.id,
+      plan.cycle_id,
+      plan.cycle?.name?.en,
+      plan.cycle?.name?.ar,
+    ].some((value) => String(value ?? "").toLocaleLowerCase().includes(term)));
+  }, [rows, search]);
 
   return (
     <AppShell
       role="manager"
       title={t("Manager evaluation", "تقييم المدير")}
       subtitle={t(
-        "Record actual results and annual competency ratings using the approved plan.",
-        "سجّل النتائج الفعلية وتقييمات الكفاءات السنوية بناءً على الخطة المعتمدة.",
+        "Select an approved employee plan to record KPI actuals and annual competency ratings.",
+        "اختر خطة موظف معتمدة لتسجيل القيم الفعلية لمؤشرات الأداء وتقييم الكفاءات السنوية.",
       )}
     >
-      <div className="manager-evaluation-workspace">
-        <Card className="evaluation-plan-picker" variant="outlined">
-          <div className="evaluation-picker-copy">
-            <span className="evaluation-eyebrow">{t("Evaluation workspace", "مساحة التقييم")}</span>
-            <Typography.Title level={5}>{t("Choose an employee plan", "اختر خطة الموظف")}</Typography.Title>
+      <div className="manager-evaluation-list-workspace">
+        <Card className="evaluation-list-intro" variant="outlined">
+          <div className="evaluation-list-intro-icon"><UserOutlined /></div>
+          <div className="evaluation-list-intro-copy">
+            <Typography.Text strong>{t("Approved plans", "الخطط المعتمدة")}</Typography.Text>
             <Typography.Text type="secondary">
               {t(
-                "Only approved plans available to your team are listed.",
-                "تظهر هنا الخطط المعتمدة والمتاحة لفريقك فقط.",
+                "Only employee-approved plans are listed. Evaluation editing is available when the Manager Evaluation stage is open.",
+                "تظهر هنا الخطط التي اعتمدها الموظفون. يتاح تعديل التقييم عند فتح مرحلة تقييم المدير.",
               )}
             </Typography.Text>
           </div>
-          <div className="evaluation-picker-control">
-            <Typography.Text strong>{t("Approved plan", "الخطة المعتمدة")}</Typography.Text>
-            {plans.isLoading ? (
-              <Skeleton.Input active block className="evaluation-plan-select-skeleton" />
-            ) : (
-              <Select
-                showSearch
-                optionFilterProp="label"
-                className="evaluation-plan-select"
-                placeholder={t("Select an approved plan to evaluate", "اختر خطة معتمدة لتقييمها")}
-                value={planId}
-                onChange={setPlanId}
-                options={rows.map((plan: any) => ({
-                  value: plan.id,
-                  label: `${plan.employee?.name || plan.employee?.full_name || plan.id} · ${plan.display_status} · #${plan.id}`,
-                }))}
-              />
-            )}
-          </div>
-          {plans.isError ? <Alert type="error" showIcon title={(plans.error as Error).message} /> : null}
+          <Tag color="success">{rows.length} {t("plans", "خطط")}</Tag>
         </Card>
 
-        {!planId && !plans.isLoading ? (
-          <Card className="evaluation-empty-state">
-            <Empty
-              image={<FileTextOutlined />}
-              description={t(
-                rows.length
-                  ? "Select an approved plan to start the evaluation."
-                  : "No approved plans are available for evaluation.",
-                rows.length
-                  ? "اختر خطة معتمدة لبدء التقييم."
-                  : "لا توجد خطط معتمدة متاحة للتقييم.",
-              )}
+        {plans.isError ? <Alert type="error" showIcon title={(plans.error as Error).message} action={<Button onClick={() => plans.refetch()}>{t("Retry", "إعادة المحاولة")}</Button>} /> : null}
+
+        <Card className="evaluation-approved-plans-card" variant="outlined">
+          <div className="evaluation-approved-plans-heading">
+            <div>
+              <Typography.Title level={5}>{t("Approved employee plans", "خطط الموظفين المعتمدة")}</Typography.Title>
+              <Typography.Text type="secondary">{t("Open a plan to view its evaluation workspace.", "افتح الخطة للانتقال إلى مساحة التقييم الخاصة بها.")}</Typography.Text>
+            </div>
+            <Input
+              allowClear
+              prefix={<SearchOutlined />}
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={t("Search employee, code or plan", "ابحث عن موظف أو رقم وظيفي أو خطة")}
+              className="evaluation-approved-search"
             />
-          </Card>
-        ) : null}
-
-        {planId && evaluation.isLoading ? (
-          <Card className="evaluation-loading"><Skeleton active title={{ width: "38%" }} paragraph={{ rows: 4, width: ["100%", "92%", "76%", "48%"] }} /></Card>
-        ) : null}
-
-        {planId && evaluation.isError ? (
-          <Alert
-            type="error"
-            showIcon
-            title={(evaluation.error as Error).message}
-            action={<Button onClick={() => evaluation.refetch()}>{t("Retry", "إعادة المحاولة")}</Button>}
-          />
-        ) : null}
-
-        {planId && ev ? (
-          <>
-            <Card
-              className="evaluation-employee-card"
-              title={
-                <Space size={10}>
-                  <span className="evaluation-employee-avatar"><UserOutlined /></span>
-                  <span>
-                    <Typography.Text strong>{employeeName}</Typography.Text>
-                    <Typography.Text type="secondary" className="evaluation-employee-subtitle">
-                      {t("Employee evaluation", "تقييم الموظف")} · #{planId}
-                    </Typography.Text>
-                  </span>
-                </Space>
-              }
-              extra={<Tag color="blue">{t("Version", "الإصدار")} {ev.version}</Tag>}
-            >
-              <Row gutter={[12, 12]} className="evaluation-summary">
-                <Col xs={12} md={8}>
-                  <div className="evaluation-summary-tile">
-                    <Statistic title={t("KPIs", "مؤشرات الأداء")} value={(ev.kpis || []).length} />
-                  </div>
-                </Col>
-                <Col xs={12} md={8}>
-                  <div className="evaluation-summary-tile">
-                    <Statistic title={t("Competencies", "الكفاءات")} value={(ev.competencies || []).length} />
-                  </div>
-                </Col>
-                <Col xs={24} md={8}>
-                  <div className="evaluation-summary-tile evaluation-summary-status">
-                    <span>{t("Evaluation status", "حالة التقييم")}</span>
-                    <Tag color={ev.is_complete ? "success" : ev.editable ? "processing" : "default"}>
-                      {ev.is_complete
-                        ? t("Completed", "مكتمل")
-                        : ev.editable
-                          ? t("In progress", "قيد التنفيذ")
-                          : t("Read only", "للقراءة فقط")}
-                    </Tag>
-                  </div>
-                </Col>
-              </Row>
-
-              {!ev.evaluable ? (
-                <Alert
-                  className="evaluation-notice"
-                  type="warning"
-                  showIcon
-                  title={t("This member is not evaluable.", "لا يمكن تقييم هذا الموظف حالياً.")}
-                />
-              ) : null}
-              {!ev.editable ? (
-                <Alert
-                  className="evaluation-notice"
-                  type="info"
-                  showIcon
-                  title={t(
-                    "Evaluation is read-only in the current workflow state.",
-                    "التقييم للقراءة فقط في حالة سير العمل الحالية.",
-                  )}
-                />
-              ) : null}
-
-              <Form
-                form={form}
-                key={`${planId}-${ev.version}`}
-                layout="vertical"
-                initialValues={initial()}
-                onFinish={(values) =>
-                  save.mutate({
-                    version: ev.version,
-                    kpis: values.kpis,
-                    competencies: values.competencies,
-                  })
-                }
-              >
-                <section className="evaluation-section">
-                  <div className="evaluation-section-heading">
-                    <div>
-                      <Typography.Title level={5}>{t("KPI actuals", "القيم الفعلية لمؤشرات الأداء")}</Typography.Title>
-                      <Typography.Text type="secondary">
-                        {t("Enter actual results and attach supporting evidence.", "أدخل النتائج الفعلية وأرفق الأدلة الداعمة.")}
-                      </Typography.Text>
-                    </div>
-                    <Tag>{(ev.kpis || []).length} {t("indicators", "مؤشرات")}</Tag>
-                  </div>
-
-                  {(ev.kpis || []).length ? (
-                    <div className="evaluation-kpi-list">
-                      {ev.kpis.map((kpi: any, index: number) => (
-                        <Card size="small" className="evaluation-kpi-card" key={kpi.plan_kpi_id}>
-                          <div className="evaluation-kpi-heading">
-                            <div>
-                              <Typography.Text strong>{kpi.name}</Typography.Text>
-                              <Typography.Text type="secondary">
-                                {t("KPI", "مؤشر الأداء")} {index + 1}
-                              </Typography.Text>
-                            </div>
-                            <div className="evaluation-kpi-meta">
-                              <span><small>{t("Target", "المستهدف")}</small><strong>{kpi.target ?? "—"}</strong></span>
-                              <span><small>{t("Weight", "الوزن")}</small><strong>{(kpi.weight_bp / 100).toFixed(2)}%</strong></span>
-                            </div>
-                          </div>
-                          <Form.Item name={["kpis", index, "plan_kpi_id"]} hidden>
-                            <Input />
-                          </Form.Item>
-                          <Row gutter={[16, 0]}>
-                            <Col xs={24} md={10}>
-                              <Form.Item
-                                name={["kpis", index, "actual"]}
-                                label={t("Actual value", "القيمة الفعلية")}
-                              >
-                                <InputNumber
-                                  className="evaluation-full-control"
-                                  stringMode
-                                  disabled={!ev.editable}
-                                  placeholder={t("Enter actual value", "أدخل القيمة الفعلية")}
-                                />
-                              </Form.Item>
-                            </Col>
-                            <Col xs={24} md={14}>
-                              <Form.Item
-                                name={["kpis", index, "comment"]}
-                                label={t("Manager comment", "تعليق المدير")}
-                              >
-                                <Input.TextArea
-                                  rows={2}
-                                  disabled={!ev.editable}
-                                  placeholder={t("Add a comment (optional)", "أضف تعليقاً (اختياري)")}
-                                />
-                              </Form.Item>
-                            </Col>
-                          </Row>
-                          {(kpi.evidence || []).length || ev.editable ? (
-                            <div className="evaluation-evidence">
-                              <Typography.Text type="secondary">{t("Supporting evidence", "الأدلة الداعمة")}</Typography.Text>
-                              <Space wrap>
-                                {(kpi.evidence || []).map((file: any) => (
-                                  <Button
-                                    key={file.id}
-                                    size="small"
-                                    icon={<FileTextOutlined />}
-                                    onClick={() => plansApi.downloadEvidence(planId, file.id, file.original_name)}
-                                  >
-                                    {t("Download", "تحميل")}: {file.original_name}
-                                  </Button>
-                                ))}
-                                <Upload
-                                  showUploadList={false}
-                                  disabled={!ev.editable}
-                                  beforeUpload={async (file) => {
-                                    setUploadingKpiId(kpi.plan_kpi_id);
-                                    try {
-                                      await plansApi.uploadEvidence(planId, kpi.plan_kpi_id, file as File);
-                                      message.success(ar ? "تم رفع الدليل" : "Evidence uploaded");
-                                      await qc.invalidateQueries({ queryKey: ["plans", planId, "evaluation"] });
-                                    } catch (error) {
-                                      message.error((error as Error).message);
-                                    } finally {
-                                      setUploadingKpiId(null);
-                                    }
-                                    return Upload.LIST_IGNORE;
-                                  }}
-                                >
-                                  <Button size="small" loading={uploadingKpiId === kpi.plan_kpi_id} disabled={!ev.editable} icon={<UploadOutlined />}>
-                                    {t("Upload evidence", "رفع دليل")}
-                                  </Button>
-                                </Upload>
-                              </Space>
-                            </div>
-                          ) : null}
-                        </Card>
-                      ))}
-                    </div>
-                  ) : (
-                    <Empty description={t("No KPIs are assigned to this plan.", "لا توجد مؤشرات أداء مرتبطة بهذه الخطة.")} />
-                  )}
-                </section>
-
-                <section className="evaluation-section">
-                  <div className="evaluation-section-heading">
-                    <div>
-                      <Typography.Title level={5}>{t("Annual competencies", "الكفاءات السنوية")}</Typography.Title>
-                      <Typography.Text type="secondary">
-                        {t("Rate each competency using the available scale.", "قيّم كل كفاءة باستخدام مقياس التقييم المتاح.")}
-                      </Typography.Text>
-                    </div>
-                    <Tag>{(ev.competencies || []).length} {t("competencies", "كفاءات")}</Tag>
-                  </div>
-                  <Row gutter={[12, 4]}>
-                    {(ev.competencies || []).map((competency: any, index: number) => (
-                      <Col xs={24} md={12} key={competency.id}>
-                        <Card size="small" className="evaluation-competency-card">
-                          <Form.Item name={["competencies", index, "competency_id"]} hidden>
-                            <Input />
-                          </Form.Item>
-                          <Form.Item
-                            name={["competencies", index, "rating"]}
-                            label={typeof competency.name === "object"
-                              ? (ar ? competency.name.ar : competency.name.en)
-                              : competency.name}
-                            rules={[{ required: true }]}
-                            className="evaluation-rating-item"
-                          >
-                            <Select
-                              disabled={!ev.editable}
-                              placeholder={t("Select rating", "اختر التقييم")}
-                              options={[1, 2, 3, 4, 5].map((value) => ({ value, label: String(value) }))}
-                            />
-                          </Form.Item>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                </section>
-
-                {ev.is_complete ? (
-                  <Alert
-                    className="evaluation-result"
-                    type="success"
-                    showIcon
-                    icon={<CheckCircleOutlined />}
-                    title={
-                      <Space wrap>
-                        <strong>{t("Overall score", "النتيجة الإجمالية")}: {((ev.overall_bp || 0) / 100).toFixed(2)}%</strong>
-                        <Tag color="success">{ev.rating?.label?.[locale] || ""}</Tag>
+          </div>
+          {plans.isLoading ? (
+            <Skeleton active paragraph={{ rows: 5 }} />
+          ) : (
+            <DataTable
+              className="evaluation-approved-plans-table"
+              ariaLabel={t("Approved employee plans", "خطط الموظفين المعتمدة")}
+              rowKey="id"
+              dataSource={filteredRows}
+              loading={plans.isFetching}
+              scroll={{ x: 850 }}
+              pagination={{ pageSize: 10, showSizeChanger: true, hideOnSinglePage: true }}
+              locale={{ emptyText: <Empty description={t(rows.length ? "No plans match your search." : "No approved plans are available.", rows.length ? "لا توجد خطط تطابق البحث." : "لا توجد خطط معتمدة متاحة.")} /> }}
+              columns={[
+                {
+                  title: t("Employee", "الموظف"),
+                  key: "employee",
+                  render: (_: any, record: any) => {
+                    const name = localized(record.employee?.name || record.employee?.full_name, ar);
+                    const initials = name.split(/\\s+/).slice(0, 2).map((part: string) => part[0] || "").join("").toLocaleUpperCase();
+                    return (
+                      <Space size={10}>
+                        <Avatar size={36}>{initials || <UserOutlined />}</Avatar>
+                        <Space orientation="vertical" size={0}>
+                          <Typography.Text strong>{name}</Typography.Text>
+                          <Typography.Text type="secondary" className="evaluation-employee-code">{record.employee?.code ? `#${record.employee.code}` : "—"}</Typography.Text>
+                        </Space>
                       </Space>
-                    }
-                  />
-                ) : null}
-
-                <div className="evaluation-form-actions">
-                  <Typography.Text type="secondary">
-                    {ev.editable
-                      ? t("Your changes are saved when you submit this evaluation.", "سيتم حفظ التغييرات عند إرسال التقييم.")
-                      : t("This evaluation cannot be edited at this stage.", "لا يمكن تعديل هذا التقييم في هذه المرحلة.")}
-                  </Typography.Text>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon={<SaveOutlined />}
-                    loading={save.isPending}
-                    disabled={!ev.editable || !ev.evaluable}
-                  >
-                    {t("Save evaluation", "حفظ التقييم")}
-                  </Button>
-                </div>
-              </Form>
-            </Card>
-          </>
-        ) : null}
+                    );
+                  },
+                },
+                {
+                  title: t("Performance cycle", "دورة الأداء"),
+                  key: "cycle",
+                  render: (_: any, record: any) => (
+                    <Space orientation="vertical" size={0}>
+                      <Typography.Text>{localized(record.cycle?.name, ar) !== "—" ? localized(record.cycle?.name, ar) : t("Cycle", "الدورة") + ` #${record.cycle_id}`}</Typography.Text>
+                      <Typography.Text type="secondary" className="evaluation-employee-code">{record.cycle?.performance_year ?? "—"}</Typography.Text>
+                    </Space>
+                  ),
+                },
+                {
+                  title: t("Plan status", "حالة الخطة"),
+                  dataIndex: "status",
+                  render: (value: any, record: any) => {
+                    const key = value?.key || record.status?.key || "approved";
+                    const label = value?.label || record.status?.label || t("Approved", "معتمدة");
+                    return <Tag color={key === "approved" ? "success" : "default"}>{label}</Tag>;
+                  },
+                },
+                {
+                  title: t("Last updated", "آخر تحديث"),
+                  dataIndex: "updated_at",
+                  render: (value: string) => value ? new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-GB", { dateStyle: "medium" }).format(new Date(value)) : "—",
+                },
+                {
+                  title: t("Actions", "الإجراءات"),
+                  key: "actions",
+                  width: 170,
+                  align: ar ? "left" : "right",
+                  render: (_: any, record: any) => (
+                    <Link href={`/${locale}/manager/evaluation/${record.id}`}>
+                      <Button type="primary" size="small" icon={<ArrowRightOutlined />} iconPlacement={ar ? "start" : "end"}>
+                        {t("Open evaluation", "فتح التقييم")}
+                      </Button>
+                    </Link>
+                  ),
+                },
+              ]}
+            />
+          )}
+        </Card>
       </div>
     </AppShell>
   );
