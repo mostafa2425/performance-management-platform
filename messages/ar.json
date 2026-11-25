@@ -1173,6 +1173,10 @@
     "affectedMembers": "الأعضاء المتأثرون (اختياري)",
     "selectAffectedMembers": "اختر الأعضاء المتأثرين",
     "approveGroup": "اعتماد المجموعة",
-    "returnGroup": "إعادة المجموعة"
+    "returnGroup": "إعادة المجموعة",
+    "statusPendingAdmin": "بانتظار اعتماد الإدارة",
+    "statusApproved": "معتمدة",
+    "statusReturned": "معادة",
+    "statusPublished": "تم النشر"
   }
 }
