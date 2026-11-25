@@ -22,14 +22,14 @@
 }
 .manager-evaluation-workspace .ant-card-body { padding: 18px; }
 .manager-evaluation-workspace .ant-btn-primary {
-  border-color: var(--ant-btn-color-base, #0d9488);
-  background: var(--ant-btn-color-base, #0d9488);
+  border-color: var(--ant-color-primary);
+  background: var(--ant-color-primary);
   color: #fff;
 }
 .manager-evaluation-workspace .ant-btn-primary:hover,
 .manager-evaluation-workspace .ant-btn-primary:focus-visible {
-  border-color: var(--ant-btn-color-base, #0d9488) !important;
-  background: var(--ant-btn-color-base, #0d9488) !important;
+  border-color: var(--ant-color-primary) !important;
+  background: var(--ant-color-primary) !important;
   filter: brightness(.94);
 }
 .manager-evaluation-workspace .evaluation-plan-picker {
@@ -50,7 +50,7 @@
 .evaluation-picker-copy .ant-typography { margin: 0; }
 .evaluation-picker-copy h5.ant-typography { color: #12243b; font-size: 16px; }
 .evaluation-eyebrow {
-  color: #0d9488;
+  color: var(--ant-color-primary);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: .1em;
@@ -172,7 +172,7 @@
   font-weight: 700;
   text-transform: uppercase;
 }
-.evaluation-kpi-meta strong { color: #0f766e; font-size: 12px; }
+.evaluation-kpi-meta strong { color: var(--ant-color-primary); font-size: 12px; }
 .manager-evaluation-workspace .ant-form-item { margin-bottom: 12px; }
 .manager-evaluation-workspace .ant-form-item-label > label {
   color: #475569;
