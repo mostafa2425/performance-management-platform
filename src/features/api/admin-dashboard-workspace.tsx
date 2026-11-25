@@ -18,24 +18,12 @@ import {
   Skeleton,
   Statistic,
   Tag,
-  Tooltip,
   Typography,
 } from "antd";
 import {
   DownloadOutlined,
   ReloadOutlined,
   SearchOutlined,
-  TeamOutlined,
-  UserOutlined,
-  FileTextOutlined,
-  ClockCircleOutlined,
-  AuditOutlined,
-  EyeOutlined,
-  RollbackOutlined,
-  PlayCircleOutlined,
-  BarChartOutlined,
-  CheckCircleOutlined,
-  SafetyCertificateOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
@@ -675,19 +663,6 @@ export default function AdminDashboardWorkspace() {
   const selectedManager = managerRows.find((row) => row.managerId === selectedManagerId);
   const selectedManagerEmployees = selectedManager?.employees || [];
 
-  const summaryCards = [
-    { key: "total", label: "totalEmployees", value: employees.length, color: "#1677ff", icon: <TeamOutlined /> },
-    { key: "not_started", label: "notStarted", value: summary.not_started, color: "#8c8c8c", icon: <UserOutlined /> },
-    { key: "draft", label: "draft", value: summary.draft, color: "#1677ff", icon: <FileTextOutlined /> },
-    { key: "pending_admin_approval", label: "pendingAdminApproval", value: summary.pending_admin_approval, color: "#d48806", icon: <ClockCircleOutlined /> },
-    { key: "pending_employee_review", label: "pendingEmployeeReview", value: summary.pending_employee_review, color: "#722ed1", icon: <EyeOutlined /> },
-    { key: "returned_to_manager", label: "returnedForModification", value: summary.returned_to_manager, color: "#fa8c16", icon: <RollbackOutlined /> },
-    { key: "active_performance", label: "activePerformance", value: summary.active_performance, color: "#389e0d", icon: <PlayCircleOutlined /> },
-    { key: "evaluation_in_progress", label: "evaluationInProgress", value: summary.evaluation_in_progress, color: "#08979c", icon: <BarChartOutlined /> },
-    { key: "pending_final_approval", label: "pendingFinalApproval", value: summary.pending_final_approval, color: "#d46b08", icon: <AuditOutlined /> },
-    { key: "finalized", label: "finalized", value: summary.finalized, color: "#237804", icon: <SafetyCertificateOutlined /> },
-  ];
-
   const cycleOptions = cycles.map((cycle) => ({
     value: Number(cycle.id),
     label: getCycleName(cycle, locale) + " · " + cycle.performance_year,
@@ -768,27 +743,9 @@ export default function AdminDashboardWorkspace() {
   const error = dashboard.error as Error | null;
 
   return (
-    <AppShell
-      role="admin"
-      title={t("text057")}
-      subtitle={t("text058")}
-    >
+    <AppShell role="admin">
       <Space orientation="vertical" size={20} style={{ width: "100%" }}>
-        <Row justify="space-between" align="middle" gutter={[12, 12]}>
-          <Col>
-            <Typography.Title level={3} style={{ margin: 0, letterSpacing: "-0.02em" }}>
-              {t("text059")}
-            </Typography.Title>
-            <Typography.Text type="secondary">
-              {t("text058")}
-            </Typography.Text>
-          </Col>
-          <Col>
-            <Button icon={<ReloadOutlined />} onClick={() => dashboard.refetch()} loading={dashboard.isFetching}>
-              {t("refresh")}
-            </Button>
-          </Col>
-        </Row>
+        <Row justify="end"><Col><Button icon={<ReloadOutlined />} onClick={() => dashboard.refetch()} loading={dashboard.isFetching}>{t("refresh")}</Button></Col></Row>
 
         {loading ? (
           <Card><div style={{ minHeight: 180, display: "grid", placeItems: "center" }}><Skeleton active /></div></Card>
@@ -802,45 +759,6 @@ export default function AdminDashboardWorkspace() {
           />
         ) : (
           <>
-            <section>
-              <Row align="middle" justify="space-between" style={{ marginBottom: 10 }}>
-                <Typography.Text strong style={{ color: "#475569", fontSize: 13, letterSpacing: ".04em", textTransform: "uppercase" }}>
-                  {t("text059")}
-                </Typography.Text>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  {summaryCards.length} {t("metricsLabel")}
-                </Typography.Text>
-              </Row>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 175px), 1fr))", gap: 12 }}>
-                {summaryCards.map((item) => (
-                  <Card
-                    key={item.key}
-                    size="small"
-                    styles={{ body: { padding: "13px 14px" } }}
-                    style={{
-                      height: "100%",
-                      border: "1px solid #e2e8f0",
-                      borderTop: "3px solid " + item.color,
-                      borderRadius: 11,
-                      boxShadow: "0 1px 2px rgba(15,23,42,.025)",
-                    }}
-                  >
-                    <div style={{ color: "#64748b", fontSize: 12, fontWeight: 500, minHeight: 18 }}>
-                      {item.key === "not_started" ? (
-                        <Tooltip title={t("notStartedDefinition")}>{t(item.label)}</Tooltip>
-                      ) : t(item.label)}
-                    </div>
-                    <Space align="center" size={9} style={{ marginTop: 8 }}>
-                      <span style={{ color: item.color, fontSize: 18, display: "inline-flex" }}>{item.icon}</span>
-                      <Typography.Text strong style={{ fontSize: 25, lineHeight: 1.1, color: "#0f172a" }}>
-                        {item.value.toLocaleString(locale)}
-                      </Typography.Text>
-                    </Space>
-                  </Card>
-                ))}
-              </div>
-            </section>
-
             {(data?.evaluationIncomplete || data?.eligibilityIncomplete) && (
               <Alert
                 type="warning"
@@ -855,15 +773,30 @@ export default function AdminDashboardWorkspace() {
               />
             )}
 
-            {summary.no_plan_yet > 0 && (
-              <Typography.Text type="secondary">
-                {t("noPlanYetNote", { count: summary.no_plan_yet })}
-              </Typography.Text>
-            )}
-            {summary.goals_approved > 0 && (
-              <Typography.Text type="secondary">
-                {t("goalsApprovedNote", { count: summary.goals_approved })}
-              </Typography.Text>
+            {(summary.no_plan_yet > 0 || summary.goals_approved > 0) && (
+              <Card title={<Typography.Text strong>{t("text059")}</Typography.Text>} style={{ borderRadius: 12, borderColor: "#e2e8f0" }}>
+                {(() => {
+                  const noPlan = summary.no_plan_yet;
+                  const approved = summary.goals_approved;
+                  const total = noPlan + approved;
+                  const noPlanAngle = total ? (noPlan / total) * 360 : 0;
+                  return (
+                    <div style={{ display: "flex", alignItems: "center", gap: 28, flexWrap: "wrap" }}>
+                      <div role="img" aria-label={t("noPlanYetNote", { count: noPlan }) + ". " + t("goalsApprovedNote", { count: approved })}
+                        style={{ width: 156, height: 156, flex: "0 0 156px", borderRadius: "50%", background: `conic-gradient(#d97706 0deg ${noPlanAngle}deg, #163366 ${noPlanAngle}deg 360deg)`, display: "grid", placeItems: "center" }}>
+                        <div style={{ width: 104, height: 104, borderRadius: "50%", background: "#fff", display: "grid", placeContent: "center", textAlign: "center" }}>
+                          <Typography.Text strong style={{ fontSize: 25, lineHeight: 1.1 }}>{total.toLocaleString(locale)}</Typography.Text>
+                          <Typography.Text type="secondary" style={{ fontSize: 11 }}>{t("metricsLabel")}</Typography.Text>
+                        </div>
+                      </div>
+                      <Space orientation="vertical" size={12}>
+                        <Space align="center" size={9}><span style={{ width: 10, height: 10, borderRadius: "50%", background: "#d97706" }} /><Typography.Text>{t("status.no_plan_yet")}</Typography.Text><Typography.Text strong>{noPlan.toLocaleString(locale)}</Typography.Text></Space>
+                        <Space align="center" size={9}><span style={{ width: 10, height: 10, borderRadius: "50%", background: "#163366" }} /><Typography.Text>{t("status.goals_approved")}</Typography.Text><Typography.Text strong>{approved.toLocaleString(locale)}</Typography.Text></Space>
+                      </Space>
+                    </div>
+                  );
+                })()}
+              </Card>
             )}
 
             <Card
@@ -879,6 +812,7 @@ export default function AdminDashboardWorkspace() {
                   pagination={false}
                   scroll={{ x: 900 }}
                   dataSource={cycles}
+                  onRow={(cycle) => ({ onClick: () => router.push("/" + locale + "/admin/performance-cycles/" + cycle.id), style: { cursor: "pointer" } })}
                   columns={[
                     {
                       title: t("cycleName"),
@@ -916,22 +850,11 @@ export default function AdminDashboardWorkspace() {
                         return (
                           <Space orientation="vertical" size={2} style={{ minWidth: 150 }}>
                             <Progress percent={progress.percent} size="small" />
-                            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                              {progress.done.toLocaleString(locale)} / {progress.total.toLocaleString(locale)} · {t(progress.labelKey)}
-                            </Typography.Text>
                           </Space>
                         );
                       },
                     },
-                    {
-                      title: t("action"),
-                      fixed: "end" as const,
-                      render: (_: unknown, cycle: DashboardCycle) => (
-                        <Button type="link" onClick={() => router.push("/" + locale + "/admin/performance-cycles/" + cycle.id)}>
-                          {t("viewCycle")}
-                        </Button>
-                      ),
-                    },
+
                   ]}
                 />
               ) : (
@@ -1024,6 +947,7 @@ export default function AdminDashboardWorkspace() {
                 rowKey="managerId"
                 size="small"
                 dataSource={managerRows}
+                onRow={(row) => ({ onClick: () => setSelectedManagerId(row.managerId), style: { cursor: "pointer" } })}
                 scroll={{ x: 1250 }}
                 pagination={{ pageSize: 10, showSizeChanger: true, showTotal: (total) => t("managerCount", { count: total }) }}
                 locale={{ emptyText: t("noManagers") }}
@@ -1052,16 +976,6 @@ export default function AdminDashboardWorkspace() {
                   { title: t("totalEmployees"), width: 105, align: "center" as const, render: (_: unknown, row: ManagerRow) => <Typography.Text strong>{row.total}</Typography.Text> },
                   { title: t("status.no_plan_yet"), width: 105, align: "center" as const, render: (_: unknown, row: ManagerRow) => <Typography.Text type={row.counts.no_plan_yet ? "danger" : "secondary"}>{row.counts.no_plan_yet}</Typography.Text> },
                   { title: t("status.not_started"), width: 105, align: "center" as const, render: (_: unknown, row: ManagerRow) => row.counts.not_started },
-                  {
-                    title: t("action"),
-                    fixed: "end" as const,
-                    width: 110,
-                    render: (_: unknown, row: ManagerRow) => (
-                      <Button type="link" onClick={() => setSelectedManagerId(row.managerId)}>
-                        {t("viewDetails")}
-                      </Button>
-                    ),
-                  },
                 ]}
               />
             </Card>
@@ -1119,7 +1033,7 @@ export default function AdminDashboardWorkspace() {
       <Drawer
         open={selectedManagerId != null}
         onClose={() => setSelectedManagerId(null)}
-        width="min(900px, 100vw)"
+        size={900}
         title={
           selectedManager?.manager?.full_name
             ? t("managerEmployeesTitle", { name: selectedManager.manager.full_name })
