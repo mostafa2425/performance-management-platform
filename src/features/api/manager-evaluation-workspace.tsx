@@ -100,7 +100,7 @@ export default function ApiManagerEvaluationWorkspace() {
                   key: "employee",
                   render: (_: any, record: any) => {
                     const name = localized(record.employee?.name || record.employee?.full_name, ar);
-                    const initials = name.split(/\\s+/).slice(0, 2).map((part: string) => part[0] || "").join("").toLocaleUpperCase();
+                    const initials = name.split(/\s+/).slice(0, 2).map((part: string) => part[0] || "").join("").toLocaleUpperCase();
                     return (
                       <Space size={10}>
                         <Avatar size={36}>{initials || <UserOutlined />}</Avatar>
