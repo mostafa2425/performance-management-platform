@@ -32,7 +32,7 @@ function toDraftObjectives(objectives: any[] = []) {
       direction: kpi.direction === "lower" ? "lower" : "higher",
       target: kpi.target == null ? null : Number(kpi.target),
       baseline: kpi.baseline == null || kpi.baseline === "" ? null : Number(kpi.baseline),
-      weight_pct: Number(((kpi.weight_bp || 0) / 100).toFixed(2)),
+      weight_pct: Math.round((kpi.weight_bp || 0) / 100),
     })),
   }));
 }
