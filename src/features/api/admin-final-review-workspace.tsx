@@ -2,9 +2,9 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import { useState } from "react";
-import { Skeleton } from "antd";
 import {
   Alert,
+  Skeleton,
   App,
   Button,
   Card,
@@ -237,7 +237,7 @@ export default function ApiAdminFinalReviewWorkspace() {
           />
           {cycleId ? (
             <Typography.Text type="secondary">
-              {t("${count} groups", "${count} مجموعة").replace("${count}", String(list.length))}
+              {translate("groupsCount", { count: list.length })}
             </Typography.Text>
           ) : null}
         </Space>
