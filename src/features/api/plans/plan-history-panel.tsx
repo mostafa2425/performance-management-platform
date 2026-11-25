@@ -79,7 +79,7 @@ export function PlanHistoryPanel({
   return (
     <Timeline
       className="plan-workflow-timeline"
-      mode="left"
+      mode="alternate"
       items={rows.map((event, index) => {
         const meta = historyMeta(event.action || "");
         const actor = event.actor?.name || t("System", "النظام");
