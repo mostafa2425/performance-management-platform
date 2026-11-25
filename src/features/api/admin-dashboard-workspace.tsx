@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import {
   Alert,
   Button,
+  Tooltip,
   Card,
   Col,
   Drawer,
@@ -24,6 +25,16 @@ import {
   DownloadOutlined,
   ReloadOutlined,
   SearchOutlined,
+  TeamOutlined,
+  UserOutlined,
+  FileTextOutlined,
+  ClockCircleOutlined,
+  AuditOutlined,
+  EyeOutlined,
+  RollbackOutlined,
+  PlayCircleOutlined,
+  BarChartOutlined,
+  SafetyCertificateOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
@@ -567,6 +578,32 @@ export default function AdminDashboardWorkspace() {
     return counts;
   }, [employees, statusByEmployee]);
 
+  const summaryCards = [
+    { key: "total", label: "totalEmployees", value: employees.length, color: "#163366", icon: <TeamOutlined /> },
+    { key: "not_started", label: "notStarted", value: summary.not_started, color: "#8c8c8c", icon: <UserOutlined /> },
+    { key: "draft", label: "draft", value: summary.draft, color: "#1677ff", icon: <FileTextOutlined /> },
+    { key: "pending_admin_approval", label: "pendingAdminApproval", value: summary.pending_admin_approval, color: "#d48806", icon: <ClockCircleOutlined /> },
+    { key: "pending_employee_review", label: "pendingEmployeeReview", value: summary.pending_employee_review, color: "#722ed1", icon: <EyeOutlined /> },
+    { key: "returned_to_manager", label: "returnedForModification", value: summary.returned_to_manager, color: "#fa8c16", icon: <RollbackOutlined /> },
+    { key: "active_performance", label: "activePerformance", value: summary.active_performance, color: "#389e0d", icon: <PlayCircleOutlined /> },
+    { key: "evaluation_in_progress", label: "evaluationInProgress", value: summary.evaluation_in_progress, color: "#08979c", icon: <BarChartOutlined /> },
+    { key: "pending_final_approval", label: "pendingFinalApproval", value: summary.pending_final_approval, color: "#d46b08", icon: <AuditOutlined /> },
+    { key: "finalized", label: "finalized", value: summary.finalized, color: "#237804", icon: <SafetyCertificateOutlined /> },
+  ];
+
+  const exclusionsByCycle = useMemo(() => {
+    const counts = new Map<number, { cycle: DashboardCycle; count: number }>();
+    for (const row of data?.exclusions || []) {
+      const id = Number(row.cycle.id);
+      const current = counts.get(id);
+      if (current) current.count += 1;
+      else counts.set(id, { cycle: row.cycle, count: 1 });
+    }
+    return Array.from(counts.values()).sort((a, b) =>
+      getCycleName(a.cycle, locale).localeCompare(getCycleName(b.cycle, locale)),
+    );
+  }, [data?.exclusions, locale]);
+
   const businessUnitOptions = useMemo(() => {
     const map = new Map<number, string>();
     for (const employee of employees) {
@@ -773,30 +810,27 @@ export default function AdminDashboardWorkspace() {
               />
             )}
 
-            {(summary.no_plan_yet > 0 || summary.goals_approved > 0) && (
-              <Card style={{ borderRadius: 12, borderColor: "#e2e8f0" }}>
-                {(() => {
-                  const noPlan = summary.no_plan_yet;
-                  const approved = summary.goals_approved;
-                  const total = noPlan + approved;
-                  const noPlanAngle = total ? (noPlan / total) * 360 : 0;
-                  return (
-                    <div style={{ display: "flex", alignItems: "center", gap: 28, flexWrap: "wrap" }}>
-                      <div role="img" aria-label={t("noPlanYetNote", { count: noPlan }) + ". " + t("goalsApprovedNote", { count: approved })}
-                        style={{ width: 156, height: 156, flex: "0 0 156px", borderRadius: "50%", background: `conic-gradient(#d97706 0deg ${noPlanAngle}deg, #163366 ${noPlanAngle}deg 360deg)`, display: "grid", placeItems: "center" }}>
-                        <div style={{ width: 104, height: 104, borderRadius: "50%", background: "#fff", display: "grid", placeContent: "center", textAlign: "center" }}>
-                          <Typography.Text strong style={{ fontSize: 25, lineHeight: 1.1 }}>{total.toLocaleString(locale)}</Typography.Text>
-                        </div>
-                      </div>
-                      <Space orientation="vertical" size={12}>
-                        <Space align="center" size={9}><span style={{ width: 10, height: 10, borderRadius: "50%", background: "#d97706" }} /><Typography.Text>{t("status.no_plan_yet")}</Typography.Text><Typography.Text strong>{noPlan.toLocaleString(locale)}</Typography.Text></Space>
-                        <Space align="center" size={9}><span style={{ width: 10, height: 10, borderRadius: "50%", background: "#163366" }} /><Typography.Text>{t("status.goals_approved")}</Typography.Text><Typography.Text strong>{approved.toLocaleString(locale)}</Typography.Text></Space>
-                      </Space>
+            <section>
+              <Row align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+                <Typography.Text strong style={{ color: "#475569", fontSize: 13, letterSpacing: ".04em", textTransform: "uppercase" }}>
+                  {t("text059")}
+                </Typography.Text>
+              </Row>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 175px), 1fr))", gap: 12 }}>
+                {summaryCards.map((item) => (
+                  <Card key={item.key} size="small" styles={{ body: { padding: "13px 14px" } }}
+                    style={{ height: "100%", border: "1px solid #e2e8f0", borderTop: "3px solid " + item.color, borderRadius: 11, boxShadow: "0 1px 2px rgba(15,23,42,.025)" }}>
+                    <div style={{ color: "#64748b", fontSize: 12, fontWeight: 500, minHeight: 18 }}>
+                      {item.key === "not_started" ? <Tooltip title={t("notStartedDefinition")}>{t(item.label)}</Tooltip> : t(item.label)}
                     </div>
-                  );
-                })()}
-              </Card>
-            )}
+                    <Space align="center" size={9} style={{ marginTop: 8 }}>
+                      <span style={{ color: item.color, fontSize: 18, display: "inline-flex" }}>{item.icon}</span>
+                      <Typography.Text strong style={{ fontSize: 25, lineHeight: 1.1, color: "#0f172a" }}>{item.value.toLocaleString(locale)}</Typography.Text>
+                    </Space>
+                  </Card>
+                ))}
+              </div>
+            </section>
 
             <Card
               title={<Typography.Text strong style={{ fontSize: 15 }}>{t("activeCycles")}</Typography.Text>}
@@ -979,52 +1013,82 @@ export default function AdminDashboardWorkspace() {
               />
             </Card>
 
-            <Card
-              title={<Typography.Text strong style={{ fontSize: 15 }}>{t("eligibilityExclusions")}</Typography.Text>}
-              extra={<Tag color="warning" style={{ borderRadius: 20 }}>{(data?.exclusions || []).length}</Tag>}
-              style={{ borderRadius: 12, borderColor: "#e2e8f0", overflow: "hidden" }}
-              styles={{ header: { minHeight: 54, paddingInline: 18, borderBottomColor: "#e8edf3" }, body: { padding: 0 } }}
-            >
-              {(data?.exclusions || []).length ? (
-                <DataTable<ExclusionRecord>
-                  rowKey={(row) => String(row.employee.id) + "-" + String(row.cycle.id)}
-                  size="small"
-                  pagination={{ pageSize: 5 }}
-                  scroll={{ x: 700 }}
-                  dataSource={data?.exclusions || []}
-                  columns={[
-                    {
-                      title: t("employeeName"),
-                      render: (_: unknown, row: ExclusionRecord) => row.employee.full_name,
-                    },
-                    {
-                      title: t("employeeId"),
-                      render: (_: unknown, row: ExclusionRecord) => row.employee.code || row.employee.id,
-                    },
-                    {
-                      title: t("cycleName"),
-                      render: (_: unknown, row: ExclusionRecord) => getCycleName(row.cycle, locale),
-                    },
-                    {
-                      title: t("joiningDate"),
-                      dataIndex: "joiningDate",
-                      render: (value: string) => formatDate(value),
-                    },
-                    {
-                      title: t("eligibleFrom"),
-                      dataIndex: "eligibleFrom",
-                      render: (value: string) => formatDate(value),
-                    },
-                    {
-                      title: t("eligibilityStatus"),
-                      render: () => <Tag color="warning">{t("underSixMonths")}</Tag>,
-                    },
-                  ]}
-                />
-              ) : (
-                <Empty description={t("noExclusions")} />
-              )}
-            </Card>
+            <Row gutter={[16, 16]} align="stretch">
+              <Col xs={24} xl={16}>
+                <Card
+                  title={<Typography.Text strong style={{ fontSize: 15 }}>{t("eligibilityExclusions")}</Typography.Text>}
+                  extra={<Tag color="warning" style={{ borderRadius: 20 }}>{(data?.exclusions || []).length}</Tag>}
+                  style={{ height: "100%", borderRadius: 12, borderColor: "#e2e8f0", overflow: "hidden" }}
+                  styles={{ header: { minHeight: 54, paddingInline: 18, borderBottomColor: "#e8edf3" }, body: { padding: 0 } }}
+                >
+                  {(data?.exclusions || []).length ? (
+                    <DataTable<ExclusionRecord>
+                      rowKey={(row) => String(row.employee.id) + "-" + String(row.cycle.id)}
+                      size="small"
+                      pagination={{ pageSize: 5 }}
+                      scroll={{ x: 700 }}
+                      dataSource={data?.exclusions || []}
+                      columns={[
+                        { title: t("employeeName"), render: (_: unknown, row: ExclusionRecord) => row.employee.full_name },
+                        { title: t("employeeId"), render: (_: unknown, row: ExclusionRecord) => row.employee.code || row.employee.id },
+                        { title: t("cycleName"), render: (_: unknown, row: ExclusionRecord) => getCycleName(row.cycle, locale) },
+                        { title: t("joiningDate"), dataIndex: "joiningDate", render: (value: string) => formatDate(value) },
+                        { title: t("eligibleFrom"), dataIndex: "eligibleFrom", render: (value: string) => formatDate(value) },
+                        { title: t("eligibilityStatus"), render: () => <Tag color="warning">{t("underSixMonths")}</Tag> },
+                      ]}
+                    />
+                  ) : <Empty description={t("noExclusions")} />}
+                </Card>
+              </Col>
+              <Col xs={24} xl={8}>
+                <Card
+                  title={<Typography.Text strong style={{ fontSize: 15 }}>{t("eligibilityExclusions")}</Typography.Text>}
+                  style={{ height: "100%", borderRadius: 12, borderColor: "#e2e8f0" }}
+                  styles={{ body: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 260 } }}
+                >
+                  {exclusionsByCycle.length ? (() => {
+                    const total = exclusionsByCycle.reduce((sum, item) => sum + item.count, 0);
+                    const circumference = 2 * Math.PI * 48;
+                    let offset = 0;
+                    const palette = ["#163366", "#d97706", "#0d9488", "#7c3aed", "#64748b", "#db2777"];
+                    return (
+                      <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+                        <svg viewBox="0 0 120 120" role="img" aria-label={t("eligibilityExclusions") + ": " + total} style={{ width: 190, maxWidth: "100%", overflow: "visible" }}>
+                          <circle cx="60" cy="60" r="48" fill="none" stroke="#edf1f6" strokeWidth="18" />
+                          {exclusionsByCycle.map((item, index) => {
+                            const length = (item.count / total) * circumference;
+                            const dashOffset = -offset;
+                            offset += length;
+                            const cycleName = getCycleName(item.cycle, locale);
+                            return (
+                              <circle key={item.cycle.id} cx="60" cy="60" r="48" fill="none"
+                                stroke={palette[index % palette.length]} strokeWidth="18"
+                                strokeDasharray={`${length} ${circumference - length}`}
+                                strokeDashoffset={dashOffset} transform="rotate(-90 60 60)" strokeLinecap="butt">
+                                <title>{cycleName}: {item.count.toLocaleString(locale)} ({Math.round((item.count / total) * 100)}%)</title>
+                              </circle>
+                            );
+                          })}
+                          <text x="60" y="57" textAnchor="middle" fontSize="17" fontWeight="700" fill="#0f172a">{total.toLocaleString(locale)}</text>
+                          <text x="60" y="70" textAnchor="middle" fontSize="6.5" fill="#64748b">{t("totalEmployees")}</text>
+                        </svg>
+                        <Space orientation="vertical" size={7} style={{ width: "100%" }}>
+                          {exclusionsByCycle.map((item, index) => (
+                            <Tooltip key={item.cycle.id} title={`${getCycleName(item.cycle, locale)} · ${item.count.toLocaleString(locale)} · ${Math.round((item.count / total) * 100)}%`}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "help" }}>
+                                <span style={{ width: 9, height: 9, flex: "0 0 9px", borderRadius: "50%", background: palette[index % palette.length] }} />
+                                <Typography.Text ellipsis style={{ flex: 1, minWidth: 0, fontSize: 12 }}>{getCycleName(item.cycle, locale)}</Typography.Text>
+                                <Typography.Text strong style={{ fontSize: 12 }}>{item.count.toLocaleString(locale)}</Typography.Text>
+                              </div>
+                            </Tooltip>
+                          ))}
+                        </Space>
+                      </div>
+                    );
+                  })() : <Empty description={t("noExclusions")} />}
+                </Card>
+              </Col>
+            </Row>
           </>
         )}
       </Space>
