@@ -77,6 +77,107 @@ function WorkflowActions({ plan, ar, onAction }: { plan: any; ar: boolean; onAct
   );
 }
 
+function PlanDetailLoadingSkeleton({ mode }: { mode: PlanMode }) {
+  const infoCards = (count: number) => (
+    <Row gutter={[10, 10]}>
+      {Array.from({ length: count }, (_, index) => (
+        <Col xs={12} sm={8} md={6} key={index}>
+          <Card className="plan-detail-info-card" size="small" style={{ height: "100%", borderRadius: 10 }}>
+            <Skeleton active title={false} paragraph={{ rows: 2, width: ["42%", "76%"] }} />
+          </Card>
+        </Col>
+      ))}
+    </Row>
+  );
+
+  return (
+    <div className="plan-detail-workspace plan-detail-loading" style={{ width: "100%" }}>
+      <Space orientation="vertical" size={16} style={{ width: "100%" }}>
+        <div className="plan-detail-page-toolbar">
+          <div className="plan-detail-page-heading">
+            <Skeleton.Button active shape="default" size="large" />
+            <div style={{ flex: 1, minWidth: 220 }}>
+              <Skeleton active title={{ width: 180 }} paragraph={{ rows: 1, width: "68%" }} />
+            </div>
+          </div>
+          <Space wrap>
+            <Skeleton.Button active />
+            <Skeleton.Button active />
+          </Space>
+        </div>
+
+        <Card className="plan-detail-hero-card" styles={{ body: { padding: 16 } }}>
+          <Space orientation="vertical" size={18} style={{ width: "100%" }}>
+            <Skeleton active title={{ width: 220 }} paragraph={false} />
+            <div>
+              <Skeleton active title={{ width: 150 }} paragraph={false} />
+              {infoCards(8)}
+            </div>
+            <div>
+              <Skeleton active title={{ width: 130 }} paragraph={false} />
+              {infoCards(6)}
+            </div>
+          </Space>
+        </Card>
+
+        <Card className="plan-detail-section plan-detail-objectives" title={<Skeleton.Input active size="small" />}>
+          <Row gutter={[12, 12]}>
+            {[0, 1, 2].map((item) => (
+              <Col xs={12} md={8} key={item}>
+                <Card className="plan-summary-card" size="small">
+                  <Skeleton active title={{ width: "48%" }} paragraph={{ rows: 1, width: "30%" }} />
+                </Card>
+              </Col>
+            ))}
+          </Row>
+          <div style={{ marginTop: 18 }}>
+            <Skeleton active title={false} paragraph={{ rows: 1, width: "58%" }} />
+            {[0, 1].map((item) => (
+              <Card key={item} size="small" style={{ marginTop: 10 }}>
+                <Skeleton active title={{ width: "52%" }} paragraph={{ rows: 1, width: "34%" }} />
+                <Row gutter={[12, 12]}>
+                  {[0, 1].map((kpi) => (
+                    <Col xs={24} md={12} key={kpi}>
+                      <Card size="small"><Skeleton active title={{ width: "46%" }} paragraph={{ rows: 2 }} /></Card>
+                    </Col>
+                  ))}
+                </Row>
+              </Card>
+            ))}
+          </div>
+        </Card>
+
+        {mode !== "employee" ? (
+          <div className="plan-detail-workflow-grid">
+            <Card className="plan-detail-section plan-detail-history" title={<Skeleton.Input active size="small" />}>
+              <Space orientation="vertical" size={20} style={{ width: "100%" }}>
+                {[0, 1, 2, 3].map((item) => (
+                  <Space key={item} align="start" size={12}>
+                    <Skeleton.Avatar active size={30} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <Skeleton active title={{ width: "58%" }} paragraph={{ rows: 2, width: ["36%", "78%"] }} />
+                    </div>
+                  </Space>
+                ))}
+              </Space>
+            </Card>
+          </div>
+        ) : null}
+
+        {mode !== "employee" ? (
+          <Card className="plan-detail-section plan-detail-snapshots" title={<Skeleton.Input active size="small" />}>
+            {[0, 1].map((item) => (
+              <Card key={item} size="small" style={{ marginBottom: 10 }}>
+                <Skeleton active title={{ width: "48%" }} paragraph={false} />
+              </Card>
+            ))}
+          </Card>
+        ) : null}
+      </Space>
+    </div>
+  );
+}
+
 export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
   const params = useParams<{ planId: string }>();
   const planId = Number(params.planId);
@@ -201,7 +302,11 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     return <AppShell role={mode} title={pageTitle}><Alert type="error" title={t("Invalid plan ID", "رقم الخطة غير صحيح")} /></AppShell>;
   }
   if (planQuery.isLoading) {
-    return <AppShell role={mode} title={pageTitle}><div style={{ minHeight: 300, display: "grid", placeItems: "center" }}><Skeleton active /></div></AppShell>;
+    return (
+      <AppShell role={mode} title={pageTitle}>
+        <PlanDetailLoadingSkeleton mode={mode} />
+      </AppShell>
+    );
   }
   if (planQuery.isError || !planData) {
     return <AppShell role={mode} title={pageTitle}><Alert type="error" showIcon title={(planQuery.error as Error)?.message || t("Plan not found", "لم يتم العثور على الخطة")} action={<Button onClick={() => router.push(listPath)}>{t("Back to plans", "العودة للخطط")}</Button>} /></AppShell>;
