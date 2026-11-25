@@ -8,5 +8,5 @@ export function homePathForUser(user: ApiUser | null | undefined, locale: string
     : user?.roles.admin ? "admin" : user?.roles.manager ? "manager" : "employee";
   if (role === "admin") return `/${locale}/admin`;
   if (role === "manager") return `/${locale}/manager`;
-  return `/${locale}/employee`;
+  return `/${locale}/dashboard`;
 }
