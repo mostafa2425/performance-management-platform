@@ -12,6 +12,7 @@ import {
   Card,
   Col,
   Empty,
+  Dropdown,
   Row,
   Select,
   Space,
@@ -19,6 +20,7 @@ import {
   Typography,
 } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { MoreOutlined } from "@ant-design/icons";
 import { cyclesApi, plansApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
 import { AppShell } from "@/components/layout/app-shell";
@@ -76,7 +78,6 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const qc = useQueryClient();
   const [cycleId, setCycleId] = useState<number>();
   const [statusFilter, setStatusFilter] = useState<string>();
-  const [attentionOnly, setAttentionOnly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [pendingAction, setPendingAction] = useState("");
   const [dialog, setDialog] = useState(false);
@@ -89,9 +90,8 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
     const filter: Record<string, unknown> = {};
     if (cycleId) filter.cycle_id = cycleId;
     if (statusFilter) filter.status = statusFilter;
-    if (attentionOnly) filter.requires_admin_attention = 1;
     return { per_page: 100, ...(Object.keys(filter).length ? { filter } : {}) };
-  }, [cycleId, statusFilter, attentionOnly]);
+  }, [cycleId, statusFilter]);
 
   const plans = useQuery({
     queryKey: [...queryKeys.plans, mode, listParams],
@@ -258,15 +258,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                     ]}
                   />
                 </Col>
-                <Col xs={12} md={6}>
-                  <Button
-                    block
-                    type={attentionOnly ? "primary" : "default"}
-                    onClick={() => setAttentionOnly((v) => !v)}
-                  >
-                    {t("Needs attention", "تتطلب متابعة")}
-                  </Button>
-                </Col>
+
               </>
             )}
           </Row>
@@ -372,15 +364,44 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                 },
                 {
                   title: t("Actions", "الإجراءات"),
-                  width: 280,
-                  render: (_: unknown, r: Plan) => (
-                    <ActionButtons
-                      actions={r.allowed_actions || []}
-                      ar={ar}
-                      plan={r}
-                      onAction={(action) => openAction(r, action)}
-                    />
-                  ),
+                  width: 76,
+                  align: "center" as const,
+                  render: (_: unknown, r: Plan) => {
+                    // Prefer backend permissions. The current list response exposes
+                    // status but not allowed_actions; pending_admin is reviewable by Admin.
+                    const actions = Array.isArray(r.allowed_actions)
+                      ? workflowActions(r.allowed_actions)
+                      : r.status?.key === "pending_admin"
+                        ? ["approve", "return"]
+                        : [];
+                    const menuItems = actions.map((action) => ({
+                      key: action,
+                      label: resolveActionLabel(action, ar, r),
+                      danger: action === "return" || action === "delete",
+                    }));
+
+                    return (
+                      <div onClick={(event) => event.stopPropagation()}>
+                        <Dropdown
+                          trigger={["click"]}
+                          placement={ar ? "bottomLeft" : "bottomRight"}
+                          menu={{
+                            items: menuItems,
+                            onClick: ({ key }) => openAction(r, String(key)),
+                          }}
+                        >
+                          <Button
+                            type="text"
+                            size="small"
+                            aria-label={t("Plan actions", "إجراءات الخطة")}
+                            icon={<MoreOutlined />}
+                            disabled={!menuItems.length}
+                            onClick={(event) => event.stopPropagation()}
+                          />
+                        </Dropdown>
+                      </div>
+                    );
+                  },
                 },
               ]}
             />
