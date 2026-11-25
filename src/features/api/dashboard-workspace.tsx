@@ -5,6 +5,7 @@ import { Alert, Button, Card, Col, Empty, Row, Skeleton, Tag, Typography } from 
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 import { useAuthSession } from "@/lib/auth/session";
 import { cyclesApi, plansApi, resultsApi } from "@/lib/api/endpoints";
 import { EmployeeDashboardView } from "@/features/api/employee-dashboard-view";
@@ -20,18 +21,19 @@ export default function DashboardPage() {
   const ar = useLocale() === "ar";
   const locale = ar ? "ar" : "en";
   const { user, isReady, isAuthenticated } = useAuthSession();
+  const { cycleId, activeCycle } = usePerformanceCycle();
   const t = (en: string, a: string) => (ar ? a : en);
 
   const cycles = useQuery({ queryKey: ["cycles"], queryFn: cyclesApi.mine, enabled: isAuthenticated });
   const plans = useQuery({
-    queryKey: ["plans", "dashboard"],
-    queryFn: () => plansApi.list({ per_page: 100 }),
-    enabled: isAuthenticated,
+    queryKey: ["plans", "dashboard", cycleId],
+    queryFn: () => plansApi.list({ filter: cycleId ? { cycle_id: cycleId } : {}, per_page: 100 }),
+    enabled: isAuthenticated && Boolean(cycleId),
   });
   const results = useQuery({
-    queryKey: ["results", "dashboard"],
-    queryFn: () => resultsApi.list(),
-    enabled: isAuthenticated,
+    queryKey: ["results", "dashboard", cycleId],
+    queryFn: () => resultsApi.list(cycleId),
+    enabled: isAuthenticated && Boolean(cycleId),
   });
 
   const busy = !isReady || cycles.isLoading || plans.isLoading || results.isLoading;
@@ -51,7 +53,8 @@ export default function DashboardPage() {
         : `/${locale}/employee/objectives`;
 
   if (role === "employee") {
-    const employeeCycles = active.filter((cycle: any) => cycle.my_roles?.member !== false);
+    const employeeCycles = active.filter((cycle: any) => cycle.id === cycleId && cycle.my_roles?.member !== false);
+    if (employeeCycles.length === 0 && activeCycle?.my_roles?.member) employeeCycles.push(activeCycle);
     return (
       <AppShell
         title={t("Overview", "نظرة عامة")}
