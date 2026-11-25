@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, Button, Card, Col, Collapse, Form, Input, InputNumber, Modal, Popconfirm, Row, Select, Space, Tag, Typography } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { KpiUnitsMeta, ObjectiveCategory } from "@/lib/api/types";
 import { commentsForTarget, type OpenComments } from "./plans/plan-shared";
@@ -30,6 +30,7 @@ type Props = {
   loading?: boolean;
   openComments?: OpenComments;
   onSave: (objectives: ObjectiveDraft[]) => void;
+  addObjectiveRequest?: number;
 };
 
 function InlineComments({
@@ -101,7 +102,7 @@ function KpiFields({
       title={
         <Space wrap size={8}>
           <Typography.Text strong>{kpiName || t("New KPI", "مؤشر جديد")}</Typography.Text>
-          <Tag color="blue">{t("Weight", "الوزن")}: {Number(kpiWeight || 0).toFixed(2)}%</Tag>
+          <Tag color="blue">{t("Weight", "الوزن")}: {Number(kpiWeight || 0).toLocaleString(ar ? "ar-EG" : "en-US", { maximumFractionDigits: 0 })}%</Tag>
         </Space>
       }
       extra={canRemove ? (
@@ -124,12 +125,13 @@ function KpiFields({
         <Input />
       </Form.Item>
       <Form.Item name={[kpiField.name, "name"]} label={t("KPI name", "اسم المؤشر")} rules={[{ required: true }]}>
-        <Input />
+        <Input placeholder={t("Enter KPI name", "أدخل اسم المؤشر")} />
       </Form.Item>
       <Row gutter={[16, 0]}>
         <Col xs={24} md={12}>
           <Form.Item name={[kpiField.name, "measurement_type"]} label={t("Type", "النوع")} rules={[{ required: true }]}>
             <Select
+              placeholder={t("Select measurement type", "اختر نوع القياس")}
               options={measurementTypes.map((item) => ({
                 value: item.value,
                 label: bilingual(item.label, ar),
@@ -144,6 +146,7 @@ function KpiFields({
         <Col xs={24} md={12}>
           <Form.Item name={[kpiField.name, "unit"]} label={t("Unit", "الوحدة")} rules={[{ required: true }]}>
             <Select
+              placeholder={t("Select unit", "اختر الوحدة")}
               options={unitOptions.map((item) => ({
                 value: item.value,
                 label: bilingual(item.label, ar),
@@ -154,6 +157,7 @@ function KpiFields({
         <Col xs={24} md={12}>
           <Form.Item name={[kpiField.name, "direction"]} label={t("Direction", "الاتجاه")} rules={[{ required: true }]}>
             <Select
+              placeholder={t("Select direction", "اختر الاتجاه")}
               options={[
                 { value: "higher", label: t("Higher is better", "الأعلى أفضل") },
                 { value: "lower", label: t("Lower is better", "الأقل أفضل") },
@@ -163,17 +167,17 @@ function KpiFields({
         </Col>
         <Col xs={24} md={12}>
           <Form.Item name={[kpiField.name, "target"]} label={t("Target", "المستهدف")} rules={[{ required: true }]}>
-            <InputNumber style={{ width: "100%" }} />
+            <InputNumber placeholder={t("Enter target", "أدخل المستهدف")} style={{ width: "100%" }} />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
           <Form.Item name={[kpiField.name, "baseline"]} label={t("Baseline", "خط الأساس")}>
-            <InputNumber style={{ width: "100%" }} />
+            <InputNumber placeholder={t("Enter baseline (optional)", "أدخل خط الأساس (اختياري)")} style={{ width: "100%" }} />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
           <Form.Item name={[kpiField.name, "weight_pct"]} label={t("Weight %", "الوزن %")} rules={[{ required: true }]}>
-            <InputNumber min={0} max={100} step={0.01} style={{ width: "100%" }} />
+            <InputNumber min={0} max={100} step={1} precision={0} placeholder={t("Enter whole number", "أدخل رقمًا صحيحًا")} style={{ width: "100%" }} />
           </Form.Item>
         </Col>
       </Row>
@@ -189,6 +193,7 @@ export function PlanContentEditor({
   loading,
   openComments,
   onSave,
+  addObjectiveRequest = 0,
 }: Props) {
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const [form] = Form.useForm<{ objectives: ObjectiveDraft[] }>();
@@ -204,6 +209,20 @@ export function PlanContentEditor({
   );
   const weightReady = Math.abs(weightTotal - 100) < 0.01;
 
+  const openObjectiveModal = () => {
+    objectiveForm.resetFields();
+    objectiveForm.setFieldsValue({
+      text: "",
+      category_id: undefined,
+      kpis: [{ name: "", measurement_type: "number_amount", unit: measurementTypes.find((item) => item.value === "number_amount")?.units?.[0]?.value || "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
+    });
+    setObjectiveModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (addObjectiveRequest > 0) openObjectiveModal();
+  }, [addObjectiveRequest]);
+
   return (
     <Form
       form={form}
@@ -212,21 +231,26 @@ export function PlanContentEditor({
       onFinish={(values) => onSave(values.objectives || [])}
     >
       <InlineComments openComments={openComments} target="plan" ar={ar} />
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
+      <div className="plan-content-editor-toolbar">
         <Alert
+          className="plan-content-editor-weight-alert"
           type={weightReady ? "success" : "warning"}
           showIcon
-          style={{ flex: 1, minWidth: 240 }}
-          title={`${t("Total KPI weight", "إجمالي وزن المؤشرات")}: ${weightTotal.toFixed(2)}%`}
+          title={`${t("Total KPI weight", "إجمالي وزن المؤشرات")}: ${Math.round(weightTotal)}%`}
           description={
             weightReady
               ? t("Ready for submission checks.", "جاهز لفحوصات الإرسال.")
               : t("Must equal 100% before submit.", "يجب أن يساوي 100% قبل الإرسال.")
           }
         />
-        <Button type="primary" htmlType="submit" loading={loading}>
-          {t("Save draft", "حفظ المسودة")}
-        </Button>
+        <Space className="plan-content-editor-actions" wrap>
+          <Button type="primary" ghost icon={<PlusOutlined />} onClick={openObjectiveModal}>
+            {t("Add objective", "إضافة هدف")}
+          </Button>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            {t("Save draft", "حفظ المسودة")}
+          </Button>
+        </Space>
       </div>
 
       <Form.List name="objectives">
@@ -234,24 +258,6 @@ export function PlanContentEditor({
           addObjectiveRef.current = add;
           return (
             <>
-              <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
-                <Button
-                  type="primary"
-                  ghost
-                  icon={<PlusOutlined />}
-                  onClick={() => {
-                    objectiveForm.resetFields();
-                    objectiveForm.setFieldsValue({
-                      text: "",
-                      category_id: undefined,
-                      kpis: [{ name: "", measurement_type: "number_amount", unit: measurementTypes.find((item) => item.value === "number_amount")?.units?.[0]?.value || "count", direction: "higher", target: null, baseline: null, weight_pct: 0 }],
-                    });
-                    setObjectiveModalOpen(true);
-                  }}
-                >
-                  {t("Add objective", "إضافة هدف")}
-                </Button>
-              </div>
               {fields.length ? (
                 <Collapse
                   bordered={false}
@@ -297,6 +303,7 @@ export function PlanContentEditor({
                           >
                             <Select
                               showSearch
+                              placeholder={t("Select objective category", "اختر تصنيف الهدف")}
                               optionFilterProp="label"
                               options={categories.map((category) => ({
                                 value: category.id,
@@ -309,24 +316,31 @@ export function PlanContentEditor({
                             label={t("Objective text", "نص الهدف")}
                             rules={[{ required: true, message: t("Objective text is required", "نص الهدف مطلوب") }]}
                           >
-                            <Input.TextArea rows={2} />
+                            <Input.TextArea rows={2} placeholder={t("Describe the objective", "اكتب وصف الهدف")} />
                           </Form.Item>
                           <Form.List name={[field.name, "kpis"]}>
                             {(kpiFields, kpiOps) => (
                               <Space orientation="vertical" style={{ width: "100%" }} size={8}>
-                                {kpiFields.map((kpiField) => (
-                                  <KpiFields
-                                    key={kpiField.key}
-                                    objectiveIndex={field.name}
-                                    kpiField={kpiField}
-                                    measurementTypes={measurementTypes}
-                                    ar={ar}
-                                    t={t}
-                                    canRemove={kpiFields.length > 1}
-                                    onRemove={() => kpiOps.remove(kpiField.name)}
-                                    openComments={openComments}
-                                  />
-                                ))}
+                                <Collapse
+                                  bordered={false}
+                                  defaultActiveKey={kpiFields.map((item) => String(item.key))}
+                                  items={kpiFields.map((kpiField, kpiIndex) => ({
+                                    key: String(kpiField.key),
+                                    label: t("KPI", "مؤشر الأداء") + " " + (kpiIndex + 1),
+                                    children: (
+                                      <KpiFields
+                                        objectiveIndex={field.name}
+                                        kpiField={kpiField}
+                                        measurementTypes={measurementTypes}
+                                        ar={ar}
+                                        t={t}
+                                        canRemove={kpiFields.length > 1}
+                                        onRemove={() => kpiOps.remove(kpiField.name)}
+                                        openComments={openComments}
+                                      />
+                                    ),
+                                  }))}
+                                />
                                 <Button
                                   type="dashed"
                                   icon={<PlusOutlined />}
@@ -381,10 +395,10 @@ export function PlanContentEditor({
           }}
         >
           <Form.Item name="category_id" label={t("Category", "التصنيف")} rules={[{ required: true }]}>
-            <Select showSearch optionFilterProp="label" options={categories.map((category) => ({ value: category.id, label: bilingual(category.name, ar) }))} />
+            <Select showSearch placeholder={t("Select objective category", "اختر تصنيف الهدف")} optionFilterProp="label" options={categories.map((category) => ({ value: category.id, label: bilingual(category.name, ar) }))} />
           </Form.Item>
           <Form.Item name="text" label={t("Objective text", "نص الهدف")} rules={[{ required: true }]}>
-            <Input.TextArea rows={3} />
+            <Input.TextArea rows={3} placeholder={t("Describe the objective", "اكتب وصف الهدف")} />
           </Form.Item>
           <Form.List name="kpis">
             {(kpiFields, { add: addKpi, remove: removeKpi }) => (
@@ -396,11 +410,12 @@ export function PlanContentEditor({
                         <Button danger type="text" icon={<DeleteOutlined />}>{t("Delete", "حذف")}</Button>
                       </Popconfirm>
                     ) : null}>
-                    <Form.Item name={[field.name, "name"]} label={t("KPI name", "اسم المؤشر")} rules={[{ required: true }]}><Input /></Form.Item>
+                    <Form.Item name={[field.name, "name"]} label={t("KPI name", "اسم المؤشر")} rules={[{ required: true }]}><Input placeholder={t("Enter KPI name", "أدخل اسم المؤشر")} /></Form.Item>
                     <Row gutter={[12, 0]}>
                       <Col xs={24} md={12}>
                         <Form.Item name={[field.name, "measurement_type"]} label={t("Type", "النوع")} rules={[{ required: true }]}>
                           <Select
+                            placeholder={t("Select measurement type", "اختر نوع القياس")}
                             options={measurementTypes.map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))}
                             onChange={(value) => objectiveForm.setFieldValue(["kpis", field.name, "unit"], measurementTypes.find((item) => item.value === value)?.units?.[0]?.value)}
                           />
@@ -413,7 +428,7 @@ export function PlanContentEditor({
                             const unitOptions = measurementTypes.find((item) => item.value === selectedType)?.units || [];
                             return (
                               <Form.Item name={[field.name, "unit"]} label={t("Unit", "الوحدة")} rules={[{ required: true }]}>
-                                <Select options={unitOptions.map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))} />
+                                <Select placeholder={t("Select unit", "اختر الوحدة")} options={unitOptions.map((item) => ({ value: item.value, label: bilingual(item.label, ar) }))} />
                               </Form.Item>
                             );
                           }}
@@ -421,7 +436,7 @@ export function PlanContentEditor({
                       </Col>
                       <Col xs={24} md={12}>
                         <Form.Item name={[field.name, "direction"]} label={t("Direction", "الاتجاه")} rules={[{ required: true }]}>
-                          <Select options={[{ value: "higher", label: t("Higher is better", "الأعلى أفضل") }, { value: "lower", label: t("Lower is better", "الأقل أفضل") }]} />
+                          <Select placeholder={t("Select direction", "اختر الاتجاه")} options={[{ value: "higher", label: t("Higher is better", "الأعلى أفضل") }, { value: "lower", label: t("Lower is better", "الأقل أفضل") }]} />
                         </Form.Item>
                       </Col>
                       <Col xs={24} md={12}><Form.Item name={[field.name, "target"]} label={t("Target", "المستهدف")} rules={[{ required: true }]}><InputNumber style={{ width: "100%" }} /></Form.Item></Col>
