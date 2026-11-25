@@ -516,3 +516,15 @@
   .plan-detail-workspace .plan-content-editor-actions .ant-btn { flex: 1 1 140px; }
   .plan-detail-workspace .plan-detail-page-actions > .ant-space { width: 100%; justify-content: flex-start; }
 }
+
+/* Objective weight progress */
+
+.plan-detail-workspace .plan-content-editor-weight-progress{flex:0 1 390px;width:min(100%,390px);min-width:220px;padding:12px 14px;border:1px solid #e2e8f0;border-radius:11px;background:#f8fafc}
+.plan-detail-workspace .plan-content-editor-weight-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.plan-detail-workspace .plan-content-editor-weight-heading .ant-typography:last-child{font-size:17px}
+.plan-detail-workspace .plan-content-editor-weight-heading .is-complete{color:#15803d}
+.plan-detail-workspace .plan-content-editor-weight-heading .is-incomplete{color:#b45309}
+.plan-detail-workspace .plan-content-editor-weight-heading .is-overweight{color:#dc2626}
+.plan-detail-workspace .plan-content-editor-weight-progress .ant-progress{line-height:1}
+.plan-detail-workspace .plan-content-editor-weight-hint{display:block;margin-top:5px;font-size:11px;line-height:1.5}
+@media(max-width:767px){.plan-detail-workspace .plan-content-editor-weight-progress{width:100%;min-width:0;flex-basis:auto}}
