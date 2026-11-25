@@ -46,8 +46,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Project-wide UI/UX design reference
 
-- Before implementing or changing UI in any role or feature, read `UI_UX_DESIGN_GUIDELINES.md` at the repository root.
-- Treat the Manager Dashboard Team Overview as the visual reference for shared design language: compact spacing, white bordered surfaces, slate typography, teal primary actions, restrained amber draft states, responsive KPI wrapping, employee identity cells, status pills, and clean table headers/rows.
+- Before implementing or changing UI in any role or feature, read `UI_UX_DESIGN_GUIDELINES.md` at the repository root. Reuse its Employee Dashboard composition patterns and design tokens rather than inventing page-specific visual systems.
+- Treat the Employee Dashboard as the current visual reference for polished page composition (welcome/context hero, responsive KPI cards, white bordered panels, summary tiles, action lists, and empty states). Use brand primary `#163366` for primary actions and key accents. Retain the Manager Dashboard's team-oriented information architecture and semantic status colors; do not copy the Employee Dashboard's content or role visibility.
 - Apply the guidelines to Admin, Manager, Employee, and shared experiences. Reuse shared components/tokens where practical; do not copy the manager dashboard layout into unrelated pages.
 - All project tables should converge on the documented table treatment, while preserving domain-specific columns, matrix layouts, data behavior, permissions, sorting, filtering, pagination, and actions.
 - Keep UI-only work separate from API contracts and business workflows. Never alter endpoint calls, payloads, role checks, allowed actions, or workflow transitions merely to achieve visual consistency.
@@ -119,3 +119,15 @@ rg -n -U '<Alert\\b[^>]*\\bmessage\\s*=' src
 ```
 
 Also run lint and typecheck, then run the app and inspect the browser console on every affected screen. Fix warnings at their source. Do not report a search as clean unless it was actually run; document any remaining match and why it is a valid exception.
+
+
+## Reusable dashboard and workspace design rules
+
+- The Employee Dashboard implementation (`src/features/api/employee-dashboard-view.tsx` and `employee-dashboard.css`) is the current reference for visual quality and reusable composition.
+- Brand primary is `#163366`. Use it for primary buttons, active navigation/accent states, key links, and important values. Use `#edf2f9` for soft brand surfaces and `#cbd8ea` for subtle brand borders.
+- Build page hierarchy from a compact context/hero area (only when useful), responsive summary/KPI cards, clearly titled content panels, and focused action areas. Do not add a hero to every CRUD page if it creates unnecessary vertical space.
+- Use white bordered surfaces, restrained/no shadows, 10–16px radii, compact section spacing, slate typography, and consistent 42px form/button controls. Buttons must not have box shadows.
+- Keep status colors semantic (draft/attention amber, pending blue, returned red, approved/completed green, neutral slate); do not recolor workflow statuses to brand navy.
+- Reuse the shared `DataTable` for all data tables. Keep filters grouped above tables and ensure loading, empty, error, and responsive states are intentional.
+- For Arabic, use logical CSS properties, mirrored icon/action alignment, readable Arabic line-height, and verify RTL on mobile as well as desktop.
+- For UI-only redesigns, preserve API requests, payloads, response mapping, role scoping, allowed actions, validation, and workflow transitions exactly.
