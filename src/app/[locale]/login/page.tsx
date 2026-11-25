@@ -21,7 +21,7 @@ export default function LoginPage() {
   const router = useRouter();
   const ar = locale === "ar";
   const translate = useTranslations("Login");
-  const { login, isReady, isAuthenticated, user } = useAuthSession();
+  const { login, isReady, isAuthenticated, user, activeRole } = useAuthSession();
   const [form] = Form.useForm<{ email: string; password: string }>();
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -32,9 +32,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isReady && isAuthenticated) {
-      router.replace(homePathForUser(user, locale));
+      router.replace(homePathForUser(user, locale, activeRole));
     }
-  }, [isReady, isAuthenticated, user, locale, router]);
+  }, [isReady, isAuthenticated, user, activeRole, locale, router]);
 
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
