@@ -5,12 +5,13 @@ import { Alert, Card, Empty, Skeleton, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { resultsApi } from "@/lib/api/endpoints";
 import { useLocale } from "next-intl";
+import { usePerformanceCycle } from "@/features/performance-cycles/performance-cycle-provider";
 
 type PublishedKpi = { name: string; target: string | number; weight_bp: number };
 type PublishedObjective = { id: number | string; text: string; kpis: PublishedKpi[] };
 type PublishedResult = { id: number; cycle?: { performance_year?: number; name?: string | { ar?: string; en?: string } }; overall_bp: number; rating_label?: { ar?: string; en?: string }; rating_level?: string; published: boolean; published_at?: string | null; objectives: PublishedObjective[] };
 export default function ApiEmployeeResultsWorkspace(){
- const ar=useLocale()==="ar"; const q=useQuery({queryKey:["results","me"],queryFn:()=>resultsApi.mine()}); const t=(en:string,a:string)=>ar?a:en;
+ const ar=useLocale()==="ar"; const {cycleId}=usePerformanceCycle(); const q=useQuery({queryKey:["results","me",cycleId],queryFn:()=>resultsApi.mine(cycleId),enabled:Boolean(cycleId)}); const t=(en:string,a:string)=>ar?a:en;
  if(q.isLoading)return <Skeleton active/>; if(q.isError)return <Alert type="error" showIcon title={(q.error as Error).message}/>;
  const rows=(q.data||[]) as PublishedResult[]; if(!rows.length)return <Empty description={t("No published results are available yet.","لا توجد نتائج منشورة متاحة حتى الآن.")}/>;
  return <Card title={t("My published performance results","نتائج أدائي المنشورة")}>
