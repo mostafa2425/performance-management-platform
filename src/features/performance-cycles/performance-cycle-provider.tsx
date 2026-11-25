@@ -12,6 +12,7 @@ type PerformanceCycle = {
   id: number;
   name?: string | { en?: string; ar?: string };
   performance_year?: number;
+  my_roles?: { manager?: boolean; member?: boolean; admin?: boolean };
   is_active?: boolean;
   is_current?: boolean;
   active?: boolean;
