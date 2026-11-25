@@ -1,12 +1,12 @@
 {
   "Home": {
     "title": "Performance Management Platform",
-    "description": "A centralized workspace for performance cycles, objectives, evaluations and results.",
+    "description": "An enterprise platform by Master Works to align people, objectives, performance reviews and organizational outcomes.",
     "signIn": "Sign in"
   },
   "Auth": {
     "title": "Welcome back",
-    "subtitle": "Sign in to your performance workspace",
+    "subtitle": "Sign in to the Performance Management Platform",
     "email": "Work email",
     "password": "Password",
     "signIn": "Sign in",
@@ -28,9 +28,9 @@
     "back": "Go back",
     "notifications": "Notifications",
     "lastUpdated": "Last updated just now",
-    "copyright": "© 2026 Perform. All rights reserved.",
-    "tagline": "Performance made meaningful.",
-    "metaDescription": "Performance management workspace",
+    "copyright": "© 2026 Master Works. All rights reserved.",
+    "tagline": "Empowering people. Elevating performance.",
+    "metaDescription": "Performance Management Platform by Master Works",
     "roles": {
       "employee": "Employee",
       "manager": "Manager",
