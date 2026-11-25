@@ -7,6 +7,8 @@ import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
 import { useAuthSession } from "@/lib/auth/session";
 import { cyclesApi, plansApi, resultsApi } from "@/lib/api/endpoints";
+import { EmployeeDashboardView } from "@/features/api/employee-dashboard-view";
+import "./employee-dashboard.css";
 
 function bilingual(value: any, ar: boolean) {
   if (!value) return "—";
@@ -37,7 +39,7 @@ export default function DashboardPage() {
   const cycleRows = cycles.data || [];
   const planRows = (plans.data as any)?.data || [];
   const resultRows = results.data || [];
-  const active = cycleRows.filter((c: any) => c.status === "active");
+  const active = cycleRows.filter((c: any) => (c.status?.key || c.status) === "active");
   const actionable = planRows.filter((p: any) => (p.allowed_actions || []).some((a: string) => a !== "edit_content"));
   const role = user?.roles?.admin ? "admin" : user?.roles?.manager ? "manager" : "employee";
 
@@ -47,6 +49,32 @@ export default function DashboardPage() {
       : role === "manager"
         ? `/${locale}/manager/objectives`
         : `/${locale}/employee/objectives`;
+
+  if (role === "employee") {
+    const employeeCycles = active.filter((cycle: any) => cycle.my_roles?.member !== false);
+    return (
+      <AppShell
+        title={t("Overview", "نظرة عامة")}
+        subtitle={t("Focus on the next step in your performance cycle.", "ركز على الخطوة التالية في دورة الأداء.")}
+      >
+        {busy ? (
+          <Skeleton active />
+        ) : error ? (
+          <Alert type="error" showIcon title={(error as Error).message} />
+        ) : (
+          <EmployeeDashboardView
+            user={user}
+            cycles={employeeCycles}
+            plans={planRows}
+            results={resultRows}
+            actionable={actionable}
+            locale={locale}
+            ar={ar}
+          />
+        )}
+      </AppShell>
+    );
+  }
 
   const shortcuts =
     role === "admin"
