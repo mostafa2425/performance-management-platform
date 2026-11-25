@@ -109,7 +109,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   }, [isReady, isAuthenticated, locale, role, router, user, activeRole]);
 
   useEffect(() => {
-    document.title = title ? `${title} | Perform.` : "Perform.";
+    document.title = title ? `${title} | Performance Management Platform` : "Performance Management Platform";
   }, [title]);
 
   const toggleCollapsed = () => {
@@ -149,12 +149,17 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
       )}
       <aside className={`app-sidebar ${mobileOpen ? "is-open" : ""}`}>
         <div className="brand-lockup">
-          <div className="brand-mark">P</div>
+          <div className="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" width="25" height="25" fill="none">
+              <path d="M7 29V19h6v10M17 29V12h6v17M27 29V6h6v23" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="m7 14 8-5 7 1 10-6" stroke="#b9fff0" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="m27 4 5-1-1 5" stroke="#b9fff0" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
           <div className="brand-copy">
-            <strong>
-              Perform<span>.</span>
-            </strong>
-            <small>People & performance</small>
+            <strong>Performance</strong>
+            <small>Management Platform</small>
+            <small className="brand-byline">BY MASTER WORKS</small>
           </div>
           {/* <AppButton
             type="button"
