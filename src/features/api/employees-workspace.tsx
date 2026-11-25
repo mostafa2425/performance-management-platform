@@ -433,7 +433,7 @@ export default function ApiEmployeesWorkspace() {
       <Drawer
         open={selectedId != null}
         onClose={() => setSelectedId(null)}
-        width={480}
+        size={480}
         title={t("Employee details", "تفاصيل الموظف")}
         destroyOnHidden
       >
