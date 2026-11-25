@@ -774,7 +774,7 @@ export default function AdminDashboardWorkspace() {
             )}
 
             {(summary.no_plan_yet > 0 || summary.goals_approved > 0) && (
-              <Card title={<Typography.Text strong>{t("text059")}</Typography.Text>} style={{ borderRadius: 12, borderColor: "#e2e8f0" }}>
+              <Card style={{ borderRadius: 12, borderColor: "#e2e8f0" }}>
                 {(() => {
                   const noPlan = summary.no_plan_yet;
                   const approved = summary.goals_approved;
@@ -786,7 +786,6 @@ export default function AdminDashboardWorkspace() {
                         style={{ width: 156, height: 156, flex: "0 0 156px", borderRadius: "50%", background: `conic-gradient(#d97706 0deg ${noPlanAngle}deg, #163366 ${noPlanAngle}deg 360deg)`, display: "grid", placeItems: "center" }}>
                         <div style={{ width: 104, height: 104, borderRadius: "50%", background: "#fff", display: "grid", placeContent: "center", textAlign: "center" }}>
                           <Typography.Text strong style={{ fontSize: 25, lineHeight: 1.1 }}>{total.toLocaleString(locale)}</Typography.Text>
-                          <Typography.Text type="secondary" style={{ fontSize: 11 }}>{t("metricsLabel")}</Typography.Text>
                         </div>
                       </div>
                       <Space orientation="vertical" size={12}>
