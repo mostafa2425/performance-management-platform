@@ -2,6 +2,7 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import { useState } from "react";
+import { Skeleton } from "antd";
 import {
   Alert,
   App,
@@ -20,7 +21,7 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminApi, cyclesApi } from "@/lib/api/endpoints";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 type ApprovalGroup = {
   group_id: number;
@@ -56,13 +57,13 @@ function statusColor(status: string) {
 export default function ApiAdminFinalReviewWorkspace() {
   const locale = useLocale();
   const ar = locale === "ar";
+  const translate = useTranslations("AdminApprovals");
   const { message } = App.useApp();
   const qc = useQueryClient();
   const [cycleId, setCycleId] = useState<number>();
   const [selected, setSelected] = useState<ApprovalGroup | null>(null);
   const [reason, setReason] = useState("");
   const [affected, setAffected] = useState<number[]>([]);
-  const t = (en: string, a: string) => (ar ? a : en);
 
   const cycles = useQuery({ queryKey: ["cycles"], queryFn: cyclesApi.mine });
   const groups = useQuery({
@@ -87,7 +88,7 @@ export default function ApiAdminFinalReviewWorkspace() {
     mutationFn: (group: ApprovalGroup) =>
       adminApi.approveGroup(group.group_id, group.version),
     onSuccess: async () => {
-      message.success(t("Group approved successfully", "تم اعتماد المجموعة بنجاح"));
+      message.success(translate("approveSuccess"));
       await refreshGroups();
       setSelected(null);
     },
@@ -102,7 +103,7 @@ export default function ApiAdminFinalReviewWorkspace() {
         affected_member_ids: affected,
       }),
     onSuccess: async () => {
-      message.success(t("Group returned successfully", "تمت إعادة المجموعة بنجاح"));
+      message.success(translate("returnSuccess"));
       await refreshGroups();
       setSelected(null);
       setReason("");
@@ -120,13 +121,13 @@ export default function ApiAdminFinalReviewWorkspace() {
   const pendingAdmin = selected?.status === "pending_admin";
   const columns: ColumnsType<ApprovalGroup> = [
     {
-      title: t("Group", "المجموعة"),
+      title: translate("group"),
       dataIndex: "group_id",
       width: 100,
       render: (value: number) => <Typography.Text strong>#{value}</Typography.Text>,
     },
     {
-      title: t("Manager", "المدير"),
+      title: translate("manager"),
       width: 220,
       render: (_, row) => (
         <Space orientation="vertical" size={0}>
@@ -138,14 +139,14 @@ export default function ApiAdminFinalReviewWorkspace() {
       ),
     },
     {
-      title: t("Members", "الأعضاء"),
+      title: translate("members"),
       dataIndex: "member_count",
       width: 100,
       align: "center",
       render: (value: number | undefined, row) => value ?? row.n ?? "—",
     },
     {
-      title: t("Status", "الحالة"),
+      title: translate("status"),
       dataIndex: "status",
       width: 155,
       render: (value: string) => (
@@ -153,36 +154,36 @@ export default function ApiAdminFinalReviewWorkspace() {
       ),
     },
     {
-      title: t("Version", "الإصدار"),
+      title: translate("version"),
       dataIndex: "version",
       width: 90,
     },
     {
-      title: t("Submission", "رقم الإرسال"),
+      title: translate("submission"),
       dataIndex: "latest_submission_no",
       width: 115,
       render: (value: number | null) => value ?? "—",
     },
     {
-      title: t("Submitted", "تاريخ الإرسال"),
+      title: translate("submitted"),
       dataIndex: "submitted_at",
       width: 175,
       render: (value: string | null) => formatDate(value, locale),
     },
     {
-      title: t("Approved", "تاريخ الاعتماد"),
+      title: translate("approved"),
       dataIndex: "approved_at",
       width: 175,
       render: (value: string | null) => formatDate(value, locale),
     },
     {
-      title: t("Published", "تاريخ النشر"),
+      title: translate("published"),
       dataIndex: "published_at",
       width: 175,
       render: (value: string | null) => formatDate(value, locale),
     },
     {
-      title: t("Actions", "الإجراءات"),
+      title: translate("actions"),
       key: "actions",
       fixed: "right",
       width: 250,
@@ -191,23 +192,23 @@ export default function ApiAdminFinalReviewWorkspace() {
         return (
           <Space wrap size={6}>
             <Button size="small" onClick={() => { setSelected(row); setReason(""); setAffected([]); }}>
-              {t("Review", "مراجعة")}
+              {translate("review")}
             </Button>
             {canDecide && (
               <>
                 <Popconfirm
-                  title={t("Approve this group?", "هل تريد اعتماد هذه المجموعة؟")}
-                  description={t("This will move the group to the next workflow stage.", "سيؤدي ذلك إلى نقل المجموعة إلى المرحلة التالية من سير العمل.")}
-                  okText={t("Approve", "اعتماد")}
-                  cancelText={t("Cancel", "إلغاء")}
+                  title={translate("approveQuestion")}
+                  description={translate("approveDescription")}
+                  okText={translate("approve")}
+                  cancelText={translate("cancel")}
                   onConfirm={() => approve.mutate(row)}
                 >
                   <Button size="small" type="primary" loading={approve.isPending}>
-                    {t("Approve", "اعتماد")}
+                    {translate("approve")}
                   </Button>
                 </Popconfirm>
                 <Button size="small" danger onClick={() => { setSelected(row); setReason(""); setAffected([]); }}>
-                  {t("Return", "إعادة")}
+                  {translate("return")}
                 </Button>
               </>
             )}
@@ -220,7 +221,7 @@ export default function ApiAdminFinalReviewWorkspace() {
   return (
     <Space orientation="vertical" style={{ width: "100%" }} size={16}>
       <Card
-        title={t("Final group review", "المراجعة النهائية للمجموعات")}
+        title={translate("title")}
         styles={{ body: { paddingTop: 16 } }}
       >
         <Space wrap style={{ width: "100%", marginBottom: 16 }} size={12}>
@@ -228,7 +229,7 @@ export default function ApiAdminFinalReviewWorkspace() {
             showSearch
             optionFilterProp="label"
             style={{ width: "100%", maxWidth: 460 }}
-            placeholder={t("Select performance cycle", "اختر دورة الأداء")}
+            placeholder={translate("selectCycle")}
             value={cycleId}
             onChange={(value) => { setCycleId(value); setSelected(null); }}
             options={cycleOptions}
@@ -246,7 +247,7 @@ export default function ApiAdminFinalReviewWorkspace() {
         ) : groups.isError ? (
           <Alert type="error" showIcon title={(groups.error as Error).message} />
         ) : !cycleId ? (
-          <Empty description={t("Select a performance cycle to view submitted groups", "اختر دورة أداء لعرض المجموعات المرسلة")} />
+          <Empty description={translate("selectCycleHint")} />
         ) : (
           <DataTable
             rowKey="group_id"
@@ -256,7 +257,7 @@ export default function ApiAdminFinalReviewWorkspace() {
             columns={columns}
             scroll={{ x: 1500 }}
             pagination={{ pageSize: 10, showSizeChanger: true }}
-            locale={{ emptyText: <Empty description={t("No groups found for this cycle", "لا توجد مجموعات في هذه الدورة")} /> }}
+            locale={{ emptyText: <Empty description={translate("noGroups")} /> }}
           />
         )}
       </Card>
@@ -264,7 +265,7 @@ export default function ApiAdminFinalReviewWorkspace() {
       <Modal
         width={900}
         open={Boolean(selected)}
-        title={t("Group review", "مراجعة المجموعة")}
+        title={translate("groupReview")}
         onCancel={() => { setSelected(null); setReason(""); setAffected([]); }}
         footer={null}
         destroyOnHidden
@@ -280,7 +281,7 @@ export default function ApiAdminFinalReviewWorkspace() {
             </Space>
 
             {detail.isLoading ? (
-              <DataTable loading dataSource={[]} columns={[]} />
+              <Skeleton active paragraph={{ rows: 3 }} />
             ) : detail.isError ? (
               <Alert type="error" showIcon title={(detail.error as Error).message} />
             ) : (
@@ -292,7 +293,7 @@ export default function ApiAdminFinalReviewWorkspace() {
                   scroll={{ x: 600 }}
                   columns={[
                     {
-                      title: t("Employee", "الموظف"),
+                      title: translate("employee"),
                       render: (_, row: any) => (
                         <Space orientation="vertical" size={0}>
                           <Typography.Text strong>{row.employee?.name || row.employee?.full_name || "—"}</Typography.Text>
@@ -301,24 +302,24 @@ export default function ApiAdminFinalReviewWorkspace() {
                       ),
                     },
                     {
-                      title: t("Overall", "الإجمالي"),
+                      title: translate("overall"),
                       render: (_, row: any) => row.overall_bp == null ? "—" : `${(row.overall_bp / 100).toFixed(2)}%`,
                     },
-                    { title: t("Rating", "التقدير"), dataIndex: "rating_level" },
+                    { title: translate("rating"), dataIndex: "rating_level" },
                   ]}
                 />
 
                 {pendingAdmin && (
                   <Form layout="vertical">
-                    <Form.Item label={t("Return reason", "سبب الإعادة")} required>
+                    <Form.Item label={translate("returnReason")} required>
                       <Input.TextArea
                         rows={3}
                         value={reason}
                         onChange={(event) => setReason(event.target.value)}
-                        placeholder={t("Explain what needs to be corrected", "وضح المطلوب تصحيحه")}
+                        placeholder={translate("returnReasonHint")}
                       />
                     </Form.Item>
-                    <Form.Item label={t("Affected members (optional)", "الأعضاء المتأثرون (اختياري)")}>
+                    <Form.Item label={translate("affectedMembers")}>
                       <Select
                         mode="multiple"
                         style={{ width: "100%" }}
@@ -328,18 +329,18 @@ export default function ApiAdminFinalReviewWorkspace() {
                           value: member.cycle_member_id,
                           label: member.employee?.name || member.employee?.full_name || member.cycle_member_id,
                         }))}
-                        placeholder={t("Select affected members", "اختر الأعضاء المتأثرين")}
+                        placeholder={translate("selectAffectedMembers")}
                       />
                     </Form.Item>
                     <Space wrap>
                       <Popconfirm
-                        title={t("Approve this group?", "هل تريد اعتماد هذه المجموعة؟")}
+                        title={translate("approveQuestion")}
                         onConfirm={() => approve.mutate(selected)}
-                        okText={t("Approve", "اعتماد")}
-                        cancelText={t("Cancel", "إلغاء")}
+                        okText={translate("approve")}
+                        cancelText={translate("cancel")}
                       >
                         <Button type="primary" loading={approve.isPending}>
-                          {t("Approve group", "اعتماد المجموعة")}
+                          {translate("approveGroup")}
                         </Button>
                       </Popconfirm>
                       <Button
@@ -348,7 +349,7 @@ export default function ApiAdminFinalReviewWorkspace() {
                         loading={returnGroup.isPending}
                         onClick={() => returnGroup.mutate()}
                       >
-                        {t("Return group", "إعادة المجموعة")}
+                        {translate("returnGroup")}
                       </Button>
                     </Space>
                   </Form>
