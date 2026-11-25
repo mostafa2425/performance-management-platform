@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { DataTable } from "@/components/ui/data-table";
-import { Alert, Avatar, Button, Card, Empty, Input, Skeleton, Space, Typography } from "antd";
+import { Alert, Avatar, Button, Card, Empty, Input, Space, Typography } from "antd";
 import { ArrowRightOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
@@ -72,16 +72,13 @@ export default function ApiManagerEvaluationWorkspace() {
               className="evaluation-approved-search"
             />
           </div>
-          {plans.isLoading ? (
-            <Skeleton active paragraph={{ rows: 5 }} />
-          ) : (
-            <DataTable
+          <DataTable
               className="evaluation-approved-plans-table"
               ariaLabel={t("Approved employee plans", "خطط الموظفين المعتمدة")}
               rowKey="id"
               dataSource={filteredRows}
               loading={plans.isFetching}
-              scroll={{ x: 850 }}
+              scroll={{ x: true }}
               pagination={{ pageSize: 10, showSizeChanger: true, hideOnSinglePage: true }}
               locale={{ emptyText: <Empty description={t(rows.length ? "No plans match your search." : "No approved plans are available.", rows.length ? "لا توجد خطط تطابق البحث." : "لا توجد خطط معتمدة متاحة.")} /> }}
               columns={[
@@ -143,8 +140,7 @@ export default function ApiManagerEvaluationWorkspace() {
                   ),
                 },
               ]}
-            />
-          )}
+          />
         </Card>
       </div>
     </AppShell>
