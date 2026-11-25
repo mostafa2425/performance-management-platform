@@ -10854,3 +10854,8 @@ textarea.ant-input {
 .cycle-scope-multi-select.ant-select-multiple:hover .ant-select-selector {
   border-color: var(--ant-color-primary) !important;
 }
+
+/* Avoid Ant Design's filled success tag background (theme token can render grey). */
+.ant-tag.ant-tag-success.ant-tag-filled {
+  background-color: transparent !important;
+}
