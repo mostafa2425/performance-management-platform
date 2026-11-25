@@ -412,7 +412,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                         </Dropdown>
                       </div>
                     );
-                  },,
+                  },
                 },
               ]}
             />
