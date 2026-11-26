@@ -23,7 +23,7 @@ import { queryKeys } from "@/lib/api/query-hooks";
 import { CycleProgressPanel, planStatusQueryKey } from "./cycle-progress-panel";
 import { CycleScopePanel } from "./cycle-scope-panel";
 import { CycleStatusTag, CycleYearTag } from "./cycle-status-tag";
-import { CalendarOutlined, CalendarCheckOutlined } from "@ant-design/icons";
+import { CalendarOutlined } from "@ant-design/icons";
 import {
   CyclePreviewSummaryCards,
   CycleScopeSummaryCards,
@@ -188,7 +188,7 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
           </Col>
           <Col xs={24} sm={12}>
             <div className="cycle-detail-date-card">
-              <span className="cycle-detail-date-icon cycle-detail-date-icon-end"><CalendarCheckOutlined /></span>
+              <span className="cycle-detail-date-icon cycle-detail-date-icon-end"><CalendarOutlined /></span>
               <div className="cycle-detail-date-copy">
                 <Typography.Text type="secondary">{t("fields.endDate")}</Typography.Text>
                 <Typography.Text strong>{formatCycleDate(c.end_date, locale)}</Typography.Text>
