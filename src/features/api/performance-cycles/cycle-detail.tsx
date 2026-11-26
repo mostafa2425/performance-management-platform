@@ -219,7 +219,17 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
         />
       )}
 
-      {isLive && <CycleProgressPanel cycleId={cycleId} />}
+      {c.status === "active" ? (
+        <Alert
+          type="info"
+          showIcon
+          title={ar ? "إدارة أعضاء الدورة" : "Cycle member management"}
+          description={ar
+            ? "يمكنك إزالة الموظفين من الدورة النشطة مع تسجيل السبب. إضافة موظفين بعد التفعيل غير مدعومة حالياً من واجهة API؛ يمكن تعديل نطاق الدورة قبل التفعيل فقط."
+            : "You can remove employees from the active cycle and record a reason. Adding employees after activation is not currently supported by the API; cycle scope can only be changed before activation."}
+        />
+      ) : null}
+      {isLive && <CycleProgressPanel cycleId={cycleId} canManageMembers={c.status === "active"} />}
 
       {showPreview && preview.data && (
         <Card title={t("sections.eligibilityPreview")}>
