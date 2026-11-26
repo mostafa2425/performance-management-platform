@@ -493,7 +493,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
         />
 
         {historyVisible ? (
-          mode === "admin" ? (
+          <>
             <Collapse
               className="plan-detail-history-collapse"
               style={{ width: "100%" }}
@@ -511,17 +511,23 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
                 },
               ]}
             />
-          ) : (
-            <Card className="plan-detail-section plan-detail-history" title={t("Workflow history", "سجل سير العمل")}>
-              <PlanHistoryPanel planId={plan.id} ar={ar} />
-            </Card>
-          )
-        ) : null}
-
-        {historyVisible ? (
-          <Card className="plan-detail-section plan-detail-snapshots" title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
-            <PlanSnapshotsPanel planId={plan.id} ar={ar} />
-          </Card>
+            <Collapse
+              className="plan-detail-snapshots-collapse"
+              style={{ width: "100%" }}
+              defaultActiveKey={[]}
+              items={[
+                {
+                  key: "plan-snapshots",
+                  label: <Typography.Text strong>{t("Plan snapshots", "نسخ الخطة المحفوظة")}</Typography.Text>,
+                  children: (
+                    <div className="plan-detail-section plan-detail-snapshots" style={{ width: "100%" }}>
+                      <PlanSnapshotsPanel planId={plan.id} ar={ar} />
+                    </div>
+                  ),
+                },
+              ]}
+            />
+          </>
         ) : null}
 
         <PlanActionModal
