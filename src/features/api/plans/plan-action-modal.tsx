@@ -88,17 +88,17 @@ function PlanActionModalContent({
     setItemBody("");
   };
 
-  const isApprove = action === "approve";
+  const isApprove = action === "approve" || action === "employee_approve" || action.endsWith("_approve");
   const modalTitle = isApprove
-    ? t("Approve performance plan?", "هل تريد اعتماد خطة الأداء؟")
+    ? t("Approve plan", "اعتماد الخطة")
     : resolveActionLabel(action, ar, plan);
 
   return (
     <Modal
       open={open}
       title={modalTitle}
-      width={480}
-      okText={isApprove ? t("Confirm approval", "تأكيد الاعتماد") : resolveActionLabel(action, ar, plan)}
+      width={520}
+      okText={isApprove ? t("Approve plan", "اعتماد الخطة") : resolveActionLabel(action, ar, plan)}
       cancelText={t("Cancel", "إلغاء")}
       onCancel={onCancel}
       onOk={() => {
@@ -127,33 +127,60 @@ function PlanActionModalContent({
       destroyOnHidden
     >
       {isApprove ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 14,
-            padding: 16,
-            border: "1px solid #d9f0e2",
-            borderRadius: 10,
-            background: "#f6fffa",
-          }}
-        >
-          <CheckCircleFilled
-            style={{ color: "#16a34a", fontSize: 22, marginTop: 2 }}
-            aria-hidden="true"
-          />
-          <div style={{ minWidth: 0 }}>
-            <Typography.Text strong style={{ display: "block", color: "#14532d", marginBottom: 4 }}>
-              {t("You’re approving this performance plan", "أنت بصدد اعتماد خطة الأداء هذه")}
-            </Typography.Text>
-            <Typography.Text type="secondary">
-              {t(
-                "Your approval will be recorded in the workflow history and move the plan to its next stage. Please review the plan before confirming.",
-                "سيتم تسجيل اعتمادك في سجل سير العمل، وستنتقل الخطة إلى المرحلة التالية. يُرجى مراجعة الخطة قبل التأكيد.",
-              )}
-            </Typography.Text>
+        <Space orientation="vertical" size={14} style={{ width: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 14,
+              padding: 18,
+              border: "1px solid #cbd8ea",
+              borderRadius: 12,
+              background: "#f5f8fc",
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                flex: "0 0 40px",
+                width: 40,
+                height: 40,
+                placeItems: "center",
+                borderRadius: 10,
+                background: "#e7eef8",
+                color: "#163366",
+              }}
+            >
+              <CheckCircleFilled style={{ fontSize: 21 }} aria-hidden="true" />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <Typography.Text strong style={{ display: "block", color: "#163366", marginBottom: 5, fontSize: 15 }}>
+                {t("You’re about to approve this plan", "أنت على وشك اعتماد هذه الخطة")}
+              </Typography.Text>
+              <Typography.Text type="secondary">
+                {t(
+                  "This confirms the plan as the approved version, records your decision in the workflow history, and moves it to the next stage.",
+                  "يؤكد هذا الإجراء الخطة كنسخة معتمدة، ويسجل قرارك في سجل سير العمل، وينقلها إلى المرحلة التالية.",
+                )}
+              </Typography.Text>
+            </div>
           </div>
-        </div>
+          <Alert
+            type="warning"
+            showIcon
+            title={t("Please review before confirming", "يرجى المراجعة قبل التأكيد")}
+            description={t(
+              "Make sure the objectives, KPI targets and weights are correct. This is an official workflow action.",
+              "تأكد من صحة الأهداف ومستهدفات مؤشرات الأداء وأوزانها. هذا إجراء رسمي ضمن سير العمل.",
+            )}
+          />
+          {plan?.status ? (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+              <Typography.Text type="secondary">{t("Current plan status", "الحالة الحالية للخطة")}</Typography.Text>
+              <Tag color="processing">{typeof plan.status === "object" ? (ar ? plan.status.label || plan.status.key : plan.status.label || plan.status.key) : String(plan.status)}</Tag>
+            </div>
+          ) : null}
+        </Space>
       ) : needsReturnComments ? (
         <Space orientation="vertical" size={12} style={{ width: "100%" }}>
           <Alert
