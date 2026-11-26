@@ -5,7 +5,8 @@ import { DataTable } from "@/components/ui/data-table";
 import { useMemo, useState } from "react";
 import { Alert, Avatar, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Progress, Row, Space, Spin, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircleOutlined, ClockCircleOutlined, EditOutlined, FileTextOutlined, RollbackOutlined, SendOutlined, UserOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
+import { ArrowRightOutlined, CheckCircleOutlined, ClockCircleOutlined, EditOutlined, FileTextOutlined, RollbackOutlined, SendOutlined, UserOutlined } from "@ant-design/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { adminApi, cyclesApi, employeesApi, resultsApi } from "@/lib/api/endpoints";
 import { PLAN_DISPLAY_STATUS, planStatusKeys } from "./shared";
@@ -31,7 +32,9 @@ function managerName(row: any) {
 
 export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
   const t = useTranslations("PerformanceCycles");
-  const ar = useLocale() === "ar";
+  const locale = useLocale();
+  const ar = locale === "ar";
+  const router = useRouter();
   const local = (en: string, arabic: string) => ar ? arabic : en;
   const [search, setSearch] = useState("");
   const [selectedMember, setSelectedMember] = useState<any>(null);
@@ -267,6 +270,25 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                     title: t("fields.attention"),
                     dataIndex: "requires_admin_attention",
                     render: (v: boolean) => (v ? <Tag color="orange">{t("progress.required")}</Tag> : "—"),
+                  },
+                  {
+                    title: local("Action", "الإجراء"),
+                    key: "admin-review-action",
+                    render: (_: unknown, r: any) =>
+                      r.status?.key === "pending_admin" && r.plan_id != null ? (
+                        <Button
+                          type="primary"
+                          size="small"
+                          className="cycle-progress-review-button"
+                          icon={<ArrowRightOutlined />}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            router.push(`/${locale}/admin/plan-reviews/${r.plan_id}`);
+                          }}
+                        >
+                          {local("Review & approve", "مراجعة واعتماد")}
+                        </Button>
+                      ) : "—",
                   },
                 ]}
               />
