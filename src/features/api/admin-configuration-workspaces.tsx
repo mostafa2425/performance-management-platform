@@ -422,7 +422,7 @@ export function ApiCompetencyTemplateWorkspace(){
   {title:t("Groups","المجموعات"),width:100,render:(_:any,r:any)=>groupsCount(r)},
   {title:t("Competencies","الكفاءات"),width:115,render:(_:any,r:any)=>competenciesCount(r)},
   {title:t("Job titles","المسميات الوظيفية"),width:130,render:(_:any,r:any)=><Typography.Text>{(r.job_titles||[]).length}</Typography.Text>},
-  {title:t("Actions","الإجراءات"),key:"actions",width:170,align:ar?"left":"right",render:(_:any,r:any)=><Space size={4} className="admin-template-actions">
+  {title:t("Actions","الإجراءات"),key:"actions",width:170,align:(ar?"left" as const:"right" as const),render:(_:any,r:any)=><Space size={4} className="admin-template-actions">
    <Button size="small" type="text" icon={<EyeOutlined/>} title={t("View template details","عرض تفاصيل القالب")} aria-label={t("View template details","عرض تفاصيل القالب")} onClick={()=>setDetails(r)}/>
    <Button size="small" type="text" icon={<LinkOutlined/>} title={t("Assign job titles","ربط المسميات الوظيفية")} aria-label={t("Assign job titles","ربط المسميات الوظيفية")} onClick={()=>{setSelected(r);assignForm.resetFields();}}/>
    <Popconfirm title={t("Delete this template?","هل تريد حذف هذا القالب؟")} description={t("This action cannot be undone.","لا يمكن التراجع عن هذا الإجراء.")} okText={t("Delete","حذف")} cancelText={t("Cancel","إلغاء")} okButtonProps={{danger:true,loading:remove.isPending}} onConfirm={()=>remove.mutate(r.lineage_key)}>

@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_APP_URL: http://localhost:3001
+    container_name: pmp-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      # Backend API runs on the host (pmp-backend-api on port 8001)
+      PMP_API_ORIGIN: ${PMP_API_ORIGIN:-http://host.docker.internal:8001}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
