@@ -229,6 +229,7 @@ export const ELIGIBILITY_STATUS_COLOR: Record<string, string> = {
   under_6_months: "orange",
   in_other_active_cycle: "red",
   excluded: "volcano",
+  excluded_rule: "volcano",
   excluded_by_scope: "default",
   removed: "default",
   missed: "red",
