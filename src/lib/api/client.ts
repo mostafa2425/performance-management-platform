@@ -1,7 +1,7 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { API_BASE_URL, API_TIMEOUT_MS, AUTH_STORAGE_KEY, AUTH_UNAUTHORIZED_EVENT } from "./config";
-export type ApiErrorPayload={error?:{code?:string;message?:string;fields?:Record<string,string[]>;details?:unknown};request_id?:string};
-export class ApiRequestError extends Error { status:number; code?:string; fields?:Record<string,string[]>; details?:unknown; requestId?:string; constructor(status:number,payload?:ApiErrorPayload,fallback="Request failed"){super(payload?.error?.message||fallback);this.name="ApiRequestError";this.status=status;this.code=payload?.error?.code;this.fields=payload?.error?.fields;this.details=payload?.error?.details;this.requestId=payload?.request_id;} }
+export type ApiErrorPayload={code?:string;message?:string;fields?:Record<string,string[]>;details?:unknown;error?:{code?:string;message?:string;fields?:Record<string,string[]>;details?:unknown};request_id?:string};
+export class ApiRequestError extends Error { status:number; code?:string; fields?:Record<string,string[]>; details?:unknown; requestId?:string; constructor(status:number,payload?:ApiErrorPayload,fallback="Request failed"){const body=payload?.error??payload;super(body?.message||fallback);this.name="ApiRequestError";this.status=status;this.code=body?.code;this.fields=body?.fields;this.details=body?.details;this.requestId=payload?.request_id;} }
 export type ApiEnvelope<T>={data:T;meta?:Record<string,unknown>;links?:Record<string,unknown>};
 export type Paginated<T>=ApiEnvelope<T[]> & {meta:{current_page:number;per_page:number;total:number;last_page:number;[key:string]:unknown}};
 export function readStoredToken():string|null{if(typeof window==="undefined")return null;try{const v=window.sessionStorage.getItem(AUTH_STORAGE_KEY);return v?(JSON.parse(v) as {token?:string}).token??null:null;}catch{return null;}}
