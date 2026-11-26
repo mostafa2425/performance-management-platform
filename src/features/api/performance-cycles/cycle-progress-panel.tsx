@@ -3,8 +3,8 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
-import { Alert, Avatar, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Progress, Row, Space, Spin, Tag, Typography } from "antd";
-import { useQuery } from "@tanstack/react-query";
+import { Alert, App, Avatar, Button, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Modal, Progress, Row, Space, Spin, Tag, Typography } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { ArrowRightOutlined, CheckCircleOutlined, ClockCircleOutlined, EditOutlined, FileTextOutlined, RollbackOutlined, SendOutlined, UserOutlined } from "@ant-design/icons";
 import { useLocale, useTranslations } from "next-intl";
@@ -30,14 +30,18 @@ function managerName(row: any) {
   );
 }
 
-export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
+export function CycleProgressPanel({ cycleId, canManageMembers = false }: { cycleId: string; canManageMembers?: boolean }) {
   const t = useTranslations("PerformanceCycles");
   const locale = useLocale();
   const ar = locale === "ar";
   const router = useRouter();
+  const { message } = App.useApp();
+  const queryClient = useQueryClient();
   const local = (en: string, arabic: string) => ar ? arabic : en;
   const [search, setSearch] = useState("");
   const [selectedMember, setSelectedMember] = useState<any>(null);
+  const [memberToRemove, setMemberToRemove] = useState<any>(null);
+  const [removalReason, setRemovalReason] = useState("");
   const selectedEmployeeId = selectedMember?.employee?.id ?? selectedMember?.employee_id;
   const employee = useQuery({
     queryKey: ["employees", "detail", selectedEmployeeId],
@@ -49,6 +53,25 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
     queryKey: planStatusQueryKey(cycleId),
     queryFn: () => cyclesApi.planStatus(cycleId, { per_page: 200 }),
   });
+  const removeMember = useMutation({
+    mutationFn: () => {
+      const employeeId = memberToRemove?.employee?.id ?? memberToRemove?.employee_id;
+      if (employeeId == null) throw new Error(local("Employee ID is missing.", "معرّف الموظف غير متوفر."));
+      return cyclesApi.removeMember(cycleId, employeeId, removalReason.trim());
+    },
+    onSuccess: async () => {
+      message.success(local("Employee removed from this cycle.", "تمت إزالة الموظف من هذه الدورة."));
+      const removedId = memberToRemove?.employee?.id ?? memberToRemove?.employee_id;
+      if (String(selectedMember?.employee?.id ?? selectedMember?.employee_id) === String(removedId)) setSelectedMember(null);
+      setMemberToRemove(null);
+      setRemovalReason("");
+      await queryClient.invalidateQueries({ queryKey: planStatusQueryKey(cycleId) });
+      await queryClient.invalidateQueries({ queryKey: ["admin", "cycles", cycleId, "members"] });
+      await queryClient.invalidateQueries({ queryKey: ["admin", "cycles", cycleId] });
+    },
+    onError: (error: Error) => message.error(error.message),
+  });
+
   const groups = useQuery({
     queryKey: ["admin", "cycles", cycleId, "groups", "progress"],
     queryFn: () => adminApi.groups(Number(cycleId), { per_page: 100 }),
@@ -274,21 +297,38 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                   {
                     title: local("Action", "الإجراء"),
                     key: "admin-review-action",
-                    render: (_: unknown, r: any) =>
-                      r.status?.key === "pending_admin" && r.plan_id != null ? (
-                        <Button
-                          type="primary"
-                          size="small"
-                          className="cycle-progress-review-button"
-                          icon={<ArrowRightOutlined />}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            router.push(`/${locale}/admin/plan-reviews/${r.plan_id}`);
-                          }}
-                        >
-                          {local("Review & approve", "مراجعة واعتماد")}
-                        </Button>
-                      ) : "—",
+                    render: (_: unknown, r: any) => (
+                      <Space size={6} wrap>
+                        {r.status?.key === "pending_admin" && r.plan_id != null ? (
+                          <Button
+                            type="primary"
+                            size="small"
+                            className="cycle-progress-review-button"
+                            icon={<ArrowRightOutlined />}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              router.push(`/${locale}/admin/plan-reviews/${r.plan_id}`);
+                            }}
+                          >
+                            {local("Review & approve", "مراجعة واعتماد")}
+                          </Button>
+                        ) : null}
+                        {canManageMembers && (r.employee?.id ?? r.employee_id) != null ? (
+                          <Button
+                            danger
+                            size="small"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setRemovalReason("");
+                              setMemberToRemove(r);
+                            }}
+                          >
+                            {local("Remove", "إزالة")}
+                          </Button>
+                        ) : null}
+                        {!(canManageMembers || (r.status?.key === "pending_admin" && r.plan_id != null)) ? "—" : null}
+                      </Space>
+                    ),
                   },
                 ]}
               />
@@ -296,6 +336,35 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
           }))}
         />
       )}
+      <Modal
+        open={Boolean(memberToRemove)}
+        title={local("Remove employee from cycle", "إزالة موظف من الدورة")}
+        okText={local("Remove employee", "إزالة الموظف")}
+        cancelText={local("Cancel", "إلغاء")}
+        okButtonProps={{ danger: true, disabled: !removalReason.trim() }}
+        confirmLoading={removeMember.isPending}
+        onCancel={() => { if (!removeMember.isPending) { setMemberToRemove(null); setRemovalReason(""); } }}
+        onOk={() => removeMember.mutate()}
+        destroyOnHidden
+      >
+        <Space orientation="vertical" size={12} style={{ width: "100%" }}>
+          <Alert
+            type="warning"
+            showIcon
+            title={local("This employee will be removed from the active cycle.", "سيتم إزالة هذا الموظف من دورة الأداء النشطة.")}
+            description={local("The membership record is retained in cycle history. This action cannot be undone from the current API.", "سيتم الاحتفاظ بسجل العضوية في سجل الدورة. لا يمكن التراجع عن هذا الإجراء من خلال واجهة API الحالية.")}
+          />
+          <Typography.Text strong>{memberToRemove?.employee?.name || memberToRemove?.employee?.full_name || memberToRemove?.employee?.code || "—"}</Typography.Text>
+          <Input.TextArea
+            rows={3}
+            maxLength={2000}
+            showCount
+            value={removalReason}
+            onChange={(event) => setRemovalReason(event.target.value)}
+            placeholder={local("Enter the reason for removing this employee", "أدخل سبب إزالة الموظف")}
+          />
+        </Space>
+      </Modal>
       <Drawer open={Boolean(selectedMember)} onClose={() => setSelectedMember(null)} title={t("fields.employee")} size={520} destroyOnHidden>
         {selectedMember ? (
           <div className="cycle-employee-drawer">
