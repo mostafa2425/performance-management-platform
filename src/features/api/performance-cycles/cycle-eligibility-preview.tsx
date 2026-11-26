@@ -46,14 +46,7 @@ export function CycleEligibilityPreview({
     {
       title: t("fields.employee"),
       render: (_: unknown, row: any) => (
-        <Space orientation="vertical" size={0}>
-          <Typography.Text strong>{candidateName(row, ar)}</Typography.Text>
-          {candidateEmployeeId(row) != null ? (
-            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-              ID: {candidateEmployeeId(row)}
-            </Typography.Text>
-          ) : null}
-        </Space>
+        <Typography.Text strong>{candidateName(row, ar)}</Typography.Text>
       ),
     },
     {
