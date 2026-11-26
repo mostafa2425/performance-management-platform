@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { App, Alert, Button, Card, Collapse, Col, Row, Space, Skeleton, Tag, Typography } from "antd";
-import { ArrowLeftOutlined, CheckCircleFilled, EditOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckCircleFilled, ClockCircleOutlined, EditOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import { AppShell } from "@/components/layout/app-shell";
@@ -17,7 +17,7 @@ import { PlanActionModal } from "./plans/plan-action-modal";
 import { PlanHistoryPanel } from "./plans/plan-history-panel";
 import { PlanSnapshotsPanel } from "./plans/plan-snapshots-panel";
 
-import { formatInstant, planStatusTag, resolveActionLabel, returnSourceLabel, workflowActions, type PlanMode } from "./plans/plan-shared";
+import { commentsForTarget, formatInstant, planStatusTag, resolveActionLabel, returnSourceLabel, workflowActions, type PlanMode } from "./plans/plan-shared";
 
 function toDraftObjectives(objectives: any[] = []) {
   return objectives.map((objective) => ({
@@ -346,6 +346,50 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           </div>
         </div>
 
+        {plan.return_source ? (
+          <Alert
+            className="plan-return-notice"
+            type="warning"
+            showIcon
+            title={
+              <Space wrap size={8}>
+                <Typography.Text strong>{returnSourceLabel(plan.return_source, ar)}</Typography.Text>
+                <Tag color="warning">{t("Action required", "يتطلب إجراء")}</Tag>
+              </Space>
+            }
+            description={
+              <div className="plan-return-notice-meta">
+                <span><UserOutlined /> {plan.open_comments?.actor?.name || "—"}</span>
+                <span><ClockCircleOutlined /> {formatInstant(plan.open_comments?.created_at, ar)}</span>
+              </div>
+            }
+          />
+        ) : null}
+
+        {commentsForTarget(plan.open_comments || null, "plan").length ? (
+          <Card
+            className="plan-detail-section plan-level-comments"
+            title={
+              <Space size={8}>
+                <MessageOutlined />
+                <Typography.Text strong>{t("Plan-level comments", "تعليقات على الخطة")}</Typography.Text>
+                <Tag>{commentsForTarget(plan.open_comments || null, "plan").length}</Tag>
+              </Space>
+            }
+          >
+            <Space orientation="vertical" size={10} style={{ width: "100%" }}>
+              {commentsForTarget(plan.open_comments || null, "plan").map((comment: any, index: number) => (
+                <div className="plan-level-comment" key={comment.id || index}>
+                  <MessageOutlined />
+                  <Typography.Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                    {comment.body}
+                  </Typography.Paragraph>
+                </div>
+              ))}
+            </Space>
+          </Card>
+        ) : null}
+
         <Card
           className="plan-detail-hero-card"
           title={
@@ -374,24 +418,6 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             </div>
           </Space>
         </Card>
-
-        {plan.return_source ? (
-          <div style={{ maxWidth: mode === "employee" ? 720 : 960, width: "100%" }}>
-          <Alert
-            type="warning"
-            showIcon
-            title={returnSourceLabel(plan.return_source, ar)}
-            description={
-              <Space orientation="vertical" size={4}>
-                <Typography.Text>{plan.open_comments?.actor?.name || "—"} · {formatInstant(plan.open_comments?.created_at, ar)}</Typography.Text>
-                {plan.open_comments?.comments?.map((comment: any, index: number) => (
-                  <Typography.Text key={index}>{comment.body}</Typography.Text>
-                ))}
-              </Space>
-            }
-          />
-          </div>
-        ) : null}
 
         {mode === "employee" && plan.content_visible === false ? (
           <div style={{ maxWidth: 720, width: "100%" }}>
