@@ -271,6 +271,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     : "#" + String(plan.cycle_id);
   const employeeInfo: Array<[string, React.ReactNode]> = [
     [t("Employee", "الموظف"), employeeProfile?.full_name || employeeName],
+    ...(mode === "employee" && plan?.current_manager?.name ? [[t("Manager", "المدير"), plan.current_manager.name] as [string, React.ReactNode]] : []),
     [t("Employee code", "كود الموظف"), employeeProfile?.code || plan.employee?.code || "—"],
     [t("Email", "البريد الإلكتروني"), employeeProfile?.email || "—"],
     [t("Department", "الإدارة"), employeeProfile?.department?.name || "—"],
