@@ -749,7 +749,13 @@
         "removed": "Removed",
         "missed": "Missed"
       },
-      "activationNotIncluded": "Not included at activation"
+      "activationNotIncluded": "Not included at activation",
+      "asOf": "As of {date}",
+      "reason": {
+        "employeeStatus": {
+          "inactive": "Employee status: Inactive"
+        }
+      }
     },
     "summary": {
       "managers": "Managers"
