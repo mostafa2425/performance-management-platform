@@ -1,7 +1,7 @@
 "use client";
 
 import { AppButton } from "@/components/ui-antd-primitives";
-import { Select, Skeleton } from "antd";
+import { Select, Spin } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -133,7 +133,22 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const homeHref = homePathForUser(user, locale, activeRole);
 
   if (!isReady || !isAuthenticated) {
-    return <div className="app-frame" style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}><div style={{ width: "min(100%, 520px)" }}><Skeleton active paragraph={{ rows: 4 }} /></div></div>;
+    return (
+      <div className="app-global-loading" role="status" aria-live="polite">
+        <div className="app-global-loading-brand">
+          <span className="app-global-loading-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" width="26" height="26" fill="none">
+              <path d="M7 29V19h6v10M17 29V12h6v17M27 29V6h6v23" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="m7 14 8-5 7 1 10-6" stroke="#b9fff0" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="m27 4 5-1-1 5" stroke="#b9fff0" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+          <span><strong>Performance</strong><small>Management Platform</small></span>
+        </div>
+        <Spin size="large" />
+        <span className="app-global-loading-caption">{isAr ? "جارٍ تجهيز مساحة العمل..." : "Preparing your workspace..."}</span>
+      </div>
+    );
   }
 
   return (
