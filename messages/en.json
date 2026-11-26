@@ -74,13 +74,13 @@
         "development": "Development"
       },
       "manager": {
-        "dashboard": "Team performance overview",
+        "dashboard": "Overview",
         "team": "My team",
         "history": "Performance history",
         "reviews": "Pending reviews",
-        "objectives": "Team objective plans",
+        "objectives": "My plans",
         "performance": "Team performance",
-        "evaluation": "Performance evaluations",
+        "evaluation": "My evaluations",
         "year-group": "Annual team review",
         "calculations": "Calculation explorer"
       },
@@ -100,14 +100,14 @@
         "history": "Performance history"
       },
       "admin": {
-        "dashboard": "Admin overview",
+        "dashboard": "Overview",
         "cycles": "Performance cycles",
         "competencies": "Competency templates",
         "categories": "Objective categories",
         "configuration": "Performance settings",
         "employees": "Employees",
         "approvals": "Annual group approvals",
-        "plan-reviews": "Objective plan reviews",
+        "plan-reviews": "Plans",
         "bell-curve": "Bell Curve",
         "publication": "Publish performance results",
         "history": "Performance history",
@@ -729,7 +729,7 @@
       "blocked": "Assigned to another active cycle",
       "removed": "Removed",
       "missed": "Missed",
-        "excluded_rule": "Excluded by an eligibility rule",
+      "excluded_rule": "Excluded by an eligibility rule",
       "loadPreviewHint": "Run the eligibility preview to see employees who are not included.",
       "readOnly": "Read-only"
     },
