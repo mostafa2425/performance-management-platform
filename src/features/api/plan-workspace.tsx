@@ -359,21 +359,23 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                 "aria-label": t("Open plan details", "فتح تفاصيل الخطة"),
               })}
               columns={[
-                {
-                  title: t("Code", "الرقم"),
-                  width: 100,
-                  render: (_: unknown, row: Plan) =>
-                    row.employee?.code ? `#${row.employee.code}` : "—",
-                },
-                {
-                  title: t("Employee", "الموظف"),
-                  ellipsis: true,
-                  render: (_: unknown, r: Plan) => (
-                    <Typography.Text style={{ color: "#000", fontWeight: 500 }}>
-                      {r.employee?.name || (r.employee as any)?.full_name || "—"}
-                    </Typography.Text>
-                  ),
-                },
+                ...(mode !== "employee" ? [
+                  {
+                    title: t("Code", "الرقم"),
+                    width: 100,
+                    render: (_: unknown, row: Plan) =>
+                      row.employee?.code ? `#${row.employee.code}` : "—",
+                  },
+                  {
+                    title: t("Employee", "الموظف"),
+                    ellipsis: true,
+                    render: (_: unknown, r: Plan) => (
+                      <Typography.Text style={{ color: "#000", fontWeight: 500 }}>
+                        {r.employee?.name || (r.employee as any)?.full_name || "—"}
+                      </Typography.Text>
+                    ),
+                  },
+                ] : []),
                 {
                   title: t("Current manager", "المدير الحالي"),
                   width: 190,
@@ -381,15 +383,24 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                     const member = memberByPlanId.get(Number(row.id));
                     const manager = (row as any).current_manager || member?.current_manager;
                     return manager ? (
-                      <Space orientation="vertical" size={0}>
-                        <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
-                        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                          {manager.code || (manager.id != null ? `ID ${manager.id}` : "—")}
-                        </Typography.Text>
-                      </Space>
+                      <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
                     ) : "—";
                   },
                 },
+                ...(mode === "employee" ? [
+                  {
+                    title: t("Performance cycle", "دورة الأداء"),
+                    width: 220,
+                    render: (_: unknown, row: Plan) => {
+                      const cycle = (row as any).cycle;
+                      const cycleName = typeof cycle?.name === "object"
+                        ? (ar ? cycle.name.ar || cycle.name.en : cycle.name.en || cycle.name.ar)
+                        : cycle?.name;
+                      const cycleOption = cycleOptions.find((option) => option.value === Number((row as any).cycle_id));
+                      return <Typography.Text strong>{cycleName || cycleOption?.label || "—"}</Typography.Text>;
+                    },
+                  },
+                ] : []),
                 {
                   title: t("Status", "الحالة"),
                   dataIndex: "status",
