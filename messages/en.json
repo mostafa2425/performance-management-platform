@@ -582,6 +582,8 @@
       "manager": "Manager",
       "employeeCode": "Code",
       "attention": "Admin attention",
+      "location": "Location",
+      "employmentType": "Employment type",
       "deadlineDate": "Deadline"
     },
     "placeholders": {
@@ -611,6 +613,7 @@
       "noEmployees": "No employees",
       "noOptions": "No options",
       "loadingEmployees": "Loading employees…",
+      "active": "Active",
       "managersSummary": "{count} managers"
     },
     "sections": {
