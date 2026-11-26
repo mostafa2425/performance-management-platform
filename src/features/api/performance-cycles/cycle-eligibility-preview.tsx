@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import type { ReactNode } from "react";
-import { Tag } from "antd";
+import { Space, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useLocale, useTranslations } from "next-intl";
 import {
@@ -13,7 +13,7 @@ import {
   reasonText,
 } from "./shared";
 
-const KNOWN = ["included", "under_6_months", "in_other_active_cycle", "excluded", "excluded_by_scope", "removed", "missed"] as const;
+const KNOWN = ["included", "under_6_months", "in_other_active_cycle", "excluded", "excluded_rule", "excluded_by_scope", "removed", "missed"] as const;
 
 export function EligibilityStatusTag({ status }: { status?: string | null }) {
   const t = useTranslations("PerformanceCycles");
@@ -45,7 +45,16 @@ export function CycleEligibilityPreview({
   const columns: ColumnsType<any> = [
     {
       title: t("fields.employee"),
-      render: (_: unknown, row: any) => candidateName(row, ar),
+      render: (_: unknown, row: any) => (
+        <Space orientation="vertical" size={0}>
+          <Typography.Text strong>{candidateName(row, ar)}</Typography.Text>
+          {candidateEmployeeId(row) != null ? (
+            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+              {t("fields.employeeCode")}: {candidateEmployeeId(row)}
+            </Typography.Text>
+          ) : null}
+        </Space>
+      ),
     },
     {
       title: t("fields.status"),
