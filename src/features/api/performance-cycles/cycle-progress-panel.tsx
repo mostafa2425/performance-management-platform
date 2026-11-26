@@ -84,10 +84,6 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
     if (!value) return "—";
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(ar ? "ar-EG" : "en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(date);
-  };  const formatDate = (value?: string | null) => {
-    if (!value) return "—";
-    const date = new Date(value);
-    return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(ar ? "ar-EG" : "en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(date);
   };
   const statusMeta: Record<string, { icon: React.ReactNode; color: string }> = {
     not_started: { icon: <ClockCircleOutlined />, color: "#94a3b8" },
