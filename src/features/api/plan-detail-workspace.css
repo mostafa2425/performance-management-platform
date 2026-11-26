@@ -532,24 +532,13 @@
 @media(max-width:767px){.plan-detail-workspace .plan-content-editor-weight-progress{width:100%;min-width:0;flex-basis:auto}}
 
 
-/* Approval actions in plan detail/review use the requested teal emphasis. */
-.plan-detail-workspace .ant-btn-primary {
-  border-color: #0d9488 !important;
-  background: #0d9488 !important;
-  color: #fff !important;
-  box-shadow: none !important;
-}
-.plan-detail-workspace .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-  border-color: #0f766e !important;
-  background: #0f766e !important;
-  color: #fff !important;
-}
-.plan-detail-workspace .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active {
+/* Approval button only — keep other primary actions on the brand theme. */
+.plan-detail-workspace .ant-btn-primary.pmp-approve-button:active {
   border-color: #115e59 !important;
   background: #115e59 !important;
   color: #fff !important;
 }
-.plan-detail-workspace .ant-btn-primary:focus-visible {
+.plan-detail-workspace .ant-btn-primary.pmp-approve-button:focus-visible {
   outline: 2px solid rgba(13, 148, 136, .28);
   outline-offset: 2px;
 }
