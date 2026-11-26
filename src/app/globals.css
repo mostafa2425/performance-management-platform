@@ -10940,3 +10940,30 @@ textarea.ant-input {
   outline: 2px solid rgba(56, 158, 13, 0.28);
   outline-offset: 2px;
 }
+
+
+/* Global workspace loading */
+.app-global-loading{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;background:#f6f8fc;color:#163366}
+.app-global-loading-brand{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.app-global-loading-mark{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#48c6a7,#168b82);color:#fff}
+.app-global-loading-brand strong,.app-global-loading-brand small{display:block}
+.app-global-loading-brand strong{font-size:18px;line-height:1.2}
+.app-global-loading-brand small{margin-top:3px;color:#718096;font-size:12px}
+.app-global-loading-caption{color:#718096;font-size:13px}
+.cycle-progress-overview{margin-bottom:22px;padding:18px;border:1px solid #e7edf5;border-radius:14px;background:linear-gradient(145deg,#f8faff,#fff 70%)}
+.cycle-progress-overview-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+.cycle-progress-total{text-align:end}
+.cycle-progress-stat-card{height:100%;border-color:#e8edf5;border-radius:12px;box-shadow:0 2px 8px #16336608}
+.cycle-progress-stat-card .ant-card-body{padding:13px 14px}
+.cycle-progress-stat-top{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:25px;margin-bottom:8px}
+.cycle-progress-stat-top .ant-tag{max-width:80%;overflow:hidden;text-overflow:ellipsis}
+.cycle-progress-stat-percent{font-size:11px;white-space:nowrap}
+.cycle-progress-stat-card .ant-statistic-content{font-size:25px;font-weight:700;color:#172b4d}
+.cycle-progress-stat-card .ant-progress{margin-top:7px;margin-bottom:0}
+.cycle-progress-stat-card-muted .ant-statistic{margin-top:8px}
+.cycle-progress-employee-row{cursor:pointer;transition:background-color .15s ease}
+.cycle-progress-employee-row:hover>td{background:#f2f6fc!important}
+.cycle-employee-profile{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding:16px;border:1px solid #e8edf5;border-radius:14px;background:#f8faff}
+.cycle-employee-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cycle-employee-drawer-loading{min-height:180px;display:grid;place-items:center}
+@media(max-width:575px){.cycle-progress-overview{padding:12px}.cycle-progress-overview-heading{align-items:flex-start}.cycle-progress-stat-card .ant-card-body{padding:11px}}
