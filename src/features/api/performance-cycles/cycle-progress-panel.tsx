@@ -281,7 +281,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                   { key: "employmentType", label: local("Employment type", "نوع التوظيف"), children: displayField(selectedPerson.employment_type) },
                   { key: "joining", label: local("Joining date", "تاريخ التعيين"), children: formatDate(selectedPerson.joining_date) },
                   { key: "termination", label: local("Termination date", "تاريخ انتهاء الخدمة"), children: formatDate(selectedPerson.terminate_date) },
-                  { key: "manager", label: local("Line manager", "المدير المباشر"), children: displayField(selectedMember.current_manager || selectedPerson.line_manager) },
+                  { key: "manager", label: local("Line manager", "المدير المباشر"), children: displayField(selectedMember.current_manager || selectedPerson.line_manager) !== "—" ? displayField(selectedMember.current_manager || selectedPerson.line_manager) : (selectedPerson.line_manager_id ?? "—") },
                 ]} />
                 <Typography.Title level={5} style={{ marginTop: 22 }}>{local("Contact & system information", "بيانات التواصل والنظام")}</Typography.Title>
                 <Descriptions bordered size="small" column={1} items={[
