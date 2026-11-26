@@ -376,27 +376,25 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                     ),
                   },
                 ] : []),
-                {
-                  title: t("Current manager", "المدير الحالي"),
-                  width: 190,
-                  render: (_: unknown, row: Plan) => {
-                    const member = memberByPlanId.get(Number(row.id));
-                    const manager = (row as any).current_manager || member?.current_manager;
-                    return manager ? (
-                      mode === "employee" ? (
-                        <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
-                      ) : (
+                ...(mode !== "manager" && mode !== "employee" ? [
+                  {
+                    title: t("Current manager", "المدير الحالي"),
+                    width: 190,
+                    render: (_: unknown, row: Plan) => {
+                      const member = memberByPlanId.get(Number(row.id));
+                      const manager = (row as any).current_manager || member?.current_manager;
+                      return manager ? (
                         <Space orientation="vertical" size={0}>
                           <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
                           <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                             {manager.code || (manager.id != null ? `ID ${manager.id}` : "—")}
                           </Typography.Text>
                         </Space>
-                      )
-                    ) : "—";
+                      ) : "—";
+                    },
                   },
-                },
-                ...(mode === "employee" ? [
+                ] : []),
+                ...(mode === "manager" || mode === "employee" ? [
                   {
                     title: t("Performance cycle", "دورة الأداء"),
                     width: 220,
