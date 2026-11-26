@@ -11009,3 +11009,79 @@ textarea.ant-input {
 
 @media(max-width:575px){.cycle-progress-stat-card .ant-card-body{padding:14px}.cycle-progress-stat-icon{width:40px;height:40px;flex-basis:40px}.cycle-progress-stat-value h3.ant-typography{font-size:23px}}
 .cycle-employee-profile-copy{min-width:0;flex:1}
+
+
+/* Performance cycle detail: clearer date range and more legible scope metrics. */
+.cycle-detail-date-range {
+  margin-bottom: 18px;
+}
+.cycle-detail-date-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 76px;
+  padding: 13px 15px;
+  border: 1px solid #e7edf5;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8faff, #fff);
+}
+.cycle-detail-date-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  background: #eaf1ff;
+  color: #24549a;
+  font-size: 18px;
+}
+.cycle-detail-date-icon-end {
+  background: #e8f7f2;
+  color: #16866c;
+}
+.cycle-detail-date-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.cycle-detail-date-copy .ant-typography-secondary {
+  font-size: 12px;
+}
+.cycle-detail-date-copy .ant-typography-strong {
+  font-size: 16px;
+  color: #243650;
+}
+.cycle-summary-metric-card {
+  height: 100%;
+  min-height: 100px;
+  border-color: #e5ebf4;
+  border-radius: 13px;
+  box-shadow: 0 3px 12px #1633660a;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.cycle-summary-metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px #16336612;
+}
+.cycle-summary-metric-card .ant-card-body {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.cycle-summary-metric-card .ant-typography {
+  line-height: 1.25;
+}
+@media (max-width: 575px) {
+  .cycle-detail-date-card {
+    min-height: 68px;
+    padding: 11px 12px;
+  }
+  .cycle-summary-metric-card {
+    min-height: 88px;
+  }
+  .cycle-summary-metric-card .ant-card-body {
+    padding: 13px !important;
+  }
+}
