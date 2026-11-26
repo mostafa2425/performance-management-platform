@@ -111,11 +111,11 @@ function PlanDetailLoadingSkeleton({ mode }: { mode: PlanMode }) {
             <Skeleton active title={{ width: 220 }} paragraph={false} />
             <div>
               <Skeleton active title={{ width: 150 }} paragraph={false} />
-              {infoCards(8)}
+              {infoCards(mode === "employee" ? 4 : 8)}
             </div>
             <div>
               <Skeleton active title={{ width: 130 }} paragraph={false} />
-              {infoCards(6)}
+              {infoCards(3)}
             </div>
           </Space>
         </Card>
@@ -270,13 +270,15 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
     ? String(typeof cycle.name === "object" ? (ar ? cycle.name.ar : cycle.name.en) : cycle.name) + " · " + cycle.performance_year
     : "#" + String(plan.cycle_id);
   const employeeInfo: Array<[string, React.ReactNode]> = [
-    [t("Employee", "الموظف"), employeeProfile?.full_name || employeeName],
+    ...(mode !== "employee" ? [
+      [t("Employee", "الموظف"), employeeProfile?.full_name || employeeName] as [string, React.ReactNode],
+      [t("Employee code", "كود الموظف"), employeeProfile?.code || plan.employee?.code || "—"] as [string, React.ReactNode],
+      [t("Email", "البريد الإلكتروني"), employeeProfile?.email || "—"] as [string, React.ReactNode],
+      [t("Business unit", "قطاع الأعمال"), employeeProfile?.business_unit?.name || "—"] as [string, React.ReactNode],
+    ] : []),
     ...(mode === "employee" && plan?.current_manager?.name ? [[t("Manager", "المدير"), plan.current_manager.name] as [string, React.ReactNode]] : []),
-    [t("Employee code", "كود الموظف"), employeeProfile?.code || plan.employee?.code || "—"],
-    [t("Email", "البريد الإلكتروني"), employeeProfile?.email || "—"],
     [t("Department", "الإدارة"), employeeProfile?.department?.name || "—"],
     [t("Job title", "المسمى الوظيفي"), employeeProfile?.job_title?.name || "—"],
-    [t("Business unit", "قطاع الأعمال"), employeeProfile?.business_unit?.name || "—"],
     [t("Location", "الموقع"), employeeProfile?.location?.name || "—"],
   ];
   const planInfo: Array<[string, React.ReactNode]> = [
@@ -395,7 +397,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           title={
             <Space wrap size={10}>
               <Typography.Title level={4} style={{ margin: 0 }}>{employeeName}</Typography.Title>
-              {plan.employee?.code ? <Tag>#{plan.employee.code}</Tag> : null}
+              {mode !== "employee" && plan.employee?.code ? <Tag>#{plan.employee.code}</Tag> : null}
               {planStatusTag(plan.status, ar)}
               {plan.requires_admin_attention ? <Tag color="orange">{t("Needs attention", "تحتاج إلى متابعة")}</Tag> : null}
             </Space>
