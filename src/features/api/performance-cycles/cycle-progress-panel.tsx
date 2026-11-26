@@ -161,7 +161,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                       <Typography.Text type="secondary">{percent}%</Typography.Text>
                     </div>
                   </div>
-                  <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor={statusMeta[k]?.color || "#64748b"} trailColor="#edf1f6" size={{ height: 9 }} />
+                  <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor={statusMeta[k]?.color || "#64748b"} railColor"#edf1f6" size={{ height: 9 }} />
                 </Card>
               </Col>
             );
@@ -184,7 +184,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                         <Typography.Text type="secondary">{percent}%</Typography.Text>
                       </div>
                     </div>
-                    <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor="#d97706" trailColor="#edf1f6" size={{ height: 9 }} />
+                    <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor="#d97706" railColor"#edf1f6" size={{ height: 9 }} />
                   </Card>
                 );
               })()}
@@ -208,7 +208,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                         <Typography.Text type="secondary">{percent}%</Typography.Text>
                       </div>
                     </div>
-                    <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor="#16a34a" trailColor="#edf1f6" size={{ height: 9 }} />
+                    <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor="#16a34a" railColor"#edf1f6" size={{ height: 9 }} />
                   </Card>
                 );
               })()}
@@ -274,7 +274,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
           }))}
         />
       )}
-      <Drawer open={Boolean(selectedMember)} onClose={() => setSelectedMember(null)} title={t("fields.employee")} width={520} destroyOnHidden>
+      <Drawer open={Boolean(selectedMember)} onClose={() => setSelectedMember(null)} title={t("fields.employee")} size={520} destroyOnHidden>
         {selectedMember ? (
           <div className="cycle-employee-drawer">
             {employee.isLoading ? (
