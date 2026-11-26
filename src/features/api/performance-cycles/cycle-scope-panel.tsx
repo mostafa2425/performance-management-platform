@@ -251,6 +251,7 @@ export function CycleScopePanel({
 
   return (
     <Card
+      className="cycle-scope-panel"
       title={
         <Space wrap size={[8, 8]}>
           <span>{t("sections.cycleScope")}</span>
@@ -317,10 +318,9 @@ export function CycleScopePanel({
                 render: (_: unknown, row) => (
                   <div className="cycle-scope-employee-cell">
                     <Typography.Text strong>{row.employee?.full_name || lookupName(employeeNameById, row.id)}</Typography.Text>
-                    <Typography.Text type="secondary">
-                      {row.employee?.code ? `#${row.employee.code}` : `#${row.id}`}
-                      {row.employee?.email ? ` · ${row.employee.email}` : ""}
-                    </Typography.Text>
+                    {row.employee?.email ? (
+                      <Typography.Text type="secondary">{row.employee.email}</Typography.Text>
+                    ) : null}
                   </div>
                 ),
               },
