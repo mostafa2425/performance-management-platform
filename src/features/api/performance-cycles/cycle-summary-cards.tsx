@@ -25,28 +25,28 @@ type Item = {
 
 function MetricCard({ item }: { item: Item }) {
   return (
-    <Card size="small" styles={{ body: { padding: "14px 16px" } }}>
+    <Card size="small" className="cycle-summary-metric-card" styles={{ body: { padding: "17px 18px" } }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <div
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: 10,
+            width: 46,
+            height: 46,
+            borderRadius: 13,
             display: "grid",
             placeItems: "center",
             background: `${item.color}18`,
             color: item.color,
-            fontSize: 18,
+            fontSize: 20,
             flexShrink: 0,
           }}
         >
           {item.icon}
         </div>
         <div style={{ minWidth: 0 }}>
-          <Typography.Text type="secondary" style={{ fontSize: 12, display: "block" }}>
+          <Typography.Text type="secondary" style={{ fontSize: 13, display: "block" }}>
             {item.label}
           </Typography.Text>
-          <Typography.Text strong style={{ fontSize: 20, lineHeight: 1.2 }}>
+          <Typography.Text strong style={{ fontSize: 25, lineHeight: 1.15 }}>
             {item.value}
           </Typography.Text>
         </div>
@@ -110,7 +110,7 @@ export function CycleScopeSummaryCards({
   return (
     <Row gutter={[12, 12]}>
       {items.map((item) => (
-        <Col xs={12} sm={8} md={6} xl={4} key={item.key}>
+        <Col xs={24} sm={12} md={8} xl={4} key={item.key}>
           <MetricCard item={item} />
         </Col>
       ))}
