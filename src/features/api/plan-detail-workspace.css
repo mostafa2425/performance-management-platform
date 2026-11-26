@@ -520,3 +520,59 @@
 
 
 /* Approval button only — keep other primary actions on the brand theme. */
+
+
+/* Returned-plan context — visible immediately below the page toolbar */
+.plan-detail-workspace .plan-return-notice {
+  width: 100%;
+  border: 1px solid #f3d39a;
+  border-radius: 12px;
+  background: linear-gradient(110deg, #fffbeb 0%, #fff 78%);
+}
+.plan-detail-workspace .plan-return-notice .ant-alert-message {
+  margin-bottom: 7px;
+  color: #92400e;
+  font-size: 14px;
+}
+.plan-detail-workspace .plan-return-notice .ant-alert-description { color: #475569; }
+.plan-detail-workspace .plan-return-notice-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  font-size: 12px;
+}
+.plan-detail-workspace .plan-return-notice-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.plan-detail-workspace .plan-return-notice-meta .anticon { color: #a16207; }
+.plan-detail-workspace .plan-level-comments {
+  width: 100%;
+  border-radius: 12px;
+}
+.plan-detail-workspace .plan-level-comments > .ant-card-head { min-height: 48px; }
+.plan-detail-workspace .plan-level-comments > .ant-card-body { padding: 14px 16px; }
+.plan-detail-workspace .plan-level-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334155;
+  line-height: 1.7;
+}
+.plan-detail-workspace .plan-level-comment > .anticon {
+  flex: 0 0 auto;
+  margin-top: 4px;
+  color: #64748b;
+}
+.plan-detail-workspace .plan-level-comment .ant-typography { overflow-wrap: anywhere; }
+@media (max-width: 767px) {
+  .plan-detail-workspace .plan-return-notice { padding: 12px; }
+  .plan-detail-workspace .plan-return-notice-meta { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .plan-detail-workspace .plan-level-comments > .ant-card-body { padding: 12px; }
+}
