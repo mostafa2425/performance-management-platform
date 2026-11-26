@@ -748,7 +748,13 @@
         "removed": "مستبعد",
         "missed": "فائت"
       },
-      "activationNotIncluded": "غير مشمولين عند التفعيل"
+      "activationNotIncluded": "غير مشمولين عند التفعيل",
+      "asOf": "حتى تاريخ {date}",
+      "reason": {
+        "employeeStatus": {
+          "inactive": "حالة الموظف: غير نشط"
+        }
+      }
     },
     "summary": {
       "managers": "المديرون"
