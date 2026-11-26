@@ -545,6 +545,8 @@
     },
     "errors": {
       "activationFailed": "Cannot activate cycle",
+      "noEligibleEmployees": "No eligible employees found in this cycle's scope.",
+      "noEligibleEmployeesHint": "The cycle cannot be activated because every employee in the selected scope is excluded by an eligibility rule. Review the employee and exclusion reason below, then update the scope or eligibility rules before trying again.",
       "activationCandidatesHint": "{count} employees in scope are not eligible. Review the reasons below, then adjust scope or close the other active cycles."
     },
     "fields": {
@@ -727,6 +729,7 @@
       "blocked": "Assigned to another active cycle",
       "removed": "Removed",
       "missed": "Missed",
+        "excluded_rule": "Excluded by an eligibility rule",
       "loadPreviewHint": "Run the eligibility preview to see employees who are not included.",
       "readOnly": "Read-only"
     },
