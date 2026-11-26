@@ -92,7 +92,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const plans = useQuery({
     queryKey: [...queryKeys.plans, mode, listParams],
     queryFn: () => plansApi.list(listParams),
-    enabled: mode === "admin" || Boolean(cycleId),
+    enabled: mode === "admin" ? !cycles.isLoading : Boolean(cycleId),
   });
   const status = useQuery({
     queryKey: ["cycles", cycleId, "plan-status"],
