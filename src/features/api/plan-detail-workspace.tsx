@@ -403,64 +403,63 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
 
         <Collapse
           className="plan-detail-objectives-collapse"
+          style={{ width: "100%" }}
           defaultActiveKey={["objectives"]}
           items={[
             {
               key: "objectives",
               label: <Typography.Text strong>{t("Objectives & KPIs", "الأهداف ومؤشرات الأداء")}</Typography.Text>,
-              extra: (
-                            canEdit ? (
-                              mode === "admin" && !adminEditMode ? (
-                                <Button type="primary" icon={<EditOutlined />} onClick={() => { setAdminEditMode(true); setEditing(true); }}>
-                                  {t("Edit submitted plan", "تعديل الخطة المرسلة")}
-                                </Button>
-                              ) : (
-                                <Space wrap>
-                                  {editing ? (
-                                    <>
-                                      <Button onClick={() => { setEditing(false); setAdminEditMode(false); }}>
-                                        {t("Cancel editing", "إلغاء التعديل")}
-                                      </Button>
-                                      {categories.isSuccess && units.isSuccess ? (
-                                        <Button type="primary" htmlType="submit" form="plan-content-editor-form" loading={save.isPending}>
-                                          {t("Save draft", "حفظ المسودة")}
-                                        </Button>
-                                      ) : null}
-                                    </>
-                                  ) : (
-                                    <Button type="primary" icon={<EditOutlined />} onClick={() => setEditing(true)}>
-                                      {t("Edit objectives", "تعديل الأهداف")}
-                                    </Button>
-                                  )}
-                                </Space>
-                              )
-                            ) : null
-              ),
+              extra: canEdit ? (
+                mode === "admin" && !adminEditMode ? (
+                  <Button type="primary" icon={<EditOutlined />} onClick={() => { setAdminEditMode(true); setEditing(true); }}>
+                    {t("Edit submitted plan", "تعديل الخطة المرسلة")}
+                  </Button>
+                ) : (
+                  <Space wrap>
+                    {editing ? (
+                      <>
+                        <Button onClick={() => { setEditing(false); setAdminEditMode(false); }}>
+                          {t("Cancel editing", "إلغاء التعديل")}
+                        </Button>
+                        {categories.isSuccess && units.isSuccess ? (
+                          <Button type="primary" htmlType="submit" form="plan-content-editor-form" loading={save.isPending}>
+                            {t("Save draft", "حفظ المسودة")}
+                          </Button>
+                        ) : null}
+                      </>
+                    ) : (
+                      <Button type="primary" icon={<EditOutlined />} onClick={() => setEditing(true)}>
+                        {t("Edit objectives", "تعديل الأهداف")}
+                      </Button>
+                    )}
+                  </Space>
+                )
+              ) : null,
               children: (
                 <div className="plan-detail-section plan-detail-objectives">
-                            {editing && canEditContent ? (
-                              categories.isLoading || units.isLoading ? <Skeleton active /> : categories.isError || units.isError ? (
-                                <Alert type="error" showIcon title={t("Could not load objective categories or KPI units.", "تعذر تحميل تصنيفات الأهداف أو وحدات المؤشرات.")} />
-                              ) : (
-                                <PlanContentEditor
-                                  initialObjectives={toDraftObjectives(plan.objectives || [])}
-                                  categories={(categories.data || []) as any}
-                                  units={(units.data || {}) as KpiUnitsMeta}
-                                  ar={ar}
-                                  loading={save.isPending}
-                                  addObjectiveRequest={addObjectiveRequest}
-                                  openComments={plan.open_comments}
-                                  onSave={(objectives) => save.mutate(objectives)}
-                                />
-                              )
-                            ) : (
-                              <PlanReadonlyTree
-                                ar={ar}
-                                objectives={plan.objectives}
-                                openComments={plan.open_comments}
-                                contentVisible={plan.content_visible !== false}
-                              />
-                            )}
+                  {editing && canEditContent ? (
+                    categories.isLoading || units.isLoading ? <Skeleton active /> : categories.isError || units.isError ? (
+                      <Alert type="error" showIcon title={t("Could not load objective categories or KPI units.", "تعذر تحميل تصنيفات الأهداف أو وحدات المؤشرات.")} />
+                    ) : (
+                      <PlanContentEditor
+                        initialObjectives={toDraftObjectives(plan.objectives || [])}
+                        categories={(categories.data || []) as any}
+                        units={(units.data || {}) as KpiUnitsMeta}
+                        ar={ar}
+                        loading={save.isPending}
+                        addObjectiveRequest={addObjectiveRequest}
+                        openComments={plan.open_comments}
+                        onSave={(objectives) => save.mutate(objectives)}
+                      />
+                    )
+                  ) : (
+                    <PlanReadonlyTree
+                      ar={ar}
+                      objectives={plan.objectives}
+                      openComments={plan.open_comments}
+                      contentVisible={plan.content_visible !== false}
+                    />
+                  )}
                 </div>
               ),
             },
@@ -472,6 +471,7 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
             <Collapse
               className="plan-detail-history-collapse"
               style={{ width: "100%" }}
+              defaultActiveKey={[]}
               items={[
                 {
                   key: "workflow-history",
