@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { App, Alert, Button, Card, Col, Row, Space, Skeleton, Tag, Typography } from "antd";
+import { App, Alert, Button, Card, Collapse, Col, Row, Space, Skeleton, Tag, Typography } from "antd";
 import { ArrowLeftOutlined, CheckCircleFilled, EditOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
@@ -401,70 +401,96 @@ export function ApiPlanDetailWorkspace({ mode }: { mode: PlanMode }) {
           </div>
         ) : null}
 
-        <Card
-          className="plan-detail-section plan-detail-objectives"
-          title={t("Objectives & KPIs", "الأهداف ومؤشرات الأداء")}
-          extra={
-            canEdit ? (
-              mode === "admin" && !adminEditMode ? (
-                <Button type="primary" icon={<EditOutlined />} onClick={() => { setAdminEditMode(true); setEditing(true); }}>
-                  {t("Edit submitted plan", "تعديل الخطة المرسلة")}
-                </Button>
-              ) : (
-                <Space wrap>
-                  {editing ? (
-                    <>
-                      <Button onClick={() => { setEditing(false); setAdminEditMode(false); }}>
-                        {t("Cancel editing", "إلغاء التعديل")}
-                      </Button>
-                      {categories.isSuccess && units.isSuccess ? (
-                        <Button type="primary" htmlType="submit" form="plan-content-editor-form" loading={save.isPending}>
-                          {t("Save draft", "حفظ المسودة")}
-                        </Button>
-                      ) : null}
-                    </>
-                  ) : (
-                    <Button type="primary" icon={<EditOutlined />} onClick={() => setEditing(true)}>
-                      {t("Edit objectives", "تعديل الأهداف")}
-                    </Button>
-                  )}
-                </Space>
-              )
-            ) : null
-          }
-        >
-          {editing && canEditContent ? (
-            categories.isLoading || units.isLoading ? <Skeleton active /> : categories.isError || units.isError ? (
-              <Alert type="error" showIcon title={t("Could not load objective categories or KPI units.", "تعذر تحميل تصنيفات الأهداف أو وحدات المؤشرات.")} />
-            ) : (
-              <PlanContentEditor
-                initialObjectives={toDraftObjectives(plan.objectives || [])}
-                categories={(categories.data || []) as any}
-                units={(units.data || {}) as KpiUnitsMeta}
-                ar={ar}
-                loading={save.isPending}
-                addObjectiveRequest={addObjectiveRequest}
-                openComments={plan.open_comments}
-                onSave={(objectives) => save.mutate(objectives)}
-              />
-            )
-          ) : (
-            <PlanReadonlyTree
-              ar={ar}
-              objectives={plan.objectives}
-              openComments={plan.open_comments}
-              contentVisible={plan.content_visible !== false}
-            />
-          )}
-        </Card>
+        <Collapse
+          className="plan-detail-objectives-collapse"
+          defaultActiveKey={["objectives"]}
+          items={[
+            {
+              key: "objectives",
+              label: <Typography.Text strong>{t("Objectives & KPIs", "الأهداف ومؤشرات الأداء")}</Typography.Text>,
+              extra: (
+                            canEdit ? (
+                              mode === "admin" && !adminEditMode ? (
+                                <Button type="primary" icon={<EditOutlined />} onClick={() => { setAdminEditMode(true); setEditing(true); }}>
+                                  {t("Edit submitted plan", "تعديل الخطة المرسلة")}
+                                </Button>
+                              ) : (
+                                <Space wrap>
+                                  {editing ? (
+                                    <>
+                                      <Button onClick={() => { setEditing(false); setAdminEditMode(false); }}>
+                                        {t("Cancel editing", "إلغاء التعديل")}
+                                      </Button>
+                                      {categories.isSuccess && units.isSuccess ? (
+                                        <Button type="primary" htmlType="submit" form="plan-content-editor-form" loading={save.isPending}>
+                                          {t("Save draft", "حفظ المسودة")}
+                                        </Button>
+                                      ) : null}
+                                    </>
+                                  ) : (
+                                    <Button type="primary" icon={<EditOutlined />} onClick={() => setEditing(true)}>
+                                      {t("Edit objectives", "تعديل الأهداف")}
+                                    </Button>
+                                  )}
+                                </Space>
+                              )
+                            ) : null
+              ),
+              children: (
+                <div className="plan-detail-section plan-detail-objectives">
+                            {editing && canEditContent ? (
+                              categories.isLoading || units.isLoading ? <Skeleton active /> : categories.isError || units.isError ? (
+                                <Alert type="error" showIcon title={t("Could not load objective categories or KPI units.", "تعذر تحميل تصنيفات الأهداف أو وحدات المؤشرات.")} />
+                              ) : (
+                                <PlanContentEditor
+                                  initialObjectives={toDraftObjectives(plan.objectives || [])}
+                                  categories={(categories.data || []) as any}
+                                  units={(units.data || {}) as KpiUnitsMeta}
+                                  ar={ar}
+                                  loading={save.isPending}
+                                  addObjectiveRequest={addObjectiveRequest}
+                                  openComments={plan.open_comments}
+                                  onSave={(objectives) => save.mutate(objectives)}
+                                />
+                              )
+                            ) : (
+                              <PlanReadonlyTree
+                                ar={ar}
+                                objectives={plan.objectives}
+                                openComments={plan.open_comments}
+                                contentVisible={plan.content_visible !== false}
+                              />
+                            )}
+                </div>
+              ),
+            },
+          ]}
+        />
 
-        <div className={historyVisible ? "plan-detail-workflow-grid" : undefined}>
-          {historyVisible ? (
+        {historyVisible ? (
+          mode === "admin" ? (
+            <Collapse
+              className="plan-detail-history-collapse"
+              style={{ width: "100%" }}
+              items={[
+                {
+                  key: "workflow-history",
+                  label: <Typography.Text strong>{t("Workflow history", "سجل سير العمل")}</Typography.Text>,
+                  extra: planStatusTag(plan.status, ar),
+                  children: (
+                    <div className="plan-detail-section plan-detail-history" style={{ width: "100%" }}>
+                      <PlanHistoryPanel planId={plan.id} ar={ar} />
+                    </div>
+                  ),
+                },
+              ]}
+            />
+          ) : (
             <Card className="plan-detail-section plan-detail-history" title={t("Workflow history", "سجل سير العمل")}>
               <PlanHistoryPanel planId={plan.id} ar={ar} />
             </Card>
-          ) : null}
-        </div>
+          )
+        ) : null}
 
         {historyVisible ? (
           <Card className="plan-detail-section plan-detail-snapshots" title={t("Plan snapshots", "نسخ الخطة المحفوظة")}>
