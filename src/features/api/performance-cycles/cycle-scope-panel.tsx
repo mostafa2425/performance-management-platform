@@ -106,36 +106,64 @@ export function CycleScopePanel({
     () =>
       employeeRows.map((x: any) => ({
         value: x.id,
-        label: `${x.full_name} · ${x.code || x.email}`,
+        label: String(x.full_name || x.code || `#${x.id}`),
+        description: [
+          x.code ? `#${x.code}` : null,
+          x.email,
+          x.department?.name,
+          x.job_title?.name,
+        ].filter(Boolean).join(" · "),
       })),
     [employeeRows],
   );
 
   const departmentOptions = useMemo(() => {
-    const map = new Map<number, string>();
+    const map = new Map<number, { label: string; count: number }>();
     for (const row of employeeRows) {
       const d = row.department;
-      if (d?.id != null) map.set(Number(d.id), String(d.name || `#${d.id}`));
+      if (d?.id != null) {
+        const id = Number(d.id);
+        const current = map.get(id);
+        map.set(id, { label: String(d.name || `#${id}`), count: (current?.count || 0) + 1 });
+      }
     }
     return Array.from(map.entries())
-      .map(([value, label]) => ({ value, label }))
+      .map(([value, item]) => ({
+        value,
+        label: item.label,
+        description: `${item.count} ${item.count === 1 ? "employee" : "employees"}`,
+      }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [employeeRows]);
 
   const jobTitleOptions = useMemo(() => {
-    const map = new Map<number, string>();
+    const map = new Map<number, { label: string; count: number }>();
     for (const row of employeeRows) {
       const j = row.job_title;
-      if (j?.id != null) map.set(Number(j.id), String(j.name || `#${j.id}`));
+      if (j?.id != null) {
+        const id = Number(j.id);
+        const current = map.get(id);
+        map.set(id, { label: String(j.name || `#${id}`), count: (current?.count || 0) + 1 });
+      }
     }
     return Array.from(map.entries())
-      .map(([value, label]) => ({ value, label }))
+      .map(([value, item]) => ({
+        value,
+        label: item.label,
+        description: `${item.count} ${item.count === 1 ? "employee" : "employees"}`,
+      }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [employeeRows]);
 
   const employeeNameById = useMemo(() => {
     const map = new Map<number, string>();
     for (const row of employeeRows) map.set(Number(row.id), String(row.full_name || row.code || row.id));
+    return map;
+  }, [employeeRows]);
+
+  const employeeById = useMemo(() => {
+    const map = new Map<number, any>();
+    for (const row of employeeRows) map.set(Number(row.id), row);
     return map;
   }, [employeeRows]);
 
@@ -272,29 +300,66 @@ export function CycleScopePanel({
             </Row>
           )}
 
-          <DataTable<{ id: number; kind: "included" | "excluded" }>
+          <DataTable<{ id: number; kind: "included" | "excluded"; employee?: any }>
             rowKey={(row) => `${row.kind}-${row.id}`}
             size="middle"
             pagination={{ pageSize: 10 }}
+            scroll={{ x: 1050 }}
             dataSource={[
-              ...viewEmployees.map((id) => ({ id, kind: "included" as const })),
-              ...viewExcluded.map((id) => ({ id, kind: "excluded" as const })),
+              ...viewEmployees.map((id) => ({ id, kind: "included" as const, employee: employeeById.get(id) })),
+              ...viewExcluded.map((id) => ({ id, kind: "excluded" as const, employee: employeeById.get(id) })),
             ]}
             locale={{ emptyText: t("scope.noEmployees") }}
             columns={[
               {
                 title: t("fields.employee"),
-                render: (_: unknown, row) => lookupName(employeeNameById, row.id),
+                width: 230,
+                render: (_: unknown, row) => (
+                  <div className="cycle-scope-employee-cell">
+                    <Typography.Text strong>{row.employee?.full_name || lookupName(employeeNameById, row.id)}</Typography.Text>
+                    <Typography.Text type="secondary">
+                      {row.employee?.code ? `#${row.employee.code}` : `#${row.id}`}
+                      {row.employee?.email ? ` · ${row.employee.email}` : ""}
+                    </Typography.Text>
+                  </div>
+                ),
+              },
+              {
+                title: t("fields.departments"),
+                width: 190,
+                render: (_: unknown, row) => (
+                  <div className="cycle-scope-employee-cell">
+                    <Typography.Text>{row.employee?.department?.name || "—"}</Typography.Text>
+                    {row.employee?.business_unit?.name ? <Typography.Text type="secondary">{row.employee.business_unit.name}</Typography.Text> : null}
+                  </div>
+                ),
+              },
+              {
+                title: t("fields.jobTitles"),
+                width: 190,
+                render: (_: unknown, row) => row.employee?.job_title?.name || "—",
+              },
+              {
+                title: t("fields.location"),
+                width: 170,
+                render: (_: unknown, row) => row.employee?.location?.name || "—",
+              },
+              {
+                title: t("fields.employmentType"),
+                width: 150,
+                render: (_: unknown, row) => row.employee?.employment_type?.name ? <Tag color="cyan">{row.employee.employment_type.name}</Tag> : "—",
               },
               {
                 title: t("fields.status"),
-                width: 140,
-                render: (_: unknown, row) =>
-                  row.kind === "excluded" ? (
-                    <Tag color="orange">{t("scope.excluded")}</Tag>
-                  ) : (
-                    <Tag color="blue">{t("scope.included")}</Tag>
-                  ),
+                width: 130,
+                render: (_: unknown, row) => (
+                  <Space size={6}>
+                    <Tag color={row.employee?.is_active === false || row.employee?.status === "inactive" ? "default" : "success"}>
+                      {row.employee?.status === "active" || row.employee?.is_active ? t("scope.active") : row.employee?.status || "—"}
+                    </Tag>
+                    {row.kind === "excluded" ? <Tag color="orange">{t("scope.excluded")}</Tag> : <Tag color="blue">{t("scope.included")}</Tag>}
+                  </Space>
+                ),
               },
             ]}
           />
