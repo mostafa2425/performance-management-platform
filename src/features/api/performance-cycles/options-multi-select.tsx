@@ -60,7 +60,7 @@ export function OptionsMultiSelect({
   };
 
   if (loading) {
-    return <Skeleton.Input active block className="cycle-scope-select-loading" style={{ height: 42 }} />;
+    return <Skeleton.Input active block className="cycle-scope-select-loading" style={{ height: 54 }} />;
   }
 
   return (
