@@ -13,7 +13,7 @@ import {
   reasonText,
 } from "./shared";
 
-const KNOWN = ["included", "under_6_months", "in_other_active_cycle", "excluded", "excluded_rule", "excluded_by_scope", "removed", "missed"] as const;
+const KNOWN = ["included", "under_6_months", "in_other_active_cycle", "excluded", "excluded_rule", "excluded_by_scope", "removed", "missed", "terminated"] as const;
 
 export function EligibilityStatusTag({ status }: { status?: string | null }) {
   const t = useTranslations("PerformanceCycles");
@@ -68,7 +68,14 @@ export function CycleEligibilityPreview({
     },
     {
       title: t("fields.reason"),
-      render: (_: unknown, row: any) => reasonText(row.reason ?? row.reasons, ar),
+      render: (_: unknown, row: any) => {
+        const reason = row.reason ?? row.reasons;
+        if (reason && typeof reason === "object" && reason.employee_status) {
+          const key = String(reason.employee_status);
+          return t(`eligibility.reason.employeeStatus.${key}` as any);
+        }
+        return reasonText(reason, ar);
+      },
     },
   ];
 
