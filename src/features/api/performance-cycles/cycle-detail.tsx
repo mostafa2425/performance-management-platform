@@ -9,7 +9,7 @@ import {
   Empty,
   Popconfirm,
   Space,
-  Skeleton,
+  Spin,
   Typography,
 } from "antd";
 import Link from "next/link";
@@ -99,8 +99,8 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
 
   if (cycle.isLoading) {
     return (
-      <div style={{ display: "grid", placeItems: "center", minHeight: 220 }}>
-        <Skeleton active />
+      <div style={{ display: "grid", placeItems: "center", minHeight: 240 }}>
+        <Spin size="large" />
       </div>
     );
   }
