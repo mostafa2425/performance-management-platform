@@ -171,11 +171,6 @@ function KpiFields({
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
-          <Form.Item name={[kpiField.name, "baseline"]} label={t("Baseline", "خط الأساس")}>
-            <InputNumber placeholder={t("Enter baseline (optional)", "أدخل خط الأساس (اختياري)")} style={{ width: "100%" }} />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
           <Form.Item name={[kpiField.name, "weight_pct"]} label={t("Weight %", "الوزن %")} rules={[{ required: true }]}>
             <InputNumber min={0} max={100} step={1} precision={0} placeholder={t("Enter whole number", "أدخل رقمًا صحيحًا")} style={{ width: "100%" }} />
           </Form.Item>
@@ -452,7 +447,6 @@ export function PlanContentEditor({
                         </Form.Item>
                       </Col>
                       <Col xs={24} md={12}><Form.Item name={[field.name, "target"]} label={t("Target", "المستهدف")} rules={[{ required: true }]}><InputNumber placeholder={t("Enter target", "أدخل المستهدف")} style={{ width: "100%" }} /></Form.Item></Col>
-                      <Col xs={24} md={12}><Form.Item name={[field.name, "baseline"]} label={t("Baseline", "خط الأساس")}><InputNumber placeholder={t("Enter baseline (optional)", "أدخل خط الأساس (اختياري)")} style={{ width: "100%" }} /></Form.Item></Col>
                       <Col xs={24} md={12}><Form.Item name={[field.name, "weight_pct"]} label={t("Weight %", "الوزن %")} rules={[{ required: true }]}><InputNumber min={0} max={100} step={1} precision={0} placeholder={t("Enter whole number", "أدخل رقمًا صحيحًا")} style={{ width: "100%" }} /></Form.Item></Col>
                     </Row>
                   </Card>
