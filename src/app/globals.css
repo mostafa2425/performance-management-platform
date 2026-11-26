@@ -10953,13 +10953,21 @@ textarea.ant-input {
 .cycle-progress-overview{margin-bottom:22px;padding:18px;border:1px solid #e7edf5;border-radius:14px;background:linear-gradient(145deg,#f8faff,#fff 70%)}
 .cycle-progress-overview-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
 .cycle-progress-total{text-align:end}
-.cycle-progress-stat-card{height:100%;border-color:#e8edf5;border-radius:12px;box-shadow:0 2px 8px #16336608}
-.cycle-progress-stat-card .ant-card-body{padding:13px 14px}
-.cycle-progress-stat-top{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:25px;margin-bottom:8px}
-.cycle-progress-stat-top .ant-tag{max-width:80%;overflow:hidden;text-overflow:ellipsis}
-.cycle-progress-stat-percent{font-size:11px;white-space:nowrap}
-.cycle-progress-stat-card .ant-statistic-content{font-size:25px;font-weight:700;color:#172b4d}
-.cycle-progress-stat-card .ant-progress{margin-top:7px;margin-bottom:0}
+.cycle-progress-stat-card{height:100%;min-height:132px;border-color:#e5ebf4;border-radius:14px;box-shadow:0 3px 12px #1633660b;transition:transform .18s ease,box-shadow .18s ease}
+.cycle-progress-stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 22px #16336612}
+.cycle-progress-stat-card .ant-card-body{padding:18px}
+.cycle-progress-stat-heading{display:flex;align-items:center;gap:12px;min-height:64px}
+.cycle-progress-stat-icon{width:46px;height:46px;display:grid;place-items:center;flex:0 0 46px;border-radius:13px;font-size:20px}
+.cycle-progress-stat-label{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.cycle-progress-stat-label .ant-typography{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cycle-progress-stat-label .ant-typography-secondary{font-size:12px}
+.cycle-progress-stat-value{text-align:end;flex:0 0 auto}
+.cycle-progress-stat-value .ant-typography{display:block;margin:0;line-height:1.1}
+.cycle-progress-stat-value h3.ant-typography{font-size:27px;font-weight:750;color:#172b4d}
+.cycle-progress-stat-value .ant-typography-secondary{margin-top:4px;font-size:13px;font-weight:650}
+.cycle-progress-status-bar{margin-top:14px;margin-bottom:0;line-height:1}
+.cycle-progress-status-bar .ant-progress-inner{border-radius:99px}
+.cycle-progress-stat-card-muted{min-height:132px}
 .cycle-progress-stat-card-muted .ant-statistic{margin-top:8px}
 .cycle-progress-employee-row{cursor:pointer;transition:background-color .15s ease}
 .cycle-progress-employee-row:hover>td{background:#f2f6fc!important}
@@ -10967,3 +10975,6 @@ textarea.ant-input {
 .cycle-employee-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .cycle-employee-drawer-loading{min-height:180px;display:grid;place-items:center}
 @media(max-width:575px){.cycle-progress-overview{padding:12px}.cycle-progress-overview-heading{align-items:flex-start}.cycle-progress-stat-card .ant-card-body{padding:11px}}
+
+@media(max-width:575px){.cycle-progress-stat-card .ant-card-body{padding:14px}.cycle-progress-stat-icon{width:40px;height:40px;flex-basis:40px}.cycle-progress-stat-value h3.ant-typography{font-size:23px}}
+.cycle-employee-profile-copy{min-width:0;flex:1}
