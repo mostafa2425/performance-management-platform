@@ -22,14 +22,19 @@ export function showCycleActivationError(
 ) {
   const apiError = error instanceof ApiRequestError ? error : null;
   const candidates = activationCandidates(apiError?.details);
-  const message =
-    apiError?.message ||
+  const noEligibleEmployees = apiError?.code === "domain_rule_violated" &&
+    (apiError.details as { rule?: string } | undefined)?.rule === "no_eligible_employees";
+  const message = noEligibleEmployees
+    ? t("errors.noEligibleEmployees")
+    : apiError?.message ||
     (error instanceof Error ? error.message : t("errors.activationFailed"));
 
   if (!candidates.length) {
     modal.error({
       title: t("errors.activationFailed"),
-      content: message,
+      content: noEligibleEmployees ? (
+        <Alert type="error" showIcon title={message} description={t("errors.noEligibleEmployeesHint")} />
+      ) : message,
     });
     return;
   }
@@ -40,7 +45,7 @@ export function showCycleActivationError(
     okText: t("actions.close"),
     content: (
       <div style={{ marginTop: 8 }}>
-        <Alert type="error" showIcon message={message} style={{ marginBottom: 16 }} />
+        <Alert type="error" showIcon title={message} description={noEligibleEmployees ? t("errors.noEligibleEmployeesHint") : undefined} style={{ marginBottom: 16 }} />
         <Typography.Paragraph type="secondary" style={{ marginBottom: 8 }}>
           {t("errors.activationCandidatesHint", { count: candidates.length })}
         </Typography.Paragraph>
