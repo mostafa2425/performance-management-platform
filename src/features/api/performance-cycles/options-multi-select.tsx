@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 export type SelectOption = {
   value: string | number;
   label: string;
+  description?: string;
 };
 
 type Props = {
@@ -55,11 +56,11 @@ export function OptionsMultiSelect({
   const filterOption = (input: string, option?: SelectOption) => {
     const q = input.trim().toLowerCase();
     if (!q) return true;
-    return String(option?.label ?? "").toLowerCase().includes(q);
+    return `${String(option?.label ?? "")} ${String((option as SelectOption | undefined)?.description ?? "")}`.toLowerCase().includes(q);
   };
 
   if (loading) {
-    return <Skeleton.Input active block />;
+    return <Skeleton.Input active block className="cycle-scope-select-loading" style={{ height: 42 }} />;
   }
 
   return (
@@ -87,6 +88,14 @@ export function OptionsMultiSelect({
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={emptyText ?? t("scope.noOptions")} />
       }
       optionLabelProp="label"
+      optionRender={(option) => (
+        <div className="cycle-scope-option">
+          <Typography.Text strong>{String(option.label ?? "")}</Typography.Text>
+          {"description" in option && option.description ? (
+            <Typography.Text type="secondary">{String(option.description)}</Typography.Text>
+          ) : null}
+        </div>
+      )}
       prefix={
         selectedCount > 0 ? (
           <Typography.Text type="secondary" style={{ fontSize: 12, whiteSpace: "nowrap" }}>
