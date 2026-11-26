@@ -127,9 +127,14 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
   const navItems =
     activeRole === "admin" ? adminNavItems : activeRole === "manager" ? managerNavItems : employeeNavItems;
+  const normalizedPathname = pathname.replace(/\\/+$/, "") || "/";
   const active =
-    navItems.find((item) => pathname === `/${locale}${item.href}` || pathname.endsWith(item.href))?.key ??
-    "dashboard";
+    [...navItems]
+      .filter((item) => {
+        const itemPath = `/${locale}${item.href}`;
+        return normalizedPathname === itemPath || normalizedPathname.startsWith(`${itemPath}/`);
+      })
+      .sort((a, b) => b.href.length - a.href.length)[0]?.key ?? "dashboard";
   const homeHref = homePathForUser(user, locale, activeRole);
 
   if (!isReady || !isAuthenticated) {
