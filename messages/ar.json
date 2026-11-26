@@ -74,13 +74,13 @@
         "development": "التطوير"
       },
       "manager": {
-        "dashboard": "نظرة عامة على أداء الفريق",
+        "dashboard": "نظرة عامة",
         "team": "فريقي",
         "history": "سجل الأداء",
         "reviews": "المراجعات المعلقة",
-        "objectives": "خطط أهداف الفريق",
+        "objectives": "خططي",
         "performance": "أداء الفريق",
-        "evaluation": "تقييمات الأداء",
+        "evaluation": "تقييماتي",
         "year-group": "المراجعة السنوية للفريق",
         "calculations": "تفاصيل الحسابات"
       },
@@ -100,14 +100,14 @@
         "history": "سجل الأداء"
       },
       "admin": {
-        "dashboard": "نظرة عامة للمسؤول",
+        "dashboard": "نظرة عامة",
         "cycles": "دورات الأداء",
         "competencies": "قوالب الكفاءات",
         "categories": "تصنيفات الأهداف",
         "configuration": "إعدادات الأداء",
         "employees": "الموظفون",
         "approvals": "اعتمادات المجموعة السنوية",
-        "plan-reviews": "مراجعة خطط الأهداف",
+        "plan-reviews": "الخطط",
         "bell-curve": "التوزيع الطبيعي",
         "publication": "نشر نتائج الأداء",
         "history": "سجل الأداء",
