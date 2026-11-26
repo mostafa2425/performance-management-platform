@@ -97,7 +97,7 @@ export function PlanHistoryPanel({
         const meta = historyMeta(event.action || "");
         const actor = event.actor?.name || t("System", "النظام");
         return {
-          dot: (
+          icon: (
             <span className={`plan-workflow-timeline-dot plan-workflow-timeline-dot--${meta.tone}`}>
               {meta.icon}
             </span>
