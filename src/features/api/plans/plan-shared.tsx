@@ -38,7 +38,7 @@ const ACTION_LABELS: Record<string, [string, string]> = {
   delete: ["Delete draft", "حذف المسودة"],
   submit: ["Submit", "إرسال"],
   resubmit: ["Resubmit updated plan", "إعادة إرسال الخطة المحدّثة"],
-  approve: ["Approve", "اعتماد"],
+  approve: ["Approve plan", "اعتماد الخطة"],
   return: ["Return", "إعادة للتعديل"],
   employee_approve: ["Approve plan", "اعتماد الخطة"],
   request_modification: ["Request changes", "طلب تعديل"],
