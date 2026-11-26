@@ -383,7 +383,16 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                     const member = memberByPlanId.get(Number(row.id));
                     const manager = (row as any).current_manager || member?.current_manager;
                     return manager ? (
-                      <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
+                      mode === "employee" ? (
+                        <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
+                      ) : (
+                        <Space orientation="vertical" size={0}>
+                          <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
+                          <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                            {manager.code || (manager.id != null ? `ID ${manager.id}` : "—")}
+                          </Typography.Text>
+                        </Space>
+                      )
                     ) : "—";
                   },
                 },
