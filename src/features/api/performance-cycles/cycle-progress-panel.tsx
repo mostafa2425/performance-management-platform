@@ -5,6 +5,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { useMemo, useState } from "react";
 import { Alert, Avatar, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Progress, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
+import { CheckCircleOutlined, ClockCircleOutlined, EditOutlined, FileTextOutlined, RollbackOutlined, SendOutlined, UserOutlined } from "@ant-design/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { adminApi, cyclesApi, employeesApi, resultsApi } from "@/lib/api/endpoints";
 import { PLAN_DISPLAY_STATUS, planStatusKeys } from "./shared";
@@ -72,12 +73,25 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
   const pendingFinal = ((groups.data as any)?.data || []).filter((g: any) => g.status === "pending_admin").length;
   const finalized = Array.isArray(results.data) ? results.data.length : null;
   const totalPlans = rows.length;
-  const selectedPerson = (employee.data as any)?.employee ?? (employee.data as any)?.data ?? employee.data ?? selectedMember?.employee ?? {};
+  const employeePayload = (employee.data as any)?.data ?? employee.data;
+  const selectedPerson = employeePayload?.employee ?? employeePayload ?? selectedMember?.employee ?? {};
   const selectedName = selectedPerson.full_name || selectedPerson.name || selectedMember?.employee?.name || selectedMember?.employee?.full_name || "—";
   const displayField = (value: any) => {
     if (value == null || value === "") return "—";
     if (typeof value === "object") return value[ar ? "ar" : "en"] || value.name || value.full_name || value.label || "—";
     return value;
+  };  const formatDate = (value?: string | null) => {
+    if (!value) return "—";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(ar ? "ar-EG" : "en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(date);
+  };
+  const statusMeta: Record<string, { icon: React.ReactNode; color: string }> = {
+    not_started: { icon: <ClockCircleOutlined />, color: "#94a3b8" },
+    draft: { icon: <EditOutlined />, color: "#3b82f6" },
+    pending_admin_approval: { icon: <SendOutlined />, color: "#d97706" },
+    returned_to_manager: { icon: <RollbackOutlined />, color: "#ea580c" },
+    pending_employee_review: { icon: <UserOutlined />, color: "#8b5cf6" },
+    goals_approved: { icon: <CheckCircleOutlined />, color: "#16a34a" },
   };
 
   const grouped = useMemo(() => {
@@ -132,14 +146,22 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
           {planStatusKeys.map((k) => {
             const percent = totalPlans ? Math.round((counts[k] / totalPlans) * 100) : 0;
             return (
-              <Col xs={12} sm={8} xl={4} key={k}>
+              <Col xs={24} sm={12} xl={8} key={k}>
                 <Card className="cycle-progress-stat-card" size="small">
-                  <div className="cycle-progress-stat-top">
-                    <Tag color={PLAN_DISPLAY_STATUS[k].color}>{t(`progress.${k as "draft"}`)}</Tag>
-                    <Typography.Text type="secondary" className="cycle-progress-stat-percent">{percent}%</Typography.Text>
+                  <div className="cycle-progress-stat-heading">
+                    <span className="cycle-progress-stat-icon" style={{ color: statusMeta[k]?.color || "#64748b", background: (statusMeta[k]?.color || "#64748b") + "16" }}>
+                      {statusMeta[k]?.icon || <FileTextOutlined /> }
+                    </span>
+                    <div className="cycle-progress-stat-label">
+                      <Typography.Text strong>{t(`progress.${k as "draft"}`)}</Typography.Text>
+                      <Typography.Text type="secondary">{t("progress.employeesCount", { count: counts[k] })}</Typography.Text>
+                    </div>
+                    <div className="cycle-progress-stat-value">
+                      <Typography.Title level={3}>{counts[k]}</Typography.Title>
+                      <Typography.Text type="secondary">{percent}%</Typography.Text>
+                    </div>
                   </div>
-                  <Statistic value={counts[k]} />
-                  <Progress percent={percent} showInfo={false} strokeColor={PLAN_DISPLAY_STATUS[k].color === "default" ? "#94a3b8" : undefined} size="small" />
+                  <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor={statusMeta[k]?.color || "#64748b"} trailColor="#edf1f6" size={{ height: 9 }} />
                 </Card>
               </Col>
             );
