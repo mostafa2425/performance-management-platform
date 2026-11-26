@@ -127,7 +127,7 @@ export function AppShell({ children, title, subtitle, backHref, role }: Props) {
   const localeHref = (path: string, nextLocale: string) => `/${nextLocale}${path}`;
   const navItems =
     activeRole === "admin" ? adminNavItems : activeRole === "manager" ? managerNavItems : employeeNavItems;
-  const normalizedPathname = pathname.replace(/\\/+$/, "") || "/";
+  const normalizedPathname = pathname.replace(/\/+$/, "") || "/";
   const active =
     [...navItems]
       .filter((item) => {
