@@ -245,8 +245,8 @@ export function PlanContentEditor({
             percent={Math.min(100, Math.max(0, weightTotal))}
             showInfo={false}
             strokeColor={weightReady ? "#16a34a" : weightTotal > 100 ? "#dc2626" : weightTotal >= 70 ? "#d97706" : "#3b82f6"}
-            trailColor="#e8edf4"
-            strokeWidth={9}
+            railColor="#e8edf4"
+            size={{ height: 9 }}
           />
           <Typography.Text type="secondary" className="plan-content-editor-weight-hint">
             {weightReady
