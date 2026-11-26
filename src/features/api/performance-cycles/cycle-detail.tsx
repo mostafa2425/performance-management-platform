@@ -4,9 +4,11 @@ import { useMemo, useState } from "react";
 import {
   Alert,
   App,
+  Col,
   Button,
   Card,
   Empty,
+  Row,
   Popconfirm,
   Space,
   Spin,
@@ -21,6 +23,7 @@ import { queryKeys } from "@/lib/api/query-hooks";
 import { CycleProgressPanel, planStatusQueryKey } from "./cycle-progress-panel";
 import { CycleScopePanel } from "./cycle-scope-panel";
 import { CycleStatusTag, CycleYearTag } from "./cycle-status-tag";
+import { CalendarOutlined, CalendarCheckOutlined } from "@ant-design/icons";
 import {
   CyclePreviewSummaryCards,
   CycleScopeSummaryCards,
@@ -35,6 +38,17 @@ import {
   previewManagersCount,
   previewQueryKey,
 } from "./shared";
+
+function formatCycleDate(value: string | null | undefined, locale: string) {
+  if (!value) return "—";
+  const date = new Date(`${value.slice(0, 10)}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+}
 
 export function CycleDetail({ cycleId }: { cycleId: string }) {
   const t = useTranslations("PerformanceCycles");
@@ -162,11 +176,26 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
           </Space>
         }
       >
-        <Typography.Paragraph type="secondary" style={{ marginTop: 0, marginBottom: 16 }}>
-          {t("fields.startDate")}: {c.start_date || "—"}
-          <span style={{ marginInline: 8 }}>·</span>
-          {t("fields.endDate")}: {c.end_date || "—"}
-        </Typography.Paragraph>
+        <Row gutter={[12, 12]} className="cycle-detail-date-range">
+          <Col xs={24} sm={12}>
+            <div className="cycle-detail-date-card">
+              <span className="cycle-detail-date-icon"><CalendarOutlined /></span>
+              <div className="cycle-detail-date-copy">
+                <Typography.Text type="secondary">{t("fields.startDate")}</Typography.Text>
+                <Typography.Text strong>{formatCycleDate(c.start_date, locale)}</Typography.Text>
+              </div>
+            </div>
+          </Col>
+          <Col xs={24} sm={12}>
+            <div className="cycle-detail-date-card">
+              <span className="cycle-detail-date-icon cycle-detail-date-icon-end"><CalendarCheckOutlined /></span>
+              <div className="cycle-detail-date-copy">
+                <Typography.Text type="secondary">{t("fields.endDate")}</Typography.Text>
+                <Typography.Text strong>{formatCycleDate(c.end_date, locale)}</Typography.Text>
+              </div>
+            </div>
+          </Col>
+        </Row>
         <CycleScopeSummaryCards
           departments={counts.departments}
           jobTitles={counts.jobTitles}
