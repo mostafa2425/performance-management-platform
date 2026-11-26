@@ -10868,6 +10868,37 @@ textarea.ant-input {
 }
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selector {
   min-height: 42px !important;
+  height: 42px !important;
+}
+.cycle-scope-select-loading .ant-skeleton-input {
+  height: 42px !important;
+  border-radius: 8px;
+}
+.cycle-scope-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding-block: 2px;
+}
+.cycle-scope-option .ant-typography {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cycle-scope-employee-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.cycle-scope-employee-cell .ant-typography {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cycle-scope-multi-select.ant-select-multiple .ant-select-selector {
+  min-height: 42px !important;
   height: 42px;
   align-items: center;
   padding-block: 3px !important;
