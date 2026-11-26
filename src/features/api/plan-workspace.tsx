@@ -19,7 +19,7 @@ import {
   Tag,
   Typography,
 } from "antd";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircleFilled, MoreOutlined } from "@ant-design/icons";
 import { cyclesApi, plansApi } from "@/lib/api/endpoints";
 import { queryKeys } from "@/lib/api/query-hooks";
@@ -73,7 +73,10 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
   const ar = locale === "ar";
   const { message } = App.useApp();
   const qc = useQueryClient();
-  const { cycleId } = usePerformanceCycle();
+  const { cycleId, options: cycleOptions, cycles } = usePerformanceCycle();
+  const [cycleFilter, setCycleFilter] = useState<number | undefined>(undefined);
+  const [cycleFilterTouched, setCycleFilterTouched] = useState(false);
+  const selectedCycleId = mode === "admin" ? (cycleFilterTouched ? cycleFilter : cycleId) : cycleId;
   const [statusFilter, setStatusFilter] = useState<string>();
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [pendingAction, setPendingAction] = useState("");
@@ -81,20 +84,32 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
 
   const listParams = useMemo(() => {
     const filter: Record<string, unknown> = {};
-    if (cycleId) filter.cycle_id = cycleId;
+    if (selectedCycleId) filter.cycle_id = selectedCycleId;
     if (statusFilter) filter.status = statusFilter;
     return { per_page: 100, ...(Object.keys(filter).length ? { filter } : {}) };
-  }, [cycleId, statusFilter]);
+  }, [selectedCycleId, statusFilter]);
 
   const plans = useQuery({
     queryKey: [...queryKeys.plans, mode, listParams],
     queryFn: () => plansApi.list(listParams),
-    enabled: Boolean(cycleId),
+    enabled: mode === "admin" || Boolean(cycleId),
   });
   const status = useQuery({
     queryKey: ["cycles", cycleId, "plan-status"],
     queryFn: () => cyclesApi.planStatus(cycleId!, { per_page: 100 }),
-    enabled: (mode === "manager" || mode === "admin") && Boolean(cycleId),
+    enabled: mode === "manager" && Boolean(cycleId),
+  });
+  const adminStatusQueries = useQueries({
+    queries: mode === "admin"
+      ? (selectedCycleId != null
+          ? [selectedCycleId]
+          : (cycles.data || []).map((cycle: any) => cycle.id)
+        ).map((id: number) => ({
+          queryKey: ["cycles", id, "plan-status"],
+          queryFn: () => cyclesApi.planStatus(id, { per_page: 200 }),
+          enabled: true,
+        }))
+      : [],
   });
   const detail = useQuery({
     queryKey: [...queryKeys.plans, "detail", selectedPlan?.id],
@@ -105,7 +120,7 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
 
   const invalidatePlanQueries = async (planId?: number) => {
     await qc.invalidateQueries({ queryKey: queryKeys.plans });
-    await qc.invalidateQueries({ queryKey: ["cycles", cycleId, "plan-status"] });
+    await qc.invalidateQueries({ queryKey: ["cycles"] });
     if (planId) {
       await qc.invalidateQueries({
         queryKey: [...queryKeys.plans, "detail", planId],
@@ -169,7 +184,11 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
 
   const t = (en: string, arabic: string) => (ar ? arabic : en);
   const rows = ((plans.data as any)?.data || []) as Plan[];
-  const members = (status.data as any)?.data || [];
+  const members = mode === "admin"
+    ? adminStatusQueries.flatMap((query) => ((query.data as any)?.data || []).map((member: any) => ({ ...member })))
+    : (status.data as any)?.data || [];
+  const memberByPlanId = new Map<number, any>(members.filter((member: any) => member.plan_id != null).map((member: any) => [Number(member.plan_id), member]));
+  const adminStatusLoading = adminStatusQueries.some((query) => query.isFetching);
   const openAction = (plan: any, action: string) => {
     setSelectedPlan(plan);
     setPendingAction(action);
@@ -215,12 +234,38 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
       subtitle={subtitle}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%" }}>
+        {(mode === "manager" || mode === "admin") && (mode === "admin" || cycleId) ? (
+          <Alert
+            type="info"
+            showIcon
+            title={t("Some goal-setting tools need backend support", "بعض أدوات إعداد الأهداف تحتاج إلى دعم من الخادم")}
+            description={t(
+              "The current API supports plan creation, editing, validation and workflow actions. It does not expose objective templates, copy-previous-cycle, SMART analysis (70% score), or AI wording suggestions yet.",
+              "تدعم الواجهة الحالية إنشاء الخطة وتعديلها والتحقق منها وإجراءات سير العمل، لكنها لا توفر بعد قوالب الأهداف أو نسخ أهداف الدورة السابقة أو تحليل SMART (70%) أو تحسين الصياغة بالذكاء الاصطناعي."
+            )}
+          />
+        ) : null}
         <Card>
           <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
 
             {mode === "admin" && (
               <>
-                <Col xs={12} md={6}>
+                <Col xs={24} md={8}>
+                  <Select
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
+                    style={{ width: "100%" }}
+                    placeholder={t("Select performance cycle", "اختر دورة الأداء")}
+                    value={selectedCycleId}
+                    onChange={(value) => {
+                      setCycleFilterTouched(true);
+                      setCycleFilter(value);
+                    }}
+                    options={cycleOptions}
+                  />
+                </Col>
+                <Col xs={24} md={8}>
                   <Select
                     allowClear
                     style={{ width: "100%" }}
@@ -236,43 +281,42 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                     ]}
                   />
                 </Col>
-
+                <Col xs={24} md={8}>
+                  <Select
+                    showSearch
+                    optionFilterProp="label"
+                    style={{ width: "100%" }}
+                    placeholder={t("Select a member without a plan", "اختر عضواً بلا خطة")}
+                    options={members
+                      .filter((member: any) => !member.plan_id)
+                      .map((member: any) => {
+                        const cycleLabel = cycleOptions.find((option) => option.value === member.cycle_id)?.label;
+                        const employeeName = member.employee?.name || member.employee?.full_name || member.cycle_member_id;
+                        return {
+                          value: member.cycle_member_id,
+                          label: selectedCycleId == null && cycleLabel ? `${employeeName} · ${cycleLabel}` : employeeName,
+                        };
+                      })}
+                    onChange={(id) => create.mutate(id)}
+                    loading={adminStatusLoading || create.isPending}
+                    disabled={!members.some((member: any) => !member.plan_id)}
+                  />
+                </Col>
               </>
             )}
           </Row>
 
-          {(mode === "manager" || mode === "admin") && cycleId && (
-            <Card
-              size="small"
-              style={{ marginBottom: 16 }}
-            >
-              <Alert
-                type="info"
-                showIcon
-                style={{ marginBottom: 12 }}
-                title={t("Some goal-setting tools need backend support", "بعض أدوات إعداد الأهداف تحتاج إلى دعم من الخادم")}
-                description={t(
-                  "The current API supports plan creation, editing, validation and workflow actions. It does not expose objective templates, copy-previous-cycle, SMART analysis (70% score), or AI wording suggestions yet.",
-                  "تدعم الواجهة الحالية إنشاء الخطة وتعديلها والتحقق منها وإجراءات سير العمل، لكنها لا توفر بعد قوالب الأهداف أو نسخ أهداف الدورة السابقة أو تحليل SMART (70%) أو تحسين الصياغة بالذكاء الاصطناعي."
-                )}
-              />
+          {mode === "manager" && cycleId && (
+            <Card size="small" style={{ marginBottom: 16 }}>
               <Select
                 showSearch
                 optionFilterProp="label"
                 style={{ width: "100%" }}
-                placeholder={t(
-                  "Select a member without a plan",
-                  "اختر عضواً بلا خطة",
-                )}
-                options={members
-                  .filter((m: any) => !m.plan_id)
-                  .map((m: any) => ({
-                    value: m.cycle_member_id,
-                    label:
-                      m.employee?.name ||
-                      m.employee?.full_name ||
-                      m.cycle_member_id,
-                  }))}
+                placeholder={t("Select a member without a plan", "اختر عضواً بلا خطة")}
+                options={members.filter((member: any) => !member.plan_id).map((member: any) => ({
+                  value: member.cycle_member_id,
+                  label: member.employee?.name || member.employee?.full_name || member.cycle_member_id,
+                }))}
                 onChange={(id) => create.mutate(id)}
                 loading={status.isFetching || create.isPending}
               />
@@ -322,6 +366,22 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
                       {r.employee?.name || (r.employee as any)?.full_name || "—"}
                     </Typography.Text>
                   ),
+                },
+                {
+                  title: t("Current manager", "المدير الحالي"),
+                  width: 190,
+                  render: (_: unknown, row: Plan) => {
+                    const member = memberByPlanId.get(Number(row.id));
+                    const manager = (row as any).current_manager || member?.current_manager;
+                    return manager ? (
+                      <Space orientation="vertical" size={0}>
+                        <Typography.Text strong>{manager.name || manager.full_name || "—"}</Typography.Text>
+                        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                          {manager.code || (manager.id != null ? `ID ${manager.id}` : "—")}
+                        </Typography.Text>
+                      </Space>
+                    ) : "—";
+                  },
                 },
                 {
                   title: t("Status", "الحالة"),
