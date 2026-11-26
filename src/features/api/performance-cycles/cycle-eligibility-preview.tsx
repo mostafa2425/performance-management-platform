@@ -70,9 +70,8 @@ export function CycleEligibilityPreview({
       title: t("fields.reason"),
       render: (_: unknown, row: any) => {
         const reason = row.reason ?? row.reasons;
-        if (reason && typeof reason === "object" && reason.employee_status) {
-          const key = String(reason.employee_status);
-          return t(`eligibility.reason.employeeStatus.${key}` as any);
+        if (reason && typeof reason === "object" && reason.employee_status === "inactive") {
+          return t("eligibility.reason.employeeStatus.inactive");
         }
         return reasonText(reason, ar);
       },
