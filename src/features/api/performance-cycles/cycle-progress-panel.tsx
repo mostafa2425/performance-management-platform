@@ -3,10 +3,10 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
-import { Alert, Card, Col, Collapse, Empty, Input, Row, Space, Skeleton, Statistic, Tag, Typography } from "antd";
+import { Alert, Avatar, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Progress, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { adminApi, cyclesApi, resultsApi } from "@/lib/api/endpoints";
+import { adminApi, cyclesApi, employeesApi, resultsApi } from "@/lib/api/endpoints";
 import { PLAN_DISPLAY_STATUS, planStatusKeys } from "./shared";
 
 export const planStatusQueryKey = (cycleId: string) => [
@@ -31,6 +31,13 @@ function managerName(row: any) {
 export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
   const t = useTranslations("PerformanceCycles");
   const [search, setSearch] = useState("");
+  const [selectedMember, setSelectedMember] = useState<any>(null);
+  const selectedEmployeeId = selectedMember?.employee?.id ?? selectedMember?.employee_id;
+  const employee = useQuery({
+    queryKey: ["employees", "detail", selectedEmployeeId],
+    queryFn: () => employeesApi.get(selectedEmployeeId),
+    enabled: selectedEmployeeId != null,
+  });
 
   const plans = useQuery({
     queryKey: planStatusQueryKey(cycleId),
@@ -62,6 +69,10 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
 
   const pendingFinal = ((groups.data as any)?.data || []).filter((g: any) => g.status === "pending_admin").length;
   const finalized = Array.isArray(results.data) ? results.data.length : null;
+  const totalPlans = rows.length;
+  const selectedPerson = (employee.data as any)?.employee ?? (employee.data as any)?.data ?? employee.data ?? selectedMember?.employee ?? {};
+  const selectedName = selectedPerson.full_name || selectedPerson.name || selectedMember?.employee?.name || selectedMember?.employee?.full_name || "—";
+  const displayField = (value: any) => value?.name || value?.full_name || value?.label || value || "—";
 
   const grouped = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -81,8 +92,8 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
   if (plans.isLoading) {
     return (
       <Card title={t("progress.title")}>
-        <div style={{ display: "grid", placeItems: "center", minHeight: 120 }}>
-          <Skeleton active />
+        <div style={{ display: "grid", placeItems: "center", minHeight: 180 }}>
+          <Spin size="large" />
         </div>
       </Card>
     );
@@ -100,32 +111,53 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
 
   return (
     <Card title={t("progress.title")}>
-      <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
-        {planStatusKeys.map((k) => (
-          <Col xs={12} md={8} xl={4} key={k}>
-            <Card size="small">
-              <Statistic
-                title={<Tag color={PLAN_DISPLAY_STATUS[k].color}>{t(`progress.${k as "draft"}`)}</Tag>}
-                value={counts[k]}
-              />
-            </Card>
-          </Col>
-        ))}
-        {groups.isSuccess && (
-          <Col xs={12} md={8} xl={4}>
-            <Card size="small">
-              <Statistic title={<Tag color="gold">{t("progress.pendingFinal")}</Tag>} value={pendingFinal} />
-            </Card>
-          </Col>
-        )}
-        {finalized != null && (
-          <Col xs={12} md={8} xl={4}>
-            <Card size="small">
-              <Statistic title={<Tag color="green">{t("progress.finalized")}</Tag>} value={finalized} />
-            </Card>
-          </Col>
-        )}
-      </Row>
+      <div className="cycle-progress-overview">
+        <div className="cycle-progress-overview-heading">
+          <div>
+            <Typography.Title level={5} style={{ margin: 0 }}>{t("progress.title")}</Typography.Title>
+            <Typography.Text type="secondary">{t("progress.employeesCount", { count: totalPlans })}</Typography.Text>
+          </div>
+          <div className="cycle-progress-total">
+            <Typography.Text type="secondary">{t("fields.employeesInScope")}</Typography.Text>
+            <Typography.Title level={2} style={{ margin: 0 }}>{totalPlans}</Typography.Title>
+          </div>
+        </div>
+        <Row gutter={[12, 12]}>
+          {planStatusKeys.map((k) => {
+            const percent = totalPlans ? Math.round((counts[k] / totalPlans) * 100) : 0;
+            return (
+              <Col xs={12} sm={8} xl={4} key={k}>
+                <Card className="cycle-progress-stat-card" size="small">
+                  <div className="cycle-progress-stat-top">
+                    <Tag color={PLAN_DISPLAY_STATUS[k].color}>{t(`progress.${k as "draft"}`)}</Tag>
+                    <Typography.Text type="secondary" className="cycle-progress-stat-percent">{percent}%</Typography.Text>
+                  </div>
+                  <Statistic value={counts[k]} />
+                  <Progress percent={percent} showInfo={false} strokeColor={PLAN_DISPLAY_STATUS[k].color === "default" ? "#94a3b8" : undefined} size="small" />
+                </Card>
+              </Col>
+            );
+          })}
+          {groups.isSuccess && (
+            <Col xs={12} sm={8} xl={4}>
+              <Card className="cycle-progress-stat-card cycle-progress-stat-card-muted" size="small">
+                <Tag color="gold">{t("progress.pendingFinal")}</Tag>
+                <Statistic value={pendingFinal} />
+                <Typography.Text type="secondary">{t("progress.pendingFinal")}</Typography.Text>
+              </Card>
+            </Col>
+          )}
+          {finalized != null && (
+            <Col xs={12} sm={8} xl={4}>
+              <Card className="cycle-progress-stat-card cycle-progress-stat-card-muted" size="small">
+                <Tag color="green">{t("progress.finalized")}</Tag>
+                <Statistic value={finalized} />
+                <Typography.Text type="secondary">{t("progress.finalized")}</Typography.Text>
+              </Card>
+            </Col>
+          )}
+        </Row>
+      </div>
 
       <Input.Search
         allowClear
@@ -155,6 +187,10 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                 size="small"
                 pagination={false}
                 dataSource={g.rows}
+                onRow={(record: any) => ({
+                  onClick: () => setSelectedMember(record),
+                  className: "cycle-progress-employee-row",
+                })}
                 columns={[
                   {
                     title: t("fields.employee"),
@@ -180,6 +216,44 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
           }))}
         />
       )}
+      <Drawer open={Boolean(selectedMember)} onClose={() => setSelectedMember(null)} title={t("fields.employee")} width={520} destroyOnHidden>
+        {selectedMember ? (
+          <div className="cycle-employee-drawer">
+            {employee.isLoading ? (
+              <div className="cycle-employee-drawer-loading"><Spin size="large" /></div>
+            ) : employee.isError ? (
+              <Alert type="error" showIcon title={(employee.error as Error).message} />
+            ) : (
+              <>
+                <div className="cycle-employee-profile">
+                  <Avatar size={56} style={{ background: "#e8eef8", color: "#163366", fontWeight: 700 }}>
+                    {String(selectedName).split(/\s+/).filter(Boolean).slice(0, 2).map((part: string) => part[0]).join("").toUpperCase()}
+                  </Avatar>
+                  <div>
+                    <Typography.Title level={4} style={{ margin: 0 }}>{selectedName}</Typography.Title>
+                    <Typography.Text type="secondary">{selectedPerson.email || "—"}</Typography.Text>
+                    <div className="cycle-employee-tags">
+                      <Tag color={PLAN_DISPLAY_STATUS[({ pending_admin: "pending_admin_approval", pending_employee: "pending_employee_review", returned: "returned_to_manager", approved: "goals_approved" } as Record<string, string>)[selectedMember.status?.key || ""] || selectedMember.status?.key || ""]?.color ?? "default"}>{selectedMember.status?.label || "—"}</Tag>
+                      {selectedMember.requires_admin_attention ? <Tag color="orange">{t("progress.required")}</Tag> : null}
+                    </div>
+                  </div>
+                </div>
+                <Descriptions bordered size="small" column={1} items={[
+                  { key: "code", label: t("fields.employeeCode"), children: selectedPerson.code || selectedPerson.employee_code || "—" },
+                  { key: "email", label: "Email", children: selectedPerson.email || "—" },
+                  { key: "phone", label: "Phone", children: selectedPerson.phone || selectedPerson.mobile || "—" },
+                  { key: "job", label: "Job title", children: displayField(selectedPerson.job_title) },
+                  { key: "department", label: "Department", children: displayField(selectedPerson.department) },
+                  { key: "unit", label: "Business unit", children: displayField(selectedPerson.business_unit) },
+                  { key: "manager", label: "Manager", children: displayField(selectedMember.current_manager || selectedPerson.line_manager) },
+                  { key: "managerId", label: "Manager ID", children: selectedMember.current_manager_id ?? selectedPerson.line_manager_id ?? "—" },
+                  { key: "plan", label: "Plan ID", children: selectedMember.plan_id ?? "—" },
+                ]} />
+              </>
+            )}
+          </div>
+        ) : null}
+      </Drawer>
     </Card>
   );
 }
