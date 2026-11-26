@@ -80,6 +80,7 @@ This section is mandatory for every new UI implementation, refactor, bug fix, an
 | `Drawer` | `width`, `height` | `size` (use a supported preset or numeric size; use semantic styles for responsive constraints) |
 | `Timeline` items | `dot` | `icon` |
 | `Progress` | `trailColor` | `railColor` |
+| `Progress` | `strokeWidth` | `size` (use the supported numeric or object size form for the installed v6 API) |
 | `Statistic` | `valueStyle`, `titleStyle` | Semantic `styles` slots, e.g. `styles={{ content: ... }}` and the documented title slot |
 | `Alert` | `message` | `title` for the alert heading; put supporting content in `description` |
 | `Timeline` items | legacy item `children` content shape | Use the current documented item content field (`content`) |
