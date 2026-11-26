@@ -225,7 +225,12 @@ export function PlanContentEditor({
       form={form}
       layout="vertical"
       initialValues={{ objectives: initialObjectives }}
-      onFinish={(values) => onSave(values.objectives || [])}
+      onFinish={() => {
+        // Read the complete Form store so newly added Form.List rows are included,
+        // even when their Collapse panels are currently closed.
+        const values = form.getFieldsValue(true);
+        onSave(Array.isArray(values.objectives) ? values.objectives : []);
+      }}
     >
       <InlineComments openComments={openComments} target="plan" ar={ar} />
       <div className="plan-content-editor-toolbar">
@@ -389,7 +394,7 @@ export function PlanContentEditor({
         onOk={() => objectiveForm.submit()}
         okText={t("Add objective", "إضافة الهدف")}
         cancelText={t("Cancel", "إلغاء")}
-        destroyOnHidden
+        forceRender
       >
         <Form
           form={objectiveForm}
