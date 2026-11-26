@@ -57,11 +57,6 @@ export function CycleTimeline({
               <Typography.Text type="secondary">
                 {t("fields.deadline")}: {s.deadline_date || "—"}
               </Typography.Text>
-              {s.cutoff_at && (
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  {t("fields.cutoff")}: {s.cutoff_at}
-                </Typography.Text>
-              )}
               {hint && (
                 <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                   {hint}
