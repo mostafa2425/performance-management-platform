@@ -107,6 +107,13 @@ export function ApiPlanWorkspace({ mode }: { mode: PlanMode }) {
         ).map((id: number) => ({
           queryKey: ["cycles", id, "plan-status"],
           queryFn: () => cyclesApi.planStatus(id, { per_page: 200 }),
+          select: (response: any) => ({
+            ...response,
+            data: (response?.data || []).map((member: any) => ({
+              ...member,
+              cycle_id: member.cycle_id ?? id,
+            })),
+          }),
           enabled: true,
         }))
       : [],
