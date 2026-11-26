@@ -84,6 +84,10 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
     if (!value) return "—";
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(ar ? "ar-EG" : "en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(date);
+  };  const formatDate = (value?: string | null) => {
+    if (!value) return "—";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(ar ? "ar-EG" : "en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(date);
   };
   const statusMeta: Record<string, { icon: React.ReactNode; color: string }> = {
     not_started: { icon: <ClockCircleOutlined />, color: "#94a3b8" },
@@ -254,28 +258,37 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
             ) : (
               <>
                 <div className="cycle-employee-profile">
-                  <Avatar size={56} style={{ background: "#e8eef8", color: "#163366", fontWeight: 700 }}>
+                  <Avatar size={60} style={{ background: "#e8eef8", color: "#163366", fontWeight: 700 }}>
                     {String(selectedName).split(/\s+/).filter(Boolean).slice(0, 2).map((part: string) => part[0]).join("").toUpperCase()}
                   </Avatar>
-                  <div>
+                  <div className="cycle-employee-profile-copy">
                     <Typography.Title level={4} style={{ margin: 0 }}>{selectedName}</Typography.Title>
                     <Typography.Text type="secondary">{selectedPerson.email || "—"}</Typography.Text>
                     <div className="cycle-employee-tags">
+                      <Tag color={selectedPerson.is_active === false || selectedPerson.status === "inactive" ? "default" : "success"}>{selectedPerson.status === "active" || selectedPerson.is_active ? local("Active", "نشط") : displayField(selectedPerson.status)}</Tag>
                       <Tag color={PLAN_DISPLAY_STATUS[({ pending_admin: "pending_admin_approval", pending_employee: "pending_employee_review", returned: "returned_to_manager", approved: "goals_approved" } as Record<string, string>)[selectedMember.status?.key || ""] || selectedMember.status?.key || ""]?.color ?? "default"}>{selectedMember.status?.label || "—"}</Tag>
                       {selectedMember.requires_admin_attention ? <Tag color="orange">{t("progress.required")}</Tag> : null}
                     </div>
                   </div>
                 </div>
+                <Typography.Title level={5}>{local("Employment information", "البيانات الوظيفية")}</Typography.Title>
                 <Descriptions bordered size="small" column={1} items={[
                   { key: "code", label: t("fields.employeeCode"), children: selectedPerson.code || selectedPerson.employee_code || "—" },
-                  { key: "email", label: local("Email", "البريد الإلكتروني"), children: selectedPerson.email || "—" },
-                  { key: "phone", label: local("Phone", "رقم الهاتف"), children: selectedPerson.phone || selectedPerson.mobile || "—" },
                   { key: "job", label: local("Job title", "المسمى الوظيفي"), children: displayField(selectedPerson.job_title) },
                   { key: "department", label: local("Department", "الإدارة"), children: displayField(selectedPerson.department) },
                   { key: "unit", label: local("Business unit", "وحدة الأعمال"), children: displayField(selectedPerson.business_unit) },
-                  { key: "manager", label: local("Manager", "المدير"), children: displayField(selectedMember.current_manager || selectedPerson.line_manager) },
-                  { key: "managerId", label: local("Manager ID", "معرّف المدير"), children: selectedMember.current_manager_id ?? selectedPerson.line_manager_id ?? "—" },
-                  { key: "plan", label: local("Plan ID", "معرّف الخطة"), children: selectedMember.plan_id ?? "—" },
+                  { key: "location", label: local("Location", "الموقع"), children: displayField(selectedPerson.location) },
+                  { key: "employmentType", label: local("Employment type", "نوع التوظيف"), children: displayField(selectedPerson.employment_type) },
+                  { key: "joining", label: local("Joining date", "تاريخ التعيين"), children: formatDate(selectedPerson.joining_date) },
+                  { key: "termination", label: local("Termination date", "تاريخ انتهاء الخدمة"), children: formatDate(selectedPerson.terminate_date) },
+                  { key: "manager", label: local("Line manager", "المدير المباشر"), children: displayField(selectedMember.current_manager || selectedPerson.line_manager) },
+                ]} />
+                <Typography.Title level={5} style={{ marginTop: 22 }}>{local("Contact & system information", "بيانات التواصل والنظام")}</Typography.Title>
+                <Descriptions bordered size="small" column={1} items={[
+                  { key: "email", label: local("Work email", "البريد الإلكتروني للعمل"), children: selectedPerson.email || "—" },
+                  { key: "phone", label: local("Phone", "رقم الهاتف"), children: selectedPerson.phone || selectedPerson.mobile || "—" },
+                  { key: "jisr", label: "Jisr ID", children: selectedPerson.jisr_id || "—" },
+                  { key: "plan", label: local("Performance plan", "خطة الأداء"), children: selectedMember.plan_id ?? "—" },
                 ]} />
               </>
             )}
