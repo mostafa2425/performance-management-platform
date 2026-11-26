@@ -67,36 +67,36 @@
     },
     "nav": {
       "employee": {
-        "dashboard": "نظرة عامة",
-        "objectives": "أهدافي",
-        "performance": "أدائي",
+        "dashboard": "نظرة عامة على الأداء",
+        "objectives": "أهداف أدائي",
+        "performance": "مراجعة أدائي",
         "history": "سجل الأداء",
         "development": "التطوير"
       },
       "manager": {
-        "dashboard": "نظرة عامة على الفريق",
+        "dashboard": "نظرة عامة على أداء الفريق",
         "team": "فريقي",
         "history": "سجل الأداء",
-        "reviews": "قائمة المراجعات",
-        "objectives": "إعداد الأهداف",
+        "reviews": "المراجعات المعلقة",
+        "objectives": "خطط أهداف الفريق",
         "performance": "أداء الفريق",
-        "evaluation": "تقييم المدير",
-        "year-group": "مجموعة المدير والسنة",
+        "evaluation": "تقييمات الأداء",
+        "year-group": "المراجعة السنوية للفريق",
         "calculations": "تفاصيل الحسابات"
       },
       "department": {
-        "dashboard": "نظرة عامة على الإدارة",
+        "dashboard": "نظرة عامة على أداء الإدارة",
         "teams": "الفرق",
-        "progress": "تقدم الأداء",
-        "reports": "تقارير الإدارة",
+        "progress": "متابعة الأداء",
+        "reports": "تقارير أداء الإدارة",
         "history": "سجل الأداء"
       },
       "hcd": {
         "dashboard": "نظرة عامة",
-        "cycles": "حوكمة الدورات",
+        "cycles": "حوكمة دورات الأداء",
         "templates": "قوالب الكفاءات",
         "calibration": "المعايرة",
-        "reports": "مؤشرات المؤسسة",
+        "reports": "مؤشرات أداء المؤسسة",
         "history": "سجل الأداء"
       },
       "admin": {
@@ -106,10 +106,10 @@
         "categories": "تصنيفات الأهداف",
         "configuration": "إعدادات الأداء",
         "employees": "الموظفون",
-        "approvals": "المراجعة النهائية للمجموعة",
-        "plan-reviews": "مراجعة الخطط",
+        "approvals": "اعتمادات المجموعة السنوية",
+        "plan-reviews": "مراجعة خطط الأهداف",
         "bell-curve": "التوزيع الطبيعي",
-        "publication": "نشر النتائج",
+        "publication": "نشر نتائج الأداء",
         "history": "سجل الأداء",
         "notifications": "الإشعارات",
         "notification-templates": "قوالب الإشعارات",
