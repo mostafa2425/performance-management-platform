@@ -105,10 +105,6 @@ export function PlanReadonlyTree({
                           <div>{kpi.target ?? "—"}</div>
                         </Col>
                         <Col xs={12}>
-                          <Typography.Text type="secondary">{t("Baseline", "خط الأساس")}</Typography.Text>
-                          <div>{kpi.baseline ?? "—"}</div>
-                        </Col>
-                        <Col xs={12}>
                           <Typography.Text type="secondary">{t("Direction", "اتجاه الاحتساب")}</Typography.Text>
                           <div>{kpi.direction === "lower" ? t("Lower is better", "الأقل أفضل") : t("Higher is better", "الأعلى أفضل")}</div>
                         </Col>
