@@ -5,7 +5,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { useMemo, useState } from "react";
 import { Alert, Avatar, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Progress, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { adminApi, cyclesApi, employeesApi, resultsApi } from "@/lib/api/endpoints";
 import { PLAN_DISPLAY_STATUS, planStatusKeys } from "./shared";
 
@@ -30,6 +30,8 @@ function managerName(row: any) {
 
 export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
   const t = useTranslations("PerformanceCycles");
+  const ar = useLocale() === "ar";
+  const local = (en: string, arabic: string) => ar ? arabic : en;
   const [search, setSearch] = useState("");
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const selectedEmployeeId = selectedMember?.employee?.id ?? selectedMember?.employee_id;
@@ -72,7 +74,11 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
   const totalPlans = rows.length;
   const selectedPerson = (employee.data as any)?.employee ?? (employee.data as any)?.data ?? employee.data ?? selectedMember?.employee ?? {};
   const selectedName = selectedPerson.full_name || selectedPerson.name || selectedMember?.employee?.name || selectedMember?.employee?.full_name || "—";
-  const displayField = (value: any) => value?.name || value?.full_name || value?.label || value || "—";
+  const displayField = (value: any) => {
+    if (value == null || value === "") return "—";
+    if (typeof value === "object") return value[ar ? "ar" : "en"] || value.name || value.full_name || value.label || "—";
+    return value;
+  };
 
   const grouped = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -240,14 +246,14 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                 </div>
                 <Descriptions bordered size="small" column={1} items={[
                   { key: "code", label: t("fields.employeeCode"), children: selectedPerson.code || selectedPerson.employee_code || "—" },
-                  { key: "email", label: "Email", children: selectedPerson.email || "—" },
-                  { key: "phone", label: "Phone", children: selectedPerson.phone || selectedPerson.mobile || "—" },
-                  { key: "job", label: "Job title", children: displayField(selectedPerson.job_title) },
-                  { key: "department", label: "Department", children: displayField(selectedPerson.department) },
-                  { key: "unit", label: "Business unit", children: displayField(selectedPerson.business_unit) },
-                  { key: "manager", label: "Manager", children: displayField(selectedMember.current_manager || selectedPerson.line_manager) },
-                  { key: "managerId", label: "Manager ID", children: selectedMember.current_manager_id ?? selectedPerson.line_manager_id ?? "—" },
-                  { key: "plan", label: "Plan ID", children: selectedMember.plan_id ?? "—" },
+                  { key: "email", label: local("Email", "البريد الإلكتروني"), children: selectedPerson.email || "—" },
+                  { key: "phone", label: local("Phone", "رقم الهاتف"), children: selectedPerson.phone || selectedPerson.mobile || "—" },
+                  { key: "job", label: local("Job title", "المسمى الوظيفي"), children: displayField(selectedPerson.job_title) },
+                  { key: "department", label: local("Department", "الإدارة"), children: displayField(selectedPerson.department) },
+                  { key: "unit", label: local("Business unit", "وحدة الأعمال"), children: displayField(selectedPerson.business_unit) },
+                  { key: "manager", label: local("Manager", "المدير"), children: displayField(selectedMember.current_manager || selectedPerson.line_manager) },
+                  { key: "managerId", label: local("Manager ID", "معرّف المدير"), children: selectedMember.current_manager_id ?? selectedPerson.line_manager_id ?? "—" },
+                  { key: "plan", label: local("Plan ID", "معرّف الخطة"), children: selectedMember.plan_id ?? "—" },
                 ]} />
               </>
             )}
