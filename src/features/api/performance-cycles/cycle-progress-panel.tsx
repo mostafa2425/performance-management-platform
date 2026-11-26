@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/ui/data-table";
 
 import { useMemo, useState } from "react";
-import { Alert, Avatar, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Progress, Row, Space, Spin, Statistic, Tag, Typography } from "antd";
+import { Alert, Avatar, Card, Col, Collapse, Descriptions, Drawer, Empty, Input, Progress, Row, Space, Spin, Tag, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircleOutlined, ClockCircleOutlined, EditOutlined, FileTextOutlined, RollbackOutlined, SendOutlined, UserOutlined } from "@ant-design/icons";
 import { useLocale, useTranslations } from "next-intl";
@@ -154,7 +154,7 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                     </span>
                     <div className="cycle-progress-stat-label">
                       <Typography.Text strong>{t(`progress.${k as "draft"}`)}</Typography.Text>
-                      <Typography.Text type="secondary">{t("progress.employeesCount", { count: counts[k] })}</Typography.Text>
+                       
                     </div>
                     <div className="cycle-progress-stat-value">
                       <Typography.Title level={3}>{counts[k]}</Typography.Title>
@@ -167,21 +167,51 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
             );
           })}
           {groups.isSuccess && (
-            <Col xs={12} sm={8} xl={4}>
-              <Card className="cycle-progress-stat-card cycle-progress-stat-card-muted" size="small">
-                <Tag color="gold">{t("progress.pendingFinal")}</Tag>
-                <Statistic value={pendingFinal} />
-                <Typography.Text type="secondary">{t("progress.pendingFinal")}</Typography.Text>
-              </Card>
+            <Col xs={24} sm={12} xl={8}>
+              {(() => {
+                const percent = totalPlans ? Math.round((pendingFinal / totalPlans) * 100) : 0;
+                return (
+                  <Card className="cycle-progress-stat-card" size="small">
+                    <div className="cycle-progress-stat-heading">
+                      <span className="cycle-progress-stat-icon" style={{ color: "#d97706", background: "#d9770616" }}>
+                        <FileTextOutlined />
+                      </span>
+                      <div className="cycle-progress-stat-label">
+                        <Typography.Text strong>{t("progress.pendingFinal")}</Typography.Text>
+                      </div>
+                      <div className="cycle-progress-stat-value">
+                        <Typography.Title level={3}>{pendingFinal}</Typography.Title>
+                        <Typography.Text type="secondary">{percent}%</Typography.Text>
+                      </div>
+                    </div>
+                    <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor="#d97706" trailColor="#edf1f6" size={{ height: 9 }} />
+                  </Card>
+                );
+              })()}
             </Col>
           )}
           {finalized != null && (
-            <Col xs={12} sm={8} xl={4}>
-              <Card className="cycle-progress-stat-card cycle-progress-stat-card-muted" size="small">
-                <Tag color="green">{t("progress.finalized")}</Tag>
-                <Statistic value={finalized} />
-                <Typography.Text type="secondary">{t("progress.finalized")}</Typography.Text>
-              </Card>
+            <Col xs={24} sm={12} xl={8}>
+              {(() => {
+                const percent = totalPlans ? Math.round((finalized / totalPlans) * 100) : 0;
+                return (
+                  <Card className="cycle-progress-stat-card" size="small">
+                    <div className="cycle-progress-stat-heading">
+                      <span className="cycle-progress-stat-icon" style={{ color: "#16a34a", background: "#16a34a16" }}>
+                        <CheckCircleOutlined />
+                      </span>
+                      <div className="cycle-progress-stat-label">
+                        <Typography.Text strong>{t("progress.finalized")}</Typography.Text>
+                      </div>
+                      <div className="cycle-progress-stat-value">
+                        <Typography.Title level={3}>{finalized}</Typography.Title>
+                        <Typography.Text type="secondary">{percent}%</Typography.Text>
+                      </div>
+                    </div>
+                    <Progress className="cycle-progress-status-bar" percent={percent} showInfo={false} strokeColor="#16a34a" trailColor="#edf1f6" size={{ height: 9 }} />
+                  </Card>
+                );
+              })()}
             </Col>
           )}
         </Row>
@@ -263,25 +293,25 @@ export function CycleProgressPanel({ cycleId }: { cycleId: string }) {
                     <div className="cycle-employee-tags">
                       <Tag color={selectedPerson.is_active === false || selectedPerson.status === "inactive" ? "default" : "success"}>{selectedPerson.status === "active" || selectedPerson.is_active ? local("Active", "نشط") : displayField(selectedPerson.status)}</Tag>
                       <Tag color={PLAN_DISPLAY_STATUS[({ pending_admin: "pending_admin_approval", pending_employee: "pending_employee_review", returned: "returned_to_manager", approved: "goals_approved" } as Record<string, string>)[selectedMember.status?.key || ""] || selectedMember.status?.key || ""]?.color ?? "default"}>{selectedMember.status?.label || "—"}</Tag>
+                      {selectedPerson.employment_type ? <Tag color="cyan">{displayField(selectedPerson.employment_type)}</Tag> : null}
                       {selectedMember.requires_admin_attention ? <Tag color="orange">{t("progress.required")}</Tag> : null}
                     </div>
                   </div>
                 </div>
                 <Typography.Title level={5}>{local("Employment information", "البيانات الوظيفية")}</Typography.Title>
                 <Descriptions bordered size="small" column={1} items={[
-                  { key: "code", label: t("fields.employeeCode"), children: selectedPerson.code || selectedPerson.employee_code || "—" },
+                  { key: "code", label: t("fields.employeeCode"), children: (selectedPerson.code || selectedPerson.employee_code) ? <Typography.Text copyable={{ text: String(selectedPerson.code || selectedPerson.employee_code) }}>{selectedPerson.code || selectedPerson.employee_code}</Typography.Text> : "—" },
                   { key: "job", label: local("Job title", "المسمى الوظيفي"), children: displayField(selectedPerson.job_title) },
                   { key: "department", label: local("Department", "الإدارة"), children: displayField(selectedPerson.department) },
                   { key: "unit", label: local("Business unit", "وحدة الأعمال"), children: displayField(selectedPerson.business_unit) },
                   { key: "location", label: local("Location", "الموقع"), children: displayField(selectedPerson.location) },
-                  { key: "employmentType", label: local("Employment type", "نوع التوظيف"), children: displayField(selectedPerson.employment_type) },
                   { key: "joining", label: local("Joining date", "تاريخ التعيين"), children: formatDate(selectedPerson.joining_date) },
                   { key: "termination", label: local("Termination date", "تاريخ انتهاء الخدمة"), children: formatDate(selectedPerson.terminate_date) },
                   { key: "manager", label: local("Line manager", "المدير المباشر"), children: displayField(selectedMember.current_manager || selectedPerson.line_manager) !== "—" ? displayField(selectedMember.current_manager || selectedPerson.line_manager) : (selectedPerson.line_manager_id ?? "—") },
                 ]} />
                 <Typography.Title level={5} style={{ marginTop: 22 }}>{local("Contact & system information", "بيانات التواصل والنظام")}</Typography.Title>
                 <Descriptions bordered size="small" column={1} items={[
-                  { key: "email", label: local("Work email", "البريد الإلكتروني للعمل"), children: selectedPerson.email || "—" },
+                  { key: "email", label: local("Work email", "البريد الإلكتروني للعمل"), children: selectedPerson.email ? <Space size={8} wrap><Typography.Link href={`mailto:${selectedPerson.email}`}>{selectedPerson.email}</Typography.Link><Typography.Text copyable={{ text: String(selectedPerson.email) }} /></Space> : "—" },
                   { key: "phone", label: local("Phone", "رقم الهاتف"), children: selectedPerson.phone || selectedPerson.mobile || "—" },
                   { key: "jisr", label: "Jisr ID", children: selectedPerson.jisr_id || "—" },
                   { key: "plan", label: local("Performance plan", "خطة الأداء"), children: selectedMember.plan_id ?? "—" },
