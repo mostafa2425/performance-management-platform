@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   App,
@@ -30,6 +30,7 @@ import {
   previewSummaryObject,
 } from "./cycle-summary-cards";
 import { CycleTimeline } from "./cycle-timeline";
+import { CycleEligibilityPreview } from "./cycle-eligibility-preview";
 import { showCycleActivationError } from "./cycle-activation-error";
 import {
   bilingual,
@@ -58,6 +59,11 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
   const { message, modal } = App.useApp();
   const qc = useQueryClient();
   const [showPreview, setShowPreview] = useState(false);
+  const previewSectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (showPreview) previewSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [showPreview]);
 
   const cycle = useQuery({
     queryKey: [...queryKeys.adminCycles, cycleId],
@@ -145,9 +151,9 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
           <Space wrap>
             {isDraft && (
               <Button
-                onClick={() => {
+                onClick={async () => {
                   setShowPreview(true);
-                  void preview.refetch();
+                  await preview.refetch();
                 }}
                 loading={preview.isFetching}
               >
@@ -231,14 +237,40 @@ export function CycleDetail({ cycleId }: { cycleId: string }) {
       ) : null}
       {isLive && <CycleProgressPanel cycleId={cycleId} canManageMembers={c.status === "active"} />}
 
-      {showPreview && preview.data && (
-        <Card title={t("sections.eligibilityPreview")}>
-          {previewSummary ? (
-            <CyclePreviewSummaryCards summary={previewSummary} />
-          ) : (
-            <Typography.Paragraph type="secondary">{t("table.previewEmpty")}</Typography.Paragraph>
-          )}
-        </Card>
+      {showPreview && (
+        <div ref={previewSectionRef} style={{ scrollMarginTop: 24 }}>
+          <Card
+            title={
+              <Space wrap size={8}>
+                <Typography.Text strong>{t("sections.eligibilityPreview")}</Typography.Text>
+                {preview.data?.as_of || preview.data?.data?.as_of ? (
+                  <Typography.Text type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
+                    {t("eligibility.asOf", {
+                      date: formatCycleDate(preview.data?.as_of ?? preview.data?.data?.as_of, locale),
+                    })}
+                  </Typography.Text>
+                ) : null}
+              </Space>
+            }
+          >
+            {preview.isError ? (
+              <Alert type="error" showIcon title={(preview.error as Error).message} />
+            ) : (
+              <Space orientation="vertical" size={16} style={{ width: "100%" }}>
+                {previewSummary ? (
+                  <CyclePreviewSummaryCards summary={previewSummary} />
+                ) : !preview.isFetching ? (
+                  <Typography.Text type="secondary">{t("table.previewEmpty")}</Typography.Text>
+                ) : null}
+                <CycleEligibilityPreview
+                  rows={previewRows}
+                  loading={preview.isFetching}
+                  emptyText={t("table.previewEmpty")}
+                />
+              </Space>
+            )}
+          </Card>
+        </div>
       )}
     </Space>
   );
