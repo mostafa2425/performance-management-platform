@@ -582,6 +582,8 @@
       "manager": "المدير",
       "employeeCode": "الرمز",
       "attention": "يتطلب متابعة الإدارة",
+      "location": "الموقع",
+      "employmentType": "نوع التوظيف",
       "deadlineDate": "الموعد النهائي"
     },
     "placeholders": {
@@ -611,6 +613,7 @@
       "noEmployees": "لا يوجد موظفون",
       "noOptions": "لا توجد خيارات",
       "loadingEmployees": "جاري تحميل الموظفين…",
+      "active": "نشط",
       "managersSummary": "{count} مديرين"
     },
     "sections": {
