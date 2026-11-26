@@ -10866,9 +10866,20 @@ textarea.ant-input {
 .cycle-scope-multi-select.ant-select-multiple {
   width: 100%;
 }
+.cycle-scope-panel .ant-form-item {
+  margin-bottom: 20px;
+}
+.cycle-scope-panel .ant-form-item-label > label {
+  min-height: 28px;
+  font-size: 15px;
+  font-weight: 650;
+}
+.cycle-scope-panel .ant-card-body {
+  padding: 22px;
+}
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selector {
-  min-height: 42px !important;
-  height: 42px !important;
+  min-height: 54px !important;
+  height: auto !important;
 }
 .cycle-scope-select-loading .ant-skeleton-input {
   height: 42px !important;
@@ -10898,28 +10909,28 @@ textarea.ant-input {
   white-space: nowrap;
 }
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selector {
-  min-height: 42px !important;
-  height: 42px;
+  min-height: 54px !important;
+  height: auto !important;
   align-items: center;
-  padding-block: 3px !important;
-  border-radius: 8px !important;
+  padding-block: 7px !important;
+  border-radius: 9px !important;
 }
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selection-wrap {
-  min-height: 34px;
+  min-height: 38px;
   align-items: center;
 }
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selection-overflow {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
-  overflow: hidden;
+  gap: 4px 2px;
 }
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selection-overflow-item {
   flex: 0 0 auto;
 }
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selection-placeholder {
-  inset-inline-start: 11px;
-  inset-inline-end: 28px;
-  line-height: 32px;
+  inset-inline-start: 12px;
+  inset-inline-end: 32px;
+  line-height: 38px;
 }
 .cycle-scope-multi-select.ant-select-multiple .ant-select-selection-search {
   margin-inline-start: 2px;
