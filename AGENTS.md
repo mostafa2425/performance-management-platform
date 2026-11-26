@@ -109,8 +109,8 @@ rg -n -U '<Drawer\\b[^>]*\\b(width|height)\\s*=' src
 # Timeline deprecated dot
 rg -n -U '\\bdot\\s*:' src
 
-# Progress deprecated rail color
-rg -n -U '\\btrailColor\\s*=' src
+# Progress deprecated rail color and thickness
+rg -n -U '\\b(trailColor|strokeWidth)\\s*=' src
 
 # Statistic deprecated styling
 rg -n -U '\\b(valueStyle|titleStyle)\\s*=' src
