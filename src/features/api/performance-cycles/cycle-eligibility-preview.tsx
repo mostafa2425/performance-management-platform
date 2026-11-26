@@ -50,7 +50,7 @@ export function CycleEligibilityPreview({
           <Typography.Text strong>{candidateName(row, ar)}</Typography.Text>
           {candidateEmployeeId(row) != null ? (
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-              {t("fields.employeeCode")}: {candidateEmployeeId(row)}
+              ID: {candidateEmployeeId(row)}
             </Typography.Text>
           ) : null}
         </Space>
