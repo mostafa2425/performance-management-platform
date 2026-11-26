@@ -102,19 +102,6 @@
   font-weight: 600;
   box-shadow: none;
 }
-.plan-detail-workspace .ant-btn-primary.pmp-approve-button {
-  border-color: #0d9488 !important;
-  background: #0d9488 !important;
-  color: #fff !important;
-  box-shadow: none !important;
-}
-.plan-detail-workspace .ant-btn-primary.pmp-approve-button:hover,
-.plan-detail-workspace .ant-btn-primary.pmp-approve-button:focus-visible {
-  border-color: #0f766e !important;
-  background: #0f766e !important;
-  color: #fff !important;
-  box-shadow: none !important;
-}
 .plan-detail-workspace .ant-collapse {
   border-color: #e2e8f0;
   border-radius: 12px;
@@ -533,12 +520,3 @@
 
 
 /* Approval button only — keep other primary actions on the brand theme. */
-.plan-detail-workspace .ant-btn-primary.pmp-approve-button:active {
-  border-color: #115e59 !important;
-  background: #115e59 !important;
-  color: #fff !important;
-}
-.plan-detail-workspace .ant-btn-primary.pmp-approve-button:focus-visible {
-  outline: 2px solid rgba(13, 148, 136, .28);
-  outline-offset: 2px;
-}
