@@ -150,6 +150,10 @@ export function reasonText(reason: unknown, ar = false): string {
   }
   if (typeof reason === "object") {
     const r = reason as Record<string, unknown>;
+    if (r.category_name != null) {
+      const categoryName = bilingual(r.category_name, ar);
+      if (categoryName !== "—") return categoryName;
+    }
     if (typeof r.message === "string") return r.message;
     if (typeof r.reason === "string") return r.reason;
     if (typeof r.code === "string") return r.code;
